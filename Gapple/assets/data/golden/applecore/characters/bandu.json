@@ -1,0 +1,71 @@
+{
+	"offsets": {
+		"singLEFT": [
+			563,
+			514
+		],
+		"singUP": [
+			449,
+			578
+		],
+		"singDOWN": [
+			445,
+			516
+		],
+		"singRIGHT": [
+			459,
+			533
+		]
+	},
+	"anims": [
+		{
+			"prefix": "idle",
+			"name": "idle"
+		}
+	],
+	"countdownVer": "bandu",
+	"scale": 2.8,
+	"patterns": [
+		{
+			"anims": [
+				{
+					"prefix": "$anim",
+					"name": "sing$ANIM"
+				}
+			]
+		}
+	],
+	"allIdleEase": true,
+	"positionOffset": [
+		700,
+		450
+	],
+	"antialiasing": false,
+	"danceSnap": 1,
+	"path": "characters/bandu",
+	"healthBarRGB": [
+		60,
+		238,
+		38
+	],
+	"flippedOffsets": {
+		"singLEFT": [
+			563,
+			514
+		],
+		"singUP": [
+			449,
+			578
+		],
+		"singDOWN": [
+			445,
+			516
+		],
+		"singRIGHT": [
+			459,
+			533
+		]
+	},
+	"noteSkin": "3d",
+	"offsetScale": 1
+}

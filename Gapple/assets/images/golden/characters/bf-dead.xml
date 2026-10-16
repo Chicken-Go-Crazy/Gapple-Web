@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="wip bf BACKUP.png">
+	<!-- Created with Adobe Animate version 21.0.6.41649 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="death0000" x="2" y="2" width="527" height="561" frameX="-77" frameY="-12" frameWidth="604" frameHeight="576"/>
+	<SubTexture name="death0001" x="2" y="2" width="527" height="561" frameX="-77" frameY="-12" frameWidth="604" frameHeight="576"/>
+	<SubTexture name="death0002" x="539" y="2" width="504" height="564" frameX="-90" frameY="-9" frameWidth="604" frameHeight="576"/>
+	<SubTexture name="death0003" x="539" y="2" width="504" height="564" frameX="-90" frameY="-9" frameWidth="604" frameHeight="576"/>
+	<SubTexture name="death0004" x="1053" y="2" width="500" height="573" frameX="-91" frameY="0" frameWidth="604" frameHeight="576"/>
+	<SubTexture name="death0005" x="1053" y="2" width="500" height="573" frameX="-91" frameY="0" frameWidth="604" frameHeight="576"/>
+	<SubTexture name="death0006" x="1563" y="2" width="499" height="570" frameX="-90" frameY="-3" frameWidth="604" frameHeight="576"/>
+	<SubTexture name="death0007" x="1563" y="2" width="499" height="570" frameX="-90" frameY="-3" frameWidth="604" frameHeight="576"/>
+	<SubTexture name="death0008" x="2072" y="2" width="496" height="571" frameX="-90" frameY="-2" frameWidth="604" frameHeight="576"/>
+	<SubTexture name="death0009" x="2072" y="2" width="496" height="571" frameX="-90" frameY="-2" frameWidth="604" frameHeight="576"/>
+	<SubTexture name="death0010" x="2578" y="2" width="499" height="571" frameX="-90" frameY="-2" frameWidth="604" frameHeight="576"/>
+	<SubTexture name="death0011" x="2578" y="2" width="499" height="571" frameX="-90" frameY="-2" frameWidth="604" frameHeight="576"/>
+	<SubTexture name="death0012" x="3087" y="2" width="497" height="571" frameX="-90" frameY="-2" frameWidth="604" frameHeight="576"/>
+	<SubTexture name="death0013" x="3087" y="2" width="497" height="571" frameX="-90" frameY="-2" frameWidth="604" frameHeight="576"/>
+	<SubTexture name="death0014" x="3594" y="2" width="496" height="565" frameX="-90" frameY="-8" frameWidth="604" frameHeight="576"/>
+	<SubTexture name="death0015" x="3594" y="2" width="496" height="565" frameX="-90" frameY="-8" frameWidth="604" frameHeight="576"/>
+	<SubTexture name="death0016" x="2" y="585" width="488" height="541" frameX="-91" frameY="-31" frameWidth="604" frameHeight="576"/>
+	<SubTexture name="death0017" x="2" y="585" width="488" height="541" frameX="-91" frameY="-31" frameWidth="604" frameHeight="576"/>
+	<SubTexture name="death0018" x="500" y="585" width="494" height="523" frameX="-65" frameY="-46" frameWidth="604" frameHeight="576"/>
+	<SubTexture name="death0019" x="500" y="585" width="494" height="523" frameX="-65" frameY="-46" frameWidth="604" frameHeight="576"/>
+	<SubTexture name="death0020" x="1004" y="585" width="532" height="451" frameX="0" frameY="-125" frameWidth="604" frameHeight="576"/>
+	<SubTexture name="death0021" x="1004" y="585" width="532" height="451" frameX="0" frameY="-125" frameWidth="604" frameHeight="576"/>
+	<SubTexture name="death0022" x="1546" y="585" width="536" height="471" frameX="-3" frameY="-101" frameWidth="604" frameHeight="576"/>
+	<SubTexture name="death0023" x="1546" y="585" width="536" height="471" frameX="-3" frameY="-101" frameWidth="604" frameHeight="576"/>
+	<SubTexture name="death0024" x="2092" y="585" width="537" height="478" frameX="-4" frameY="-94" frameWidth="604" frameHeight="576"/>
+	<SubTexture name="death0025" x="2092" y="585" width="537" height="478" frameX="-4" frameY="-94" frameWidth="604" frameHeight="576"/>
+	<SubTexture name="deathloop0000" x="2639" y="585" width="543" height="491" frameX="0" frameY="0" frameWidth="549" frameHeight="491"/>
+	<SubTexture name="deathloop0001" x="2639" y="585" width="543" height="491" frameX="0" frameY="0" frameWidth="549" frameHeight="491"/>
+	<SubTexture name="deathloop0002" x="3192" y="585" width="543" height="491" frameX="0" frameY="0" frameWidth="549" frameHeight="491"/>
+	<SubTexture name="deathloop0003" x="3192" y="585" width="543" height="491" frameX="0" frameY="0" frameWidth="549" frameHeight="491"/>
+	<SubTexture name="deathloop0004" x="2" y="1136" width="543" height="491" frameX="0" frameY="0" frameWidth="549" frameHeight="491"/>
+	<SubTexture name="deathloop0005" x="555" y="1136" width="549" height="491"/>
+	<SubTexture name="deathloop0006" x="1114" y="1136" width="549" height="491"/>
+	<SubTexture name="deathloop0007" x="1673" y="1136" width="543" height="491" frameX="0" frameY="0" frameWidth="549" frameHeight="491"/>
+	<SubTexture name="deathloop0008" x="2226" y="1136" width="543" height="491" frameX="0" frameY="0" frameWidth="549" frameHeight="491"/>
+	<SubTexture name="deathloop0009" x="2226" y="1136" width="543" height="491" frameX="0" frameY="0" frameWidth="549" frameHeight="491"/>
+	<SubTexture name="deathloop0010" x="2779" y="1136" width="543" height="491" frameX="0" frameY="0" frameWidth="549" frameHeight="491"/>
+	<SubTexture name="deathloop0011" x="2779" y="1136" width="543" height="491" frameX="0" frameY="0" frameWidth="549" frameHeight="491"/>
+	<SubTexture name="deathloop0012" x="2639" y="585" width="543" height="491" frameX="0" frameY="0" frameWidth="549" frameHeight="491"/>
+	<SubTexture name="deathloop0013" x="2639" y="585" width="543" height="491" frameX="0" frameY="0" frameWidth="549" frameHeight="491"/>
+	<SubTexture name="deathloop0014" x="3192" y="585" width="543" height="491" frameX="0" frameY="0" frameWidth="549" frameHeight="491"/>
+	<SubTexture name="deathloop0015" x="3192" y="585" width="543" height="491" frameX="0" frameY="0" frameWidth="549" frameHeight="491"/>
+	<SubTexture name="deathloop0016" x="2" y="1136" width="543" height="491" frameX="0" frameY="0" frameWidth="549" frameHeight="491"/>
+	<SubTexture name="deathloop0017" x="3332" y="1136" width="543" height="491" frameX="0" frameY="0" frameWidth="549" frameHeight="491"/>
+	<SubTexture name="deathloop0018" x="2" y="1637" width="543" height="491" frameX="0" frameY="0" frameWidth="549" frameHeight="491"/>
+</TextureAtlas>

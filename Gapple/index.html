@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="utf-8">
+
+	<title>Golden Apple</title>
+
+	<meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta name="mobile-web-app-capable" content="yes">
+
+	
+	<link rel="shortcut icon" type="image/png" href="./favicon.png">
+
+	
+	<script>
+        window.addEventListener("error", event => {
+            const error = event.error;
+            console.error("Engine startup error: " + (error && error.value != null ? String(error.value) : event.message) + "\n" + (error && error.stack || ""));
+        });
+        window.addEventListener("unhandledrejection", event => {
+            const error = event.reason;
+            console.error("Engine asset error: " + (error && error.value != null ? String(error.value) : String(error)) + "\n" + (error && error.stack || ""));
+        });
+    </script>
+<script type="text/javascript" src="./Funkin.js"></script>
+
+	<script>
+		window.addEventListener ("touchmove", function (event) { event.preventDefault (); }, { capture: false, passive: false });
+		if (typeof window.devicePixelRatio != 'undefined' && window.devicePixelRatio > 2) {
+			var meta = document.getElementById ("viewport");
+			meta.setAttribute ('content', 'width=device-width, initial-scale=' + (2 / window.devicePixelRatio) + ', user-scalable=no');
+		}
+	</script>
+
+	<style>
+		html,body { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+		#start-screen { position:fixed; inset:0; background:#111; color:white; display:grid; place-content:center; text-align:center; font:20px system-ui; z-index:10; }
+		#start-screen button { font:inherit; padding:16px 28px; cursor:pointer; }
+		#content { background: #000000; width: 100%; height: 100%; }
+		@font-face {
+			font-family: 'Comic Sans MS';
+			src: url('assets/fonts/comic_normal.eot?#iefix') format('embedded-opentype'),
+			url('assets/fonts/comic_normal.woff') format('woff'),
+			url('assets/fonts/comic_normal.ttf') format('truetype'),
+			url('assets/fonts/comic_normal.svg#Comic%20Sans%20MS') format('svg');
+			font-weight: normal;
+			font-style: normal;
+		}
+		@font-face {
+			font-family: 'Comic Sans MS Bold';
+			src: url('assets/fonts/comic.eot?#iefix') format('embedded-opentype'),
+			url('assets/fonts/comic.woff') format('woff'),
+			url('assets/fonts/comic.ttf') format('truetype'),
+			url('assets/fonts/comic.svg#Comic%20Sans%20MS%20Bold') format('svg');
+			font-weight: normal;
+			font-style: normal;
+		}
+		@font-face {
+			font-family: 'VCR OSD Mono';
+			src: url('assets/fonts/vcr.eot?#iefix') format('embedded-opentype'),
+			url('assets/fonts/vcr.woff') format('woff'),
+			url('assets/fonts/vcr.ttf') format('truetype'),
+			url('assets/fonts/vcr.svg#VCR%20OSD%20Mono') format('svg');
+			font-weight: normal;
+			font-style: normal;
+		}
+		@font-face {
+			font-family: 'Pixel Arial 11 Bold';
+			src: url('assets/fonts/pixel.eot?#iefix') format('embedded-opentype'),
+			url('assets/fonts/pixel.woff') format('woff'),
+			url('assets/fonts/pixel.otf') format('truetype');
+			font-weight: normal;
+			font-style: normal;
+		}
+		@font-face {
+			font-family: 'Nokia Cellphone FC Small';
+			src: url('flixel/fonts/nokiafc22.eot?#iefix') format('embedded-opentype'),
+			url('flixel/fonts/nokiafc22.woff') format('woff'),
+			url('flixel/fonts/nokiafc22.ttf') format('truetype'),
+			url('flixel/fonts/nokiafc22.svg#Nokia%20Cellphone%20FC%20Small') format('svg');
+			font-weight: normal;
+			font-style: normal;
+		}
+		@font-face {
+			font-family: 'Monsterrat';
+			src: url('flixel/fonts/monsterrat.eot?#iefix') format('embedded-opentype'),
+			url('flixel/fonts/monsterrat.woff') format('woff'),
+			url('flixel/fonts/monsterrat.ttf') format('truetype'),
+			url('flixel/fonts/monsterrat.svg#Monsterrat') format('svg');
+			font-weight: normal;
+			font-style: normal;
+		}
+
+	</style>
+
+</head>
+<body>
+	
+	<span style="font-family: assets/fonts/comic_normal.ttf"> </span>
+	<span style="font-family: assets/fonts/comic.ttf"> </span>
+	<span style="font-family: assets/fonts/vcr.ttf"> </span>
+	<span style="font-family: assets/fonts/pixel.otf"> </span>
+	<span style="font-family: flixel/fonts/nokiafc22.ttf"> </span>
+	<span style="font-family: flixel/fonts/monsterrat.ttf"> </span>
+
+	<div id="content"></div>
+	<div id="start-screen"><button id="start-game">Click to start</button><p>Enter also starts the game</p></div>
+
+	<script type="text/javascript">
+		let started = false;
+        function startGame() {
+            if (started) return;
+            started = true;
+            document.getElementById("start-screen").remove();
+            window.removeEventListener("keydown", startKey);
+            const boot = () => lime.embed("Funkin", "content", 1280, 720);
+            if (typeof Howler !== "undefined") Howler.volume(1);
+            if (typeof Howler !== "undefined" && Howler.ctx && Howler.ctx.state === "suspended") {
+                Howler.ctx.resume().then(boot);
+            } else boot();
+        }
+        function startKey(event) { if (event.key === "Enter") { event.preventDefault(); startGame(); } }
+        document.getElementById("start-game").addEventListener("click", startGame);
+        window.addEventListener("keydown", startKey);
+	</script>
+
+</body>
+</html>

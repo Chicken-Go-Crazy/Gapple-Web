@@ -1,0 +1,15 @@
+{
+  "healthBarRGB": [49, 176, 209],
+  "path": "characters/tunnel_bf",
+  "scale": 1.4,
+  "flipX": true,
+  "nativelyPlayable": true,
+  "patterns": [{}],
+  "cameraOffset": [0, 100],
+  "anims": [
+    {
+      "name": "idle"
+    }
+  ],
+  "iconName": "bf"
+}

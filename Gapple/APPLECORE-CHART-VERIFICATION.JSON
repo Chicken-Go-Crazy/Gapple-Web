@@ -1,0 +1,78 @@
+{
+  "passed": true,
+  "kind": "Actual compiled generateSong, Note constructor/update and Conductor methods with rendering/audio stubs; compared against original chart",
+  "cases": [
+    {
+      "savedOffset": "undefined",
+      "appliedOffset": 0,
+      "heads": 1725,
+      "sustains": 716,
+      "firstOpponent": 961.53846153846,
+      "firstPlayer": 4807.6923076923
+    },
+    {
+      "savedOffset": "null",
+      "appliedOffset": 0,
+      "heads": 1725,
+      "sustains": 716,
+      "firstOpponent": 961.53846153846,
+      "firstPlayer": 4807.6923076923
+    },
+    {
+      "savedOffset": "NaN",
+      "appliedOffset": 0,
+      "heads": 1725,
+      "sustains": 716,
+      "firstOpponent": 961.53846153846,
+      "firstPlayer": 4807.6923076923
+    },
+    {
+      "savedOffset": "Infinity",
+      "appliedOffset": 0,
+      "heads": 1725,
+      "sustains": 716,
+      "firstOpponent": 961.53846153846,
+      "firstPlayer": 4807.6923076923
+    },
+    {
+      "savedOffset": "invalid",
+      "appliedOffset": 0,
+      "heads": 1725,
+      "sustains": 716,
+      "firstOpponent": 961.53846153846,
+      "firstPlayer": 4807.6923076923
+    },
+    {
+      "savedOffset": "0",
+      "appliedOffset": 0,
+      "heads": 1725,
+      "sustains": 716,
+      "firstOpponent": 961.53846153846,
+      "firstPlayer": 4807.6923076923
+    },
+    {
+      "savedOffset": "25",
+      "appliedOffset": 25,
+      "heads": 1725,
+      "sustains": 716,
+      "firstOpponent": 986.53846153846,
+      "firstPlayer": 4832.6923076923
+    },
+    {
+      "savedOffset": "-30",
+      "appliedOffset": -30,
+      "heads": 1725,
+      "sustains": 716,
+      "firstOpponent": 931.53846153846,
+      "firstPlayer": 4777.6923076923
+    },
+    {
+      "savedOffset": "12.5",
+      "appliedOffset": 12.5,
+      "heads": 1725,
+      "sustains": 716,
+      "firstOpponent": 974.03846153846,
+      "firstPlayer": 4820.1923076923
+    }
+  ]
+}

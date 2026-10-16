@@ -1,0 +1,127 @@
+{
+	"offsets": {
+		"singDOWN": [
+			0,
+			74
+		],
+		"singUP": [
+			4,
+			63
+		],
+		"idle": [
+			0,
+			70
+		],
+		"singRIGHT": [
+			26,
+			70
+		],
+		"singLEFT": [
+			20,
+			77
+		],
+		"fuck": [
+			0,
+			70
+		],
+		"look": [
+			0,
+			70
+		],
+		"crash": [
+			-5,
+			65
+		],
+		"become": [
+			-185,
+			-165
+		]
+	},
+	"anims": [
+		{
+			"prefix": "idle",
+			"name": "idle"
+		},
+		{
+			"prefix": "Become",
+			"name": "become"
+		},
+		{
+			"prefix": "Sad",
+			"name": "crash"
+		},
+		{
+			"prefix": "Fuck",
+			"name": "fuck"
+		},
+		{
+			"prefix": "Look",
+			"name": "look"
+		}
+	],
+	"countdownVer": "bandu",
+	"scale": 2.8,
+	"patterns": [
+		{
+			"anims": [
+				{
+					"prefix": "$anim",
+					"name": "sing$ANIM"
+				}
+			]
+		}
+	],
+	"allIdleEase": true,
+	"positionOffset": [
+		700,
+		400
+	],
+	"antialiasing": false,
+	"danceSnap": 1,
+	"path": "characters/bandu_sad",
+	"healthBarRGB": [
+		60,
+		238,
+		38
+	],
+	"flippedOffsets": {
+		"singDOWN": [
+			0,
+			74
+		],
+		"singUP": [
+			4,
+			63
+		],
+		"idle": [
+			0,
+			70
+		],
+		"singRIGHT": [
+			26,
+			70
+		],
+		"singLEFT": [
+			20,
+			77
+		],
+		"fuck": [
+			0,
+			70
+		],
+		"look": [
+			0,
+			70
+		],
+		"crash": [
+			-5,
+			65
+		],
+		"become": [
+			-185,
+			-165
+		]
+	},
+	"noteSkin": "3d",
+	"offsetScale": 1
+}

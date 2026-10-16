@@ -1,0 +1,69 @@
+{
+  "offsets": {
+    "bump": [230, 280]
+  },
+  "cameraOffset": [170, 100],
+  "anims": [
+    {
+      "name": "idle",
+      "loops": true
+    },
+    {
+      "name": "look",
+      "prefix": "look0"
+    },
+    {
+      "name": "looking",
+	  "loops": true
+    },
+    {
+      "name": "back"
+    },
+    {
+      "prefix": "die",
+      "name": "bump",
+      "hasEase": false
+    },
+    {
+      "prefix": "idle",
+      "name": "bgLeft",
+      "hasEase": false
+    },
+    {
+      "prefix": "idle",
+      "name": "bgRight",
+      "hasEase": false
+    }
+  ],
+  "allIdleEase": true,
+  "countdownVer": "dave",
+  "scale": 1.4,
+  "patterns": [
+    {
+      "anims": [
+        {
+          "name": "sing$ANIM",
+          "prefix": "$anim",
+          "holdFrame": 6
+        }
+      ]
+    }
+  ],
+  "antialiasing": false,
+  "path": "characters/tunnel_chase_dave",
+  "healthBarRGB": [238, 11, 10],
+  "noteSkin": "3d",
+  "parts": [
+    {
+      "id": "chair",
+      "x": 0,
+      "y": 0,
+      "order": -1,
+      "path": "characters/chair",
+      "antialiasing": false,
+      "scale": 1.4,
+      "anims": [{ "name": "idle", "prefix": "Wheelchair", "loops": true }]
+    }
+  ],
+  "holdStyle": "frames"
+}

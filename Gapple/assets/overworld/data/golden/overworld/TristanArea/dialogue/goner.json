@@ -1,0 +1,20 @@
+{
+  "dialogue": {
+    "start": [
+      {
+        "text": "Have you ever thought about a world where everything is exactly the same..."
+      },
+      {
+        "text": "Except you don't exist?"
+      },
+      {
+        "text": "Everything functions perfectly without you..."
+      },
+      {
+        "text": "Ha, ha... The thought terrifies me.",
+        "events": [{ "SET_NEXT": { "part": "noob" } }]
+      }
+    ],
+    "noob": [{ "text": "..." }]
+  }
+}

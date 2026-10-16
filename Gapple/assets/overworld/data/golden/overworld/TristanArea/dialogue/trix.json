@@ -1,0 +1,17 @@
+{
+  "dialogue": {
+    "start": [
+      {
+        "text": "🅱️ruh",
+        "char": "trix",
+        "events": [{ "SET_NEXT": { "part": "next" } }]
+      }
+    ],
+    "next": [
+      {
+        "text": "you talk to me again :/",
+        "char": "trix"
+      }
+    ]
+  }
+}

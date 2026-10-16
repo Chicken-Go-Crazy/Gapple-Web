@@ -1,0 +1,144 @@
+{
+	"cameraOffset": [
+		0,
+		90
+	],
+	"offsets": {
+		"dead": [
+			25,
+			-15
+		],
+		"smashL": [
+			0,
+			5
+		],
+		"smashD": [
+			0,
+			5
+		],
+		"smashU": [
+			0,
+			5
+		],
+		"smashR": [
+			0,
+			5
+		],
+		"enter": [
+			840,
+			235
+		],
+		"idle-alt": [
+			250,
+			115
+		],
+		"singRIGHT": [
+			-10,
+			-10
+		],
+		"singLEFT": [
+			-35,
+			-25
+		],
+		"murder": [
+			245,
+			125
+		]
+	},
+	"scale": 2.296,
+	"anims": [
+		{
+			"name": "idle",
+			"loops": true
+		},
+		{
+			"name": "smashL"
+		},
+		{
+			"name": "smashD"
+		},
+		{
+			"name": "smashU"
+		},
+		{
+			"name": "smashR"
+		},
+		{
+			"name": "enter"
+		},
+		{
+			"name": "dead"
+		}
+	],
+	"countdownVer": "bambi",
+	"allIdleEase": true,
+	"patterns": [
+		{}
+	],
+	"antialiasing": false,
+	"path": "characters/bambi",
+	"healthBarRGB": [
+		0,
+		88,
+		2
+	],
+	"flippedOffsets": {
+		"dead": [
+			25,
+			-15
+		],
+		"smashL": [
+			0,
+			5
+		],
+		"smashD": [
+			0,
+			5
+		],
+		"smashU": [
+			0,
+			5
+		],
+		"smashR": [
+			0,
+			5
+		],
+		"enter": [
+			840,
+			235
+		],
+		"idle-alt": [
+			250,
+			115
+		],
+		"singRIGHT": [
+			-10,
+			-10
+		],
+		"singLEFT": [
+			-35,
+			-25
+		],
+		"murder": [
+			245,
+			125
+		]
+	},
+	"noteSkin": "3d",
+	"offsetScale": 0.82,
+	"atlasSheets": [
+		{
+			"anims": [
+				{
+					"prefix": "altidle",
+					"loops": true,
+					"name": "idle-alt"
+				},
+				{
+					"name": "murder"
+				}
+			],
+			"path": "characters/bambiExtra"
+		}
+	]
+}

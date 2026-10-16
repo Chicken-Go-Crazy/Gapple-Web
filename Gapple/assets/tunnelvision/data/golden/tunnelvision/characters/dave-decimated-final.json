@@ -1,0 +1,14 @@
+{
+  "iconName": "dave-decimated",
+  "anims": [
+    {
+      "name": "idle"
+    }
+  ],
+  "noteSkin": "3d",
+  "allIdleEase": true,
+  "patterns": [{}],
+  "antialiasing": false,
+  "healthBarRGB": [218, 0, 0],
+  "path": "characters/tunnel_chase_dave_finale"
+}

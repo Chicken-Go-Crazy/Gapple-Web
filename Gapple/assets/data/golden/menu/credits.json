@@ -1,0 +1,37 @@
+{
+  "people": [
+    {
+      "name": "Sky!",
+      "role": "Creator and Director, Composer, Programmer, Charter, Animator, and Artist",
+      "links": [
+        "https://www.youtube.com/@SkyFactorial/",
+        "https://twitter.com/SkyFactorial"
+      ]
+    },
+    {
+      "name": "Lancey",
+      "role": "Director, Main Artist and Animator",
+      "links": [
+        "https://www.youtube.com/c/Lancey170",
+        "https://twitter.com/Lancey170"
+      ]
+    },
+    {
+      "name": "Aadsta",
+      "role": "Composer, Artist, Animator and Charter",
+      "links": [
+        "https://www.youtube.com/@AadstaPinwheel",
+        "https://twitter.com/FullNameDeTrain"
+      ]
+    },
+    {
+      "name": "Stev",
+      "role": "did erberythign for this mod",
+      "links": [
+        "https://www.youtube.com/@thebevchev",
+        "https://twitter.com/thebevchev"
+      ]
+    }
+  ],
+  "source": "Golden Apple.exe CreditsMenuState.new 0x141ccc280"
+}

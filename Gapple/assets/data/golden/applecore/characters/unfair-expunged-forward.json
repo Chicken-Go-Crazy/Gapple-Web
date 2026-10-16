@@ -1,0 +1,39 @@
+{
+  "healthBarRGB": [217, 0, 0],
+  "anims": [
+    {
+      "name": "danceLeft",
+      "prefix": "idlel"
+    },
+    {
+      "name": "danceRight",
+      "prefix": "idler"
+    },
+    {
+      "loops": true,
+      "prefix": "suck instance 10",
+      "name": "suck"
+    },
+    {
+      "hasEase": true,
+      "prefix": "suckend instance 1",
+      "name": "suckEnd"
+    }
+  ],
+  "gfDance": true,
+  "noteSkin": "3d",
+  "danceSnap": 1,
+  "patterns": [
+    {
+      "anims": [
+        {
+          "hasEase": true,
+          "prefix": "$anim",
+          "name": "sing$ANIM"
+        }
+      ]
+    }
+  ],
+  "antialiasing": false,
+  "path": "characters/unfairguy"
+}

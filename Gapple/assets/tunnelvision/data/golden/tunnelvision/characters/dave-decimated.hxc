@@ -1,0 +1,26 @@
+var nextLook = 2.0;
+
+function reset()
+{
+	trace('script reset');
+	nextLook = 2.0;
+}
+
+function update(elapsed:Float)
+{
+	if (dancing && !debugMode)
+	{
+		nextLook -= elapsed;
+		if (nextLook <= 0)
+		{
+			danced = !danced;
+			nextLook = danced ? FlxG.random.float(.5, .75) : FlxG.random.float(2, 6);
+			playAnim(danced ? "look" : "back");
+			specialAnim = true;
+		}
+	}
+	else if (singing)
+	{
+		danced = false;
+	}
+}

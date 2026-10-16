@@ -1,0 +1,15 @@
+{
+  "healthBarRGB": [49, 176, 209],
+  "path": "characters/tunnel_3d_bf",
+  "noteSkin": "3d",
+  "nativelyPlayable": true,
+  "flipAll": true,
+  "anims": [
+    {
+      "name": "idle"
+    }
+  ],
+  "iconName": "3d-bf",
+  "allIdleEase": true,
+  "patterns": [{}]
+}

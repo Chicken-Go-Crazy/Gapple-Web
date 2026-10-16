@@ -1,0 +1,19 @@
+{
+  "dialogue": {
+    "start": [
+      {
+        "text": "960000331004145674",
+        "char": "bimpe"
+      },
+	  {
+		"text": "ok",
+		"char": "bf",
+		"pos": "right"
+	  },
+	  {
+		"text": "bimpe",
+		"char": "bimpe"
+	  }
+    ]
+  }
+}

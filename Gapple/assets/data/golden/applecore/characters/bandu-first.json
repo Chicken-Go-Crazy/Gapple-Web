@@ -1,0 +1,154 @@
+{
+	"offsets": {
+		"singDOWN": [
+			24,
+			255
+		],
+		"danceLeft": [
+			8,
+			0
+		],
+		"singUP": [
+			4,
+			7
+		],
+		"phones galore": [
+			35,
+			10
+		],
+		"hey": [
+			88,
+			-28
+		],
+		"danceRight-alt": [
+			0,
+			-25
+		],
+		"singRIGHT": [
+			16,
+			-26
+		],
+		"danceLeft-alt": [
+			0,
+			-25
+		],
+		"singLEFT": [
+			0,
+			-26
+		],
+		"wow": [
+			0,
+			-25
+		]
+	},
+	"anims": [
+		{
+			"prefix": "idelL",
+			"name": "danceRight"
+		},
+		{
+			"prefix": "IdleR",
+			"name": "danceLeft"
+		},
+		{
+			"prefix": "hey",
+			"name": "hey"
+		}
+	],
+	"countdownVer": "bandu",
+	"allIdleEase": true,
+	"patterns": [
+		{
+			"anims": [
+				{
+					"prefix": "$anim",
+					"name": "sing$ANIM"
+				}
+			]
+		}
+	],
+	"antialiasing": false,
+	"iconName": "bandu",
+	"gfDance": true,
+	"path": "characters/banduFirst",
+	"healthBarRGB": [
+		60,
+		238,
+		38
+	],
+	"offsetScale": 1,
+	"cameraOffset": [
+		200,
+		20
+	],
+	"scale": 2.8,
+	"positionOffset": [
+		0,
+		0
+	],
+	"danceSnap": 1,
+	"flippedOffsets": {
+		"singDOWN": [
+			24,
+			255
+		],
+		"danceLeft": [
+			8,
+			0
+		],
+		"singUP": [
+			4,
+			7
+		],
+		"phones galore": [
+			35,
+			10
+		],
+		"hey": [
+			88,
+			-28
+		],
+		"danceRight-alt": [
+			0,
+			-25
+		],
+		"singRIGHT": [
+			16,
+			-26
+		],
+		"danceLeft-alt": [
+			0,
+			-25
+		],
+		"singLEFT": [
+			0,
+			-26
+		],
+		"wow": [
+			0,
+			-25
+		]
+	},
+	"noteSkin": "3d",
+	"atlasSheets": [
+		{
+			"anims": [
+				{
+					"prefix": "altidleL",
+					"name": "danceLeft-alt"
+				},
+				{
+					"prefix": "altidleR",
+					"name": "danceRight-alt"
+				},
+				{
+					"name": "phones galore"
+				},
+				{
+					"name": "wow"
+				}
+			],
+			"path": "characters/banduRap"
+		}
+	]
+}

@@ -1,0 +1,37 @@
+{
+	"meta": {
+		"LessFarBG": {
+			"colorZones": [
+				{
+					"targets": [],
+					"color": "#90F07A",
+					"zones": [
+						[0, 0, 2404, 761]
+					]
+				},
+				{
+					"targets": [],
+					"color": "#A7FF6F",
+					"zones": [
+						[2414, 0, 3280, 761]
+					]
+				},
+				{
+					"targets": [],
+					"color": "#D3FF87",
+					"zones": [
+						[3290, 0, 4720, 761]
+					]
+				},
+				{
+					"targets": [],
+					"color": "#E0FF95",
+					"zones": [
+						[4720, 0, 6622, 1119]
+					]
+				}
+			]
+		}
+	}
+	
+}

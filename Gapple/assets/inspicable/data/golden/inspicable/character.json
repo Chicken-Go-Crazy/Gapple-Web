@@ -1,0 +1,91 @@
+{
+  "cameraOffset": [0, 90],
+  "offsets": {
+    "smashL": [30, 190],
+    "singDOWN": [0, -10],
+    "singUP": [10, 130],
+    "end": [1125, 880],
+    "beHere": [20, 70],
+    "singRIGHT": [-190, 130],
+    "smashR": [95, 70],
+    "buddyBoy": [24, 56],
+    "singLEFT": [210, 40],
+    "grr": [30, 60]
+  },
+  "scale": 3.5,
+  "anims": [
+    {
+      "name": "idle"
+    },
+    {
+      "hasEase": true,
+      "name": "smashL"
+    },
+    {
+      "hasEase": true,
+      "name": "smashR"
+    },
+    {
+      "name": "grr"
+    },
+    {
+      "name": "end"
+    },
+    {
+      "prefix": "shoot",
+      "name": "shootFirst",
+      "indices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+    },
+    {
+      "hasEase": true,
+      "name": "shoot",
+      "indices": [
+        16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31
+      ]
+    }
+  ],
+  "countdownVer": "bambi",
+  "allIdleEase": true,
+  "patterns": [
+    {
+      "anims": [
+        {
+          "prefix": "$anim",
+          "name": "sing$ANIM"
+        }
+      ]
+    }
+  ],
+  "iconName": "disruption-bambi",
+  "antialiasing": false,
+  "path": "characters/inspicable",
+  "healthBarRGB": [0, 88, 2],
+  "flippedOffsets": {
+    "smashL": [30, 190],
+    "singDOWN": [0, -10],
+    "singUP": [10, 130],
+    "end": [1125, 880],
+    "beHere": [20, 70],
+    "singRIGHT": [-190, 130],
+    "smashR": [95, 70],
+    "buddyBoy": [24, 56],
+    "singLEFT": [210, 40],
+    "grr": [30, 60]
+  },
+  "atlasSheets": [
+    {
+      "anims": [
+        {
+          "name": "cantBeHere",
+          "easeFrame": 8
+        },
+        {
+          "name": "boyMan",
+          "easeFrame": 8
+        }
+      ],
+      "path": "characters/inspicableTalking"
+    }
+  ],
+  "noteSkin": "3d"
+}

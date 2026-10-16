@@ -1,0 +1,40 @@
+{
+  "healthBarRGB": [250, 57, 224],
+  "anims": [
+    {
+      "name": "idle"
+    },
+    {
+      "name": "disco",
+      "prefix": "disco instance"
+    },
+    {
+      "name": "wait",
+      "prefix": "wait wha instance"
+    },
+    {
+      "name": "singLEFT",
+      "prefix": "left instance"
+    }
+  ],
+  "scale": 1.8,
+  "noteSkin": "3d",
+  "allIdleEase": true,
+  "patterns": [
+    {
+      "inputs": ["down", "up", "right"],
+      "anims": [
+        {
+          "name": "sing$ANIM",
+          "prefix": "$anim instance"
+        },
+        {
+          "name": "idle-sing$ANIM",
+          "prefix": "$anim-idle"
+        }
+      ]
+    }
+  ],
+  "antialiasing": false,
+  "path": "characters/badai"
+}

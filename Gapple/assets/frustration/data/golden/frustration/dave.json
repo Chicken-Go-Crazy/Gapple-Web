@@ -1,0 +1,213 @@
+{
+	"cameraOffset": [
+		-80,
+		0
+	],
+	"offsets": {
+		"idle-alt": [
+			0,
+			0
+		],
+		"singDOWN": [
+			0,
+			0
+		],
+		"singLEFT-alt": [
+			0,
+			0
+		],
+		"dead": [
+			-150,
+			-301
+		],
+		"chair": [
+			364,
+			169
+		],
+		"singUP-alt": [
+			0,
+			0
+		],
+		"singLEFT": [
+			0,
+			0
+		],
+		"grr": [
+			0,
+			0
+		],
+		"singRIGHT-alt": [
+			0,
+			0
+		],
+		"singUP": [
+			0,
+			0
+		],
+		"fall": [
+			200,
+			0
+		],
+		"huh": [
+			-159,
+			-85
+		],
+		"idle0": [
+			0,
+			0
+		],
+		"idle1": [
+			0,
+			0
+		],
+		"singRIGHT": [
+			0,
+			0
+		],
+		"singDOWN-alt": [
+			0,
+			0
+		],
+		"idle2": [
+			0,
+			0
+		]
+	},
+	"altAnim": true,
+	"countdownVer": "dave",
+	"scale": 1.66666666667,
+	"anims": [
+		{
+			"prefix": "idle",
+			"name": "idle0"
+		},
+		{
+			"prefix": "2idle",
+			"name": "idle1"
+		},
+		{
+			"prefix": "3idle",
+			"name": "idle2"
+		},
+		{
+			"prefix": "mad_idle",
+			"name": "idle-alt"
+		},
+		{
+			"hasEase": true,
+			"name": "grr"
+		},
+		{
+			"prefix": "NEW_huh",
+			"name": "huh"
+		},
+		{
+			"prefix": "NEW_fall",
+			"name": "fall"
+		},
+		{
+			"prefix": "NEW_chair",
+			"name": "chair"
+		}
+	],
+	"patterns": [
+		{
+			"anims": [
+				{
+					"prefix": "$anim",
+					"hasEase": true,
+					"name": "sing$ANIM"
+				},
+				{
+					"prefix": "mad_$anim",
+					"hasEase": true,
+					"name": "sing$ANIM-alt"
+				}
+			]
+		}
+	],
+	"antialiasing": false,
+	"song": "frustration",
+	"path": "characters/dave_frustration",
+	"flippedOffsets": {
+		"idle-alt": [
+			0,
+			0
+		],
+		"singDOWN": [
+			0,
+			0
+		],
+		"singLEFT-alt": [
+			0,
+			0
+		],
+		"dead": [
+			-150,
+			-301
+		],
+		"chair": [
+			364,
+			169
+		],
+		"singUP-alt": [
+			0,
+			0
+		],
+		"singLEFT": [
+			0,
+			0
+		],
+		"grr": [
+			0,
+			0
+		],
+		"singRIGHT-alt": [
+			0,
+			0
+		],
+		"singUP": [
+			0,
+			0
+		],
+		"fall": [
+			200,
+			0
+		],
+		"huh": [
+			-159,
+			-85
+		],
+		"idle0": [
+			0,
+			0
+		],
+		"idle1": [
+			0,
+			0
+		],
+		"singRIGHT": [
+			0,
+			0
+		],
+		"singDOWN-alt": [
+			0,
+			0
+		],
+		"idle2": [
+			0,
+			0
+		]
+	},
+	"healthBarRGB": [
+		69,
+		63,
+		230
+	],
+	"atlasSheets": [
+		{
+			"path": "characters/dave_cutscene"
+		}
+	],
+	"noteSkin": "3d"
+}
