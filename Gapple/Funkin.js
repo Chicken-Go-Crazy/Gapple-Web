@@ -2876,7 +2876,7 @@ flixel_group_FlxTypedSpriteGroup.prototype = $extend(flixel_FlxSprite.prototype,
 			}
 		}
 	}
-	,transformChildren_Int: function(Function1,Value) {
+	,transformChildren_Array_flixel_FlxCamera: function(Function1,Value) {
 		if(this._skipTransformChildren || this.group == null) {
 			return;
 		}
@@ -2890,7 +2890,7 @@ flixel_group_FlxTypedSpriteGroup.prototype = $extend(flixel_FlxSprite.prototype,
 			}
 		}
 	}
-	,transformChildren_Array_flixel_FlxCamera: function(Function1,Value) {
+	,transformChildren_Int: function(Function1,Value) {
 		if(this._skipTransformChildren || this.group == null) {
 			return;
 		}
@@ -3895,7 +3895,8 @@ var AlphaCharacter = function(x,y) {
 	this.row = 0;
 	flixel_FlxSprite.call(this,x,y);
 	var library = null;
-	var tex = flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "alphabet" + ".png","IMAGE",library),Paths.getPath("images/" + "alphabet" + ".xml","TEXT",library));
+	var potatoKey = "alphabet" + "_potato";
+	var tex = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "alphabet" + ".png","IMAGE",library),Paths.getPath("images/" + "alphabet" + ".xml","TEXT",library));
 	this.set_frames(tex);
 	this.set_antialiasing(true);
 };
@@ -7607,6 +7608,8 @@ Main.prototype = $extend(openfl_display_Sprite.prototype,{
 		this.setupGame();
 	}
 	,setupGame: function() {
+		flixel_FlxG.save.bind("golden-apple");
+		GoldenQuality.load();
 		var stageWidth = openfl_Lib.get_current().stage.stageWidth;
 		var stageHeight = openfl_Lib.get_current().stage.stageHeight;
 		if(this.zoom == -1) {
@@ -7642,6 +7645,7 @@ Main.prototype = $extend(openfl_display_Sprite.prototype,{
 			this.initialState = GoldenScenePreviewState;
 		}
 		this.addChild(new flixel_FlxGame(this.gameWidth,this.gameHeight,this.initialState,this.zoom,this.framerate,this.framerate,this.skipSplash,this.startFullscreen));
+		GoldenMobileControls.install();
 		this.addChild(new openfl_display_FPS(10,3,16777215));
 	}
 	,__class__: Main
@@ -7661,7 +7665,8 @@ var BackgroundDancer = function(x,y) {
 	this.danceDir = false;
 	flixel_FlxSprite.call(this,x,y);
 	var library = null;
-	this.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "limo/limoDancer" + ".png","IMAGE",library),Paths.getPath("images/" + "limo/limoDancer" + ".xml","TEXT",library)));
+	var potatoKey = "limo/limoDancer" + "_potato";
+	this.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "limo/limoDancer" + ".png","IMAGE",library),Paths.getPath("images/" + "limo/limoDancer" + ".xml","TEXT",library)));
 	this.animation.addByIndices("danceLeft","bg dancer sketch PINK",[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14],"",24,false);
 	this.animation.addByIndices("danceRight","bg dancer sketch PINK",[15,16,17,18,19,20,21,22,23,24,25,26,27,28,29],"",24,false);
 	this.animation.play("danceLeft");
@@ -7686,7 +7691,8 @@ var BackgroundGirls = function(x,y) {
 	this.danceDir = false;
 	flixel_FlxSprite.call(this,x,y);
 	var library = null;
-	this.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "weeb/bgFreaks" + ".png","IMAGE",library),Paths.getPath("images/" + "weeb/bgFreaks" + ".xml","TEXT",library)));
+	var potatoKey = "weeb/bgFreaks" + "_potato";
+	this.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "weeb/bgFreaks" + ".png","IMAGE",library),Paths.getPath("images/" + "weeb/bgFreaks" + ".xml","TEXT",library)));
 	this.animation.addByIndices("danceLeft","BG girls group",CoolUtil.numberArray(14),"",24,false);
 	this.animation.addByIndices("danceRight","BG girls group",CoolUtil.numberArray(30,15),"",24,false);
 	this.animation.play("danceLeft");
@@ -7733,6 +7739,8 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 	this.referenceLayout = false;
 	this.goldenOriginY = 0;
 	this.goldenOriginX = 0;
+	this.singHoldAnimation = null;
+	this.singHoldUntil = -1;
 	this.holdTimer = 0;
 	this.curCharacter = "bf-golden";
 	this.isPlayer = false;
@@ -7754,7 +7762,8 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 	case "badai":case "dave-decimated":case "dave-decimated-final":case "tunnel-3d-bf":case "tunnel-bf":
 		var config = JSON.parse(openfl_utils_Assets.getText(Paths.getPath("data/" + ("golden/tunnelvision/characters/" + this.curCharacter) + ".json","TEXT","tunnelvision")));
 		var key = "golden/tunnelvision/" + Std.string(config.path);
-		this.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE","tunnelvision"),Paths.getPath("images/" + key + ".xml","TEXT","tunnelvision")));
+		var potatoKey = key + "_potato";
+		this.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","tunnelvision"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","tunnelvision"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","tunnelvision"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","tunnelvision")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE","tunnelvision"),Paths.getPath("images/" + key + ".xml","TEXT","tunnelvision")));
 		var instance = this.curCharacter == "badai" || this.curCharacter == "dave-decimated-final";
 		this.addExactFrameTrack("idle",instance ? "idle instance " : "idle",24,this.curCharacter == "dave-decimated");
 		var dir = "LEFT";
@@ -7794,12 +7803,20 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 			var pair_0 = "bump";
 			var pair_1 = "die";
 			this.addExactFrameTrack(pair_0,pair_1,24,pair_0 == "looking");
+			this.addExactFrameTrack("bgLeft","idle",24,false);
+			this.addExactFrameTrack("bgRight","idle",24,false);
 			this.addOffset("bump",230,280);
 			this.holdStyle = "frames";
 		}
 		if(this.curCharacter == "badai") {
 			this.addExactFrameTrack("disco","disco instance ",24,false);
 			this.addExactFrameTrack("wait","wait wha instance ",24,false);
+			var dir = "DOWN";
+			this.addExactFrameTrack("idle-sing" + dir,dir.toLowerCase() + "-idle instance ",24,false);
+			var dir = "UP";
+			this.addExactFrameTrack("idle-sing" + dir,dir.toLowerCase() + "-idle instance ",24,false);
+			var dir = "RIGHT";
+			this.addExactFrameTrack("idle-sing" + dir,dir.toLowerCase() + "-idle instance ",24,false);
 		}
 		var nativeScale = config.scale == null ? 1 : config.scale;
 		this.referenceNativeScale = nativeScale;
@@ -7810,7 +7827,8 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 		break;
 	case "bandu":
 		var library = null;
-		tex = flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/applecore/characters/bandu" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/applecore/characters/bandu" + ".xml","TEXT",library));
+		var potatoKey = "golden/applecore/characters/bandu" + "_potato";
+		tex = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/applecore/characters/bandu" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/applecore/characters/bandu" + ".xml","TEXT",library));
 		this.set_frames(tex);
 		this.animation.addByPrefix("idle","idle",24,false);
 		this.animation.addByPrefix("singLEFT","left",24,false);
@@ -7828,7 +7846,8 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 		break;
 	case "bandu-first":
 		var library = null;
-		tex = flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/applecore/characters/banduFirst" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/applecore/characters/banduFirst" + ".xml","TEXT",library));
+		var potatoKey = "golden/applecore/characters/banduFirst" + "_potato";
+		tex = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/applecore/characters/banduFirst" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/applecore/characters/banduFirst" + ".xml","TEXT",library));
 		var combined = new flixel_graphics_frames_FlxAtlasFrames(tex.parent);
 		var _g = 0;
 		var _g1 = tex.frames;
@@ -7838,7 +7857,8 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 			combined.pushFrame(frame.copyTo());
 		}
 		var library = null;
-		var extra = flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/applecore/characters/banduRap" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/applecore/characters/banduRap" + ".xml","TEXT",library));
+		var potatoKey = "golden/applecore/characters/banduRap" + "_potato";
+		var extra = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/applecore/characters/banduRap" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/applecore/characters/banduRap" + ".xml","TEXT",library));
 		var _g = 0;
 		var _g1 = extra.frames;
 		while(_g < _g1.length) {
@@ -7875,7 +7895,8 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 		break;
 	case "bandu-sad":
 		var library = null;
-		tex = flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/applecore/characters/bandu_sad" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/applecore/characters/bandu_sad" + ".xml","TEXT",library));
+		var potatoKey = "golden/applecore/characters/bandu_sad" + "_potato";
+		tex = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/applecore/characters/bandu_sad" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/applecore/characters/bandu_sad" + ".xml","TEXT",library));
 		this.set_frames(tex);
 		this.animation.addByPrefix("idle","idle",24,false);
 		this.animation.addByPrefix("become","Become",24,false);
@@ -7903,7 +7924,8 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 	case "bf-golden":
 		this.holdStyle = "frames";
 		var library = null;
-		this.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/characters/bf" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/characters/bf" + ".xml","TEXT",library)));
+		var potatoKey = "golden/characters/bf" + "_potato";
+		this.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/characters/bf" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/characters/bf" + ".xml","TEXT",library)));
 		if(frustrationSheets) {
 			this.set_frames(this.withFrustrationSheet(this.frames,"bf_cutscene"));
 		}
@@ -7940,7 +7962,8 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 		break;
 	case "bf-golden-dead":
 		var library = null;
-		this.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/characters/bf-dead" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/characters/bf-dead" + ".xml","TEXT",library)));
+		var potatoKey = "golden/characters/bf-dead" + "_potato";
+		this.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/characters/bf-dead" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/characters/bf-dead" + ".xml","TEXT",library)));
 		var _g = [];
 		var _g1 = 0;
 		var _g2 = this.frames.frames;
@@ -7960,7 +7983,8 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 		this.set_flipX(true);
 		break;
 	case "dave":
-		this.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/orthogonal/dave" + ".png","IMAGE","orthogonal"),Paths.getPath("images/" + "golden/orthogonal/dave" + ".xml","TEXT","orthogonal")));
+		var potatoKey = "golden/orthogonal/dave" + "_potato";
+		this.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","orthogonal"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","orthogonal"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","orthogonal"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","orthogonal")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/orthogonal/dave" + ".png","IMAGE","orthogonal"),Paths.getPath("images/" + "golden/orthogonal/dave" + ".xml","TEXT","orthogonal")));
 		this.addExactFrameTrack("idle","idle",24,false);
 		this.addExactFrameTrack("singLEFT","left",24,false);
 		this.addExactFrameTrack("singDOWN","down",24,false);
@@ -7974,7 +7998,8 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 		this.playAnim("idle");
 		break;
 	case "dave-frustration":
-		var main = flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/frustration/characters/dave_frustration" + ".png","IMAGE","frustration"),Paths.getPath("images/" + "golden/frustration/characters/dave_frustration" + ".xml","TEXT","frustration"));
+		var potatoKey = "golden/frustration/characters/dave_frustration" + "_potato";
+		var main = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","frustration"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","frustration"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","frustration"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","frustration")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/frustration/characters/dave_frustration" + ".png","IMAGE","frustration"),Paths.getPath("images/" + "golden/frustration/characters/dave_frustration" + ".xml","TEXT","frustration"));
 		var combined = new flixel_graphics_frames_FlxAtlasFrames(main.parent);
 		var _g = 0;
 		var _g1 = main.frames;
@@ -7983,7 +8008,8 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 			++_g;
 			combined.pushFrame(frame.copyTo());
 		}
-		var extra = flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/frustration/characters/dave_cutscene" + ".png","IMAGE","frustration"),Paths.getPath("images/" + "golden/frustration/characters/dave_cutscene" + ".xml","TEXT","frustration"));
+		var potatoKey = "golden/frustration/characters/dave_cutscene" + "_potato";
+		var extra = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","frustration"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","frustration"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","frustration"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","frustration")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/frustration/characters/dave_cutscene" + ".png","IMAGE","frustration"),Paths.getPath("images/" + "golden/frustration/characters/dave_cutscene" + ".xml","TEXT","frustration"));
 		var _g = 0;
 		var _g1 = extra.frames;
 		while(_g < _g1.length) {
@@ -8028,7 +8054,8 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 	case "disruption-bambi":
 		this.referenceNativeScale = 2.296;
 		var library = null;
-		tex = flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/applecore/characters/bambi" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/applecore/characters/bambi" + ".xml","TEXT",library));
+		var potatoKey = "golden/applecore/characters/bambi" + "_potato";
+		tex = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/applecore/characters/bambi" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/applecore/characters/bambi" + ".xml","TEXT",library));
 		var combined = new flixel_graphics_frames_FlxAtlasFrames(tex.parent);
 		var _g = 0;
 		var _g1 = tex.frames;
@@ -8038,7 +8065,8 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 			combined.pushFrame(frame.copyTo());
 		}
 		var library = null;
-		var extra = flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/applecore/characters/bambiExtra" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/applecore/characters/bambiExtra" + ".xml","TEXT",library));
+		var potatoKey = "golden/applecore/characters/bambiExtra" + "_potato";
+		var extra = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/applecore/characters/bambiExtra" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/applecore/characters/bambiExtra" + ".xml","TEXT",library));
 		var _g = 0;
 		var _g1 = extra.frames;
 		while(_g < _g1.length) {
@@ -8077,7 +8105,8 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 		break;
 	case "gf-golden":
 		var library = null;
-		this.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/characters/gf" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/characters/gf" + ".xml","TEXT",library)));
+		var potatoKey = "golden/characters/gf" + "_potato";
+		this.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/characters/gf" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/characters/gf" + ".xml","TEXT",library)));
 		if(frustrationSheets) {
 			this.set_frames(this.withFrustrationSheet(this.frames,"gf_cutscene"));
 		}
@@ -8111,7 +8140,8 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 		this.playAnim("danceLeft");
 		break;
 	case "inspicable":
-		var main = flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/inspicable/characters/inspicable" + ".png","IMAGE","inspicable"),Paths.getPath("images/" + "golden/inspicable/characters/inspicable" + ".xml","TEXT","inspicable"));
+		var potatoKey = "golden/inspicable/characters/inspicable" + "_potato";
+		var main = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","inspicable"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","inspicable"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","inspicable"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","inspicable")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/inspicable/characters/inspicable" + ".png","IMAGE","inspicable"),Paths.getPath("images/" + "golden/inspicable/characters/inspicable" + ".xml","TEXT","inspicable"));
 		var combined = new flixel_graphics_frames_FlxAtlasFrames(main.parent);
 		var _g = 0;
 		var _g1 = main.frames;
@@ -8121,7 +8151,8 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 			combined.pushFrame(frame.copyTo());
 		}
 		var _g = 0;
-		var _g1 = flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/inspicable/characters/inspicableTalking" + ".png","IMAGE","inspicable"),Paths.getPath("images/" + "golden/inspicable/characters/inspicableTalking" + ".xml","TEXT","inspicable")).frames;
+		var potatoKey = "golden/inspicable/characters/inspicableTalking" + "_potato";
+		var _g1 = (GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","inspicable"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","inspicable"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","inspicable"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","inspicable")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/inspicable/characters/inspicableTalking" + ".png","IMAGE","inspicable"),Paths.getPath("images/" + "golden/inspicable/characters/inspicableTalking" + ".xml","TEXT","inspicable"))).frames;
 		while(_g < _g1.length) {
 			var frame = _g1[_g];
 			++_g;
@@ -8175,7 +8206,8 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 		break;
 	case "unfair-expunged-forward":
 		var library = null;
-		tex = flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/applecore/characters/unfairguy" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/applecore/characters/unfairguy" + ".xml","TEXT",library));
+		var potatoKey = "golden/applecore/characters/unfairguy" + "_potato";
+		tex = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/applecore/characters/unfairguy" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/applecore/characters/unfairguy" + ".xml","TEXT",library));
 		this.set_frames(tex);
 		this.animation.addByPrefix("danceLeft","idlel",24,false);
 		this.animation.addByPrefix("danceRight","idler",24,false);
@@ -8214,6 +8246,8 @@ Character.prototype = $extend(flixel_FlxSprite.prototype,{
 	,isPlayer: null
 	,curCharacter: null
 	,holdTimer: null
+	,singHoldUntil: null
+	,singHoldAnimation: null
 	,goldenOriginX: null
 	,goldenOriginY: null
 	,referenceLayout: null
@@ -8228,9 +8262,34 @@ Character.prototype = $extend(flixel_FlxSprite.prototype,{
 	,danced: null
 	,draw: function() {
 		GoldenPoseOffsets.apply(this);
+		if(!this.useReferenceAnchor && (this.curCharacter == "badai" || this.curCharacter == "dave-decimated")) {
+			this.origin.set(this.frameWidth * .5,this.frameHeight * .5);
+			var pose = this.animation._curAnim == null ? null : this.animOffsets.h[this.animation._curAnim.name];
+			var ox = pose == null ? 0 : pose[0];
+			var oy = pose == null ? 0 : pose[1];
+			this.offset.set(this.origin.x * (1 - this.scale.x) + ox * this.scale.x,this.origin.y * (1 - this.scale.y) + oy * this.scale.y);
+		}
+		if(GoldenQuality.superLow) {
+			this.set_antialiasing(false);
+			this.shader = null;
+		}
 		flixel_FlxSprite.prototype.draw.call(this);
 	}
 	,update: function(elapsed) {
+		if(this.singHoldAnimation != null) {
+			if(Conductor.songPosition >= this.singHoldUntil || this.specialAnimation != null || this.animation._curAnim == null || this.animation._curAnim.name != this.singHoldAnimation) {
+				this.releaseSingHold();
+			} else {
+				var holdAt = this.holdStyle == "frames" ? Math.min(this.holdFrame,this.animation._curAnim.frames.length - 1) | 0 : this.animation._curAnim.frames.length - 1;
+				if(this.animation._curAnim.curFrame >= holdAt) {
+					this.animation._curAnim.set_curFrame(holdAt);
+					var _this = this.animation;
+					if(_this._curAnim != null) {
+						_this._curAnim.pause();
+					}
+				}
+			}
+		}
 		if(!StringTools.startsWith(this.curCharacter,"bf") && this.animation._curAnim != null) {
 			if(StringTools.startsWith(this.animation._curAnim.name,"sing") || StringTools.startsWith(this.animation._curAnim.name,"smash")) {
 				this.holdTimer += elapsed;
@@ -8248,17 +8307,29 @@ Character.prototype = $extend(flixel_FlxSprite.prototype,{
 			this.completedSpecial = this.specialAnimation;
 			this.specialAnimation = null;
 			this.holdTimer = 0;
-			this.dance();
+			if(this.curCharacter == "dave-decimated" && this.completedSpecial == "look") {
+				this.playAnim("looking",true);
+			} else {
+				this.dance();
+			}
 		}
 	}
 	,dance: function() {
 		if(this.debugMode || !this.canAutoDance || this.specialAnimation != null || StringTools.endsWith(this.curCharacter,"-dead")) {
 			return;
 		}
+		if(this.singHoldAnimation != null && Conductor.songPosition < this.singHoldUntil) {
+			return;
+		}
 		if(this.allIdleEase && this.animation._curAnim != null && !this.animation._curAnim.finished && !StringTools.startsWith(this.animation._curAnim.name,"dance") && !StringTools.startsWith(this.animation._curAnim.name,"idle")) {
 			return;
 		}
 		switch(this.curCharacter) {
+		case "badai":
+			var current = this.animation._curAnim == null ? "" : this.animation._curAnim.name;
+			var target = StringTools.startsWith(current,"sing") ? "idle-" + current : StringTools.startsWith(current,"idle-sing") ? current : "idle";
+			this.playAnim(this.animation.exists(target) ? target : "idle");
+			break;
 		case "dave-frustration":
 			this.playAnim(this.idleSuffix == "-alt" ? "idle-alt" : "idle" + (this.idleSuffix == "" ? "0" : this.idleSuffix));
 			break;
@@ -8292,6 +8363,9 @@ Character.prototype = $extend(flixel_FlxSprite.prototype,{
 		if(this.specialAnimation != null && AnimName != this.specialAnimation && this.animation._curAnim != null && !this.animation._curAnim.finished) {
 			return;
 		}
+		if(this.singHoldAnimation != null && AnimName != this.singHoldAnimation) {
+			this.releaseSingHold();
+		}
 		this.animation.play(AnimName,Force,Reversed,Frame);
 		this.refreshAnimationOffset();
 	}
@@ -8313,27 +8387,48 @@ Character.prototype = $extend(flixel_FlxSprite.prototype,{
 			this.offset.set(this.scaleOffsetX + ox * this.scale.x + this.goldenOriginX,this.scaleOffsetY + oy * this.scale.y + this.goldenOriginY);
 		}
 	}
-	,playSing: function(name,sustain) {
+	,playSing: function(name,sustain,until) {
+		if(until == null) {
+			until = -1;
+		}
 		if(sustain == null) {
 			sustain = false;
 		}
-		if(sustain && this.animation._curAnim != null) {
-			if(this.holdStyle == "stay") {
-				return;
-			}
-			var frame = Math.min(this.animation._curAnim.curFrame,this.holdFrame) | 0;
-			if(frame == this.animation._curAnim.curFrame) {
-				return;
-			}
-			this.playAnim(name,true,false,frame);
-		} else {
-			this.playAnim(name,true);
+		if(this.specialAnimation != null) {
+			return;
 		}
+		if(sustain && until <= Conductor.songPosition && this.animation._curAnim != null && this.animation._curAnim.name == name) {
+			return;
+		}
+		if(sustain && this.animation._curAnim != null && this.animation._curAnim.name == name && this.singHoldAnimation == name) {
+			this.singHoldUntil = Math.max(this.singHoldUntil,until);
+			return;
+		}
+		this.releaseSingHold();
+		this.playAnim(name,true);
+		if(this.animation._curAnim != null && this.animation._curAnim.name == name && until > Conductor.songPosition) {
+			this.singHoldAnimation = name;
+			this.singHoldUntil = until;
+		}
+	}
+	,releaseSingHold: function(direction) {
+		if(direction != null && (this.singHoldAnimation == null || !StringTools.startsWith(this.singHoldAnimation,direction))) {
+			return;
+		}
+		if(this.singHoldAnimation != null && this.animation._curAnim != null && this.animation._curAnim.name == this.singHoldAnimation) {
+			var _this = this.animation;
+			if(_this._curAnim != null) {
+				_this._curAnim.paused = false;
+			}
+		}
+		this.singHoldAnimation = null;
+		this.singHoldUntil = -1;
 	}
 	,playSpecialAnim: function(name) {
 		if(!this.animation.exists(name)) {
 			return;
 		}
+		this.releaseSingHold();
 		this.specialAnimation = null;
 		this.playAnim(name,true);
 		this.specialAnimation = name;
@@ -8386,7 +8481,8 @@ Character.prototype = $extend(flixel_FlxSprite.prototype,{
 		}
 		var _g = 0;
 		var key = "golden/frustration/characters/" + name;
-		var _g1 = flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE","frustration"),Paths.getPath("images/" + key + ".xml","TEXT","frustration")).frames;
+		var potatoKey = key + "_potato";
+		var _g1 = (GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","frustration"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","frustration"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","frustration"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","frustration")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE","frustration"),Paths.getPath("images/" + key + ".xml","TEXT","frustration"))).frames;
 		while(_g < _g1.length) {
 			var frame = _g1[_g];
 			++_g;
@@ -15663,21 +15759,24 @@ var DialogueBox = function(talkingRight,dialogueList) {
 		hasDialog = true;
 		flixel_FlxG.sound.play(Paths.sound("ANGRY_TEXT_BOX"));
 		var library = null;
-		this.box.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "weeb/pixelUI/dialogueBox-senpaiMad" + ".png","IMAGE",library),Paths.getPath("images/" + "weeb/pixelUI/dialogueBox-senpaiMad" + ".xml","TEXT",library)));
+		var potatoKey = "weeb/pixelUI/dialogueBox-senpaiMad" + "_potato";
+		this.box.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "weeb/pixelUI/dialogueBox-senpaiMad" + ".png","IMAGE",library),Paths.getPath("images/" + "weeb/pixelUI/dialogueBox-senpaiMad" + ".xml","TEXT",library)));
 		this.box.animation.addByPrefix("normalOpen","SENPAI ANGRY IMPACT SPEECH",24,false);
 		this.box.animation.addByIndices("normal","SENPAI ANGRY IMPACT SPEECH",[4],"",24);
 		break;
 	case "senpai":
 		hasDialog = true;
 		var library = null;
-		this.box.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "weeb/pixelUI/dialogueBox-pixel" + ".png","IMAGE",library),Paths.getPath("images/" + "weeb/pixelUI/dialogueBox-pixel" + ".xml","TEXT",library)));
+		var potatoKey = "weeb/pixelUI/dialogueBox-pixel" + "_potato";
+		this.box.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "weeb/pixelUI/dialogueBox-pixel" + ".png","IMAGE",library),Paths.getPath("images/" + "weeb/pixelUI/dialogueBox-pixel" + ".xml","TEXT",library)));
 		this.box.animation.addByPrefix("normalOpen","Text Box Appear",24,false);
 		this.box.animation.addByIndices("normal","Text Box Appear",[4],"",24);
 		break;
 	case "thorns":
 		hasDialog = true;
 		var library = null;
-		this.box.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "weeb/pixelUI/dialogueBox-evil" + ".png","IMAGE",library),Paths.getPath("images/" + "weeb/pixelUI/dialogueBox-evil" + ".xml","TEXT",library)));
+		var potatoKey = "weeb/pixelUI/dialogueBox-evil" + "_potato";
+		this.box.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "weeb/pixelUI/dialogueBox-evil" + ".png","IMAGE",library),Paths.getPath("images/" + "weeb/pixelUI/dialogueBox-evil" + ".xml","TEXT",library)));
 		this.box.animation.addByPrefix("normalOpen","Spirit Textbox spawn",24,false);
 		this.box.animation.addByIndices("normal","Spirit Textbox spawn",[11],"",24);
 		var face = new flixel_FlxSprite(320,170).loadGraphic(Paths.getPath("images/" + "weeb/spiritFaceForward" + ".png","IMAGE",null));
@@ -15691,7 +15790,8 @@ var DialogueBox = function(talkingRight,dialogueList) {
 	}
 	this.portraitLeft = new flixel_FlxSprite(-20,40);
 	var library = null;
-	this.portraitLeft.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "weeb/senpaiPortrait" + ".png","IMAGE",library),Paths.getPath("images/" + "weeb/senpaiPortrait" + ".xml","TEXT",library)));
+	var potatoKey = "weeb/senpaiPortrait" + "_potato";
+	this.portraitLeft.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "weeb/senpaiPortrait" + ".png","IMAGE",library),Paths.getPath("images/" + "weeb/senpaiPortrait" + ".xml","TEXT",library)));
 	this.portraitLeft.animation.addByPrefix("enter","Senpai Portrait Enter",24,false);
 	this.portraitLeft.setGraphicSize(this.portraitLeft.get_width() * PlayState.daPixelZoom * 0.9 | 0);
 	this.portraitLeft.updateHitbox();
@@ -15700,7 +15800,8 @@ var DialogueBox = function(talkingRight,dialogueList) {
 	this.portraitLeft.set_visible(false);
 	this.portraitRight = new flixel_FlxSprite(0,40);
 	var library = null;
-	this.portraitRight.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "weeb/bfPortrait" + ".png","IMAGE",library),Paths.getPath("images/" + "weeb/bfPortrait" + ".xml","TEXT",library)));
+	var potatoKey = "weeb/bfPortrait" + "_potato";
+	this.portraitRight.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "weeb/bfPortrait" + ".png","IMAGE",library),Paths.getPath("images/" + "weeb/bfPortrait" + ".xml","TEXT",library)));
 	this.portraitRight.animation.addByPrefix("enter","Boyfriend portrait enter",24,false);
 	this.portraitRight.setGraphicSize(this.portraitRight.get_width() * PlayState.daPixelZoom * 0.9 | 0);
 	this.portraitRight.updateHitbox();
@@ -15979,6 +16080,9 @@ EReg.prototype = {
 	,__class__: EReg
 };
 var FreeplayState = function(TransIn,TransOut) {
+	this.songCredits = ["SONG\nSky!\n\nVISUALS\nLancey, LongDonny, gitgato\n\nCHART\nBezieAnims","SONG\nSky!\n\nVISUALS\nLancey, Jukebox, Sporbb\n\nCHART\nSky!","SONG\nSky!\n\nVISUALS\nLancey, Sporbb\n\nCHART\nBarGames","SONG\nSky!\n\nVISUALS\nLancey, gitgato\n\nCHART\nBezieAnims","SONG\nSky!\n\nVISUALS\nLongDonny, Lancey, Sporbb, gitgato\n\nCHART\nSky!"];
+	this.songDescriptions = ["The Golden Apple opening set.","The world folds in on itself.","Dave has had enough.","Watch the pitchforks.","A trip through the tunnel."];
+	this.songTitles = ["Applecore","Orthogonal","Frustration","Inspicable","Tunnel Vision"];
 	this.songs = ["applecore","orthogonal","frustration","inspicable","tunnelvision"];
 	this.starting = false;
 	this.inputDelay = 0.25;
@@ -15991,6 +16095,9 @@ FreeplayState.prototype = $extend(MusicBeatState.prototype,{
 	inputDelay: null
 	,starting: null
 	,songs: null
+	,songTitles: null
+	,songDescriptions: null
+	,songCredits: null
 	,content: null
 	,art: function(sprite) {
 		this.content.add(sprite);
@@ -15998,6 +16105,9 @@ FreeplayState.prototype = $extend(MusicBeatState.prototype,{
 	,create: function() {
 		MusicBeatState.prototype.create.call(this);
 		flixel_FlxG.camera.set_zoom(1);
+		if(FreeplayState.selection < 0 || FreeplayState.selection >= this.songs.length) {
+			FreeplayState.selection = 0;
+		}
 		this.renderSong();
 		flixel_FlxG.sound.playMusic(Paths.getPath("music/" + "golden/menu/play" + "." + "mp3","MUSIC",null),0.7);
 	}
@@ -16096,15 +16206,15 @@ FreeplayState.prototype = $extend(MusicBeatState.prototype,{
 		board.set_y(board.y + 30);
 		board.set_alpha(0);
 		flixel_tweens_FlxTween.tween(board,{ y : 100, alpha : 1},0.4,{ ease : flixel_tweens_FlxEase.quadOut});
-		var info = new flixel_text_FlxText(820,185,310,song == "frustration" ? "Dave does some stuff and its cool\n\nSONG\nSky!\n\nVISUALS\nLancey, Sporbb\n\nCHART\nBarGames" : song == "orthogonal" ? "Dave in bambi mod\n\nSONG\nSky!\n\nVISUALS\nLancey, Jukebox, Sporbb\n\nCHART\nSky!" : "i got losta phones\n\nSONG\nSky!\n\nVISUALS\nLancey, LongDonny, gitgato\n\nCHART\nBezieAnims",18);
+		var info = new flixel_text_FlxText(820,155,310,this.songDescriptions[FreeplayState.selection] + "\n\n" + this.songCredits[FreeplayState.selection],18);
 		info.setFormat("assets/fonts/" + "comic_normal.ttf",18,-1,"center");
 		this.art(info);
 		if(song == "inspicable") {
-			info.set_text("stop being weird\n\nSONG\nSky!\n\nVISUALS\nLancey, gitgato\n\nCHART\nBezieAnims\n\nSpace: dodge pitchforks");
+			info.set_text(info.text + "\n\nSpace: dodge pitchforks");
 		}
-		if(song == "tunnelvision") {
-			info.set_text("Sprites by Sporbb\n\nSONG\nSky!\n\nVISUALS\nLongDonny, Lancey, Sporbb, gitgato\n\nCHART\nSky!");
-		}
+		var title = new flixel_text_FlxText(820,105,310,this.songTitles[FreeplayState.selection],28);
+		title.setFormat("assets/fonts/" + "comic.ttf",28,-154,"center",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
+		this.art(title);
 		var best = new flixel_text_FlxText(30,20,1220,"PERSONAL BEST: " + Highscore.getScore(song,1),22);
 		best.setFormat("assets/fonts/" + "comic.ttf",22,-1,"left",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
 		this.art(best);
@@ -16123,6 +16233,7 @@ FreeplayState.prototype = $extend(MusicBeatState.prototype,{
 		}
 		if(PlayerSettings.player1.controls._leftP.check() || PlayerSettings.player1.controls._rightP.check()) {
 			FreeplayState.selection = (FreeplayState.selection + (PlayerSettings.player1.controls._rightP.check() ? 1 : this.songs.length - 1)) % this.songs.length;
+			this.inputDelay = 0.12;
 			flixel_FlxG.sound.play(Paths.sound("scrollMenu"),0.4);
 			this.renderSong();
 		}
@@ -16376,7 +16487,8 @@ GitarooPause.prototype = $extend(MusicBeatState.prototype,{
 		this.add(bg);
 		var bf = new flixel_FlxSprite(0,30);
 		var library = null;
-		bf.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "pauseAlt/bfLol" + ".png","IMAGE",library),Paths.getPath("images/" + "pauseAlt/bfLol" + ".xml","TEXT",library)));
+		var potatoKey = "pauseAlt/bfLol" + "_potato";
+		bf.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "pauseAlt/bfLol" + ".png","IMAGE",library),Paths.getPath("images/" + "pauseAlt/bfLol" + ".xml","TEXT",library)));
 		bf.animation.addByPrefix("lol","funnyThing",13);
 		bf.animation.play("lol");
 		this.add(bf);
@@ -16408,14 +16520,16 @@ GitarooPause.prototype = $extend(MusicBeatState.prototype,{
 		}
 		this.replayButton = new flixel_FlxSprite(flixel_FlxG.width * 0.28,flixel_FlxG.height * 0.7);
 		var library = null;
-		this.replayButton.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "pauseAlt/pauseUI" + ".png","IMAGE",library),Paths.getPath("images/" + "pauseAlt/pauseUI" + ".xml","TEXT",library)));
+		var potatoKey = "pauseAlt/pauseUI" + "_potato";
+		this.replayButton.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "pauseAlt/pauseUI" + ".png","IMAGE",library),Paths.getPath("images/" + "pauseAlt/pauseUI" + ".xml","TEXT",library)));
 		this.replayButton.animation.addByPrefix("selected","bluereplay",0,false);
 		this.replayButton.animation.appendByPrefix("selected","yellowreplay");
 		this.replayButton.animation.play("selected");
 		this.add(this.replayButton);
 		this.cancelButton = new flixel_FlxSprite(flixel_FlxG.width * 0.58,this.replayButton.y);
 		var library = null;
-		this.cancelButton.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "pauseAlt/pauseUI" + ".png","IMAGE",library),Paths.getPath("images/" + "pauseAlt/pauseUI" + ".xml","TEXT",library)));
+		var potatoKey = "pauseAlt/pauseUI" + "_potato";
+		this.cancelButton.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "pauseAlt/pauseUI" + ".png","IMAGE",library),Paths.getPath("images/" + "pauseAlt/pauseUI" + ".xml","TEXT",library)));
 		this.cancelButton.animation.addByPrefix("selected","bluecancel",0,false);
 		this.cancelButton.animation.appendByPrefix("selected","cancelyellow");
 		this.cancelButton.animation.play("selected");
@@ -16999,7 +17113,8 @@ GoldenBambiScenes.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 	,clip: function(path,prefix) {
 		var sprite = new flixel_FlxSprite();
 		var key = "golden/applecore/native-stage/bambi/" + path;
-		sprite.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE","applecorestage"),Paths.getPath("images/" + key + ".xml","TEXT","applecorestage")));
+		var potatoKey = key + "_potato";
+		sprite.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","applecorestage"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","applecorestage"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","applecorestage"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","applecorestage")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE","applecorestage"),Paths.getPath("images/" + key + ".xml","TEXT","applecorestage")));
 		sprite.animation.addByPrefix("play",prefix,24,false);
 		sprite.animation.play("play");
 		var _this = sprite.animation;
@@ -17707,6 +17822,16 @@ PlayState.goldenSong = function() {
 		return true;
 	}
 };
+PlayState.singingEnd = function(note) {
+	if(note.isSustainNote) {
+		return note.strumTime;
+	}
+	if(note.sustainLength > 0) {
+		return note.strumTime + note.sustainLength;
+	} else {
+		return -1;
+	}
+};
 PlayState.__super__ = MusicBeatState;
 PlayState.prototype = $extend(MusicBeatState.prototype,{
 	applecoreVideo: null
@@ -17795,6 +17920,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 	,inCutscene: null
 	,create: function() {
 		var _gthis = this;
+		GoldenQuality.load();
 		GoldenHoldPath.frustration = null;
 		PlayState.theFunne = flixel_FlxG.save.data.newInput;
 		if(flixel_FlxG.sound.music != null) {
@@ -17826,6 +17952,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 		}
 		Conductor.mapBPMChanges(PlayState.SONG);
 		this.goldenInput = new GoldenInput(this);
+		this.touchLayout = new GoldenTouchLayout(this);
 		Conductor.changeBPM(PlayState.SONG.bpm);
 		switch(PlayState.SONG.song.toLowerCase()) {
 		case "bopeebo":
@@ -17854,7 +17981,8 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 			PlayState.curStage = "spooky";
 			this.halloweenLevel = true;
 			var library = null;
-			var hallowTex = flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "halloween_bg" + ".png","IMAGE",library),Paths.getPath("images/" + "halloween_bg" + ".xml","TEXT",library));
+			var potatoKey = "halloween_bg" + "_potato";
+			var hallowTex = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "halloween_bg" + ".png","IMAGE",library),Paths.getPath("images/" + "halloween_bg" + ".xml","TEXT",library));
 			this.halloweenBG = new flixel_FlxSprite(-200,-100);
 			this.halloweenBG.set_frames(hallowTex);
 			this.halloweenBG.animation.addByPrefix("idle","halloweem bg0");
@@ -17926,7 +18054,8 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 			this.add(skyBG);
 			var bgLimo = new flixel_FlxSprite(-200,480);
 			var library = null;
-			bgLimo.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "limo/bgLimo" + ".png","IMAGE",library),Paths.getPath("images/" + "limo/bgLimo" + ".xml","TEXT",library)));
+			var potatoKey = "limo/bgLimo" + "_potato";
+			bgLimo.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "limo/bgLimo" + ".png","IMAGE",library),Paths.getPath("images/" + "limo/bgLimo" + ".xml","TEXT",library)));
 			bgLimo.animation.addByPrefix("drive","background limo pink",24);
 			bgLimo.animation.play("drive");
 			bgLimo.scrollFactor.set(0.4,0.4);
@@ -17951,7 +18080,8 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 			var overlayShit = new flixel_FlxSprite(-500,-600).loadGraphic(Paths.getPath("images/" + "limo/limoOverlay" + ".png","IMAGE",null));
 			overlayShit.set_alpha(0.5);
 			var library = null;
-			var limoTex = flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "limo/limoDrive" + ".png","IMAGE",library),Paths.getPath("images/" + "limo/limoDrive" + ".xml","TEXT",library));
+			var potatoKey = "limo/limoDrive" + "_potato";
+			var limoTex = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "limo/limoDrive" + ".png","IMAGE",library),Paths.getPath("images/" + "limo/limoDrive" + ".xml","TEXT",library));
 			this.limo = new flixel_FlxSprite(-120,550);
 			this.limo.set_frames(limoTex);
 			this.limo.animation.addByPrefix("drive","Limo stage",24);
@@ -17970,7 +18100,8 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 			this.add(bg);
 			this.upperBoppers = new flixel_FlxSprite(-240,-90);
 			var library = null;
-			this.upperBoppers.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "christmas/upperBop" + ".png","IMAGE",library),Paths.getPath("images/" + "christmas/upperBop" + ".xml","TEXT",library)));
+			var potatoKey = "christmas/upperBop" + "_potato";
+			this.upperBoppers.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "christmas/upperBop" + ".png","IMAGE",library),Paths.getPath("images/" + "christmas/upperBop" + ".xml","TEXT",library)));
 			this.upperBoppers.animation.addByPrefix("bop","Upper Crowd Bob",24,false);
 			this.upperBoppers.set_antialiasing(true);
 			this.upperBoppers.scrollFactor.set(0.33,0.33);
@@ -17990,7 +18121,8 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 			this.add(tree);
 			this.bottomBoppers = new flixel_FlxSprite(-300,140);
 			var library = null;
-			this.bottomBoppers.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "christmas/bottomBop" + ".png","IMAGE",library),Paths.getPath("images/" + "christmas/bottomBop" + ".xml","TEXT",library)));
+			var potatoKey = "christmas/bottomBop" + "_potato";
+			this.bottomBoppers.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "christmas/bottomBop" + ".png","IMAGE",library),Paths.getPath("images/" + "christmas/bottomBop" + ".xml","TEXT",library)));
 			this.bottomBoppers.animation.addByPrefix("bop","Bottom Level Boppers",24,false);
 			this.bottomBoppers.set_antialiasing(true);
 			this.bottomBoppers.scrollFactor.set(0.9,0.9);
@@ -18003,7 +18135,8 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 			this.add(fgSnow);
 			this.santa = new flixel_FlxSprite(-840,150);
 			var library = null;
-			this.santa.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "christmas/santa" + ".png","IMAGE",library),Paths.getPath("images/" + "christmas/santa" + ".xml","TEXT",library)));
+			var potatoKey = "christmas/santa" + "_potato";
+			this.santa.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "christmas/santa" + ".png","IMAGE",library),Paths.getPath("images/" + "christmas/santa" + ".xml","TEXT",library)));
 			this.santa.animation.addByPrefix("idle","santa idle in fear",24,false);
 			this.santa.set_antialiasing(true);
 			this.add(this.santa);
@@ -18048,7 +18181,8 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 			this.add(bgTrees);
 			var treeLeaves = new flixel_FlxSprite(repositionShit,-40);
 			var library = null;
-			treeLeaves.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "weeb/petals" + ".png","IMAGE",library),Paths.getPath("images/" + "weeb/petals" + ".xml","TEXT",library)));
+			var potatoKey = "weeb/petals" + "_potato";
+			treeLeaves.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "weeb/petals" + ".png","IMAGE",library),Paths.getPath("images/" + "weeb/petals" + ".xml","TEXT",library)));
 			treeLeaves.animation.addByPrefix("leaves","PETALS ALL",24,true);
 			treeLeaves.animation.play("leaves");
 			treeLeaves.scrollFactor.set(0.85,0.85);
@@ -18082,7 +18216,8 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 			var posY = 200;
 			var bg = new flixel_FlxSprite(posX,posY);
 			var library = null;
-			bg.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "weeb/animatedEvilSchool" + ".png","IMAGE",library),Paths.getPath("images/" + "weeb/animatedEvilSchool" + ".xml","TEXT",library)));
+			var potatoKey = "weeb/animatedEvilSchool" + "_potato";
+			bg.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "weeb/animatedEvilSchool" + ".png","IMAGE",library),Paths.getPath("images/" + "weeb/animatedEvilSchool" + ".xml","TEXT",library)));
 			bg.animation.addByPrefix("idle","background 2",24);
 			bg.animation.play("idle");
 			bg.scrollFactor.set(0.8,0.9);
@@ -18463,7 +18598,8 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 		red.scrollFactor.set();
 		var senpaiEvil = new flixel_FlxSprite();
 		var library = null;
-		senpaiEvil.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "weeb/senpaiCrazy" + ".png","IMAGE",library),Paths.getPath("images/" + "weeb/senpaiCrazy" + ".xml","TEXT",library)));
+		var potatoKey = "weeb/senpaiCrazy" + "_potato";
+		senpaiEvil.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "weeb/senpaiCrazy" + ".png","IMAGE",library),Paths.getPath("images/" + "weeb/senpaiCrazy" + ".xml","TEXT",library)));
 		senpaiEvil.animation.addByPrefix("idle","Senpai Pre Explosion",24,false);
 		senpaiEvil.setGraphicSize(senpaiEvil.get_width() * 6 | 0);
 		senpaiEvil.scrollFactor.set();
@@ -18878,6 +19014,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 	}
 	,update: function(elapsed) {
 		var _gthis = this;
+		this.touchLayout.restore();
 		this.perfectMode = false;
 		if(PlayState.curStage == "philly") {
 			if(this.trainMoving) {
@@ -19021,6 +19158,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 		if(this.inspicable != null) {
 			this.inspicable.update(Conductor.songPosition,elapsed);
 		}
+		this.touchLayout.apply();
 		if(!PlayState.goldenSong() && this.camZooming) {
 			var a = this.defaultCamZoom;
 			flixel_FlxG.camera.set_zoom(a + 0.95 * (flixel_FlxG.camera.zoom - a));
@@ -19097,16 +19235,16 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 					}
 					switch(Math.abs(daNote.noteData)) {
 					case 0:
-						_gthis.dad.playSing("singLEFT" + altAnim,daNote.isSustainNote);
+						_gthis.dad.playSing("singLEFT" + altAnim,daNote.isSustainNote,PlayState.singingEnd(daNote));
 						break;
 					case 1:
-						_gthis.dad.playSing("singDOWN" + altAnim,daNote.isSustainNote);
+						_gthis.dad.playSing("singDOWN" + altAnim,daNote.isSustainNote,PlayState.singingEnd(daNote));
 						break;
 					case 2:
-						_gthis.dad.playSing("singUP" + altAnim,daNote.isSustainNote);
+						_gthis.dad.playSing("singUP" + altAnim,daNote.isSustainNote,PlayState.singingEnd(daNote));
 						break;
 					case 3:
-						_gthis.dad.playSing("singRIGHT" + altAnim,daNote.isSustainNote);
+						_gthis.dad.playSing("singRIGHT" + altAnim,daNote.isSustainNote,PlayState.singingEnd(daNote));
 						break;
 					}
 					_gthis.dad.holdTimer = 0;
@@ -19189,8 +19327,8 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 				if(PlayState.storyDifficulty == 2) {
 					difficulty = "-hard";
 				}
-				haxe_Log.trace("LOADING NEXT SONG",{ fileName : "source/PlayState.hx", lineNumber : 1720, className : "PlayState", methodName : "endSong"});
-				haxe_Log.trace(PlayState.storyPlaylist[0].toLowerCase() + difficulty,{ fileName : "source/PlayState.hx", lineNumber : 1721, className : "PlayState", methodName : "endSong"});
+				haxe_Log.trace("LOADING NEXT SONG",{ fileName : "source/PlayState.hx", lineNumber : 1724, className : "PlayState", methodName : "endSong"});
+				haxe_Log.trace(PlayState.storyPlaylist[0].toLowerCase() + difficulty,{ fileName : "source/PlayState.hx", lineNumber : 1725, className : "PlayState", methodName : "endSong"});
 				if(PlayState.SONG.song.toLowerCase() == "eggnog") {
 					var blackShit = new flixel_FlxSprite(-flixel_FlxG.width * flixel_FlxG.camera.zoom,-flixel_FlxG.height * flixel_FlxG.camera.zoom).makeGraphic(flixel_FlxG.width * 3,flixel_FlxG.height * 3,-16777216);
 					blackShit.scrollFactor.set();
@@ -19440,6 +19578,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 	,rightHold: null
 	,leftHold: null
 	,goldenInput: null
+	,touchLayout: null
 	,noteSplashes: null
 	,replayHeld: null
 	,keyShit: function() {
@@ -19521,6 +19660,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 			}
 			var receptor = this.playerStrums.members[lane];
 			if(!event.down) {
+				this.boyfriend.releaseSingHold(["singLEFT","singDOWN","singUP","singRIGHT"][lane]);
 				receptor.animation.play("static",true);
 				continue;
 			}
@@ -19559,7 +19699,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 			if(spr.animation._curAnim.name == "confirm" && spr.animation._curAnim.finished) {
 				spr.animation.play(held[spr.ID] ? "pressed" : "static");
 			}
-			GoldenNoteSkin.alignStrum(spr,"default");
+			GoldenNoteSkin.alignStrum(spr);
 		});
 	}
 	,destroy: function() {
@@ -19581,6 +19721,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 		if(direction == null) {
 			direction = 1;
 		}
+		this.boyfriend.releaseSingHold(["singLEFT","singDOWN","singUP","singRIGHT"][direction]);
 		if(!this.boyfriend.stunned) {
 			this.health -= 0.04;
 			if(this.combo > 5 && Object.prototype.hasOwnProperty.call(this.gf.animOffsets.h,"sad")) {
@@ -19634,16 +19775,16 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 			}
 			switch(note.noteData) {
 			case 0:
-				this.boyfriend.playSing("singLEFT" + (note.altAnimation ? "-alt" : ""),note.isSustainNote);
+				this.boyfriend.playSing("singLEFT" + (note.altAnimation ? "-alt" : ""),note.isSustainNote,PlayState.singingEnd(note));
 				break;
 			case 1:
-				this.boyfriend.playSing("singDOWN" + (note.altAnimation ? "-alt" : ""),note.isSustainNote);
+				this.boyfriend.playSing("singDOWN" + (note.altAnimation ? "-alt" : ""),note.isSustainNote,PlayState.singingEnd(note));
 				break;
 			case 2:
-				this.boyfriend.playSing("singUP" + (note.altAnimation ? "-alt" : ""),note.isSustainNote);
+				this.boyfriend.playSing("singUP" + (note.altAnimation ? "-alt" : ""),note.isSustainNote,PlayState.singingEnd(note));
 				break;
 			case 3:
-				this.boyfriend.playSing("singRIGHT" + (note.altAnimation ? "-alt" : ""),note.isSustainNote);
+				this.boyfriend.playSing("singRIGHT" + (note.altAnimation ? "-alt" : ""),note.isSustainNote,PlayState.singingEnd(note));
 				break;
 			}
 			this.playerStrums.forEach(function(spr) {
@@ -20065,7 +20206,8 @@ var GoldenFrustration = function(owner) {
 	this.backdrop.set_alpha(0);
 	owner.add(this.backdrop);
 	this.closeup = new flixel_FlxSprite();
-	this.closeup.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/frustration/dave_closeup" + ".png","IMAGE","frustration"),Paths.getPath("images/" + "golden/frustration/dave_closeup" + ".xml","TEXT","frustration")));
+	var potatoKey = "golden/frustration/dave_closeup" + "_potato";
+	this.closeup.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","frustration"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","frustration"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","frustration"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","frustration")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/frustration/dave_closeup" + ".png","IMAGE","frustration"),Paths.getPath("images/" + "golden/frustration/dave_closeup" + ".xml","TEXT","frustration")));
 	var pair_0 = "idle";
 	var pair_1 = "closeup";
 	this.closeup.animation.addByPrefix(pair_0,pair_1,24,true);
@@ -20701,7 +20843,9 @@ var GoldenFrustrationStage = function() {
 	this.world = new flixel_addons_display_FlxBackdrop(Paths.getPath("images/" + "golden/frustration/frustables" + ".png","IMAGE","frustration"));
 	this.world.setPosition(-1000,-800);
 	this.glitch = new GoldenGlitchShader();
-	this.world.shader = this.glitch;
+	if(!GoldenQuality.superLow) {
+		this.world.shader = this.glitch;
+	}
 	this.world.scale.set(1.5,1.5);
 	this.world.updateHitbox();
 	this.world.origin.set();
@@ -22027,22 +22171,27 @@ GoldenInput.prototype = {
 		}
 	}
 	,onDown: function(event) {
-		var lane = this.laneFor(event.keyCode);
-		if(lane < 0 || this.keys.h.hasOwnProperty(event.keyCode) || !this.playable()) {
+		this.pressKey(event.keyCode,this.laneFor(event.keyCode));
+	}
+	,pressKey: function(source,lane) {
+		if(lane < 0 || this.keys.h.hasOwnProperty(source) || !this.playable()) {
 			return;
 		}
-		this.keys.h[event.keyCode] = lane;
+		this.keys.h[source] = lane;
 		if(!this.held[lane]) {
 			this.events.push({ lane : lane, time : GoldenInput.audioTime(), down : true});
 		}
 		this.held[lane] = true;
 	}
 	,onUp: function(event) {
-		if(!this.keys.h.hasOwnProperty(event.keyCode)) {
+		this.releaseKey(event.keyCode);
+	}
+	,releaseKey: function(source) {
+		if(!this.keys.h.hasOwnProperty(source)) {
 			return;
 		}
-		var lane = this.keys.h[event.keyCode];
-		this.keys.remove(event.keyCode);
+		var lane = this.keys.h[source];
+		this.keys.remove(source);
 		var stillHeld = false;
 		var other = this.keys.iterator();
 		while(other.hasNext()) {
@@ -22054,6 +22203,18 @@ GoldenInput.prototype = {
 		this.held[lane] = stillHeld;
 		if(!stillHeld && this.playable()) {
 			this.events.push({ lane : lane, time : GoldenInput.audioTime(), down : false});
+		}
+	}
+	,touchKey: function(code,down) {
+		var lane = this.laneFor(code);
+		if(lane < 0) {
+			return;
+		}
+		var source = -1000 - code;
+		if(down) {
+			this.pressKey(source,lane);
+		} else {
+			this.releaseKey(source);
 		}
 	}
 	,onBlur: function(event) {
@@ -22128,7 +22289,8 @@ var GoldenInspicable = function(owner) {
 	}
 	this.attacks = _g;
 	this.fork = new flixel_FlxSprite();
-	this.fork.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/inspicable/pitchfork" + ".png","IMAGE","inspicable"),Paths.getPath("images/" + "golden/inspicable/pitchfork" + ".xml","TEXT","inspicable")));
+	var potatoKey = "golden/inspicable/pitchfork" + "_potato";
+	this.fork.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","inspicable"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","inspicable"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","inspicable"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","inspicable")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/inspicable/pitchfork" + ".png","IMAGE","inspicable"),Paths.getPath("images/" + "golden/inspicable/pitchfork" + ".xml","TEXT","inspicable")));
 	this.fork.animation.addByPrefix("scroll","scroll",24,false);
 	this.fork.animation.addByPrefix("confirm","confirm",24,false);
 	this.fork.set_antialiasing(true);
@@ -22242,12 +22404,26 @@ GoldenInspicable.prototype = {
 			return false;
 		}
 	}
+	,showTouchDodge: function() {
+		if(this.dodgePlayable() && this.dodgeStrum != null) {
+			return this.dodgeStrum.visible;
+		} else {
+			return false;
+		}
+	}
 	,pressDodge: function() {
 		if(this.dodgeHeld || !this.dodgePlayable()) {
 			return;
 		}
 		this.dodgeHeld = true;
 		this.dodgePresses.push(GoldenInput.audioTime());
+	}
+	,touchDodge: function(down) {
+		if(down) {
+			this.pressDodge();
+		} else {
+			this.dodgeHeld = false;
+		}
 	}
 	,onDodgeDown: function(event) {
 		if(event.keyCode != 32) {
@@ -22544,7 +22720,9 @@ var GoldenInspicableStage = function() {
 	this.add(this.disruptor);
 	this.back = new flixel_FlxSprite(-275,35).loadGraphic(Paths.getPath("images/" + "golden/inspicable/backLayer" + ".png","IMAGE","inspicable"));
 	this.backShader = new GoldenTubeShader();
-	this.back.shader = this.backShader;
+	if(!GoldenQuality.superLow) {
+		this.back.shader = this.backShader;
+	}
 	this.add(this.back);
 	this.front = new flixel_FlxSprite(-275,35).loadGraphic(Paths.getPath("images/" + "golden/inspicable/frontLayer" + ".png","IMAGE","inspicable"));
 	this.frontShader = new GoldenTubeShader();
@@ -22552,7 +22730,9 @@ var GoldenInspicableStage = function() {
 	this.frontShader.verticalAmount.value = [.075];
 	this.frontShader.verticalSpeed.value = [.15];
 	this.frontShader.verticalOffset.value = [.2];
-	this.front.shader = this.frontShader;
+	if(!GoldenQuality.superLow) {
+		this.front.shader = this.frontShader;
+	}
 	this.add(this.front);
 	var s = this.disruptor;
 	s.scale.set(1.15384615384615374,1.15384615384615374);
@@ -22569,7 +22749,9 @@ var GoldenInspicableStage = function() {
 	this.add(this.shade);
 	this.headroom = new flixel_FlxSprite().makeGraphic(1280,720,-1);
 	this.headroomShader = new GoldenHeadroomShader();
-	this.headroom.shader = this.headroomShader;
+	if(!GoldenQuality.superLow) {
+		this.headroom.shader = this.headroomShader;
+	}
 	this.headroom.set_alpha(0);
 	this.add(this.headroom);
 	this.sectionFlash = new flixel_FlxSprite().makeGraphic(1280,720,-1);
@@ -22901,7 +23083,7 @@ GoldenMenuTransition.prototype = $extend(flixel_FlxSubState.prototype,{
 		tmp.add("apple",_g,12,true);
 		this.iris.animation.play("apple",true,false,flixel_FlxG.random.int(0,18));
 		this.iris.set_color(-16777216);
-		this.iris.set_antialiasing(true);
+		this.iris.set_antialiasing(!GoldenQuality.superLow);
 		this.iris.scrollFactor.set();
 		this.iris.set_pixelPerfectRender(false);
 		this.add(this.iris);
@@ -23003,6 +23185,427 @@ GoldenMenuTransition.prototype = $extend(flixel_FlxSubState.prototype,{
 	}
 	,__class__: GoldenMenuTransition
 });
+var GoldenMobileControls = function() { };
+$hxClasses["GoldenMobileControls"] = GoldenMobileControls;
+GoldenMobileControls.__name__ = "GoldenMobileControls";
+GoldenMobileControls.setEnabled = function(value) {
+	GoldenMobileControls.enabled = value;
+	if(!GoldenMobileControls.installed || GoldenMobileControls.controls == null) {
+		return;
+	}
+	GoldenMobileControls.clear();
+	try {
+		window.localStorage.setItem("golden-touch-enabled",value ? "1" : "0");
+	} catch( _g ) {
+		haxe_NativeStackTrace.lastError = _g;
+	}
+	GoldenMobileControls.applyEnabled();
+	if(((flixel_FlxG.game._state) instanceof PlayState)) {
+		var play = flixel_FlxG.game._state;
+		if(play.touchLayout != null) {
+			play.touchLayout.restore();
+			play.touchLayout.apply();
+		}
+		if(play.notes != null) {
+			var _g = 0;
+			var _g1 = play.notes.members;
+			while(_g < _g1.length) {
+				var note = _g1[_g];
+				++_g;
+				if(note != null && note.alive) {
+					GoldenPartThree.positionNote(play,note);
+				}
+			}
+		}
+	}
+};
+GoldenMobileControls.controls = null;
+GoldenMobileControls.accept = null;
+GoldenMobileControls.action = null;
+GoldenMobileControls.install = function() {
+	if(GoldenMobileControls.installed) {
+		return;
+	}
+	GoldenMobileControls.installed = true;
+	GoldenMobileControls.controls = window.document.getElementById("touch-controls");
+	if(GoldenMobileControls.controls == null) {
+		return;
+	}
+	GoldenMobileControls.accept = window.document.getElementById("touch-accept");
+	GoldenMobileControls.action = window.document.getElementById("touch-action");
+	var forced = new URLSearchParams($global.location.search).get("touch");
+	var saved = null;
+	try {
+		saved = window.localStorage.getItem("golden-touch-enabled");
+	} catch( _g ) {
+		haxe_NativeStackTrace.lastError = _g;
+	}
+	GoldenMobileControls.enabled = saved != null ? saved == "1" : forced == "1" || forced != "0" && ($global.navigator.maxTouchPoints > 0 || window.matchMedia("(pointer: coarse)").matches);
+	window.document.getElementById("touch-toggle").addEventListener("click",function(_) {
+		GoldenMobileControls.setEnabled(!GoldenMobileControls.enabled);
+	});
+	GoldenMobileControls.applyEnabled();
+	var _g = 0;
+	var _g1 = GoldenMobileControls.controls.querySelectorAll("button[data-key]");
+	while(_g < _g1.length) {
+		var button = _g1[_g];
+		++_g;
+		var element = [button];
+		element[0].addEventListener("pointerdown",(function(element) {
+			return function(event) {
+				event.preventDefault();
+				if(event.pointerType == "mouse" && event.button != 0) {
+					return;
+				}
+				if(GoldenMobileControls.pointers.h.hasOwnProperty(event.pointerId)) {
+					return;
+				}
+				GoldenMobileControls.focusGame();
+				try {
+					element[0].setPointerCapture(event.pointerId);
+				} catch( _g ) {
+					haxe_NativeStackTrace.lastError = _g;
+				}
+				GoldenMobileControls.holdLanes.h[event.pointerId] = element[0].hasAttribute("data-lane");
+				var code = Std.parseInt(element[0].getAttribute("data-key"));
+				GoldenMobileControls.pointers.h[event.pointerId] = code;
+				GoldenMobileControls.press(code);
+			};
+		})(element));
+		element[0].addEventListener("pointermove",GoldenMobileControls.move);
+		element[0].addEventListener("pointerup",GoldenMobileControls.end);
+		element[0].addEventListener("pointercancel",GoldenMobileControls.end);
+		element[0].addEventListener("lostpointercapture",GoldenMobileControls.end);
+		element[0].addEventListener("contextmenu",(function() {
+			return function(event) {
+				event.preventDefault();
+			};
+		})());
+	}
+	window.addEventListener("blur",function(_) {
+		GoldenMobileControls.clear();
+	});
+	window.addEventListener("pointerup",GoldenMobileControls.end);
+	window.addEventListener("pointercancel",GoldenMobileControls.end);
+	window.document.addEventListener("visibilitychange",function(_) {
+		if(window.document.hidden) {
+			GoldenMobileControls.clear();
+		}
+	});
+	flixel_FlxG.signals.postStateSwitch.add(GoldenMobileControls.clear);
+	flixel_FlxG.signals.preUpdate.add(GoldenMobileControls.pumpKeys);
+	flixel_FlxG.signals.postUpdate.add(GoldenMobileControls.refresh);
+	GoldenMobileControls.refresh();
+	try {
+		GoldenMobileControls.loadSkin("default");
+		GoldenMobileControls.loadSkin("3d");
+	} catch( _g ) {
+		haxe_NativeStackTrace.lastError = _g;
+		var error = haxe_Exception.caught(_g).unwrap();
+		haxe_Log.trace("Touch artwork: " + Std.string(error),{ fileName : "source/GoldenMobileControls.hx", lineNumber : 94, className : "GoldenMobileControls", methodName : "install"});
+	}
+};
+GoldenMobileControls.applyEnabled = function() {
+	GoldenMobileControls.controls.hidden = !GoldenMobileControls.enabled;
+	window.document.body.classList.toggle("touch-enabled",GoldenMobileControls.enabled);
+	var toggle = window.document.getElementById("touch-toggle");
+	toggle.textContent = "TOUCH: " + (GoldenMobileControls.enabled ? "ON" : "OFF");
+	toggle.setAttribute("aria-checked",GoldenMobileControls.enabled ? "true" : "false");
+	GoldenMobileControls.context = "";
+	GoldenMobileControls.refresh();
+	window.dispatchEvent(new Event("resize"));
+	GoldenMobileControls.focusGame();
+};
+GoldenMobileControls.focusGame = function() {
+	var canvas = window.document.querySelector("#content canvas");
+	if(canvas != null) {
+		canvas.setAttribute("tabindex","0");
+		canvas.focus();
+	}
+};
+GoldenMobileControls.loadSkin = function(name) {
+	var path = GoldenNoteSkin.atlas(name);
+	var frames = new haxe_ds_StringMap();
+	var type = "TEXT";
+	if(type == null) {
+		type = "TEXT";
+	}
+	var node = Xml.parse(openfl_utils_Assets.getText(Paths.getPath("images/" + path + ".xml",type,"preload"))).firstElement().elementsNamed("SubTexture");
+	while(node.hasNext()) {
+		var node1 = node.next();
+		var w = Std.parseInt(node1.get("width"));
+		var h = Std.parseInt(node1.get("height"));
+		var key = node1.get("name");
+		var value = Std.parseInt(node1.get("x"));
+		var value1 = Std.parseInt(node1.get("y"));
+		var value2 = node1.exists("frameWidth") ? Std.parseInt(node1.get("frameWidth")) : w;
+		var value3 = node1.exists("frameHeight") ? Std.parseInt(node1.get("frameHeight")) : h;
+		var value4 = node1.exists("frameX") ? -Std.parseInt(node1.get("frameX")) : 0;
+		var value5 = node1.exists("frameY") ? -Std.parseInt(node1.get("frameY")) : 0;
+		frames.h[key] = { x : value, y : value1, w : w, h : h, fw : value2, fh : value3, ox : value4, oy : value5};
+		var direction = "LEFT";
+		if(node1.get("name").indexOf(direction.toLowerCase() + " confirm") == 0 && !Object.prototype.hasOwnProperty.call(frames.h,"__confirm" + direction)) {
+			var key1 = node1.get("name");
+			frames.h["__confirm" + direction] = frames.h[key1];
+		}
+		var direction1 = "DOWN";
+		if(node1.get("name").indexOf(direction1.toLowerCase() + " confirm") == 0 && !Object.prototype.hasOwnProperty.call(frames.h,"__confirm" + direction1)) {
+			var key2 = node1.get("name");
+			frames.h["__confirm" + direction1] = frames.h[key2];
+		}
+		var direction2 = "UP";
+		if(node1.get("name").indexOf(direction2.toLowerCase() + " confirm") == 0 && !Object.prototype.hasOwnProperty.call(frames.h,"__confirm" + direction2)) {
+			var key3 = node1.get("name");
+			frames.h["__confirm" + direction2] = frames.h[key3];
+		}
+		var direction3 = "RIGHT";
+		if(node1.get("name").indexOf(direction3.toLowerCase() + " confirm") == 0 && !Object.prototype.hasOwnProperty.call(frames.h,"__confirm" + direction3)) {
+			var key4 = node1.get("name");
+			frames.h["__confirm" + direction3] = frames.h[key4];
+		}
+	}
+	GoldenMobileControls.atlasFrames.h[name] = frames;
+	var image = window.document.createElement("img");
+	GoldenMobileControls.images.h[name] = image;
+	image.onload = function(_) {
+		GoldenMobileControls.drawLanes();
+	};
+	image.src = Paths.getPath("images/" + path + ".png","IMAGE","preload");
+};
+GoldenMobileControls.drawLanes = function() {
+	if(GoldenMobileControls.controls == null || !Object.prototype.hasOwnProperty.call(GoldenMobileControls.images.h,GoldenMobileControls.skin)) {
+		return;
+	}
+	var image = GoldenMobileControls.images.h[GoldenMobileControls.skin];
+	if(!image.complete || image.naturalWidth == 0) {
+		return;
+	}
+	var frames = GoldenMobileControls.atlasFrames.h[GoldenMobileControls.skin];
+	var directions = ["LEFT","DOWN","UP","RIGHT"];
+	var _g = 0;
+	while(_g < 4) {
+		var lane = _g++;
+		var button = GoldenMobileControls.controls.querySelector("button[data-lane=\"" + lane + "\"]");
+		var canvas = button.querySelector("canvas");
+		var code = Std.parseInt(button.getAttribute("data-key"));
+		var dir = directions[lane];
+		var base = frames.h["arrow" + dir + "0000"];
+		var pose = GoldenMobileControls.counts.h.hasOwnProperty(code) ? frames.h["__confirm" + dir] : base;
+		if(pose == null) {
+			pose = base;
+		}
+		if(base == null || pose == null) {
+			continue;
+		}
+		var scale = 160.0 / Math.max(base.fw,base.fh);
+		var ctx = canvas.getContext("2d",null);
+		ctx.clearRect(0,0,256,256);
+		ctx.imageSmoothingEnabled = GoldenMobileControls.skin != "3d";
+		ctx.drawImage(image,pose.x,pose.y,pose.w,pose.h,(256 - pose.fw * scale) / 2 + pose.ox * scale,(256 - pose.fh * scale) / 2 + pose.oy * scale,pose.w * scale,pose.h * scale);
+	}
+};
+GoldenMobileControls.feedGameplay = function(code,down) {
+	if(!((flixel_FlxG.game._state) instanceof PlayState)) {
+		return;
+	}
+	var play = flixel_FlxG.game._state;
+	if(play.goldenInput != null) {
+		play.goldenInput.touchKey(code,down);
+	}
+	if(code == 32 && play.inspicable != null) {
+		play.inspicable.touchDodge(down);
+	}
+};
+GoldenMobileControls.dispatch = function(code,down) {
+	GoldenMobileControls.feedGameplay(code,down);
+	if(!GoldenMobileControls.pending.h.hasOwnProperty(code)) {
+		GoldenMobileControls.pending.h[code] = [];
+	}
+	GoldenMobileControls.pending.h[code].push(down);
+};
+GoldenMobileControls.pumpKeys = function() {
+	var code = GoldenMobileControls.pending.keys();
+	while(code.hasNext()) {
+		var code1 = code.next();
+		var edges = GoldenMobileControls.pending.h[code1];
+		if(edges.length == 0) {
+			continue;
+		}
+		var down = edges.shift();
+		var key = flixel_FlxG.keys._keyListMap.h[code1];
+		if(key != null) {
+			if(down) {
+				key.press();
+			} else {
+				key.release();
+			}
+		}
+		if(down) {
+			GoldenMobileControls.keyboardDown.h[code1] = true;
+		} else {
+			GoldenMobileControls.keyboardDown.remove(code1);
+		}
+	}
+};
+GoldenMobileControls.press = function(code) {
+	if(code < 0) {
+		return;
+	}
+	var count = GoldenMobileControls.counts.h.hasOwnProperty(code) ? GoldenMobileControls.counts.h[code] : 0;
+	GoldenMobileControls.counts.h[code] = count + 1;
+	if(count == 0) {
+		GoldenMobileControls.dispatch(code,true);
+	}
+	GoldenMobileControls.paint(code,true);
+};
+GoldenMobileControls.release = function(code) {
+	if(code < 0 || !GoldenMobileControls.counts.h.hasOwnProperty(code)) {
+		return;
+	}
+	var count = GoldenMobileControls.counts.h[code] - 1;
+	if(count > 0) {
+		GoldenMobileControls.counts.h[code] = count;
+	} else {
+		GoldenMobileControls.counts.remove(code);
+		GoldenMobileControls.dispatch(code,false);
+		GoldenMobileControls.paint(code,false);
+	}
+};
+GoldenMobileControls.paint = function(code,down) {
+	var button = GoldenMobileControls.controls.querySelector("button[data-key=\"" + code + "\"]");
+	if(button != null) {
+		button.classList.toggle("pressed",down);
+		button.setAttribute("aria-pressed",down ? "true" : "false");
+	}
+	GoldenMobileControls.drawLanes();
+};
+GoldenMobileControls.move = function(event) {
+	if(!GoldenMobileControls.pointers.h.hasOwnProperty(event.pointerId) || GoldenMobileControls.holdLanes.h[event.pointerId] != true) {
+		return;
+	}
+	event.preventDefault();
+	var under = window.document.elementFromPoint(event.clientX,event.clientY);
+	var button = under == null ? null : under.closest("button[data-lane]");
+	var code = button == null ? -1 : Std.parseInt(button.getAttribute("data-key"));
+	var previous = GoldenMobileControls.pointers.h[event.pointerId];
+	if(previous == code) {
+		return;
+	}
+	GoldenMobileControls.release(previous);
+	GoldenMobileControls.pointers.h[event.pointerId] = code;
+	GoldenMobileControls.press(code);
+};
+GoldenMobileControls.end = function(event) {
+	if(!GoldenMobileControls.pointers.h.hasOwnProperty(event.pointerId)) {
+		return;
+	}
+	event.preventDefault();
+	GoldenMobileControls.release(GoldenMobileControls.pointers.h[event.pointerId]);
+	GoldenMobileControls.pointers.remove(event.pointerId);
+	GoldenMobileControls.holdLanes.remove(event.pointerId);
+};
+GoldenMobileControls.clear = function() {
+	var code = GoldenMobileControls.counts.keys();
+	while(code.hasNext()) {
+		var code1 = code.next();
+		GoldenMobileControls.feedGameplay(code1,false);
+		GoldenMobileControls.paint(code1,false);
+	}
+	var code = GoldenMobileControls.keyboardDown.keys();
+	while(code.hasNext()) {
+		var code1 = code.next();
+		var key = flixel_FlxG.keys._keyListMap.h[code1];
+		if(key != null) {
+			key.release();
+		}
+	}
+	GoldenMobileControls.pending.h = { };
+	GoldenMobileControls.keyboardDown.h = { };
+	GoldenMobileControls.counts.h = { };
+	GoldenMobileControls.pointers.h = { };
+	GoldenMobileControls.holdLanes.h = { };
+	GoldenMobileControls.drawLanes();
+};
+GoldenMobileControls.refresh = function() {
+	GoldenMobileControls.syncGameFrame();
+	if(flixel_FlxG.game._state == null) {
+		return;
+	}
+	var play = ((flixel_FlxG.game._state) instanceof PlayState);
+	var paused = play && flixel_FlxG.game._state.paused;
+	var dodge = window.document.getElementById("touch-dodge");
+	var showDodge = false;
+	if(play && !paused) {
+		var state = flixel_FlxG.game._state;
+		showDodge = state.inspicable != null && state.inspicable.showTouchDodge();
+	}
+	dodge.hidden = !showDodge;
+	var nextSkin = "default";
+	if(play) {
+		var state = flixel_FlxG.game._state;
+		if(state.playerStrums != null && state.playerStrums.members[0] != null) {
+			nextSkin = GoldenNoteSkin.skinOf(state.playerStrums.members[0]);
+		}
+	}
+	if(nextSkin != GoldenMobileControls.skin) {
+		GoldenMobileControls.skin = nextSkin;
+		GoldenMobileControls.drawLanes();
+	}
+	var c = js_Boot.getClass(flixel_FlxG.game._state);
+	var next = c.__name__ + ":" + (paused == null ? "null" : "" + paused) + ":" + Std.string(GoldenMobileControls.enabled);
+	if(next == GoldenMobileControls.context) {
+		return;
+	}
+	GoldenMobileControls.clear();
+	GoldenMobileControls.context = next;
+	window.document.getElementById("touch-toggle").hidden = play;
+	GoldenMobileControls.accept.hidden = play && !paused;
+	window.document.getElementById("touch-pause").hidden = !play || paused;
+	GoldenMobileControls.accept.textContent = "OK";
+	GoldenMobileControls.accept.setAttribute("aria-label","Confirm");
+	var world = ((flixel_FlxG.game._state) instanceof GoldenOverworld);
+	var viewer = ((flixel_FlxG.game._state) instanceof GoldenAssetViewerState);
+	GoldenMobileControls.action.hidden = !(world || viewer);
+	GoldenMobileControls.action.setAttribute("data-key",world ? "16" : "32");
+	GoldenMobileControls.action.textContent = world ? "RUN" : "PLAY";
+	GoldenMobileControls.action.setAttribute("aria-label",world ? "Run" : "Play animation");
+	if(world) {
+		GoldenMobileControls.accept.textContent = "USE";
+		GoldenMobileControls.accept.setAttribute("aria-label","Interact");
+	}
+	window.document.getElementById("touch-world").hidden = !((flixel_FlxG.game._state) instanceof MainMenuState);
+};
+GoldenMobileControls.syncGameFrame = function() {
+	var mode = flixel_FlxG.scaleMode;
+	if(mode == null || mode.deviceSize.x <= 0 || mode.deviceSize.y <= 0) {
+		return;
+	}
+	var signature = mode.gameSize.x + ":" + mode.gameSize.y + ":" + mode.offset.x + ":" + mode.offset.y + ":" + openfl_Lib.get_current().stage.stageWidth + ":" + openfl_Lib.get_current().stage.stageHeight + ":" + Std.string(window.innerWidth) + ":" + Std.string(window.innerHeight);
+	if(signature == GoldenMobileControls.frameSignature) {
+		return;
+	}
+	var canvas = window.document.querySelector("#content canvas");
+	var overlay = window.document.getElementById("game-frame-overlay");
+	if(canvas == null || overlay == null) {
+		return;
+	}
+	var rect = canvas.getBoundingClientRect();
+	if(rect.width <= 0 || rect.height <= 0) {
+		return;
+	}
+	var sx = rect.width / mode.deviceSize.x;
+	var sy = rect.height / mode.deviceSize.y;
+	var width = mode.gameSize.x * sx;
+	var height = mode.gameSize.y * sy;
+	overlay.style.left = rect.left + mode.offset.x * sx + "px";
+	overlay.style.top = rect.top + mode.offset.y * sy + "px";
+	overlay.style.right = "auto";
+	overlay.style.bottom = "auto";
+	overlay.style.width = width + "px";
+	overlay.style.height = height + "px";
+	overlay.style.setProperty("--touch-height",Math.max(34,Math.min(96,height * .18)) + "px");
+	GoldenMobileControls.frameSignature = signature;
+};
 var GoldenNoteGeometry = function() { };
 $hxClasses["GoldenNoteGeometry"] = GoldenNoteGeometry;
 GoldenNoteGeometry.__name__ = "GoldenNoteGeometry";
@@ -23024,13 +23627,22 @@ GoldenNoteGeometry.spawnLead = function(screenHeight,speed) {
 var GoldenNoteSkin = function() { };
 $hxClasses["GoldenNoteSkin"] = GoldenNoteSkin;
 GoldenNoteSkin.__name__ = "GoldenNoteSkin";
+GoldenNoteSkin.skinOf = function(sprite) {
+	if(GoldenNoteSkin.assigned.h.__keys__[sprite.__id__] != null) {
+		return GoldenNoteSkin.assigned.h[sprite.__id__];
+	} else {
+		return "default";
+	}
+};
 GoldenNoteSkin.atlas = function(skin) {
 	return "golden/notes/" + (skin == "3d" ? "NOTE_assets_3D" : "NOTE_assets");
 };
 GoldenNoteSkin.setupStrum = function(sprite,skin,direction) {
+	GoldenNoteSkin.assigned.set(sprite,skin);
 	var key = GoldenNoteSkin.atlas(skin);
 	var library = null;
-	sprite.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE",library),Paths.getPath("images/" + key + ".xml","TEXT",library)));
+	var potatoKey = key + "_potato";
+	sprite.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE",library),Paths.getPath("images/" + key + ".xml","TEXT",library)));
 	var dirs = ["LEFT","DOWN","UP","RIGHT"];
 	var key = dirs[direction];
 	sprite.animation.addByPrefix("static","arrow" + key,24,false);
@@ -23045,6 +23657,9 @@ GoldenNoteSkin.setupStrum = function(sprite,skin,direction) {
 GoldenNoteSkin.alignStrum = function(sprite,skin,direction) {
 	if(direction == null) {
 		direction = -1;
+	}
+	if(skin == null || skin == "default" && GoldenNoteSkin.assigned.h.__keys__[sprite.__id__] != null && GoldenNoteSkin.assigned.h[sprite.__id__] != "default") {
+		skin = GoldenNoteSkin.assigned.h.__keys__[sprite.__id__] != null ? GoldenNoteSkin.assigned.h[sprite.__id__] : "default";
 	}
 	sprite.origin.set(0,0);
 	sprite.offset.set(0,0);
@@ -23147,7 +23762,8 @@ GoldenNoteSplash.prototype = $extend(flixel_FlxSprite.prototype,{
 			this.loadedSkin = skin;
 			var key = "golden/notes/" + (skin == "3d" ? "splash_3d" : "noteSplashes");
 			var library = null;
-			this.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE",library),Paths.getPath("images/" + key + ".xml","TEXT",library)));
+			var potatoKey = key + "_potato";
+			this.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE",library),Paths.getPath("images/" + key + ".xml","TEXT",library)));
 			if(skin == "3d") {
 				var inlarr_0 = "purple";
 				var inlarr_1 = "blue";
@@ -23188,12 +23804,12 @@ GoldenNoteSplash.prototype = $extend(flixel_FlxSprite.prototype,{
 		this.set_alpha(0.5);
 		this.scrollFactor.set(0,0);
 		this.set_pixelPerfectRender(false);
-		this.set_antialiasing(skin != "3d");
+		this.set_antialiasing(!GoldenQuality.superLow && skin != "3d");
 		this.set_cameras(receptor.get_cameras());
 		this.set_clipRect(null);
 		if(skin == "3d") {
 			this.shader = null;
-		} else {
+		} else if(!GoldenQuality.superLow) {
 			var red = GoldenNoteSplash.paletteColor(this.style.rgbSplashes.red,lane);
 			var green = GoldenNoteSplash.paletteColor(this.style.rgbSplashes.green,lane);
 			var blue = GoldenNoteSplash.paletteColor(this.style.rgbSplashes.blue,lane);
@@ -23204,6 +23820,8 @@ GoldenNoteSplash.prototype = $extend(flixel_FlxSprite.prototype,{
 				this1.h[key] = value;
 			}
 			this.shader = GoldenNoteSplash.paletteShaders.h[key];
+		} else {
+			this.shader = null;
 		}
 	}
 	,draw: function() {
@@ -23461,7 +24079,8 @@ var GoldenOrthogonalPortal = function() {
 	var sheet = "spritemap1";
 	var _g = 0;
 	var key = "golden/orthogonal/" + sheet;
-	var _g1 = flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE","orthogonal"),Paths.getPath("images/" + key + ".xml","TEXT","orthogonal")).frames;
+	var potatoKey = key + "_potato";
+	var _g1 = (GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","orthogonal"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","orthogonal"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","orthogonal"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","orthogonal")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE","orthogonal"),Paths.getPath("images/" + key + ".xml","TEXT","orthogonal"))).frames;
 	while(_g < _g1.length) {
 		var frame = _g1[_g];
 		++_g;
@@ -23470,13 +24089,14 @@ var GoldenOrthogonalPortal = function() {
 	var sheet = "spritemap2";
 	var _g = 0;
 	var key = "golden/orthogonal/" + sheet;
-	var _g1 = flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE","orthogonal"),Paths.getPath("images/" + key + ".xml","TEXT","orthogonal")).frames;
+	var potatoKey = key + "_potato";
+	var _g1 = (GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","orthogonal"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","orthogonal"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","orthogonal"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","orthogonal")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE","orthogonal"),Paths.getPath("images/" + key + ".xml","TEXT","orthogonal"))).frames;
 	while(_g < _g1.length) {
 		var frame = _g1[_g];
 		++_g;
 		this.sprites.h[frame.name] = frame;
 	}
-	this.set_antialiasing(true);
+	this.set_antialiasing(!GoldenQuality.superLow);
 };
 $hxClasses["GoldenOrthogonalPortal"] = GoldenOrthogonalPortal;
 GoldenOrthogonalPortal.__name__ = "GoldenOrthogonalPortal";
@@ -23863,7 +24483,8 @@ GoldenOverworld.prototype = $extend(MusicBeatState.prototype,{
 		}
 		var sprite = new flixel_FlxSprite(e.x,e.y);
 		if(name == "door") {
-			sprite.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + path + ".png","IMAGE","overworld"),Paths.getPath("images/" + path + ".xml","TEXT","overworld")));
+			var potatoKey = path + "_potato";
+			sprite.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","overworld"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","overworld"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","overworld"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","overworld")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + path + ".png","IMAGE","overworld"),Paths.getPath("images/" + path + ".xml","TEXT","overworld")));
 			sprite.animation.addByPrefix("door","door",12,false);
 			sprite.animation.play("door");
 			var _this = sprite.animation;
@@ -24197,7 +24818,8 @@ GoldenOverworld.prototype = $extend(MusicBeatState.prototype,{
 var GoldenOverworldPlayer = function() {
 	this.walkAngle = 90;
 	flixel_FlxSprite.call(this);
-	this.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/overworld/boyfriend" + ".png","IMAGE","overworld"),Paths.getPath("images/" + "golden/overworld/boyfriend" + ".xml","TEXT","overworld")));
+	var potatoKey = "golden/overworld/boyfriend" + "_potato";
+	this.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","overworld"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","overworld"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","overworld"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","overworld")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/overworld/boyfriend" + ".png","IMAGE","overworld"),Paths.getPath("images/" + "golden/overworld/boyfriend" + ".xml","TEXT","overworld")));
 	var angles = [0,-90,-135,-45,90,135,45,180];
 	var walks = [[7,2,12,2],[9,4,14,4],[8,3,13,3],[8,3,13,3],[5,0,10,0],[6,1,11,1],[6,1,11,1],[7,2,12,2]];
 	var idles = [2,4,3,3,0,1,1,2];
@@ -24378,6 +25000,7 @@ GoldenPartThree.noteSpeed = function(p,note) {
 	}
 };
 GoldenPartThree.positionNote = function(p,note) {
+	note.set_visible(note.mustPress || !GoldenMobileControls.enabled);
 	if(p.frustration != null) {
 		p.frustration.mods.position(note,p);
 		return;
@@ -24388,7 +25011,8 @@ GoldenPartThree.positionNote = function(p,note) {
 	}
 	note.curvedHold = GoldenPartThree.active(p);
 	if(!note.curvedHold) {
-		note.positionOnStrum(Conductor.songPosition,p.strumLine.y,PlayState.SONG.speed,flixel_FlxG.save.data.downscroll);
+		var receptor = p.strumLineNotes.members[note.noteData + (note.mustPress ? 4 : 0)];
+		note.positionOnStrum(Conductor.songPosition,receptor == null ? p.strumLine.y : receptor.y,PlayState.SONG.speed,flixel_FlxG.save.data.downscroll,receptor == null ? null : receptor.x);
 		return;
 	}
 	var strum = p.strumLineNotes.members[note.noteData + (note.mustPress ? 4 : 0)];
@@ -24505,6 +25129,43 @@ GoldenPoseOffsets.apply = function(actor) {
 	} else {
 		actor.offset.set(actor.scaleOffsetX + (ox + dx) * actor.scale.x + actor.goldenOriginX,actor.scaleOffsetY + (oy + dy) * actor.scale.y + actor.goldenOriginY);
 	}
+};
+var GoldenQuality = function() { };
+$hxClasses["GoldenQuality"] = GoldenQuality;
+GoldenQuality.__name__ = "GoldenQuality";
+GoldenQuality.load = function() {
+	if(flixel_FlxG.save.data.superLowQuality == null) {
+		flixel_FlxG.save.data.superLowQuality = false;
+	}
+	GoldenQuality.superLow = flixel_FlxG.save.data.superLowQuality == true;
+	GoldenQuality.apply();
+};
+GoldenQuality.toggle = function() {
+	GoldenQuality.superLow = !GoldenQuality.superLow;
+	flixel_FlxG.save.data.superLowQuality = GoldenQuality.superLow;
+	flixel_FlxG.save.flush();
+	GoldenQuality.apply();
+};
+GoldenQuality.apply = function() {
+	if(openfl_Lib.get_current().stage != null) {
+		var tmp = GoldenQuality.superLow ? 2 : 0;
+		openfl_Lib.get_current().stage.set_quality(tmp);
+	}
+	if(GoldenQuality.superLow && flixel_FlxG.cameras != null) {
+		var _g = 0;
+		var _g1 = flixel_FlxG.cameras.list;
+		while(_g < _g1.length) {
+			var camera = _g1[_g];
+			++_g;
+			camera.setFilters([]);
+		}
+	}
+};
+GoldenQuality.shadersEnabled = function() {
+	return !GoldenQuality.superLow;
+};
+GoldenQuality.antialiasingEnabled = function() {
+	return !GoldenQuality.superLow;
 };
 var GoldenScenePreviewState = function(TransIn,TransOut) {
 	this.wowStarted = false;
@@ -24879,7 +25540,8 @@ GoldenStage.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 	}
 	,loadOriginalAtlases: function() {
 		var clock = this.fg.waveShader.iTime.value[0];
-		this.fg.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/applecore/native-stage/bandu/fg" + ".png","IMAGE","applecorestage"),Paths.getPath("images/" + "golden/applecore/native-stage/bandu/fg" + ".xml","TEXT","applecorestage")));
+		var potatoKey = "golden/applecore/native-stage/bandu/fg" + "_potato";
+		this.fg.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","applecorestage"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","applecorestage"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","applecorestage"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","applecorestage")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/applecore/native-stage/bandu/fg" + ".png","IMAGE","applecorestage"),Paths.getPath("images/" + "golden/applecore/native-stage/bandu/fg" + ".xml","TEXT","applecorestage")));
 		this.fg.animation.addByPrefix("break-static","frame",0,false);
 		this.fg.animation.addByPrefix("break","frame",12,false);
 		this.fg.animation.play(this.breakStarted ? "break" : "break-static",true);
@@ -24891,7 +25553,8 @@ GoldenStage.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 		this.add(this.bambiBg);
 		this.projectedLayers.push(this.bambiBg);
 		this.banduCheck = new flixel_FlxSprite(-793.7,-1018.5);
-		this.banduCheck.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/applecore/native-stage/banduCheck" + ".png","IMAGE","applecorestage"),Paths.getPath("images/" + "golden/applecore/native-stage/banduCheck" + ".xml","TEXT","applecorestage")));
+		var potatoKey = "golden/applecore/native-stage/banduCheck" + "_potato";
+		this.banduCheck.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","applecorestage"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","applecorestage"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","applecorestage"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","applecorestage")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/applecore/native-stage/banduCheck" + ".png","IMAGE","applecorestage"),Paths.getPath("images/" + "golden/applecore/native-stage/banduCheck" + ".xml","TEXT","applecorestage")));
 		this.banduCheck.animation.addByPrefix("check","check",24,false);
 		this.banduCheck.animation.play("check");
 		this.banduCheck.scale.set(1.6,1.6);
@@ -25104,6 +25767,63 @@ GoldenSubtitles.load = function(text) {
 	}
 	return result;
 };
+var GoldenTouchLayout = function(owner) {
+	this.bambiVisible = null;
+	this.visibility = [];
+	this.offsets = [];
+	this.owner = owner;
+};
+$hxClasses["GoldenTouchLayout"] = GoldenTouchLayout;
+GoldenTouchLayout.__name__ = "GoldenTouchLayout";
+GoldenTouchLayout.prototype = {
+	owner: null
+	,offsets: null
+	,visibility: null
+	,bambiVisible: null
+	,restore: function() {
+		var _g = 0;
+		var _g1 = this.offsets.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var strum = this.owner.strumLineNotes.members[i];
+			if(strum != null) {
+				strum.set_x(strum.x - this.offsets[i]);
+				strum.set_visible(this.visibility[i]);
+			}
+		}
+		this.offsets.length = 0;
+		this.visibility.length = 0;
+		if(this.bambiVisible != null && this.owner.bambiStrums != null) {
+			this.owner.bambiStrums.set_visible(this.bambiVisible);
+		}
+		this.bambiVisible = null;
+	}
+	,apply: function() {
+		if(!GoldenMobileControls.enabled || this.owner.strumLineNotes == null) {
+			return;
+		}
+		var _g = 0;
+		var _g1 = this.owner.strumLineNotes.members.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var strum = this.owner.strumLineNotes.members[i];
+			var offset = i >= 4 && !GoldenPartThree.active(this.owner) ? -flixel_FlxG.width / 4 : 0;
+			this.offsets.push(offset);
+			this.visibility.push(strum == null ? false : strum.visible);
+			if(strum != null) {
+				strum.set_x(strum.x + offset);
+				if(i < 4) {
+					strum.set_visible(false);
+				}
+			}
+		}
+		if(this.owner.bambiStrums != null) {
+			this.bambiVisible = this.owner.bambiStrums.visible;
+			this.owner.bambiStrums.set_visible(false);
+		}
+	}
+	,__class__: GoldenTouchLayout
+};
 var GoldenTubeShader = function() {
 	if(this.__glFragmentSource == null) {
 		this.__glFragmentSource = "\n    varying float openfl_Alphav;\n\t\tvarying vec4 openfl_ColorMultiplierv;\n\t\tvarying vec4 openfl_ColorOffsetv;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform bool openfl_HasColorTransform;\n\t\tuniform vec2 openfl_TextureSize;\n\t\tuniform sampler2D bitmap;\n\n\t\tuniform bool hasTransform;\n\t\tuniform bool hasColorTransform;\n\n\t\tvec4 flixel_texture2D(sampler2D bitmap, vec2 coord)\n\t\t{\n\t\t\tvec4 color = texture2D(bitmap, coord);\n\t\t\tif (!hasTransform)\n\t\t\t{\n\t\t\t\treturn color;\n\t\t\t}\n\n\t\t\tif (color.a == 0.0)\n\t\t\t{\n\t\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\n\t\t\t}\n\n\t\t\tif (!hasColorTransform)\n\t\t\t{\n\t\t\t\treturn color * openfl_Alphav;\n\t\t\t}\n\n\t\t\tcolor = vec4(color.rgb / color.a, color.a);\n\n\t\t\tmat4 colorMultiplier = mat4(0);\n\t\t\tcolorMultiplier[0][0] = openfl_ColorMultiplierv.x;\n\t\t\tcolorMultiplier[1][1] = openfl_ColorMultiplierv.y;\n\t\t\tcolorMultiplier[2][2] = openfl_ColorMultiplierv.z;\n\t\t\tcolorMultiplier[3][3] = openfl_ColorMultiplierv.w;\n\n\t\t\tcolor = clamp(openfl_ColorOffsetv + (color * colorMultiplier), 0.0, 1.0);\n\n\t\t\tif (color.a > 0.0)\n\t\t\t{\n\t\t\t\treturn vec4(color.rgb * color.a * openfl_Alphav, color.a * openfl_Alphav);\n\t\t\t}\n\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\n\t\t}\n\t\n\n    \n\n    float depth = 5.0;\n    uniform float speed;\n    uniform float iTime;\n    uniform float horizSize;\n    uniform float verticalAmount;\n    uniform float verticalSpeed;\n    uniform float verticalOffset;\n\n    void main()\n    {\n        vec2 uv = openfl_TextureCoordv;\n\n        float dx = distance(uv.x, .5) * 1.5;\n        float dy = distance(uv.y, .5);\n        \n        float offset = (dx*.2) * dy;\n        \n        float dir = 0.;\n        if (uv.y <= .5) \n            dir = 1.0;\n        else\n            dir = -1.;\n            \n        uv.y += sin(iTime * verticalSpeed * 10.) * verticalAmount;\n        uv.y += verticalOffset;\n        uv.y = mod(uv.y, 1.);\n        \n        vec2 coords = vec2(uv.x, uv.y + dx*(offset*depth*dir));\n        \n        float xuv = mod((coords.x * horizSize) - iTime * speed, 1.);\n        \n        gl_FragColor = texture2D(bitmap, vec2(xuv, coords.y));\n    }";
@@ -25133,38 +25853,385 @@ GoldenTubeShader.prototype = $extend(flixel_graphics_tile_FlxGraphicsShader.prot
 	,verticalOffset: null
 	,__class__: GoldenTubeShader
 });
+var flixel_addons_display_FlxBackdrop = function(Graphic,ScrollX,ScrollY,RepeatX,RepeatY,SpaceX,SpaceY) {
+	if(SpaceY == null) {
+		SpaceY = 0;
+	}
+	if(SpaceX == null) {
+		SpaceX = 0;
+	}
+	if(RepeatY == null) {
+		RepeatY = true;
+	}
+	if(RepeatX == null) {
+		RepeatX = true;
+	}
+	if(ScrollY == null) {
+		ScrollY = 1;
+	}
+	if(ScrollX == null) {
+		ScrollX = 1;
+	}
+	this.useScaleHack = true;
+	this._numTiles = 0;
+	this._spaceY = 0;
+	this._spaceX = 0;
+	this._repeatY = false;
+	this._repeatX = false;
+	this._scrollH = 0;
+	this._scrollW = 0;
+	flixel_FlxSprite.call(this);
+	this.scale = new flixel_math_FlxCallbackPoint($bind(this,this.scaleCallback));
+	this.scale.set(1,1);
+	this._repeatX = RepeatX;
+	this._repeatY = RepeatY;
+	this._spaceX = SpaceX;
+	this._spaceY = SpaceY;
+	this._ppoint = new openfl_geom_Point();
+	this.scrollFactor.set_x(ScrollX);
+	this.scrollFactor.set_y(ScrollY);
+	if(Graphic != null) {
+		this.loadGraphic(Graphic);
+	}
+	flixel_FlxG.signals.gameResized.add($bind(this,this.onGameResize));
+};
+$hxClasses["flixel.addons.display.FlxBackdrop"] = flixel_addons_display_FlxBackdrop;
+flixel_addons_display_FlxBackdrop.__name__ = "flixel.addons.display.FlxBackdrop";
+flixel_addons_display_FlxBackdrop.__super__ = flixel_FlxSprite;
+flixel_addons_display_FlxBackdrop.prototype = $extend(flixel_FlxSprite.prototype,{
+	_ppoint: null
+	,_scrollW: null
+	,_scrollH: null
+	,_repeatX: null
+	,_repeatY: null
+	,_spaceX: null
+	,_spaceY: null
+	,_tileFrame: null
+	,_tileInfo: null
+	,_numTiles: null
+	,useScaleHack: null
+	,destroy: function() {
+		this._tileInfo = null;
+		this._ppoint = null;
+		this.scale = flixel_util_FlxDestroyUtil.destroy(this.scale);
+		this.setTileFrame(null);
+		flixel_FlxG.signals.gameResized.remove($bind(this,this.onGameResize));
+		flixel_FlxSprite.prototype.destroy.call(this);
+	}
+	,loadGraphic: function(Graphic,Animated,Width,Height,Unique,Key) {
+		if(Unique == null) {
+			Unique = false;
+		}
+		if(Height == null) {
+			Height = 0;
+		}
+		if(Width == null) {
+			Width = 0;
+		}
+		if(Animated == null) {
+			Animated = false;
+		}
+		var tileGraphic = flixel_FlxG.bitmap.add(Graphic);
+		this.setTileFrame(tileGraphic.get_imageFrame().get_frame());
+		var w = this._tileFrame.sourceSize.x + this._spaceX | 0;
+		var h = this._tileFrame.sourceSize.y + this._spaceY | 0;
+		this._scrollW = w;
+		this._scrollH = h;
+		this.regenGraphic();
+		return this;
+	}
+	,loadFrame: function(Frame) {
+		this.setTileFrame(Frame);
+		var w = this._tileFrame.sourceSize.x + this._spaceX | 0;
+		var h = this._tileFrame.sourceSize.y + this._spaceY | 0;
+		this._scrollW = w;
+		this._scrollH = h;
+		this.regenGraphic();
+		return this;
+	}
+	,draw: function() {
+		var isColored = this.alpha != 1 || this.color != 16777215;
+		var hasColorOffsets = this.colorTransform != null && flixel_util_FlxColorTransformUtil.hasRGBAOffsets(this.colorTransform);
+		var _g = 0;
+		var _g1 = this.get_cameras();
+		while(_g < _g1.length) {
+			var camera = _g1[_g];
+			++_g;
+			if(!camera.visible || !camera.exists) {
+				continue;
+			}
+			var ssw = this._scrollW * Math.abs(this.scale.x);
+			var ssh = this._scrollH * Math.abs(this.scale.y);
+			if(this._repeatX) {
+				this._ppoint.x = (this.x - this.offset.x - camera.scroll.x * this.scrollFactor.x) % ssw;
+				if(this._ppoint.x > 0) {
+					this._ppoint.x -= ssw;
+				}
+			} else {
+				this._ppoint.x = this.x - this.offset.x - camera.scroll.x * this.scrollFactor.x;
+			}
+			if(this._repeatY) {
+				this._ppoint.y = (this.y - this.offset.y - camera.scroll.y * this.scrollFactor.y) % ssh;
+				if(this._ppoint.y > 0) {
+					this._ppoint.y -= ssh;
+				}
+			} else {
+				this._ppoint.y = this.y - this.offset.y - camera.scroll.y * this.scrollFactor.y;
+			}
+			if(flixel_FlxG.renderBlit) {
+				if(this.graphic == null) {
+					return;
+				}
+				if(this.dirty) {
+					this.calcFrame(this.useFramePixels);
+				}
+				this._flashRect2.setTo(0,0,this.graphic.width,this.graphic.height);
+				camera.copyPixels(this.frame,this.framePixels,this._flashRect2,this._ppoint);
+			} else {
+				if(this._tileFrame == null) {
+					return;
+				}
+				var drawItem = camera.startQuadBatch(this._tileFrame.parent,isColored,hasColorOffsets);
+				this._tileFrame.prepareMatrix(this._matrix);
+				var scaleX = this.scale.x;
+				var scaleY = this.scale.y;
+				if(this.useScaleHack) {
+					scaleX += 1 / (this._tileFrame.sourceSize.x * camera.totalScaleX);
+					scaleY += 1 / (this._tileFrame.sourceSize.y * camera.totalScaleY);
+				}
+				this._matrix.scale(scaleX,scaleY);
+				var tx = this._matrix.tx;
+				var ty = this._matrix.ty;
+				var _g2 = 0;
+				var _g3 = this._numTiles;
+				while(_g2 < _g3) {
+					var j = _g2++;
+					var currTileX = this._tileInfo[j * 2];
+					var currTileY = this._tileInfo[j * 2 + 1];
+					this._matrix.tx = tx + (this._ppoint.x + currTileX);
+					this._matrix.ty = ty + (this._ppoint.y + currTileY);
+					drawItem.addQuad(this._tileFrame,this._matrix,this.colorTransform);
+				}
+			}
+		}
+	}
+	,regenGraphic: function() {
+		var sx = Math.abs(this.scale.x);
+		var sy = Math.abs(this.scale.y);
+		var ssw = this._scrollW * sx | 0;
+		var ssh = this._scrollH * sy | 0;
+		var w = ssw;
+		var h = ssh;
+		var frameBitmap = null;
+		if(this._repeatX) {
+			w += flixel_FlxG.width;
+		}
+		if(this._repeatY) {
+			h += flixel_FlxG.height;
+		}
+		if(flixel_FlxG.renderBlit) {
+			if(this.graphic == null || (this.graphic.width != w || this.graphic.height != h)) {
+				this.makeGraphic(w,h,0,true);
+			}
+		} else {
+			this._tileInfo = [];
+			this._numTiles = 0;
+			this.set_width(this.frameWidth = w);
+			this.set_height(this.frameHeight = h);
+		}
+		this._ppoint.x = this._ppoint.y = 0;
+		if(flixel_FlxG.renderBlit) {
+			this.get_pixels().lock();
+			this._flashRect2.setTo(0,0,this.graphic.width,this.graphic.height);
+			this.get_pixels().fillRect(this._flashRect2,0);
+			this._matrix.identity();
+			this._matrix.scale(sx,sy);
+			frameBitmap = this._tileFrame.paint();
+		}
+		while(this._ppoint.y < h) {
+			while(this._ppoint.x < w) {
+				if(flixel_FlxG.renderBlit) {
+					this.get_pixels().draw(frameBitmap,this._matrix);
+					this._matrix.tx += ssw;
+				} else {
+					this._tileInfo.push(this._ppoint.x);
+					this._tileInfo.push(this._ppoint.y);
+					this._numTiles++;
+				}
+				this._ppoint.x += ssw;
+			}
+			if(flixel_FlxG.renderBlit) {
+				this._matrix.tx = 0;
+				this._matrix.ty += ssh;
+			}
+			this._ppoint.x = 0;
+			this._ppoint.y += ssh;
+		}
+		if(flixel_FlxG.renderBlit) {
+			frameBitmap.dispose();
+			this.get_pixels().unlock();
+			this.dirty = true;
+			this.calcFrame();
+		}
+	}
+	,onGameResize: function(_,_1) {
+		if(this._tileFrame != null) {
+			this.regenGraphic();
+		}
+	}
+	,scaleCallback: function(Scale) {
+		if(this._tileFrame != null) {
+			this.regenGraphic();
+		}
+	}
+	,setTileFrame: function(Frame) {
+		if(Frame != this._tileFrame) {
+			if(this._tileFrame != null) {
+				var fh = this._tileFrame.parent;
+				fh.set_useCount(fh.get_useCount() - 1);
+			}
+			if(Frame != null) {
+				var fh = Frame.parent;
+				fh.set_useCount(fh.get_useCount() + 1);
+			}
+		}
+		return this._tileFrame = Frame;
+	}
+	,__class__: flixel_addons_display_FlxBackdrop
+});
+var GoldenTunnelBackdrop = function(Graphic) {
+	this.coverageTileHeight = -1;
+	this.coverageTileWidth = -1;
+	this.coverageHeight = -1;
+	this.coverageWidth = -1;
+	flixel_addons_display_FlxBackdrop.call(this,Graphic,.8,.8,true,true);
+};
+$hxClasses["GoldenTunnelBackdrop"] = GoldenTunnelBackdrop;
+GoldenTunnelBackdrop.__name__ = "GoldenTunnelBackdrop";
+GoldenTunnelBackdrop.__super__ = flixel_addons_display_FlxBackdrop;
+GoldenTunnelBackdrop.prototype = $extend(flixel_addons_display_FlxBackdrop.prototype,{
+	coverageInfo: null
+	,coverageWidth: null
+	,coverageHeight: null
+	,coverageTileWidth: null
+	,coverageTileHeight: null
+	,draw: function() {
+		if(this._tileFrame == null || this._scrollW <= 0 || this._scrollH <= 0 || this.scale.x == 0 || this.scale.y == 0) {
+			return;
+		}
+		if(!flixel_FlxG.renderBlit) {
+			this.ensureZoomCoverage();
+		}
+		flixel_addons_display_FlxBackdrop.prototype.draw.call(this);
+	}
+	,ensureZoomCoverage: function() {
+		var tileWidth = this._scrollW * Math.abs(this.scale.x);
+		var tileHeight = this._scrollH * Math.abs(this.scale.y);
+		var viewWidth = flixel_FlxG.width;
+		var viewHeight = flixel_FlxG.height;
+		var _g = 0;
+		var _g1 = this.get_cameras();
+		while(_g < _g1.length) {
+			var camera = _g1[_g];
+			++_g;
+			if(camera.width > viewWidth) {
+				viewWidth = camera.width;
+			}
+			if(camera.height > viewHeight) {
+				viewHeight = camera.height;
+			}
+		}
+		if(this.coverageInfo == this._tileInfo && viewWidth == this.coverageWidth && viewHeight == this.coverageHeight && tileWidth == this.coverageTileWidth && tileHeight == this.coverageTileHeight) {
+			return;
+		}
+		var marginX = viewWidth * 0.754385964912280826 * .5;
+		var marginY = viewHeight * 0.754385964912280826 * .5;
+		var firstColumn = Math.floor(-marginX / tileWidth) | 0;
+		var lastColumn = Math.ceil((viewWidth + marginX) / tileWidth) | 0;
+		var firstRow = Math.floor(-marginY / tileHeight) | 0;
+		var lastRow = Math.ceil((viewHeight + marginY) / tileHeight) | 0;
+		this._tileInfo = [];
+		this._numTiles = 0;
+		var _g = firstRow;
+		var _g1 = lastRow + 1;
+		while(_g < _g1) {
+			var row = _g++;
+			var _g2 = firstColumn;
+			var _g3 = lastColumn + 1;
+			while(_g2 < _g3) {
+				var column = _g2++;
+				this._tileInfo.push(column * tileWidth);
+				this._tileInfo.push(row * tileHeight);
+				this._numTiles++;
+			}
+		}
+		this.coverageInfo = this._tileInfo;
+		this.coverageWidth = viewWidth;
+		this.coverageHeight = viewHeight;
+		this.coverageTileWidth = tileWidth;
+		this.coverageTileHeight = tileHeight;
+	}
+	,destroy: function() {
+		this.coverageInfo = null;
+		flixel_addons_display_FlxBackdrop.prototype.destroy.call(this);
+	}
+	,__class__: GoldenTunnelBackdrop
+});
 var GoldenTunnelVision = function(owner) {
+	this.finalePhase = 0;
+	this.backgroundPhase = 0;
+	this.movementPhase = 0;
+	this.floatClock = 0;
+	this.backgroundY = 0;
+	this.backgroundX = 0;
+	this.entranceY = 0;
+	this.entranceX = 0;
+	this.cameraY = 0;
+	this.cameraX = 0;
 	this.looking = false;
 	this.nextLook = 2000;
 	this.subtitleIndex = 0;
 	this.lastStep = -1;
 	this.owner = owner;
 	owner.gf.set_visible(false);
-	owner.dad.setReferenceAnchor(380,680,1.05);
+	GoldenTunnelVision.place(owner.dad,-526,-56,1.4);
 	this.chaseDave = owner.dad;
-	owner.boyfriend.setReferenceAnchor(1080,690,.72);
-	owner.camFollow.setPosition(660,340);
+	GoldenTunnelVision.place(owner.boyfriend,26,-334,1.4);
+	this.cameraX = this.chaseDave.x + this.chaseDave.get_width() * .5 + 170;
+	this.cameraY = this.chaseDave.y + this.chaseDave.get_height() * .5 + 100;
+	owner.camFollow.setPosition(this.cameraX,this.cameraY);
 	flixel_FlxG.camera.set_followLerp(1);
-	owner.camGame.bgColor = 0;
+	owner.camGame.bgColor = -16777216;
 	owner.healthBar.createFilledBar(-1176822,-13520687);
 	this.chair = new flixel_FlxSprite();
-	this.chair.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/tunnelvision/characters/chair" + ".png","IMAGE","tunnelvision"),Paths.getPath("images/" + "golden/tunnelvision/characters/chair" + ".xml","TEXT","tunnelvision")));
+	var potatoKey = "golden/tunnelvision/characters/chair" + "_potato";
+	this.chair.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","tunnelvision"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","tunnelvision"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","tunnelvision"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","tunnelvision")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/tunnelvision/characters/chair" + ".png","IMAGE","tunnelvision"),Paths.getPath("images/" + "golden/tunnelvision/characters/chair" + ".xml","TEXT","tunnelvision")));
 	this.chair.animation.addByPrefix("idle","Wheelchair",24,true);
 	this.chair.animation.play("idle");
-	this.chair.scale.set(1.05,1.05);
+	this.chair.scale.set(1.4,1.4);
 	this.chair.updateHitbox();
 	this.chair.origin.set();
 	this.chair.offset.set();
 	owner.insert(owner.members.indexOf(owner.dad),this.chair);
 	this.badai = new Character(-1250,0,"badai");
-	this.badai.setReferenceAnchor(-1250,675,1.0);
+	GoldenTunnelVision.place(this.badai,-1250,0,1.8);
 	this.badai.set_visible(false);
 	owner.insert(owner.members.indexOf(owner.boyfriend),this.badai);
+	this.trail = new GoldenTunnelVisionTrail(this.badai);
+	this.trail.alpha = 0;
+	owner.insert(owner.members.indexOf(this.badai) + 1,this.trail);
+	owner.tunnelVisionStage.vignette.set_cameras([owner.camHUD]);
+	owner.add(owner.tunnelVisionStage.vignette);
 	this.dim = new flixel_FlxSprite().makeGraphic(1280,720,-16777216);
 	this.dim.scrollFactor.set();
-	this.dim.set_cameras([owner.camHUD]);
+	this.dim.set_cameras([owner.camGame]);
 	this.dim.set_alpha(0);
-	owner.add(this.dim);
+	owner.insert(owner.members.indexOf(owner.tunnelVisionStage) + 1,this.dim);
+	this.finalFade = new flixel_FlxSprite().makeGraphic(1280,720,-1);
+	this.finalFade.scrollFactor.set();
+	this.finalFade.set_cameras([owner.camHUD]);
+	this.finalFade.set_alpha(0);
+	owner.add(this.finalFade);
 	this.subtitle = new flixel_text_FlxText(140,560,1000,"",26);
 	this.subtitle.set_alignment("center");
 	this.subtitle.set_borderStyle(flixel_text_FlxTextBorderStyle.OUTLINE);
@@ -25174,6 +26241,7 @@ var GoldenTunnelVision = function(owner) {
 	this.subtitle.set_cameras([owner.camHUD]);
 	owner.add(this.subtitle);
 	this.captions = JSON.parse(openfl_utils_Assets.getText(Paths.getPath("data/" + "golden/tunnelvision/subtitles" + ".json","TEXT","tunnelvision")));
+	this.hudOverlay = owner.members[owner.members.indexOf(owner.healthBar) + 1];
 	this.explosion = new flixel_FlxSprite();
 	this.explosion.set_visible(false);
 	var type = "TEXT";
@@ -25181,19 +26249,133 @@ var GoldenTunnelVision = function(owner) {
 		type = "TEXT";
 	}
 	if(openfl_utils_Assets.exists(Paths.getPath("images/golden/tunnelvision/explosion.xml",type,"tunnelvision"))) {
-		this.explosion.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/tunnelvision/explosion" + ".png","IMAGE","tunnelvision"),Paths.getPath("images/" + "golden/tunnelvision/explosion" + ".xml","TEXT","tunnelvision")));
+		var potatoKey = "golden/tunnelvision/explosion" + "_potato";
+		this.explosion.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","tunnelvision"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","tunnelvision"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","tunnelvision"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","tunnelvision")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/tunnelvision/explosion" + ".png","IMAGE","tunnelvision"),Paths.getPath("images/" + "golden/tunnelvision/explosion" + ".xml","TEXT","tunnelvision")));
 		this.explosion.animation.addByPrefix("boom","explosion",24,false);
 	}
 	owner.add(this.explosion);
+	owner.tunnelVisionStage.sync(0,0);
 };
 $hxClasses["GoldenTunnelVision"] = GoldenTunnelVision;
 GoldenTunnelVision.__name__ = "GoldenTunnelVision";
+GoldenTunnelVision.place = function(actor,x,y,scale) {
+	actor.useReferenceAnchor = false;
+	actor.setReferenceScale(scale);
+	actor.setPosition(x,y);
+};
+GoldenTunnelVision.ramp = function(time,step,durationMs) {
+	return Math.max(0,Math.min(1,(time - step * 81.5217391304347814) / durationMs));
+};
+GoldenTunnelVision.eased = function(value) {
+	return 1 - Math.pow(1 - value,3);
+};
 GoldenTunnelVision.skinFor = function(time,player) {
 	if(player && time < 133043.478260869568) {
 		return "default";
 	} else {
 		return "3d";
 	}
+};
+GoldenTunnelVision.zoomAt = function(time,step) {
+	if(step >= 2544) {
+		return .57;
+	}
+	if(step >= 2288) {
+		return .67;
+	}
+	if(step >= 2160) {
+		return .82;
+	}
+	if(step >= 2080) {
+		return .67;
+	}
+	if(step >= 1632) {
+		return .57;
+	}
+	if(step >= 1600) {
+		return .67;
+	}
+	if(step >= 1472) {
+		return .77;
+	}
+	if(step >= 1344) {
+		return .87;
+	}
+	if(step >= 1184) {
+		return .67;
+	}
+	if(step >= 1088) {
+		return .67 + .43 * GoldenTunnelVision.eased(GoldenTunnelVision.ramp(time,1088,5000));
+	}
+	if(step >= 832) {
+		return .67;
+	}
+	if(step >= 704) {
+		return .81;
+	}
+	if(step >= 576) {
+		return .9;
+	}
+	if(step >= 568) {
+		return .67 + .43 * GoldenTunnelVision.eased(GoldenTunnelVision.ramp(time,568,670));
+	}
+	if(step >= 448) {
+		return .67;
+	}
+	if(step >= 320) {
+		return .67 + .43 * GoldenTunnelVision.eased(GoldenTunnelVision.ramp(time,320,5000));
+	}
+	if(step >= 64) {
+		return .67;
+	} else {
+		return 1;
+	}
+};
+GoldenTunnelVision.dimAt = function(time,step) {
+	if(step >= 1184) {
+		return .5 * (1 - GoldenTunnelVision.eased(GoldenTunnelVision.ramp(time,1184,500)));
+	}
+	if(step >= 1088) {
+		return .5 * GoldenTunnelVision.eased(GoldenTunnelVision.ramp(time,1088,500));
+	}
+	if(step >= 832) {
+		return .5 * (1 - GoldenTunnelVision.eased(GoldenTunnelVision.ramp(time,832,100)));
+	}
+	if(step >= 576) {
+		return .5 * GoldenTunnelVision.eased(GoldenTunnelVision.ramp(time,576,500));
+	}
+	if(step >= 442) {
+		return .5 * (1 - GoldenTunnelVision.eased(GoldenTunnelVision.ramp(time,442,500)));
+	}
+	if(step >= 320) {
+		return .5 * GoldenTunnelVision.eased(GoldenTunnelVision.ramp(time,320,500));
+	} else {
+		return 0;
+	}
+};
+GoldenTunnelVision.hudAt = function(time,step) {
+	if(step >= 1184) {
+		return GoldenTunnelVision.eased(GoldenTunnelVision.ramp(time,1184,100));
+	}
+	if(step >= 1088) {
+		return 1 - GoldenTunnelVision.eased(GoldenTunnelVision.ramp(time,1088,4000));
+	}
+	if(step >= 832) {
+		return GoldenTunnelVision.eased(GoldenTunnelVision.ramp(time,832,100));
+	}
+	if(step >= 576) {
+		return 1 - GoldenTunnelVision.eased(GoldenTunnelVision.ramp(time,576,3000));
+	}
+	if(step >= 448) {
+		return GoldenTunnelVision.eased(GoldenTunnelVision.ramp(time,448,100));
+	}
+	if(step >= 320) {
+		return 1 - GoldenTunnelVision.eased(GoldenTunnelVision.ramp(time,320,4000));
+	}
+	if(step >= 64) {
+		return GoldenTunnelVision.eased(GoldenTunnelVision.ramp(time,64,100));
+	}
+	return 1 - Math.min(1,time / 100);
 };
 GoldenTunnelVision.prototype = {
 	owner: null
@@ -25206,13 +26388,29 @@ GoldenTunnelVision.prototype = {
 	,captions: null
 	,subtitleIndex: null
 	,dim: null
+	,finalFade: null
 	,nextLook: null
 	,looking: null
+	,trail: null
+	,hudOverlay: null
+	,cameraX: null
+	,cameraY: null
+	,entranceX: null
+	,entranceY: null
+	,backgroundX: null
+	,backgroundY: null
+	,floatClock: null
+	,movementPhase: null
+	,backgroundPhase: null
+	,finalePhase: null
 	,swapOpponentIcon: function(character) {
 		var old = this.owner.iconP2;
 		var index = this.owner.members.indexOf(old);
+		this.owner.goldenTweens.cancelTweensOf(old);
+		this.owner.goldenTweens.cancelTweensOf(old.scale);
 		this.owner.remove(old,true);
 		this.owner.iconP2 = new HealthIcon(character,false);
+		this.owner.iconP2.setPosition(old.x,old.y);
 		this.owner.iconP2.set_cameras([this.owner.camHUD]);
 		this.owner.insert(index,this.owner.iconP2);
 		old.destroy();
@@ -25222,9 +26420,19 @@ GoldenTunnelVision.prototype = {
 		var index = this.owner.members.indexOf(old);
 		this.owner.remove(old,true);
 		this.owner.boyfriend = new Boyfriend(0,0,"tunnel-3d-bf");
-		this.owner.boyfriend.setReferenceAnchor(1080,690,.85);
+		GoldenTunnelVision.place(this.owner.boyfriend,395,1229,1);
 		this.owner.insert(index,this.owner.boyfriend);
 		old.destroy();
+		var oldIcon = this.owner.iconP1;
+		var iconIndex = this.owner.members.indexOf(oldIcon);
+		this.owner.goldenTweens.cancelTweensOf(oldIcon);
+		this.owner.goldenTweens.cancelTweensOf(oldIcon.scale);
+		this.owner.remove(oldIcon,true);
+		this.owner.iconP1 = new HealthIcon("tunnel-3d-bf",true);
+		this.owner.iconP1.setPosition(oldIcon.x,oldIcon.y);
+		this.owner.iconP1.set_cameras([this.owner.camHUD]);
+		this.owner.insert(iconIndex,this.owner.iconP1);
+		oldIcon.destroy();
 		GoldenNoteSkin.setupStrum(this.owner.strumLineNotes.members[4],"3d",4 % 4);
 		GoldenNoteSkin.setupStrum(this.owner.strumLineNotes.members[5],"3d",5 % 4);
 		GoldenNoteSkin.setupStrum(this.owner.strumLineNotes.members[6],"3d",6 % 4);
@@ -25235,99 +26443,215 @@ GoldenTunnelVision.prototype = {
 		var index = this.owner.members.indexOf(old);
 		this.owner.remove(old,true);
 		this.owner.dad = new Character(0,0,"dave-decimated-final");
-		this.owner.dad.setReferenceAnchor(360,670,.95);
+		GoldenTunnelVision.place(this.owner.dad,-301,-150,1);
 		this.owner.insert(index,this.owner.dad);
+		this.trail.resetTrail();
+		this.trail.set_visible(false);
+		this.badai.set_visible(false);
 		old.destroy();
 		this.chair.set_visible(false);
-		this.badai.set_visible(false);
 		this.chaseDave.set_visible(false);
 		this.swapOpponentIcon("dave-decimated-final");
 		this.owner.healthBar.createFilledBar(-2490368,-13520687);
 	}
 	,cue: function(step) {
 		switch(step) {
+		case 64:
+			flixel_FlxG.camera.flash(-1,1);
+			break;
+		case 448:
+			flixel_FlxG.camera.flash(-1,1);
+			break;
+		case 576:
+			flixel_FlxG.camera.flash(-1,1);
+			break;
 		case 832:
 			flixel_FlxG.camera.flash(-1,1);
 			break;
-		case 1190:
+		case 1182:
+			this.entranceX = this.chaseDave.x - 200;
+			this.entranceY = this.chaseDave.y + 100;
+			this.badai.set_visible(true);
+			break;
+		case 1184:
+			this.movementPhase = this.floatClock;
 			this.chaseDave.playSpecialAnim("bump");
-			this.chaseDave.setReferenceScale(.55);
+			this.chaseDave.canAutoDance = false;
+			this.chair.set_visible(false);
+			this.badai.setPosition(this.entranceX,this.entranceY);
 			this.owner.dad = this.badai;
 			this.swapOpponentIcon("badai");
 			this.owner.healthBar.createFilledBar(-378400,-13520687);
-			this.chair.scale.set(.55,.55);
-			flixel_FlxG.camera.shake(.01,.35);
+			flixel_FlxG.camera.shake(.01,0.326086956521739135);
+			break;
+		case 1216:
+			this.backgroundPhase = this.floatClock + 2.5;
+			this.chaseDave.set_visible(true);
+			this.chaseDave.canAutoDance = true;
+			this.chaseDave.setReferenceScale(.8);
+			this.chaseDave.playAnim("bgLeft",true);
+			this.backgroundX = this.chaseDave.x;
+			this.backgroundY = this.chaseDave.y;
+			flixel_FlxG.camera.flash(-1,1);
+			break;
+		case 1344:
+			this.trail.alpha = .3;
 			break;
 		case 1600:
 			this.badai.playSpecialAnim("disco");
 			flixel_FlxG.camera.flash(-16777216,.5);
+			this.trail.resetTrail();
+			this.trail.set_visible(false);
 			break;
 		case 1632:
+			this.movementPhase = this.floatClock;
+			this.badai.setPosition(-880,445);
+			this.chaseDave.set_visible(false);
 			this.swapBoyfriend();
 			flixel_FlxG.camera.flash(-1,1);
 			break;
 		case 2144:
-			this.owner.dad.canAutoDance = false;
+			this.cameraX = this.chaseDave.x + this.chaseDave.get_width() * .5 + 170;
+			this.cameraY = this.chaseDave.y + this.chaseDave.get_height() * .5 + 100;
 			break;
 		case 2146:
+			this.badai.canAutoDance = false;
 			this.badai.playSpecialAnim("wait");
 			break;
 		case 2152:
+			this.badai.set_visible(false);
 			if(this.explosion.frames != null) {
-				this.explosion.setPosition(this.owner.dad.x,this.owner.dad.y - 250);
+				this.explosion.setPosition(this.badai.x,this.badai.y);
 				this.explosion.set_visible(true);
 				this.explosion.animation.play("boom",true);
 			}
 			flixel_FlxG.camera.shake(.02,.5);
 			break;
 		case 2160:
+			this.finalePhase = this.floatClock;
 			this.finale();
-			flixel_FlxG.camera.flash(-1,.5);
 			break;
+		case 2288:
+			flixel_FlxG.camera.flash(-1,1);
+			break;
+		case 2672:
+			flixel_FlxG.camera.flash(-1,.8);
+			break;
+		}
+		if(step >= 1216 && step < 2160 && step % 4 == 0 && this.chaseDave.specialAnimation == null) {
+			this.chaseDave.playAnim((step / 4 | 0) % 2 == 0 ? "bgLeft" : "bgRight",true);
 		}
 	}
 	,update: function(time,elapsed) {
+		if(!this.owner.paused) {
+			this.floatClock += elapsed;
+		}
 		if(this.owner.startingSong) {
+			this.chaseDave.set_y(-56 - 75.6 * (1 - Math.cos(this.floatClock)));
+			this.chair.setPosition(this.chaseDave.x,this.chaseDave.y);
 			return;
 		}
 		var step = Math.max(0,time) / 81.5217391304347814 | 0;
 		while(this.lastStep < step) this.cue(++this.lastStep);
-		var seconds = time / 1000;
-		if(step < 1190) {
-			this.chaseDave.set_y(680 + Math.sin(seconds * 5) * 12);
-			if(time >= this.nextLook && this.chaseDave.specialAnimation == null && this.chaseDave.animation._curAnim.name == "idle") {
+		if(step < 1184) {
+			this.chaseDave.set_y(-56 - 75.6 * (1 - Math.cos(this.floatClock)));
+			var name = this.chaseDave.animation._curAnim == null ? "" : this.chaseDave.animation._curAnim.name;
+			if(name.indexOf("sing") == 0) {
+				this.looking = false;
+			}
+			if(time >= this.nextLook && this.chaseDave.specialAnimation == null && (name == "idle" || name == "looking")) {
 				this.looking = !this.looking;
 				this.chaseDave.playSpecialAnim(this.looking ? "look" : "back");
-				this.nextLook = time + (this.looking ? 625 : 4000);
+				this.nextLook = time + (this.looking ? flixel_FlxG.random.float(500,750) : flixel_FlxG.random.float(2000,6000));
 			}
 		}
-		if(step >= 1182 && step < 1190) {
-			this.badai.set_visible(true);
-			var q = Math.max(0,Math.min(1,(time - 96358.6956521739) / 652.173913043478251));
-			q = 1 - Math.pow(1 - q,3);
-			this.badai.set_x(-1250 + 1770 * q);
+		if(step >= 1182 && step < 1184) {
+			var q = GoldenTunnelVision.eased(GoldenTunnelVision.ramp(time,1182,163.043478260869563));
+			this.badai.setPosition(-1250 + (this.entranceX + 1250) * q,this.entranceY * q);
 		}
-		if(step >= 1190 && step < 2160) {
-			this.badai.set_x(520);
-			this.badai.set_y(675);
-			var travel = (time - 97010.8695652173919) / 1000;
-			var horizontal = travel * 100 % 1800;
-			var vertical = travel * 98 % 600;
-			this.chaseDave.set_x(-150 + (horizontal < 900 ? horizontal : 1800 - horizontal));
-			this.chaseDave.set_y(220 + (vertical < 300 ? vertical : 600 - vertical));
-			this.chaseDave.set_flipX(horizontal >= 900);
+		if(step >= 1184 && step < 1216 && this.chaseDave.completedSpecial == "bump") {
+			this.chaseDave.set_visible(false);
+		}
+		if(step >= 1184 && step < 2152) {
+			var drift = 75.6 * (Math.cos(this.movementPhase) - Math.cos(this.floatClock));
+			this.badai.set_x((step >= 1632 ? -880 : this.entranceX) + drift);
+			this.badai.set_y((step >= 1632 ? 445 : this.entranceY) + drift);
+			this.badai.origin.set(this.badai.frameWidth * .5,this.badai.frameHeight * .5);
+			this.badai.set_angle(GoldenQuality.superLow ? 0 : Math.sin(this.floatClock) * 15);
+		}
+		if(step >= 1216 && step < 2160) {
+			var p = GoldenTunnelVision.eased(GoldenTunnelVision.ramp(time,1216,2500));
+			this.chaseDave.set_x(this.backgroundX + (this.entranceX - this.backgroundX) * p);
+			this.chaseDave.set_y(this.backgroundY + (-300 - this.backgroundY) * p);
+			if(p >= 1) {
+				var travel = Math.max(0,(time - 99130.4347826086887 - 2500) / 1000);
+				var horizontal = travel * 100 % 1800;
+				var vertical = travel * 100 % 600;
+				this.chaseDave.set_x(this.entranceX + (horizontal < 900 ? horizontal : 1800 - horizontal));
+				this.chaseDave.set_y(-300 + (vertical < 300 ? vertical : 600 - vertical));
+				var fh = this.chaseDave;
+				fh.set_y(fh.y - 75.6 * (Math.cos(this.backgroundPhase) - Math.cos(this.floatClock)));
+				this.chaseDave.set_flipX(horizontal >= 900);
+				this.chaseDave.origin.set(this.chaseDave.frameWidth * .5,this.chaseDave.frameHeight * .5);
+				this.chaseDave.set_angle(GoldenQuality.superLow ? 0 : travel * 20 % 360);
+			}
 		}
 		this.chair.scale.set(this.chaseDave.scale.x,this.chaseDave.scale.y);
-		this.chair.setPosition(this.chaseDave.x - this.chaseDave.referenceAnchorX * this.chaseDave.scale.x,this.chaseDave.y - this.chaseDave.referenceAnchorY * this.chaseDave.scale.y);
+		this.chair.setPosition(this.chaseDave.x,this.chaseDave.y);
 		if(step >= 2160) {
-			this.owner.dad.set_y(670 + Math.sin(seconds * 2) * 55);
+			this.owner.dad.set_y(850 - 1000 * (1 - GoldenTunnelVision.eased(GoldenTunnelVision.ramp(time,2160,2000))) - 2000 * GoldenTunnelVision.ramp(time,2544,20869.565217391304) - 75.6 * (Math.cos(this.finalePhase) - Math.cos(this.floatClock)));
 		}
-		this.owner.boyfriend.set_y(690 + Math.sin(seconds * 6) * 8);
-		var zoom = step >= 2160 ? 0.72 : step >= 1632 ? 0.57 : step >= 1344 ? 0.87 : step >= 832 ? 0.67 : step >= 704 ? 0.81 : 0.67;
+		this.owner.boyfriend.set_y(step >= 1632 ? 1229 : -334);
+		var zoom = GoldenTunnelVision.zoomAt(time,step);
 		flixel_FlxG.camera.set_zoom(zoom);
-		this.owner.camFollow.setPosition(660,340);
+		if(step < 2144 || step >= 2160) {
+			var section = PlayState.SONG.notes[step / 16 | 0];
+			var player = section != null && section.mustHitSection;
+			var actor = player ? this.owner.boyfriend : this.owner.dad;
+			var idle = actor.frames.frames[actor.animation._animations.h["idle"].frames[0]].sourceSize;
+			this.cameraX = actor.x + idle.x * actor.scale.x * .5 + (actor == this.chaseDave ? 170 : 0);
+			this.cameraY = actor.y + idle.y * actor.scale.y * .5 + 100;
+		}
+		var follow = 1 - Math.exp(-elapsed * 6);
+		var fh = this.owner.camFollow;
+		fh.set_x(fh.x + (this.cameraX - this.owner.camFollow.x) * follow);
+		var fh = this.owner.camFollow;
+		fh.set_y(fh.y + (this.cameraY - this.owner.camFollow.y) * follow);
 		this.owner.tunnelVisionStage.sync(time,step);
-		this.dim.set_alpha(step >= 2800 ? Math.min(1,(step - 2800) / 32) : step >= 1624 && step < 1632 ? (step - 1624) / 8 : 0);
+		var cover = 1 / zoom;
+		this.dim.scale.set(cover,cover);
+		this.dim.updateHitbox();
+		var _this = this.dim;
+		var axes = flixel_util_FlxAxes.XY;
+		var tmp;
+		switch(axes._hx_index) {
+		case 0:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			_this.set_x((flixel_FlxG.width - _this.get_width()) / 2);
+		}
+		var tmp;
+		switch(axes._hx_index) {
+		case 1:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			_this.set_y((flixel_FlxG.height - _this.get_height()) / 2);
+		}
+		this.dim.set_alpha(GoldenTunnelVision.dimAt(time,step));
+		this.finalFade.set_color(step >= 2832 ? -16777216 : -1);
+		this.finalFade.set_alpha(step >= 2832 ? GoldenTunnelVision.ramp(time,2832,1304.3478260869565) : step >= 1624 && step < 1632 ? GoldenTunnelVision.ramp(time,1624,326.086956521739125) : 0);
+		this.setHudOpacity(GoldenTunnelVision.hudAt(time,step));
+		if(this.trail.visible) {
+			this.trail.sync(time);
+		}
 		if(this.explosion.visible && this.explosion.animation._curAnim != null && this.explosion.animation._curAnim.finished) {
 			this.explosion.set_visible(false);
 		}
@@ -25336,9 +26660,20 @@ GoldenTunnelVision.prototype = {
 		var total = Math.max(0,time) / 1000 | 0;
 		this.owner.applecoreClock.set_text((total / 60 | 0) + ":" + (total % 60 < 10 ? "0" : "") + total % 60);
 	}
+	,setHudOpacity: function(value) {
+		this.owner.healthBarBG.set_alpha(this.owner.healthBar.set_alpha(value));
+		if(this.hudOverlay != null) {
+			this.hudOverlay.set_alpha(value);
+		}
+		this.owner.iconP1.set_alpha(this.owner.iconP2.set_alpha(value));
+		this.owner.applecoreAccuracy.set_alpha(this.owner.applecoreMisses.set_alpha(this.owner.applecoreScore.set_alpha(value)));
+		this.owner.applecoreClock.set_alpha(value);
+	}
 	,setSuspended: function(value) {
+		this.trail.setSuspended(value);
 	}
 	,destroy: function() {
+		this.owner = null;
 	}
 	,__class__: GoldenTunnelVision
 };
@@ -25371,19 +26706,63 @@ var GoldenTunnelVisionStage = function() {
 	if(tmp) {
 		_this.set_y((flixel_FlxG.height - _this.get_height()) / 2);
 	}
-	this.backdrop.scrollFactor.set();
+	this.backdrop.scrollFactor.set(.2,.2);
 	this.add(this.backdrop);
 	this.wire = new flixel_FlxSprite();
-	this.wire.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/tunnelvision/wire" + ".png","IMAGE","tunnelvision"),Paths.getPath("images/" + "golden/tunnelvision/wire" + ".xml","TEXT","tunnelvision")));
+	var potatoKey = "golden/tunnelvision/wire" + "_potato";
+	this.wire.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","tunnelvision"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","tunnelvision"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","tunnelvision"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","tunnelvision")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/tunnelvision/wire" + ".png","IMAGE","tunnelvision"),Paths.getPath("images/" + "golden/tunnelvision/wire" + ".xml","TEXT","tunnelvision")));
 	this.wire.animation.addByPrefix("wire","wire",24,true);
 	this.wire.animation.play("wire");
-	this.wire.scrollFactor.set();
-	this.wire.set_antialiasing(true);
+	this.wire.scale.set(2,2);
+	this.wire.updateHitbox();
+	var _this = this.wire;
+	var axes = flixel_util_FlxAxes.XY;
+	var tmp;
+	switch(axes._hx_index) {
+	case 0:case 2:
+		tmp = true;
+		break;
+	default:
+		tmp = false;
+	}
+	if(tmp) {
+		_this.set_x((flixel_FlxG.width - _this.get_width()) / 2);
+	}
+	var tmp;
+	switch(axes._hx_index) {
+	case 1:case 2:
+		tmp = true;
+		break;
+	default:
+		tmp = false;
+	}
+	if(tmp) {
+		_this.set_y((flixel_FlxG.height - _this.get_height()) / 2);
+	}
+	this.wire.scrollFactor.set(.2,.2);
+	this.wire.set_antialiasing(!GoldenQuality.superLow);
 	this.add(this.wire);
-	this.disco = new flixel_FlxSprite().loadGraphic(Paths.getPath("images/" + "golden/tunnelvision/disco_bg" + ".png","IMAGE","tunnelvision"));
-	this.disco.scrollFactor.set();
-	this.disco.set_visible(false);
-	this.add(this.disco);
+	this.disco = new GoldenTunnelBackdrop(Paths.getPath("images/" + "golden/tunnelvision/disco_bg" + ".png","IMAGE","tunnelvision"));
+	this.discoSecond = new GoldenTunnelBackdrop(Paths.getPath("images/" + "golden/tunnelvision/disco_bg" + ".png","IMAGE","tunnelvision"));
+	var layer = this.disco;
+	layer.scale.set(4,4);
+	layer.scrollFactor.set(.8,.8);
+	layer.setPosition(-1612,-2466);
+	layer.set_visible(false);
+	layer.set_antialiasing(false);
+	this.add(layer);
+	var layer = this.discoSecond;
+	layer.scale.set(4,4);
+	layer.scrollFactor.set(.8,.8);
+	layer.setPosition(-1612,-2466);
+	layer.set_visible(false);
+	layer.set_antialiasing(false);
+	this.add(layer);
+	this.vignette = new flixel_FlxSprite().loadGraphic(Paths.getPath("images/" + "golden/tunnelvision/vignette" + ".png","IMAGE","tunnelvision"));
+	this.vignette.scrollFactor.set();
+	this.vignette.set_visible(false);
+	this.vignette.set_alpha(0);
+	this.vignette.set_antialiasing(!GoldenQuality.superLow);
 };
 $hxClasses["GoldenTunnelVisionStage"] = GoldenTunnelVisionStage;
 GoldenTunnelVisionStage.__name__ = "GoldenTunnelVisionStage";
@@ -25392,74 +26771,210 @@ GoldenTunnelVisionStage.prototype = $extend(flixel_group_FlxTypedGroup.prototype
 	backdrop: null
 	,wire: null
 	,disco: null
+	,discoSecond: null
+	,vignette: null
 	,sync: function(time,step) {
-		this.backdrop.set_visible(step < 1632);
-		this.wire.set_visible(step < 1632);
-		this.disco.set_visible(step >= 1632);
-		var s = this.wire;
-		var cover = Math.max(flixel_FlxG.width / s.frameWidth,flixel_FlxG.height / s.frameHeight) / flixel_FlxG.camera.zoom;
-		s.scale.set(cover,cover);
-		s.updateHitbox();
-		var axes = flixel_util_FlxAxes.XY;
-		var tmp;
-		switch(axes._hx_index) {
-		case 0:case 2:
-			tmp = true;
-			break;
-		default:
-			tmp = false;
-		}
-		if(tmp) {
-			s.set_x((flixel_FlxG.width - s.get_width()) / 2);
-		}
-		var tmp;
-		switch(axes._hx_index) {
-		case 1:case 2:
-			tmp = true;
-			break;
-		default:
-			tmp = false;
-		}
-		if(tmp) {
-			s.set_y((flixel_FlxG.height - s.get_height()) / 2);
-		}
-		var s = this.disco;
-		var cover = Math.max(flixel_FlxG.width / s.frameWidth,flixel_FlxG.height / s.frameHeight) / flixel_FlxG.camera.zoom;
-		s.scale.set(cover,cover);
-		s.updateHitbox();
-		var axes = flixel_util_FlxAxes.XY;
-		var tmp;
-		switch(axes._hx_index) {
-		case 0:case 2:
-			tmp = true;
-			break;
-		default:
-			tmp = false;
-		}
-		if(tmp) {
-			s.set_x((flixel_FlxG.width - s.get_width()) / 2);
-		}
-		var tmp;
-		switch(axes._hx_index) {
-		case 1:case 2:
-			tmp = true;
-			break;
-		default:
-			tmp = false;
-		}
-		if(tmp) {
-			s.set_y((flixel_FlxG.height - s.get_height()) / 2);
+		var discoActive = step >= 1632;
+		this.disco.set_visible(this.discoSecond.set_visible(this.vignette.set_visible(discoActive)));
+		if(discoActive) {
+			var phaseTime = Math.max(0,time - 133043.478260869568);
+			var offset = GoldenQuality.superLow ? 0 : -(phaseTime * 5) % 5652;
+			this.disco.set_y(-2466 + offset);
+			this.discoSecond.set_y(this.disco.y + 5652);
+			var colorTime = Math.max(0,Math.min(time,176086.956521739135) - 133043.478260869568);
+			var tint = flixel_util_FlxColor.fromHSB(colorTime / 1000 * 200 % 360,1,1);
+			if(step >= 2160) {
+				var Color2 = -1;
+				var Factor = Math.min(1,(time - 176086.956521739135) / 3000);
+				if(Factor == null) {
+					Factor = 0.5;
+				}
+				var r = ((Color2 >> 16 & 255) - (tint >> 16 & 255)) * Factor + (tint >> 16 & 255) | 0;
+				var g = ((Color2 >> 8 & 255) - (tint >> 8 & 255)) * Factor + (tint >> 8 & 255) | 0;
+				var b = ((Color2 & 255) - (tint & 255)) * Factor + (tint & 255) | 0;
+				var a = ((Color2 >> 24 & 255) - (tint >> 24 & 255)) * Factor + (tint >> 24 & 255) | 0;
+				var Alpha = a;
+				if(Alpha == null) {
+					Alpha = 255;
+				}
+				var color = flixel_util_FlxColor._new();
+				var Alpha1 = Alpha;
+				if(Alpha1 == null) {
+					Alpha1 = 255;
+				}
+				color &= -16711681;
+				color |= (r > 255 ? 255 : r < 0 ? 0 : r) << 16;
+				color &= -65281;
+				color |= (g > 255 ? 255 : g < 0 ? 0 : g) << 8;
+				color &= -256;
+				color |= b > 255 ? 255 : b < 0 ? 0 : b;
+				color &= 16777215;
+				color |= (Alpha1 > 255 ? 255 : Alpha1 < 0 ? 0 : Alpha1) << 24;
+				tint = color;
+			}
+			this.disco.set_color(tint);
+			this.discoSecond.set_color(tint);
+			this.vignette.set_alpha(step >= 2160 ? .8 * (1 - Math.min(1,(time - 176086.956521739135) / 3000)) : .8);
 		}
 		if(this.wire.animation._curAnim != null) {
-			this.wire.animation._curAnim.set_curFrame((Math.max(0,time) * 24 / 1000 | 0) % this.wire.animation._curAnim.frames.length);
+			this.wire.animation._curAnim.set_curFrame(GoldenQuality.superLow ? 0 : (Math.max(0,time) * 24 / 1000 | 0) % this.wire.animation._curAnim.frames.length);
 			var _this = this.wire.animation;
 			if(_this._curAnim != null) {
 				_this._curAnim.pause();
 			}
 		}
-		this.wire.set_alpha(step < 64 ? 0 : step < 320 ? (step - 64) / 256 : step < 448 ? 1 - (step - 320) / 128 : step < 832 ? 1 : 0.6);
 	}
 	,__class__: GoldenTunnelVisionStage
+});
+var GoldenTunnelVisionTrail = function(target) {
+	this.suspended = false;
+	this.previousTime = NaN;
+	this.nextSample = NaN;
+	this.filled = 0;
+	this.newest = -1;
+	this.alpha = 1;
+	flixel_group_FlxTypedGroup.call(this,4);
+	this.target = target;
+	this.set_active(false);
+	if(!GoldenQuality.superLow) {
+		this.allocateCopies();
+	}
+};
+$hxClasses["GoldenTunnelVisionTrail"] = GoldenTunnelVisionTrail;
+GoldenTunnelVisionTrail.__name__ = "GoldenTunnelVisionTrail";
+GoldenTunnelVisionTrail.__super__ = flixel_group_FlxTypedGroup;
+GoldenTunnelVisionTrail.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
+	target: null
+	,alpha: null
+	,newest: null
+	,filled: null
+	,nextSample: null
+	,previousTime: null
+	,suspended: null
+	,allocateCopies: function() {
+		if(this.members.length > 0) {
+			return;
+		}
+		var copy = new flixel_FlxSprite();
+		copy.set_active(false);
+		copy.set_exists(false);
+		copy.set_moves(false);
+		copy.set_solid(false);
+		this.add(copy);
+		var copy = new flixel_FlxSprite();
+		copy.set_active(false);
+		copy.set_exists(false);
+		copy.set_moves(false);
+		copy.set_solid(false);
+		this.add(copy);
+		var copy = new flixel_FlxSprite();
+		copy.set_active(false);
+		copy.set_exists(false);
+		copy.set_moves(false);
+		copy.set_solid(false);
+		this.add(copy);
+		var copy = new flixel_FlxSprite();
+		copy.set_active(false);
+		copy.set_exists(false);
+		copy.set_moves(false);
+		copy.set_solid(false);
+		this.add(copy);
+	}
+	,sync: function(timeMs,source) {
+		if(source != null && source != this.target) {
+			this.target = source;
+			this.resetTrail();
+		}
+		if(GoldenQuality.superLow) {
+			if(this.filled > 0) {
+				this.resetTrail();
+			}
+			return;
+		}
+		if(this.suspended || !isFinite(timeMs)) {
+			return;
+		}
+		if(this.target == null || !this.target.exists || !this.target.visible || this.target.frame == null) {
+			this.resetTrail();
+			return;
+		}
+		this.allocateCopies();
+		var f = this.previousTime;
+		if(isNaN(f) || timeMs < this.previousTime || timeMs - this.previousTime > 133.333333333333343) {
+			this.resetTrail();
+			this.nextSample = timeMs + 33.3333333333333357;
+		}
+		this.previousTime = timeMs;
+		if(timeMs < this.nextSample) {
+			return;
+		}
+		this.nextSample = timeMs + 33.3333333333333357;
+		this.newest = (this.newest + 1) % 4;
+		var copy = this.members[this.newest];
+		if(copy.frames != this.target.frames) {
+			copy.set_frames(this.target.frames);
+		}
+		copy.set_frame(this.target.frame);
+		copy.setPosition(this.target.x,this.target.y);
+		copy.offset.set(this.target.offset.x,this.target.offset.y);
+		copy.origin.set(this.target.origin.x,this.target.origin.y);
+		copy.scale.set(this.target.scale.x,this.target.scale.y);
+		copy.scrollFactor.set(this.target.scrollFactor.x,this.target.scrollFactor.y);
+		copy.set_angle(this.target.angle);
+		copy.set_flipX(this.target.flipX);
+		copy.set_flipY(this.target.flipY);
+		copy.set_color(this.target.color);
+		copy.set_alpha(this.target.alpha);
+		copy.set_blend(this.target.blend);
+		copy.set_antialiasing(this.target.antialiasing);
+		copy.set_cameras(this.target.get_cameras());
+		copy.set_exists(true);
+		if(this.filled < 4) {
+			this.filled++;
+		}
+	}
+	,draw: function() {
+		if(GoldenQuality.superLow || this.filled == 0 || this.alpha <= 0) {
+			return;
+		}
+		var _g = 0;
+		var _g1 = this.filled;
+		while(_g < _g1) {
+			var age = _g++;
+			var historyAge = this.filled - 1 - age;
+			var index = (this.newest - historyAge + 4) % 4;
+			var copy = this.members[index];
+			if(!copy.exists || !copy.visible) {
+				continue;
+			}
+			var sampledAlpha = copy.alpha;
+			copy.set_alpha(sampledAlpha * Math.max(0,.3 - historyAge * .03) * Math.max(0,Math.min(1,this.alpha)));
+			copy.draw();
+			copy.set_alpha(sampledAlpha);
+		}
+	}
+	,resetTrail: function() {
+		this.newest = -1;
+		this.filled = 0;
+		this.previousTime = NaN;
+		this.nextSample = NaN;
+		var _g = 0;
+		var _g1 = this.members;
+		while(_g < _g1.length) {
+			var copy = _g1[_g];
+			++_g;
+			copy.set_exists(false);
+			copy.set_frames(null);
+		}
+	}
+	,setSuspended: function(value) {
+		this.suspended = value;
+	}
+	,destroy: function() {
+		this.target = null;
+		flixel_group_FlxTypedGroup.prototype.destroy.call(this);
+	}
+	,__class__: GoldenTunnelVisionTrail
 });
 var GoldenVideo = function(camera,source,behind,looping) {
 	if(looping == null) {
@@ -25646,7 +27161,9 @@ var GoldenWavySprite = function(x,y) {
 	}
 	flixel_FlxSprite.call(this,x,y);
 	this.waveShader = new GoldenWavyShader();
-	this.shader = this.waveShader;
+	if(!GoldenQuality.superLow) {
+		this.shader = this.waveShader;
+	}
 };
 $hxClasses["GoldenWavySprite"] = GoldenWavySprite;
 GoldenWavySprite.__name__ = "GoldenWavySprite";
@@ -25669,7 +27186,9 @@ GoldenWavySprite.prototype = $extend(flixel_FlxSprite.prototype,{
 	}
 	,update: function(elapsed) {
 		flixel_FlxSprite.prototype.update.call(this,elapsed);
-		this.waveShader.iTime.value[0] += elapsed;
+		if(!GoldenQuality.superLow) {
+			this.waveShader.iTime.value[0] += elapsed;
+		}
 	}
 	,__class__: GoldenWavySprite
 });
@@ -25716,7 +27235,10 @@ var HealthIcon = function(char,isPlayer) {
 	case "inspicable":
 		icon = "inspicable";
 		break;
-	case "tunnel-3d-bf":case "tunnel-bf":
+	case "tunnel-3d-bf":
+		icon = "3d-bf";
+		break;
+	case "tunnel-bf":
 		icon = "bf";
 		break;
 	case "unfair-expunged-forward":
@@ -25742,6 +27264,12 @@ HealthIcon.prototype = $extend(flixel_FlxSprite.prototype,{
 		if(this.sprTracker != null) {
 			this.setPosition(this.sprTracker.x + this.sprTracker.get_width() + 10,this.sprTracker.y - 30);
 		}
+	}
+	,draw: function() {
+		if(GoldenQuality.superLow) {
+			this.set_antialiasing(false);
+		}
+		flixel_FlxSprite.prototype.draw.call(this);
 	}
 	,__class__: HealthIcon
 });
@@ -26508,16 +28036,23 @@ MainMenuState.prototype = $extend(MusicBeatState.prototype,{
 		var electric = new flixel_FlxSprite(278,89);
 		electric.ID = -1;
 		var library = null;
-		electric.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/menu/mainMenu/electric" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/menu/mainMenu/electric" + ".xml","TEXT",library)));
+		var potatoKey = "golden/menu/mainMenu/electric" + "_potato";
+		electric.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/menu/mainMenu/electric" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/menu/mainMenu/electric" + ".xml","TEXT",library)));
 		electric.animation.addByPrefix("idle","idle",24,true);
 		electric.animation.play("idle");
 		electric.scale.set(0.664886,1);
 		electric.updateHitbox();
+		electric.set_antialiasing(!GoldenQuality.superLow);
 		this.carousel.add(electric);
-		this.add(new flixel_FlxSprite(278,-180).loadGraphic(Paths.getPath("images/" + "golden/menu/mainMenu/Toppom" + ".png","IMAGE",null)));
-		this.add(new flixel_FlxSprite(-24,456).loadGraphic(Paths.getPath("images/" + "golden/menu/mainMenu/Bottom" + ".png","IMAGE",null)));
+		var top = new flixel_FlxSprite(278,-180).loadGraphic(Paths.getPath("images/" + "golden/menu/mainMenu/Toppom" + ".png","IMAGE",null));
+		top.set_antialiasing(!GoldenQuality.superLow);
+		this.add(top);
+		var bottom = new flixel_FlxSprite(-24,456).loadGraphic(Paths.getPath("images/" + "golden/menu/mainMenu/Bottom" + ".png","IMAGE",null));
+		bottom.set_antialiasing(!GoldenQuality.superLow);
+		this.add(bottom);
 		var library = null;
-		var atlas = flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/menu/mainMenu/buttons" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/menu/mainMenu/buttons" + ".xml","TEXT",library));
+		var potatoKey = "golden/menu/mainMenu/buttons" + "_potato";
+		var atlas = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/menu/mainMenu/buttons" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/menu/mainMenu/buttons" + ".xml","TEXT",library));
 		var _g = 0;
 		var _g1 = this.names;
 		while(_g < _g1.length) {
@@ -26527,7 +28062,7 @@ MainMenuState.prototype = $extend(MusicBeatState.prototype,{
 			sprite.set_frames(atlas);
 			sprite.animation.addByPrefix("idle",name,24,true);
 			sprite.animation.play("idle");
-			sprite.set_antialiasing(true);
+			sprite.set_antialiasing(!GoldenQuality.superLow);
 			sprite.ID = this.buttons.length;
 			this.buttons.push(sprite);
 			this.carousel.add(sprite);
@@ -26555,7 +28090,7 @@ MainMenuState.prototype = $extend(MusicBeatState.prototype,{
 		flixel_tweens_FlxTween.cancelTweensOf(this.bandu);
 		this.bandu.setPosition(targetX + 45,0);
 		this.bandu.set_alpha(0);
-		this.bandu.set_antialiasing(true);
+		this.bandu.set_antialiasing(!GoldenQuality.superLow);
 		flixel_tweens_FlxTween.tween(this.bandu,{ x : targetX, alpha : 1},0.22,{ ease : flixel_tweens_FlxEase.quadOut});
 	}
 	,update: function(elapsed) {
@@ -26673,7 +28208,7 @@ ManifestResources.init = function(config) {
 	lime_utils_Assets.libraryPaths.h["orthogonal"] = v;
 	var v = ManifestResources.rootPath + "manifest/applecorestage.json";
 	lime_utils_Assets.libraryPaths.h["applecorestage"] = v;
-	var data = "{\"name\":null,\"assets\":\"aoy4:sizei1464369y4:typey5:MUSICy2:idy44:assets%2Fmusic%2Fgolden%2Fmenu%2Fcredits.mp3y9:pathGroupaR4hy7:preloadtgoR0i1417760R1R2R3y41:assets%2Fmusic%2Fgolden%2Fmenu%2Fplay.mp3R5aR7hR6tgoR0i566714R1R2R3y42:assets%2Fmusic%2Fgolden%2Fmenu%2Fpause.mp3R5aR8hR6tgoR0i1469737R1R2R3y41:assets%2Fmusic%2Fgolden%2Fmenu%2Fmain.mp3R5aR9hR6tgoR0i3713317R1R2R3y42:assets%2Fmusic%2Fgolden%2Fmenu%2Ftitle.mp3R5aR10hR6tgoR0i1473973R1R2R3y45:assets%2Fmusic%2Fgolden%2Fmenu%2Fsettings.mp3R5aR11hR6tgoR0i2309657R1R2R3y31:assets%2Fmusic%2FfreakyMenu.mp3R5aR12hR6tgoy4:pathy39:assets%2Fimages%2Fstorymenu%2Fweek3.pngR0i7148R1y5:IMAGER3R14R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek2.pngR0i6517R1R15R3R16R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek0.pngR0i7056R1R15R3R17R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek1.pngR0i6261R1R15R3R18R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek5.pngR0i6440R1R15R3R19R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek4.pngR0i6262R1R15R3R20R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek6.pngR0i6998R1R15R3R21R6tgoR13y28:assets%2Fimages%2FmenuBG.pngR0i620342R1R15R3R22R6tgoR13y26:assets%2Fimages%2Fnum4.pngR0i3989R1R15R3R23R6tgoR13y26:assets%2Fimages%2Fnum5.pngR0i4113R1R15R3R24R6tgoR13y26:assets%2Fimages%2Fnum7.pngR0i3692R1R15R3R25R6tgoR13y26:assets%2Fimages%2Fnum6.pngR0i4181R1R15R3R26R6tgoR13y26:assets%2Fimages%2Fnum2.pngR0i3990R1R15R3R27R6tgoR13y44:assets%2Fimages%2Fgolden%2Fui%2FuiBorder.pngR0i203R1R15R3R28R6tgoR13y52:assets%2Fimages%2Fgolden%2Fui%2FhealthBarOverlay.pngR0i331R1R15R3R29R6tgoR13y50:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2Fgo.pngR0i13831R1R15R3R30R6tgoR13y49:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2F2.pngR0i7823R1R15R3R31R6tgoR13y49:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2F3.pngR0i9226R1R15R3R32R6tgoR13y49:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2F1.pngR0i5893R1R15R3R33R6tgoR13y43:assets%2Fimages%2Fgolden%2Fui%2FtimeBar.pngR0i235R1R15R3R34R6tgoR13y45:assets%2Fimages%2Fgolden%2Fui%2FhealthBar.pngR0i290R1R15R3R35R6tgoR13y53:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets_3D.xmlR0i5205R1y4:TEXTR3R36R6tgoR13y53:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets_3D.pngR0i666393R1R15R3R38R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets.pngR0i561216R1R15R3R39R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets.xmlR0i7178R1R37R3R40R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2FnoteSplashes.xmlR0i1596R1R37R3R41R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2FnoteSplashes.pngR0i219186R1R15R3R42R6tgoR13y48:assets%2Fimages%2Fgolden%2Fnotes%2Fsplash_3d.pngR0i63270R1R15R3R43R6tgoR13y48:assets%2Fimages%2Fgolden%2Fnotes%2Fsplash_3d.xmlR0i4823R1R37R3R44R6tgoR13y61:assets%2Fimages%2Fgolden%2Fmenu%2Ftransition%2Ftransition.pngR0i28278R1R15R3R45R6tgoR13y72:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2FtitleFellows%2Fbandu.pngR0i432446R1R15R3R46R6tgoR13y72:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2FtitleFellows%2Fbandu.xmlR0i2899R1R37R3R47R6tgoR13y63:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2FdarkChecker.pngR0i149R1R15R3R48R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2Flogo.pngR0i82258R1R15R3R49R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2Fsopar_text.xmlR0i4934R1R37R3R50R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2Fsopar_text.pngR0i1449202R1R15R3R51R6tgoR13y75:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Forthogonal%2Ficon.pngR0i258865R1R15R3R52R6tgoR13y77:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Forthogonal%2Fheader.pngR0i45705R1R15R3R53R6tgoR13y73:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Forthogonal%2Fbg.pngR0i202995R1R15R3R54R6tgoR13y75:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2Ficon.pngR0i326259R1R15R3R55R6tgoR13y77:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2Fheader.pngR0i12093R1R15R3R56R6tgoR13y82:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2FsongPreview.pngR0i168958R1R15R3R57R6tgoR13y73:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2Fbg.pngR0i861461R1R15R3R58R6tgoR13y76:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2Ficon.pngR0i910457R1R15R3R59R6tgoR13y78:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2Fheader.pngR0i17253R1R15R3R60R6tgoR13y83:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2FsongPreview.pngR0i174673R1R15R3R61R6tgoR13y74:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2Fbg.pngR0i1170366R1R15R3R62R6tgoR13y93:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2FsongPreview_complete.pngR0i357300R1R15R3R63R6tgoR13y77:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2Ficon.pngR0i708048R1R15R3R64R6tgoR13y79:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2Fheader.pngR0i22174R1R15R3R65R6tgoR13y84:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2FsongPreview.pngR0i178512R1R15R3R66R6tgoR13y75:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2Fbg.pngR0i178626R1R15R3R67R6tgoR13y90:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2FsongPreview_complete.pngR0i261035R1R15R3R68R6tgoR13y74:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2Ficon.pngR0i38964R1R15R3R69R6tgoR13y76:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2Fheader.pngR0i11563R1R15R3R70R6tgoR13y81:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2FsongPreview.pngR0i87336R1R15R3R71R6tgoR13y72:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2Fbg.pngR0i565038R1R15R3R72R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fchalkboard.pngR0i46302R1R15R3R73R6tgoR13y59:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fcudroid.pngR0i463377R1R15R3R74R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fbiorange.pngR0i403587R1R15R3R75R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fvio.pngR0i213111R1R15R3R76R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FSmeekles.pngR0i670164R1R15R3R77R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fbubbscadex.pngR0i109865R1R15R3R78R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FCid.pngR0i47673R1R15R3R79R6tgoR13y64:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fexorcistgold.pngR0i502774R1R15R3R80R6tgoR13y63:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fbaldilord64.pngR0i480724R1R15R3R81R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fcleoarty.pngR0i241191R1R15R3R82R6tgoR13y59:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fzevisly.pngR0i239645R1R15R3R83R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fwick.pngR0i120994R1R15R3R84R6tgoR13y54:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FTy.pngR0i199739R1R15R3R85R6tgoR13y69:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FTallsAnimationTAF.pngR0i201648R1R15R3R86R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fdoo.pngR0i57073R1R15R3R87R6tgoR13y58:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FHarvey.pngR0i178777R1R15R3R88R6tgoR13y64:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fsamualcheese.pngR0i458670R1R15R3R89R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fseth.pngR0i127660R1R15R3R90R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2FcheckeredBG.pngR0i423R1R15R3R91R6tgoR13y57:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fgradient.pngR0i63026R1R15R3R92R6tgoR13y66:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FSettings.pngR0i16351R1R15R3R93R6tgoR13y63:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FLinks.pngR0i13691R1R15R3R94R6tgoR13y65:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FCredits.pngR0i26321R1R15R3R95R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FPlay.pngR0i19101R1R15R3R96R6tgoR13y69:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fblack_border_overlay.pngR0i111R1R15R3R97R6tgoR13y57:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Felectric.xmlR0i13228R1R37R3R98R6tgoR13y57:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Felectric.pngR0i79183R1R15R3R99R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2FBottom.pngR0i6280R1R15R3R100R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbuttons.xmlR0i3354R1R37R3R101R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbuttons.pngR0i27595R1R15R3R102R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2FToppom.pngR0i3261R1R15R3R103R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf.xmlR0i11114R1R37R3R104R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf.pngR0i3152226R1R15R3R105R6tgoR13y51:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead.pngR0i1263283R1R15R3R106R6tgoR13y51:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead.xmlR0i6158R1R37R3R107R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf.xmlR0i26042R1R37R3R108R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf.pngR0i6529446R1R15R3R109R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fbadai.pngR0i6570R1R15R3R110R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fgf.pngR0i5432R1R15R3R111R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Finspicable.pngR0i6797R1R15R3R112R6tgoR13y55:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fdave.pngR0i3271R1R15R3R113R6tgoR13y67:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fdave-frustration.pngR0i7963R1R15R3R114R6tgoR13y58:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fjunkers.pngR0i3905R1R15R3R115R6tgoR13y74:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Funfair-expunged-forward.pngR0i16340R1R15R3R116R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fbandu.pngR0i5862R1R15R3R117R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fdave-decimated.pngR0i15982R1R15R3R118R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fbf.pngR0i5815R1R15R3R119R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Fmg.pngR0i25187R1R15R3R120R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Ffries.pngR0i6266R1R15R3R121R6tgoR13y57:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Fphones.pngR0i158733R1R15R3R122R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Fbg.pngR0i322926R1R15R3R123R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst.pngR0i1356106R1R15R3R124R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst.xmlR0i48616R1R37R3R125R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy.pngR0i874647R1R15R3R126R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy.xmlR0i8049R1R37R3R127R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi.pngR0i1136169R1R15R3R128R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi.xmlR0i47561R1R37R3R129R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad.pngR0i274474R1R15R3R130R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad.xmlR0i25415R1R37R3R131R6tgoR13y64:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap.xmlR0i50350R1R37R3R132R6tgoR13y64:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap.pngR0i1220343R1R15R3R133R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu.pngR0i366915R1R15R3R134R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu.xmlR0i12422R1R37R3R135R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra.xmlR0i19808R1R37R3R136R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra.pngR0i5372875R1R15R3R137R6tgoR13y26:assets%2Fimages%2Fnum3.pngR0i4022R1R15R3R138R6tgoR13y26:assets%2Fimages%2Fnum1.pngR0i3390R1R15R3R139R6tgoR13y37:assets%2Fimages%2Fnewgrounds_logo.pngR0i57747R1R15R3R140R6tgoR13y26:assets%2Fimages%2Fnum0.pngR0i3738R1R15R3R141R6tgoR13y30:assets%2Fimages%2Falphabet.xmlR0i39069R1R37R3R142R6tgoR13y30:assets%2Fimages%2Falphabet.pngR0i139836R1R15R3R143R6tgoR13y26:assets%2Fimages%2Flogo.pngR0i86924R1R15R3R144R6tgoR13y35:assets%2Fimages%2FmenuBGMagenta.pngR0i553468R1R15R3R145R6tgoR13y32:assets%2Fimages%2FlogoBumpin.pngR0i592724R1R15R3R146R6tgoR13y32:assets%2Fimages%2FlogoBumpin.xmlR0i2177R1R37R3R147R6tgoR13y26:assets%2Fimages%2Fnum8.pngR0i3914R1R15R3R148R6tgoR13y26:assets%2Fimages%2Fnum9.pngR0i3687R1R15R3R149R6tgoR13y45:assets%2Fimages%2Fcampaign_menu_UI_assets.pngR0i27171R1R15R3R150R6tgoR13y45:assets%2Fimages%2Fcampaign_menu_UI_assets.xmlR0i1893R1R37R3R151R6tgoR13y32:assets%2Fimages%2FmenuBGBlue.pngR0i614586R1R15R3R152R6tgoR13y42:assets%2Fimages%2FFNF_main_menu_assets.pngR0i281298R1R15R3R153R6tgoR13y42:assets%2Fimages%2FFNF_main_menu_assets.xmlR0i4755R1R37R3R154R6tgoR13y32:assets%2Fimages%2FtitleEnter.xmlR0i4875R1R37R3R155R6tgoR13y31:assets%2Fimages%2FmenuDesat.pngR0i357911R1R15R3R156R6tgoR13y32:assets%2Fimages%2FtitleEnter.pngR0i1449202R1R15R3R157R6tgoR0i17762R1R2R3y32:assets%2Fsounds%2FcancelMenu.mp3R5aR158hR6tgoR0i12773R1R2R3y49:assets%2Fsounds%2Fgolden%2Fcountdown%2Fintro2.mp3R5aR159hR6tgoR0i8857R1R2R3y49:assets%2Fsounds%2Fgolden%2Fcountdown%2Fintro3.mp3R5aR160hR6tgoR0i12458R1R2R3y49:assets%2Fsounds%2Fgolden%2Fcountdown%2Fintro1.mp3R5aR161hR6tgoR0i8441R1R2R3y56:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2Fintro2.mp3R5aR162hR6tgoR0i7317R1R2R3y56:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2Fintro3.mp3R5aR163hR6tgoR0i6198R1R2R3y56:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2Fintro1.mp3R5aR164hR6tgoR0i7500R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2FintroGo.mp3R5aR165hR6tgoR0i7555R1R2R3y50:assets%2Fsounds%2Fgolden%2Fcountdown%2FintroGo.mp3R5aR166hR6tgoR0i91950R1R2R3y33:assets%2Fsounds%2FconfirmMenu.mp3R5aR167hR6tgoR0i17762R1R2R3y32:assets%2Fsounds%2FscrollMenu.mp3R5aR168hR6tgoR0i245600R1y4:FONTy9:classNamey38:__ASSET__assets_fonts_comic_normal_ttfR3y33:assets%2Ffonts%2Fcomic_normal.ttfR6tgoR0i229408R1R169R170y31:__ASSET__assets_fonts_comic_ttfR3y26:assets%2Ffonts%2Fcomic.ttfR6tgoR13y34:assets%2Fdata%2Fdata-goes-here.txtR0zR1R37R3R175R6tgoR13y29:assets%2Fdata%2Fmain-view.xmlR0i123R1R37R3R176R6tgoR13y29:assets%2Fdata%2FintroText.txtR0i1260R1R37R3R177R6tgoR13y33:assets%2Fdata%2FspecialThanks.txtR0i300R1R37R3R178R6tgoR13y44:assets%2Fdata%2Forthogonal%2Forthogonal.jsonR0i127054R1R37R3R179R6tgoR13y40:assets%2Fdata%2Fgolden%2Fnotes%2F3d.jsonR0i667R1R37R3R180R6tgoR13y45:assets%2Fdata%2Fgolden%2Fnotes%2Fdefault.jsonR0i1028R1R37R3R181R6tgoR13y44:assets%2Fdata%2Fgolden%2Fmenu%2Fcredits.jsonR0i940R1R37R3R182R6tgoR13y50:assets%2Fdata%2Fgolden%2Fshaders%2FWavyShader.fragR0i1316R1R37R3R183R6tgoR13y52:assets%2Fdata%2Fgolden%2Fcharacters%2Fbf-bounds.jsonR0i22224R1R37R3R184R6tgoR13y57:assets%2Fdata%2Fgolden%2Fapplecore%2Fsecondary-bambi.jsonR0i46074R1R37R3R185R6tgoR13y50:assets%2Fdata%2Fgolden%2Fapplecore%2Fsubtitles.srtR0i1683R1R37R3R186R6tgoR13y78:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Funfair-expunged-forward.jsonR0i688R1R37R3R187R6tgoR13y66:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu-first.jsonR0i1784R1R37R3R188R6tgoR13y60:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu.jsonR0i819R1R37R3R189R6tgoR13y64:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu-sad.jsonR0i1363R1R37R3R190R6tgoR13y71:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fdisruption-bambi.jsonR0i1527R1R37R3R191R6tgoR13y44:assets%2Fdata%2Finspicable%2Finspicable.jsonR0i41973R1R37R3R192R6tgoR13y36:assets%2Fdata%2FfreeplaySonglist.txtR0i10R1R37R3R193R6tgoR13y28:assets%2Fdata%2Fcontrols.txtR0i324R1R37R3R194R6tgoR13y46:assets%2Fdata%2Ffrustration%2Ffrustration.jsonR0i79278R1R37R3R195R6tgoR13y48:assets%2Fdata%2Ftunnelvision%2Ftunnelvision.jsonR0i124949R1R37R3R196R6tgoR13y33:assets%2Fdata%2FcharacterList.txtR0i89R1R37R3R197R6tgoR13y42:assets%2Fdata%2Fapplecore%2Fapplecore.jsonR0i77355R1R37R3R198R6tgoR13y41:assets%2Fvideos%2Fgolden%2FPizzaVideo.mp4R0i18210431R1y6:BINARYR3R199goR13y50:assets%2Fvideos%2Fgolden%2Ftunnelvision%2Fmask.mp4R0i5769684R1R200R3R201goR13y55:assets%2Fvideos%2Fgolden%2Ftunnelvision%2Fred_blobs.mp4R0i11119130R1R200R3R202goR13y48:mods%2FintroMod%2F_append%2Fdata%2FintroText.txtR0i20R1R37R3R203goR13y17:mods%2Freadme.txtR0i90R1R37R3R204goR13y18:mods%2FmodList.txtR0i8R1R37R3R205goR13y21:do%20NOT%20readme.txtR0i4326R1R37R3R206R6tgoR13y13:changelog.txtR0i7730R1R37R3R207R6tgoR0i75864R1R169R170y29:__ASSET__assets_fonts_vcr_ttfR3y24:assets%2Ffonts%2Fvcr.ttfR6tgoR13y34:assets%2Ffonts%2Ffonts-go-here.txtR0zR1R37R3R210R6tgoR0i14656R1R169R170y31:__ASSET__assets_fonts_pixel_otfR3y26:assets%2Ffonts%2Fpixel.otfR6tgoR0i39706R1R2R3y28:flixel%2Fsounds%2Fflixel.mp3R5aR213y28:flixel%2Fsounds%2Fflixel.ogghR6tgoR0i2114R1R2R3y26:flixel%2Fsounds%2Fbeep.mp3R5aR215y26:flixel%2Fsounds%2Fbeep.ogghR6tgoR0i5794R1y5:SOUNDR3R216R5aR215R216hgoR0i33629R1R217R3R214R5aR213R214hgoR0i15744R1R169R170y35:__ASSET__flixel_fonts_nokiafc22_ttfR3y30:flixel%2Ffonts%2Fnokiafc22.ttfR6tgoR0i29724R1R169R170y36:__ASSET__flixel_fonts_monsterrat_ttfR3y31:flixel%2Ffonts%2Fmonsterrat.ttfR6tgoR13y33:flixel%2Fimages%2Fui%2Fbutton.pngR0i519R1R15R3R222R6tgoR13y36:flixel%2Fimages%2Flogo%2Fdefault.pngR0i3280R1R15R3R223R6tgoR13y44:flixel%2Fflixel-ui%2Fimg%2Fdropdown_mark.pngR0i86R1R15R3R224R6tgoR13y40:flixel%2Fflixel-ui%2Fimg%2Fplus_mark.pngR0i83R1R15R3R225R6tgoR13y36:flixel%2Fflixel-ui%2Fimg%2Fradio.pngR0i108R1R15R3R226R6tgoR13y48:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_left.pngR0i222R1R15R3R227R6tgoR13y42:flixel%2Fflixel-ui%2Fimg%2Fbutton_thin.pngR0i118R1R15R3R228R6tgoR13y34:flixel%2Fflixel-ui%2Fimg%2Ftab.pngR0i106R1R15R3R229R6tgoR13y41:flixel%2Fflixel-ui%2Fimg%2Ffinger_big.pngR0i1337R1R15R3R230R6tgoR13y36:flixel%2Fflixel-ui%2Fimg%2Finvis.pngR0i72R1R15R3R231R6tgoR13y43:flixel%2Fflixel-ui%2Fimg%2Fchrome_inset.pngR0i102R1R15R3R232R6tgoR13y44:flixel%2Fflixel-ui%2Fimg%2Ftooltip_arrow.pngR0i176R1R15R3R233R6tgoR13y49:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_right.pngR0i238R1R15R3R234R6tgoR13y40:flixel%2Fflixel-ui%2Fimg%2Fradio_dot.pngR0i81R1R15R3R235R6tgoR13y37:flixel%2Fflixel-ui%2Fimg%2Fchrome.pngR0i135R1R15R3R236R6tgoR13y40:flixel%2Fflixel-ui%2Fimg%2Fcheck_box.pngR0i101R1R15R3R237R6tgoR13y44:flixel%2Fflixel-ui%2Fimg%2Fbutton_toggle.pngR0i254R1R15R3R238R6tgoR13y46:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_up.pngR0i227R1R15R3R239R6tgoR13y41:flixel%2Fflixel-ui%2Fimg%2Fminus_mark.pngR0i77R1R15R3R240R6tgoR13y42:flixel%2Fflixel-ui%2Fimg%2Fchrome_flat.pngR0i124R1R15R3R241R6tgoR13y37:flixel%2Fflixel-ui%2Fimg%2Fswatch.pngR0i94R1R15R3R242R6tgoR13y43:flixel%2Fflixel-ui%2Fimg%2Fchrome_light.pngR0i118R1R15R3R243R6tgoR13y38:flixel%2Fflixel-ui%2Fimg%2Fhilight.pngR0i74R1R15R3R244R6tgoR13y41:flixel%2Fflixel-ui%2Fimg%2Fcheck_mark.pngR0i97R1R15R3R245R6tgoR13y39:flixel%2Fflixel-ui%2Fimg%2Ftab_back.pngR0i111R1R15R3R246R6tgoR13y34:flixel%2Fflixel-ui%2Fimg%2Fbox.pngR0i75R1R15R3R247R6tgoR13y43:flixel%2Fflixel-ui%2Fimg%2Ffinger_small.pngR0i157R1R15R3R248R6tgoR13y37:flixel%2Fflixel-ui%2Fimg%2Fbutton.pngR0i211R1R15R3R249R6tgoR13y48:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_down.pngR0i216R1R15R3R250R6tgoR13y44:flixel%2Fflixel-ui%2Fxml%2Fdefault_popup.xmlR0i1848R1R37R3R251R6tgoR13y53:flixel%2Fflixel-ui%2Fxml%2Fdefault_loading_screen.xmlR0i1953R1R37R3R252R6tgoR13y39:flixel%2Fflixel-ui%2Fxml%2Fdefaults.xmlR0i1263R1R37R3R253R6tgh\",\"rootPath\":null,\"version\":2,\"libraryArgs\":[],\"libraryType\":null}";
+	var data = "{\"name\":null,\"assets\":\"aoy4:sizei1464369y4:typey5:MUSICy2:idy44:assets%2Fmusic%2Fgolden%2Fmenu%2Fcredits.mp3y9:pathGroupaR4hy7:preloadtgoR0i1417760R1R2R3y41:assets%2Fmusic%2Fgolden%2Fmenu%2Fplay.mp3R5aR7hR6tgoR0i566714R1R2R3y42:assets%2Fmusic%2Fgolden%2Fmenu%2Fpause.mp3R5aR8hR6tgoR0i1469737R1R2R3y41:assets%2Fmusic%2Fgolden%2Fmenu%2Fmain.mp3R5aR9hR6tgoR0i3713317R1R2R3y42:assets%2Fmusic%2Fgolden%2Fmenu%2Ftitle.mp3R5aR10hR6tgoR0i1473973R1R2R3y45:assets%2Fmusic%2Fgolden%2Fmenu%2Fsettings.mp3R5aR11hR6tgoR0i2309657R1R2R3y31:assets%2Fmusic%2FfreakyMenu.mp3R5aR12hR6tgoy4:pathy39:assets%2Fimages%2Fstorymenu%2Fweek3.pngR0i7148R1y5:IMAGER3R14R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek2.pngR0i6517R1R15R3R16R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek0.pngR0i7056R1R15R3R17R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek1.pngR0i6261R1R15R3R18R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek5.pngR0i6440R1R15R3R19R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek4.pngR0i6262R1R15R3R20R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek6.pngR0i6998R1R15R3R21R6tgoR13y28:assets%2Fimages%2FmenuBG.pngR0i620342R1R15R3R22R6tgoR13y26:assets%2Fimages%2Fnum4.pngR0i3989R1R15R3R23R6tgoR13y26:assets%2Fimages%2Fnum5.pngR0i4113R1R15R3R24R6tgoR13y26:assets%2Fimages%2Fnum7.pngR0i3692R1R15R3R25R6tgoR13y26:assets%2Fimages%2Fnum6.pngR0i4181R1R15R3R26R6tgoR13y26:assets%2Fimages%2Fnum2.pngR0i3990R1R15R3R27R6tgoR13y44:assets%2Fimages%2Fgolden%2Fui%2FuiBorder.pngR0i203R1R15R3R28R6tgoR13y52:assets%2Fimages%2Fgolden%2Fui%2FhealthBarOverlay.pngR0i331R1R15R3R29R6tgoR13y50:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2Fgo.pngR0i13831R1R15R3R30R6tgoR13y49:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2F2.pngR0i7823R1R15R3R31R6tgoR13y49:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2F3.pngR0i9226R1R15R3R32R6tgoR13y49:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2F1.pngR0i5893R1R15R3R33R6tgoR13y43:assets%2Fimages%2Fgolden%2Fui%2FtimeBar.pngR0i235R1R15R3R34R6tgoR13y45:assets%2Fimages%2Fgolden%2Fui%2FhealthBar.pngR0i290R1R15R3R35R6tgoR13y53:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets_3D.xmlR0i5205R1y4:TEXTR3R36R6tgoR13y53:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets_3D.pngR0i666393R1R15R3R38R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets.pngR0i561216R1R15R3R39R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets.xmlR0i7178R1R37R3R40R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2FnoteSplashes.xmlR0i1596R1R37R3R41R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2FnoteSplashes.pngR0i219186R1R15R3R42R6tgoR13y48:assets%2Fimages%2Fgolden%2Fnotes%2Fsplash_3d.pngR0i63270R1R15R3R43R6tgoR13y48:assets%2Fimages%2Fgolden%2Fnotes%2Fsplash_3d.xmlR0i4823R1R37R3R44R6tgoR13y61:assets%2Fimages%2Fgolden%2Fmenu%2Ftransition%2Ftransition.pngR0i28278R1R15R3R45R6tgoR13y72:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2FtitleFellows%2Fbandu.pngR0i432446R1R15R3R46R6tgoR13y72:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2FtitleFellows%2Fbandu.xmlR0i2899R1R37R3R47R6tgoR13y63:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2FdarkChecker.pngR0i149R1R15R3R48R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2Flogo.pngR0i82258R1R15R3R49R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2Fsopar_text.xmlR0i4934R1R37R3R50R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2Fsopar_text.pngR0i1449202R1R15R3R51R6tgoR13y75:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Forthogonal%2Ficon.pngR0i258865R1R15R3R52R6tgoR13y77:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Forthogonal%2Fheader.pngR0i45705R1R15R3R53R6tgoR13y73:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Forthogonal%2Fbg.pngR0i202995R1R15R3R54R6tgoR13y75:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2Ficon.pngR0i326259R1R15R3R55R6tgoR13y77:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2Fheader.pngR0i12093R1R15R3R56R6tgoR13y82:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2FsongPreview.pngR0i168958R1R15R3R57R6tgoR13y73:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2Fbg.pngR0i861461R1R15R3R58R6tgoR13y76:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2Ficon.pngR0i910457R1R15R3R59R6tgoR13y78:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2Fheader.pngR0i17253R1R15R3R60R6tgoR13y83:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2FsongPreview.pngR0i174673R1R15R3R61R6tgoR13y74:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2Fbg.pngR0i1170366R1R15R3R62R6tgoR13y93:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2FsongPreview_complete.pngR0i357300R1R15R3R63R6tgoR13y77:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2Ficon.pngR0i708048R1R15R3R64R6tgoR13y79:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2Fheader.pngR0i22174R1R15R3R65R6tgoR13y84:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2FsongPreview.pngR0i178512R1R15R3R66R6tgoR13y75:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2Fbg.pngR0i178626R1R15R3R67R6tgoR13y90:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2FsongPreview_complete.pngR0i261035R1R15R3R68R6tgoR13y74:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2Ficon.pngR0i38964R1R15R3R69R6tgoR13y76:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2Fheader.pngR0i11563R1R15R3R70R6tgoR13y81:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2FsongPreview.pngR0i87336R1R15R3R71R6tgoR13y72:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2Fbg.pngR0i565038R1R15R3R72R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fchalkboard.pngR0i46302R1R15R3R73R6tgoR13y59:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fcudroid.pngR0i463377R1R15R3R74R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fbiorange.pngR0i403587R1R15R3R75R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fvio.pngR0i213111R1R15R3R76R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FSmeekles.pngR0i670164R1R15R3R77R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fbubbscadex.pngR0i109865R1R15R3R78R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FCid.pngR0i47673R1R15R3R79R6tgoR13y64:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fexorcistgold.pngR0i502774R1R15R3R80R6tgoR13y63:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fbaldilord64.pngR0i480724R1R15R3R81R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fcleoarty.pngR0i241191R1R15R3R82R6tgoR13y59:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fzevisly.pngR0i239645R1R15R3R83R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fwick.pngR0i120994R1R15R3R84R6tgoR13y54:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FTy.pngR0i199739R1R15R3R85R6tgoR13y69:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FTallsAnimationTAF.pngR0i201648R1R15R3R86R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fdoo.pngR0i57073R1R15R3R87R6tgoR13y58:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FHarvey.pngR0i178777R1R15R3R88R6tgoR13y64:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fsamualcheese.pngR0i458670R1R15R3R89R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fseth.pngR0i127660R1R15R3R90R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2FcheckeredBG.pngR0i423R1R15R3R91R6tgoR13y57:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fgradient.pngR0i63026R1R15R3R92R6tgoR13y66:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FSettings.pngR0i16351R1R15R3R93R6tgoR13y63:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FLinks.pngR0i13691R1R15R3R94R6tgoR13y65:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FCredits.pngR0i26321R1R15R3R95R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FPlay.pngR0i19101R1R15R3R96R6tgoR13y69:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fblack_border_overlay.pngR0i111R1R15R3R97R6tgoR13y57:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Felectric.xmlR0i13228R1R37R3R98R6tgoR13y57:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Felectric.pngR0i79183R1R15R3R99R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2FBottom.pngR0i6280R1R15R3R100R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbuttons.xmlR0i3354R1R37R3R101R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbuttons.pngR0i27595R1R15R3R102R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2FToppom.pngR0i3261R1R15R3R103R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf_potato.pngR0i2750120R1R15R3R104R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf_potato.xmlR0i26042R1R37R3R105R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf_potato.xmlR0i11114R1R37R3R106R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf_potato.pngR0i1713304R1R15R3R107R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf.xmlR0i11114R1R37R3R108R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf.pngR0i3152226R1R15R3R109R6tgoR13y51:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead.pngR0i1263283R1R15R3R110R6tgoR13y51:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead.xmlR0i6158R1R37R3R111R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf.xmlR0i26042R1R37R3R112R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf.pngR0i6529446R1R15R3R113R6tgoR13y58:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead_potato.xmlR0i6158R1R37R3R114R6tgoR13y58:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead_potato.pngR0i598561R1R15R3R115R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2F3d-bf.pngR0i5508R1R15R3R116R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fbadai.pngR0i6570R1R15R3R117R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fgf.pngR0i5432R1R15R3R118R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Finspicable.pngR0i6797R1R15R3R119R6tgoR13y55:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fdave.pngR0i3271R1R15R3R120R6tgoR13y67:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fdave-frustration.pngR0i7963R1R15R3R121R6tgoR13y58:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fjunkers.pngR0i3905R1R15R3R122R6tgoR13y74:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Funfair-expunged-forward.pngR0i16340R1R15R3R123R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fbandu.pngR0i5862R1R15R3R124R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fdave-decimated.pngR0i15982R1R15R3R125R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fbf.pngR0i5815R1R15R3R126R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Fmg.pngR0i25187R1R15R3R127R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Ffries.pngR0i6266R1R15R3R128R6tgoR13y57:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Fphones.pngR0i158733R1R15R3R129R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Fbg.pngR0i322926R1R15R3R130R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst_potato.pngR0i1949693R1R15R3R131R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst_potato.xmlR0i48616R1R37R3R132R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst.pngR0i1356106R1R15R3R133R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst.xmlR0i48616R1R37R3R134R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy.pngR0i874647R1R15R3R135R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy.xmlR0i8049R1R37R3R136R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi.pngR0i1136169R1R15R3R137R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi.xmlR0i47561R1R37R3R138R6tgoR13y71:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap_potato.xmlR0i50350R1R37R3R139R6tgoR13y71:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap_potato.pngR0i1810011R1R15R3R140R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy_potato.pngR0i1021910R1R15R3R141R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy_potato.xmlR0i8049R1R37R3R142R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad.pngR0i274474R1R15R3R143R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad.xmlR0i25415R1R37R3R144R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_potato.pngR0i776449R1R15R3R145R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_potato.xmlR0i12422R1R37R3R146R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra_potato.xmlR0i19808R1R37R3R147R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra_potato.pngR0i2604569R1R15R3R148R6tgoR13y64:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap.xmlR0i50350R1R37R3R149R6tgoR13y64:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap.pngR0i1220343R1R15R3R150R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi_potato.xmlR0i47561R1R37R3R151R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi_potato.pngR0i2258904R1R15R3R152R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu.pngR0i366915R1R15R3R153R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu.xmlR0i12422R1R37R3R154R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra.xmlR0i19808R1R37R3R155R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad_potato.xmlR0i25415R1R37R3R156R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad_potato.pngR0i666177R1R15R3R157R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra.pngR0i5372875R1R15R3R158R6tgoR13y26:assets%2Fimages%2Fnum3.pngR0i4022R1R15R3R159R6tgoR13y26:assets%2Fimages%2Fnum1.pngR0i3390R1R15R3R160R6tgoR13y37:assets%2Fimages%2Fnewgrounds_logo.pngR0i57747R1R15R3R161R6tgoR13y26:assets%2Fimages%2Fnum0.pngR0i3738R1R15R3R162R6tgoR13y30:assets%2Fimages%2Falphabet.xmlR0i39069R1R37R3R163R6tgoR13y30:assets%2Fimages%2Falphabet.pngR0i139836R1R15R3R164R6tgoR13y26:assets%2Fimages%2Flogo.pngR0i86924R1R15R3R165R6tgoR13y35:assets%2Fimages%2FmenuBGMagenta.pngR0i553468R1R15R3R166R6tgoR13y32:assets%2Fimages%2FlogoBumpin.pngR0i592724R1R15R3R167R6tgoR13y32:assets%2Fimages%2FlogoBumpin.xmlR0i2177R1R37R3R168R6tgoR13y26:assets%2Fimages%2Fnum8.pngR0i3914R1R15R3R169R6tgoR13y26:assets%2Fimages%2Fnum9.pngR0i3687R1R15R3R170R6tgoR13y45:assets%2Fimages%2Fcampaign_menu_UI_assets.pngR0i27171R1R15R3R171R6tgoR13y45:assets%2Fimages%2Fcampaign_menu_UI_assets.xmlR0i1893R1R37R3R172R6tgoR13y32:assets%2Fimages%2FmenuBGBlue.pngR0i614586R1R15R3R173R6tgoR13y42:assets%2Fimages%2FFNF_main_menu_assets.pngR0i281298R1R15R3R174R6tgoR13y42:assets%2Fimages%2FFNF_main_menu_assets.xmlR0i4755R1R37R3R175R6tgoR13y32:assets%2Fimages%2FtitleEnter.xmlR0i4875R1R37R3R176R6tgoR13y31:assets%2Fimages%2FmenuDesat.pngR0i357911R1R15R3R177R6tgoR13y32:assets%2Fimages%2FtitleEnter.pngR0i1449202R1R15R3R178R6tgoR0i17762R1R2R3y32:assets%2Fsounds%2FcancelMenu.mp3R5aR179hR6tgoR0i12773R1R2R3y49:assets%2Fsounds%2Fgolden%2Fcountdown%2Fintro2.mp3R5aR180hR6tgoR0i8857R1R2R3y49:assets%2Fsounds%2Fgolden%2Fcountdown%2Fintro3.mp3R5aR181hR6tgoR0i12458R1R2R3y49:assets%2Fsounds%2Fgolden%2Fcountdown%2Fintro1.mp3R5aR182hR6tgoR0i8441R1R2R3y56:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2Fintro2.mp3R5aR183hR6tgoR0i7317R1R2R3y56:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2Fintro3.mp3R5aR184hR6tgoR0i6198R1R2R3y56:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2Fintro1.mp3R5aR185hR6tgoR0i7500R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2FintroGo.mp3R5aR186hR6tgoR0i7555R1R2R3y50:assets%2Fsounds%2Fgolden%2Fcountdown%2FintroGo.mp3R5aR187hR6tgoR0i91950R1R2R3y33:assets%2Fsounds%2FconfirmMenu.mp3R5aR188hR6tgoR0i17762R1R2R3y32:assets%2Fsounds%2FscrollMenu.mp3R5aR189hR6tgoR0i245600R1y4:FONTy9:classNamey38:__ASSET__assets_fonts_comic_normal_ttfR3y33:assets%2Ffonts%2Fcomic_normal.ttfR6tgoR0i229408R1R190R191y31:__ASSET__assets_fonts_comic_ttfR3y26:assets%2Ffonts%2Fcomic.ttfR6tgoR13y34:assets%2Fdata%2Fdata-goes-here.txtR0zR1R37R3R196R6tgoR13y29:assets%2Fdata%2Fmain-view.xmlR0i123R1R37R3R197R6tgoR13y29:assets%2Fdata%2FintroText.txtR0i1260R1R37R3R198R6tgoR13y33:assets%2Fdata%2FspecialThanks.txtR0i300R1R37R3R199R6tgoR13y44:assets%2Fdata%2Forthogonal%2Forthogonal.jsonR0i127054R1R37R3R200R6tgoR13y40:assets%2Fdata%2Fgolden%2Fnotes%2F3d.jsonR0i667R1R37R3R201R6tgoR13y45:assets%2Fdata%2Fgolden%2Fnotes%2Fdefault.jsonR0i1028R1R37R3R202R6tgoR13y44:assets%2Fdata%2Fgolden%2Fmenu%2Fcredits.jsonR0i940R1R37R3R203R6tgoR13y50:assets%2Fdata%2Fgolden%2Fshaders%2FWavyShader.fragR0i1316R1R37R3R204R6tgoR13y52:assets%2Fdata%2Fgolden%2Fcharacters%2Fbf-bounds.jsonR0i22224R1R37R3R205R6tgoR13y57:assets%2Fdata%2Fgolden%2Fapplecore%2Fsecondary-bambi.jsonR0i46074R1R37R3R206R6tgoR13y50:assets%2Fdata%2Fgolden%2Fapplecore%2Fsubtitles.srtR0i1683R1R37R3R207R6tgoR13y78:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Funfair-expunged-forward.jsonR0i688R1R37R3R208R6tgoR13y66:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu-first.jsonR0i1784R1R37R3R209R6tgoR13y60:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu.jsonR0i819R1R37R3R210R6tgoR13y64:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu-sad.jsonR0i1363R1R37R3R211R6tgoR13y71:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fdisruption-bambi.jsonR0i1527R1R37R3R212R6tgoR13y44:assets%2Fdata%2Finspicable%2Finspicable.jsonR0i41973R1R37R3R213R6tgoR13y36:assets%2Fdata%2FfreeplaySonglist.txtR0i10R1R37R3R214R6tgoR13y28:assets%2Fdata%2Fcontrols.txtR0i324R1R37R3R215R6tgoR13y46:assets%2Fdata%2Ffrustration%2Ffrustration.jsonR0i79278R1R37R3R216R6tgoR13y48:assets%2Fdata%2Ftunnelvision%2Ftunnelvision.jsonR0i124949R1R37R3R217R6tgoR13y33:assets%2Fdata%2FcharacterList.txtR0i89R1R37R3R218R6tgoR13y42:assets%2Fdata%2Fapplecore%2Fapplecore.jsonR0i77355R1R37R3R219R6tgoR13y41:assets%2Fvideos%2Fgolden%2FPizzaVideo.mp4R0i18210431R1y6:BINARYR3R220goR13y50:assets%2Fvideos%2Fgolden%2Ftunnelvision%2Fmask.mp4R0i5769684R1R221R3R222goR13y55:assets%2Fvideos%2Fgolden%2Ftunnelvision%2Fred_blobs.mp4R0i11119130R1R221R3R223goR13y48:mods%2FintroMod%2F_append%2Fdata%2FintroText.txtR0i20R1R37R3R224goR13y17:mods%2Freadme.txtR0i90R1R37R3R225goR13y18:mods%2FmodList.txtR0i8R1R37R3R226goR13y21:do%20NOT%20readme.txtR0i4326R1R37R3R227R6tgoR13y13:changelog.txtR0i7730R1R37R3R228R6tgoR0i75864R1R190R191y29:__ASSET__assets_fonts_vcr_ttfR3y24:assets%2Ffonts%2Fvcr.ttfR6tgoR13y34:assets%2Ffonts%2Ffonts-go-here.txtR0zR1R37R3R231R6tgoR0i14656R1R190R191y31:__ASSET__assets_fonts_pixel_otfR3y26:assets%2Ffonts%2Fpixel.otfR6tgoR0i39706R1R2R3y28:flixel%2Fsounds%2Fflixel.mp3R5aR234y28:flixel%2Fsounds%2Fflixel.ogghR6tgoR0i2114R1R2R3y26:flixel%2Fsounds%2Fbeep.mp3R5aR236y26:flixel%2Fsounds%2Fbeep.ogghR6tgoR0i5794R1y5:SOUNDR3R237R5aR236R237hgoR0i33629R1R238R3R235R5aR234R235hgoR0i15744R1R190R191y35:__ASSET__flixel_fonts_nokiafc22_ttfR3y30:flixel%2Ffonts%2Fnokiafc22.ttfR6tgoR0i29724R1R190R191y36:__ASSET__flixel_fonts_monsterrat_ttfR3y31:flixel%2Ffonts%2Fmonsterrat.ttfR6tgoR13y33:flixel%2Fimages%2Fui%2Fbutton.pngR0i519R1R15R3R243R6tgoR13y36:flixel%2Fimages%2Flogo%2Fdefault.pngR0i3280R1R15R3R244R6tgoR13y44:flixel%2Fflixel-ui%2Fimg%2Fdropdown_mark.pngR0i86R1R15R3R245R6tgoR13y40:flixel%2Fflixel-ui%2Fimg%2Fplus_mark.pngR0i83R1R15R3R246R6tgoR13y36:flixel%2Fflixel-ui%2Fimg%2Fradio.pngR0i108R1R15R3R247R6tgoR13y48:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_left.pngR0i222R1R15R3R248R6tgoR13y42:flixel%2Fflixel-ui%2Fimg%2Fbutton_thin.pngR0i118R1R15R3R249R6tgoR13y34:flixel%2Fflixel-ui%2Fimg%2Ftab.pngR0i106R1R15R3R250R6tgoR13y41:flixel%2Fflixel-ui%2Fimg%2Ffinger_big.pngR0i1337R1R15R3R251R6tgoR13y36:flixel%2Fflixel-ui%2Fimg%2Finvis.pngR0i72R1R15R3R252R6tgoR13y43:flixel%2Fflixel-ui%2Fimg%2Fchrome_inset.pngR0i102R1R15R3R253R6tgoR13y44:flixel%2Fflixel-ui%2Fimg%2Ftooltip_arrow.pngR0i176R1R15R3R254R6tgoR13y49:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_right.pngR0i238R1R15R3R255R6tgoR13y40:flixel%2Fflixel-ui%2Fimg%2Fradio_dot.pngR0i81R1R15R3R256R6tgoR13y37:flixel%2Fflixel-ui%2Fimg%2Fchrome.pngR0i135R1R15R3R257R6tgoR13y40:flixel%2Fflixel-ui%2Fimg%2Fcheck_box.pngR0i101R1R15R3R258R6tgoR13y44:flixel%2Fflixel-ui%2Fimg%2Fbutton_toggle.pngR0i254R1R15R3R259R6tgoR13y46:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_up.pngR0i227R1R15R3R260R6tgoR13y41:flixel%2Fflixel-ui%2Fimg%2Fminus_mark.pngR0i77R1R15R3R261R6tgoR13y42:flixel%2Fflixel-ui%2Fimg%2Fchrome_flat.pngR0i124R1R15R3R262R6tgoR13y37:flixel%2Fflixel-ui%2Fimg%2Fswatch.pngR0i94R1R15R3R263R6tgoR13y43:flixel%2Fflixel-ui%2Fimg%2Fchrome_light.pngR0i118R1R15R3R264R6tgoR13y38:flixel%2Fflixel-ui%2Fimg%2Fhilight.pngR0i74R1R15R3R265R6tgoR13y41:flixel%2Fflixel-ui%2Fimg%2Fcheck_mark.pngR0i97R1R15R3R266R6tgoR13y39:flixel%2Fflixel-ui%2Fimg%2Ftab_back.pngR0i111R1R15R3R267R6tgoR13y34:flixel%2Fflixel-ui%2Fimg%2Fbox.pngR0i75R1R15R3R268R6tgoR13y43:flixel%2Fflixel-ui%2Fimg%2Ffinger_small.pngR0i157R1R15R3R269R6tgoR13y37:flixel%2Fflixel-ui%2Fimg%2Fbutton.pngR0i211R1R15R3R270R6tgoR13y48:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_down.pngR0i216R1R15R3R271R6tgoR13y44:flixel%2Fflixel-ui%2Fxml%2Fdefault_popup.xmlR0i1848R1R37R3R272R6tgoR13y53:flixel%2Fflixel-ui%2Fxml%2Fdefault_loading_screen.xmlR0i1953R1R37R3R273R6tgoR13y39:flixel%2Fflixel-ui%2Fxml%2Fdefaults.xmlR0i1263R1R37R3R274R6tgh\",\"rootPath\":null,\"version\":2,\"libraryArgs\":[],\"libraryType\":null}";
 	var manifest = lime_utils_AssetManifest.parse(data,ManifestResources.rootPath);
 	var library = lime_utils_AssetLibrary.fromManifest(manifest);
 	lime_utils_Assets.registerLibrary("default",library);
@@ -27136,7 +28671,8 @@ var MenuCharacter = function(x,character) {
 	flixel_FlxSprite.call(this,x);
 	this.character = character;
 	var library = null;
-	var tex = flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "campaign_menu_UI_characters" + ".png","IMAGE",library),Paths.getPath("images/" + "campaign_menu_UI_characters" + ".xml","TEXT",library));
+	var potatoKey = "campaign_menu_UI_characters" + "_potato";
+	var tex = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "campaign_menu_UI_characters" + ".png","IMAGE",library),Paths.getPath("images/" + "campaign_menu_UI_characters" + ".xml","TEXT",library));
 	this.set_frames(tex);
 	this.animation.addByPrefix("bf","BF idle dance white",24);
 	this.animation.addByPrefix("bfConfirm","BF HEY!!",24,false);
@@ -27359,7 +28895,8 @@ var Note = function(strumTime,noteData,prevNote,sustainNote,skin,stepDuration) {
 	this.noteData = noteData;
 	var key = GoldenNoteSkin.atlas(skin);
 	var library = null;
-	this.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE",library),Paths.getPath("images/" + key + ".xml","TEXT",library)));
+	var potatoKey = key + "_potato";
+	this.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE",library),Paths.getPath("images/" + key + ".xml","TEXT",library)));
 	this.animation.addByPrefix("greenScroll","green0");
 	this.animation.addByPrefix("redScroll","red0");
 	this.animation.addByPrefix("blueScroll","blue0");
@@ -27575,6 +29112,9 @@ Note.prototype = $extend(flixel_FlxSprite.prototype,{
 		}
 	}
 	,draw: function() {
+		if(GoldenMobileControls.enabled && !this.mustPress) {
+			return;
+		}
 		if(this.isSustainNote) {
 			if(this.ribbon == null) {
 				this.ribbon = new GoldenHoldRibbon();
@@ -27634,7 +29174,8 @@ Note.prototype = $extend(flixel_FlxSprite.prototype,{
 	,__class__: Note
 });
 var OptionsMenu = function(TransIn,TransOut) {
-	this.descriptions = ["Choose WASD or DFJK. Arrow keys work with either layout.","Allow empty presses without a miss penalty.","Move notes toward receptors at the bottom of the screen.","Show the accuracy percentage in the gameplay HUD.","Adjust the note timing offset in milliseconds. Left / Right: 1 ms; Shift: 10 ms.","Browse saved replays."];
+	this.lastTouch = false;
+	this.descriptions = ["Choose WASD or DFJK. Arrow keys work with either layout.","Allow empty presses without a miss penalty.","Move notes toward receptors at the bottom of the screen.","Show the accuracy percentage in the gameplay HUD.","Adjust the note timing offset in milliseconds. Left / Right: 1 ms; Shift: 10 ms.","Disable shaders, filtering, and camera effects for a very low GPU load.","Touch buttons and a centered player note field. Turn off to restore the standard layout.","Browse saved replays."];
 	this.labels = [];
 	this.selected = 0;
 	this.inputDelay = 0.25;
@@ -27649,6 +29190,7 @@ OptionsMenu.prototype = $extend(MusicBeatState.prototype,{
 	,labels: null
 	,descriptions: null
 	,description: null
+	,lastTouch: null
 	,create: function() {
 		MusicBeatState.prototype.create.call(this);
 		flixel_FlxG.camera.set_zoom(1);
@@ -27659,27 +29201,35 @@ OptionsMenu.prototype = $extend(MusicBeatState.prototype,{
 		var title = new flixel_text_FlxText(75,28,1130,"Settings",48);
 		title.setFormat("assets/fonts/" + "comic.ttf",48,-1,"left",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
 		this.add(title);
-		var text = new flixel_text_FlxText(90,140,1100,"",30);
+		var text = new flixel_text_FlxText(90,135,1100,"",30);
 		text.setFormat("assets/fonts/" + "comic.ttf",30,-1,"left",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
 		this.labels.push(text);
 		this.add(text);
-		var text = new flixel_text_FlxText(90,210,1100,"",30);
+		var text = new flixel_text_FlxText(90,195,1100,"",30);
 		text.setFormat("assets/fonts/" + "comic.ttf",30,-1,"left",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
 		this.labels.push(text);
 		this.add(text);
-		var text = new flixel_text_FlxText(90,280,1100,"",30);
+		var text = new flixel_text_FlxText(90,255,1100,"",30);
 		text.setFormat("assets/fonts/" + "comic.ttf",30,-1,"left",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
 		this.labels.push(text);
 		this.add(text);
-		var text = new flixel_text_FlxText(90,350,1100,"",30);
+		var text = new flixel_text_FlxText(90,315,1100,"",30);
 		text.setFormat("assets/fonts/" + "comic.ttf",30,-1,"left",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
 		this.labels.push(text);
 		this.add(text);
-		var text = new flixel_text_FlxText(90,420,1100,"",30);
+		var text = new flixel_text_FlxText(90,375,1100,"",30);
 		text.setFormat("assets/fonts/" + "comic.ttf",30,-1,"left",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
 		this.labels.push(text);
 		this.add(text);
-		var text = new flixel_text_FlxText(90,490,1100,"",30);
+		var text = new flixel_text_FlxText(90,435,1100,"",30);
+		text.setFormat("assets/fonts/" + "comic.ttf",30,-1,"left",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
+		this.labels.push(text);
+		this.add(text);
+		var text = new flixel_text_FlxText(90,495,1100,"",30);
+		text.setFormat("assets/fonts/" + "comic.ttf",30,-1,"left",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
+		this.labels.push(text);
+		this.add(text);
+		var text = new flixel_text_FlxText(90,555,1100,"",30);
 		text.setFormat("assets/fonts/" + "comic.ttf",30,-1,"left",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
 		this.labels.push(text);
 		this.add(text);
@@ -27690,7 +29240,8 @@ OptionsMenu.prototype = $extend(MusicBeatState.prototype,{
 		this.refresh();
 	}
 	,refresh: function() {
-		var values = ["Keys: " + (flixel_FlxG.save.data.dfjk ? "DFJK" : "WASD"),"Ghost tapping: " + (flixel_FlxG.save.data.newInput ? "On" : "Off"),"Scroll: " + (flixel_FlxG.save.data.downscroll ? "Downscroll" : "Upscroll"),"Accuracy: " + (flixel_FlxG.save.data.accuracyDisplay ? "On" : "Off"),"Offset: " + Conductor.validOffset(flixel_FlxG.save.data.offset) + " ms","Load replays"];
+		this.lastTouch = GoldenMobileControls.enabled;
+		var values = ["Keys: " + (flixel_FlxG.save.data.dfjk ? "DFJK" : "WASD") + " + Arrow keys","Ghost tapping: " + (flixel_FlxG.save.data.newInput ? "On" : "Off"),"Scroll: " + (flixel_FlxG.save.data.downscroll ? "Downscroll" : "Upscroll"),"Accuracy: " + (flixel_FlxG.save.data.accuracyDisplay ? "On" : "Off"),"Offset: " + Conductor.validOffset(flixel_FlxG.save.data.offset) + " ms","Super low quality: " + (GoldenQuality.superLow ? "On" : "Off"),"Mobile controls: " + (GoldenMobileControls.enabled ? "On" : "Off"),"Load replays"];
 		var _g = 0;
 		var _g1 = this.labels.length;
 		while(_g < _g1) {
@@ -27723,6 +29274,12 @@ OptionsMenu.prototype = $extend(MusicBeatState.prototype,{
 			flixel_FlxG.save.data.offset = tmp + delta * tmp1;
 			break;
 		case 5:
+			GoldenQuality.toggle();
+			break;
+		case 6:
+			GoldenMobileControls.setEnabled(!GoldenMobileControls.enabled);
+			break;
+		case 7:
 			return;
 		}
 		flixel_FlxG.save.flush();
@@ -27731,6 +29288,9 @@ OptionsMenu.prototype = $extend(MusicBeatState.prototype,{
 	}
 	,update: function(elapsed) {
 		MusicBeatState.prototype.update.call(this,elapsed);
+		if(this.lastTouch != GoldenMobileControls.enabled) {
+			this.refresh();
+		}
 		this.inputDelay -= elapsed;
 		if(this.inputDelay > 0 || GoldenMenuTransition.busy) {
 			return;
@@ -27753,7 +29313,7 @@ OptionsMenu.prototype = $extend(MusicBeatState.prototype,{
 		} else if(PlayerSettings.player1.controls._rightP.check()) {
 			this.changeValue(1);
 		} else if(PlayerSettings.player1.controls._accept.check()) {
-			if(this.selected == 5) {
+			if(this.selected == 7) {
 				GoldenMenuTransition.go(function() {
 					return new LoadReplayState();
 				});
@@ -27841,6 +29401,10 @@ Paths.font = function(key) {
 	return "assets/fonts/" + key;
 };
 Paths.getSparrowAtlas = function(key,library) {
+	var potatoKey = key + "_potato";
+	if(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT")) {
+		return flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library));
+	}
 	return flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE",library),Paths.getPath("images/" + key + ".xml","TEXT",library));
 };
 Paths.getPackerAtlas = function(key,library) {
@@ -28350,7 +29914,8 @@ StoryMenuState.prototype = $extend(MusicBeatState.prototype,{
 			rankText.set_y((flixel_FlxG.height - rankText.get_height()) / 2);
 		}
 		var library = null;
-		var ui_tex = flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "campaign_menu_UI_assets" + ".png","IMAGE",library),Paths.getPath("images/" + "campaign_menu_UI_assets" + ".xml","TEXT",library));
+		var potatoKey = "campaign_menu_UI_assets" + "_potato";
+		var ui_tex = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "campaign_menu_UI_assets" + ".png","IMAGE",library),Paths.getPath("images/" + "campaign_menu_UI_assets" + ".xml","TEXT",library));
 		var yellowBG = new flixel_FlxSprite(0,56).makeGraphic(flixel_FlxG.width,400,-405679);
 		this.grpWeekText = new flixel_group_FlxTypedGroup();
 		this.add(this.grpWeekText);
@@ -28862,27 +30427,29 @@ TitleState.prototype = $extend(MusicBeatState.prototype,{
 		this.add(new GoldenMenuBackground(true));
 		this.fellow = new flixel_FlxSprite(-150,flixel_FlxG.height - 280);
 		var library = null;
-		this.fellow.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/menu/titleScreen/titleFellows/bandu" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/menu/titleScreen/titleFellows/bandu" + ".xml","TEXT",library)));
+		var potatoKey = "golden/menu/titleScreen/titleFellows/bandu" + "_potato";
+		this.fellow.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/menu/titleScreen/titleFellows/bandu" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/menu/titleScreen/titleFellows/bandu" + ".xml","TEXT",library)));
 		this.fellow.animation.addByPrefix("danceLeft","bandu-danceLeft",24,false);
 		this.fellow.animation.addByPrefix("danceRight","bandu-danceRight",24,false);
 		this.fellow.animation.play("danceLeft");
-		this.fellow.set_antialiasing(true);
+		this.fellow.set_antialiasing(!GoldenQuality.superLow);
 		this.add(this.fellow);
 		this.logo = new flixel_FlxSprite(flixel_FlxG.width + 258,-205).loadGraphic(Paths.getPath("images/" + "golden/menu/titleScreen/logo" + ".png","IMAGE",null));
-		this.logo.set_antialiasing(true);
+		this.logo.set_antialiasing(!GoldenQuality.superLow);
 		this.add(this.logo);
 		flixel_tweens_FlxTween.tween(this.fellow,{ y : 0},1,{ ease : flixel_tweens_FlxEase.expoInOut});
 		flixel_tweens_FlxTween.tween(this.logo,{ x : 650, y : 25},1,{ ease : flixel_tweens_FlxEase.expoInOut});
 		this.prompt = new flixel_FlxSprite(0,flixel_FlxG.height * 0.8);
 		var library = null;
-		this.prompt.set_frames(flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/menu/titleScreen/sopar_text" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/menu/titleScreen/sopar_text" + ".xml","TEXT",library)));
+		var potatoKey = "golden/menu/titleScreen/sopar_text" + "_potato";
+		this.prompt.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/menu/titleScreen/sopar_text" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/menu/titleScreen/sopar_text" + ".xml","TEXT",library)));
 		this.prompt.animation.addByPrefix("idle","Press Enter to Begin",24,false);
 		this.prompt.animation.addByPrefix("pressed","ENTER PRESSED",24,false);
 		this.prompt.animation.play("idle");
 		this.prompt.scale.set(0.5,0.5);
 		this.prompt.updateHitbox();
 		this.prompt.set_x((flixel_FlxG.width - this.prompt.get_width()) / 2 + 280);
-		this.prompt.set_antialiasing(true);
+		this.prompt.set_antialiasing(!GoldenQuality.superLow);
 		this.add(this.prompt);
 		flixel_FlxG.mouse.set_visible(false);
 		flixel_FlxG.sound.playMusic(Paths.getPath("music/" + "golden/menu/title" + "." + "mp3","MUSIC",null),0.7);
@@ -34725,252 +36292,6 @@ flixel_IFlxSprite.prototype = {
 	,__class__: flixel_IFlxSprite
 	,__properties__: {set_immovable:"set_immovable",set_moves:"set_moves",set_facing:"set_facing",set_angle:"set_angle",set_alpha:"set_alpha",set_y:"set_y",set_x:"set_x"}
 };
-var flixel_addons_display_FlxBackdrop = function(Graphic,ScrollX,ScrollY,RepeatX,RepeatY,SpaceX,SpaceY) {
-	if(SpaceY == null) {
-		SpaceY = 0;
-	}
-	if(SpaceX == null) {
-		SpaceX = 0;
-	}
-	if(RepeatY == null) {
-		RepeatY = true;
-	}
-	if(RepeatX == null) {
-		RepeatX = true;
-	}
-	if(ScrollY == null) {
-		ScrollY = 1;
-	}
-	if(ScrollX == null) {
-		ScrollX = 1;
-	}
-	this.useScaleHack = true;
-	this._numTiles = 0;
-	this._spaceY = 0;
-	this._spaceX = 0;
-	this._repeatY = false;
-	this._repeatX = false;
-	this._scrollH = 0;
-	this._scrollW = 0;
-	flixel_FlxSprite.call(this);
-	this.scale = new flixel_math_FlxCallbackPoint($bind(this,this.scaleCallback));
-	this.scale.set(1,1);
-	this._repeatX = RepeatX;
-	this._repeatY = RepeatY;
-	this._spaceX = SpaceX;
-	this._spaceY = SpaceY;
-	this._ppoint = new openfl_geom_Point();
-	this.scrollFactor.set_x(ScrollX);
-	this.scrollFactor.set_y(ScrollY);
-	if(Graphic != null) {
-		this.loadGraphic(Graphic);
-	}
-	flixel_FlxG.signals.gameResized.add($bind(this,this.onGameResize));
-};
-$hxClasses["flixel.addons.display.FlxBackdrop"] = flixel_addons_display_FlxBackdrop;
-flixel_addons_display_FlxBackdrop.__name__ = "flixel.addons.display.FlxBackdrop";
-flixel_addons_display_FlxBackdrop.__super__ = flixel_FlxSprite;
-flixel_addons_display_FlxBackdrop.prototype = $extend(flixel_FlxSprite.prototype,{
-	_ppoint: null
-	,_scrollW: null
-	,_scrollH: null
-	,_repeatX: null
-	,_repeatY: null
-	,_spaceX: null
-	,_spaceY: null
-	,_tileFrame: null
-	,_tileInfo: null
-	,_numTiles: null
-	,useScaleHack: null
-	,destroy: function() {
-		this._tileInfo = null;
-		this._ppoint = null;
-		this.scale = flixel_util_FlxDestroyUtil.destroy(this.scale);
-		this.setTileFrame(null);
-		flixel_FlxG.signals.gameResized.remove($bind(this,this.onGameResize));
-		flixel_FlxSprite.prototype.destroy.call(this);
-	}
-	,loadGraphic: function(Graphic,Animated,Width,Height,Unique,Key) {
-		if(Unique == null) {
-			Unique = false;
-		}
-		if(Height == null) {
-			Height = 0;
-		}
-		if(Width == null) {
-			Width = 0;
-		}
-		if(Animated == null) {
-			Animated = false;
-		}
-		var tileGraphic = flixel_FlxG.bitmap.add(Graphic);
-		this.setTileFrame(tileGraphic.get_imageFrame().get_frame());
-		var w = this._tileFrame.sourceSize.x + this._spaceX | 0;
-		var h = this._tileFrame.sourceSize.y + this._spaceY | 0;
-		this._scrollW = w;
-		this._scrollH = h;
-		this.regenGraphic();
-		return this;
-	}
-	,loadFrame: function(Frame) {
-		this.setTileFrame(Frame);
-		var w = this._tileFrame.sourceSize.x + this._spaceX | 0;
-		var h = this._tileFrame.sourceSize.y + this._spaceY | 0;
-		this._scrollW = w;
-		this._scrollH = h;
-		this.regenGraphic();
-		return this;
-	}
-	,draw: function() {
-		var isColored = this.alpha != 1 || this.color != 16777215;
-		var hasColorOffsets = this.colorTransform != null && flixel_util_FlxColorTransformUtil.hasRGBAOffsets(this.colorTransform);
-		var _g = 0;
-		var _g1 = this.get_cameras();
-		while(_g < _g1.length) {
-			var camera = _g1[_g];
-			++_g;
-			if(!camera.visible || !camera.exists) {
-				continue;
-			}
-			var ssw = this._scrollW * Math.abs(this.scale.x);
-			var ssh = this._scrollH * Math.abs(this.scale.y);
-			if(this._repeatX) {
-				this._ppoint.x = (this.x - this.offset.x - camera.scroll.x * this.scrollFactor.x) % ssw;
-				if(this._ppoint.x > 0) {
-					this._ppoint.x -= ssw;
-				}
-			} else {
-				this._ppoint.x = this.x - this.offset.x - camera.scroll.x * this.scrollFactor.x;
-			}
-			if(this._repeatY) {
-				this._ppoint.y = (this.y - this.offset.y - camera.scroll.y * this.scrollFactor.y) % ssh;
-				if(this._ppoint.y > 0) {
-					this._ppoint.y -= ssh;
-				}
-			} else {
-				this._ppoint.y = this.y - this.offset.y - camera.scroll.y * this.scrollFactor.y;
-			}
-			if(flixel_FlxG.renderBlit) {
-				if(this.graphic == null) {
-					return;
-				}
-				if(this.dirty) {
-					this.calcFrame(this.useFramePixels);
-				}
-				this._flashRect2.setTo(0,0,this.graphic.width,this.graphic.height);
-				camera.copyPixels(this.frame,this.framePixels,this._flashRect2,this._ppoint);
-			} else {
-				if(this._tileFrame == null) {
-					return;
-				}
-				var drawItem = camera.startQuadBatch(this._tileFrame.parent,isColored,hasColorOffsets);
-				this._tileFrame.prepareMatrix(this._matrix);
-				var scaleX = this.scale.x;
-				var scaleY = this.scale.y;
-				if(this.useScaleHack) {
-					scaleX += 1 / (this._tileFrame.sourceSize.x * camera.totalScaleX);
-					scaleY += 1 / (this._tileFrame.sourceSize.y * camera.totalScaleY);
-				}
-				this._matrix.scale(scaleX,scaleY);
-				var tx = this._matrix.tx;
-				var ty = this._matrix.ty;
-				var _g2 = 0;
-				var _g3 = this._numTiles;
-				while(_g2 < _g3) {
-					var j = _g2++;
-					var currTileX = this._tileInfo[j * 2];
-					var currTileY = this._tileInfo[j * 2 + 1];
-					this._matrix.tx = tx + (this._ppoint.x + currTileX);
-					this._matrix.ty = ty + (this._ppoint.y + currTileY);
-					drawItem.addQuad(this._tileFrame,this._matrix,this.colorTransform);
-				}
-			}
-		}
-	}
-	,regenGraphic: function() {
-		var sx = Math.abs(this.scale.x);
-		var sy = Math.abs(this.scale.y);
-		var ssw = this._scrollW * sx | 0;
-		var ssh = this._scrollH * sy | 0;
-		var w = ssw;
-		var h = ssh;
-		var frameBitmap = null;
-		if(this._repeatX) {
-			w += flixel_FlxG.width;
-		}
-		if(this._repeatY) {
-			h += flixel_FlxG.height;
-		}
-		if(flixel_FlxG.renderBlit) {
-			if(this.graphic == null || (this.graphic.width != w || this.graphic.height != h)) {
-				this.makeGraphic(w,h,0,true);
-			}
-		} else {
-			this._tileInfo = [];
-			this._numTiles = 0;
-			this.set_width(this.frameWidth = w);
-			this.set_height(this.frameHeight = h);
-		}
-		this._ppoint.x = this._ppoint.y = 0;
-		if(flixel_FlxG.renderBlit) {
-			this.get_pixels().lock();
-			this._flashRect2.setTo(0,0,this.graphic.width,this.graphic.height);
-			this.get_pixels().fillRect(this._flashRect2,0);
-			this._matrix.identity();
-			this._matrix.scale(sx,sy);
-			frameBitmap = this._tileFrame.paint();
-		}
-		while(this._ppoint.y < h) {
-			while(this._ppoint.x < w) {
-				if(flixel_FlxG.renderBlit) {
-					this.get_pixels().draw(frameBitmap,this._matrix);
-					this._matrix.tx += ssw;
-				} else {
-					this._tileInfo.push(this._ppoint.x);
-					this._tileInfo.push(this._ppoint.y);
-					this._numTiles++;
-				}
-				this._ppoint.x += ssw;
-			}
-			if(flixel_FlxG.renderBlit) {
-				this._matrix.tx = 0;
-				this._matrix.ty += ssh;
-			}
-			this._ppoint.x = 0;
-			this._ppoint.y += ssh;
-		}
-		if(flixel_FlxG.renderBlit) {
-			frameBitmap.dispose();
-			this.get_pixels().unlock();
-			this.dirty = true;
-			this.calcFrame();
-		}
-	}
-	,onGameResize: function(_,_1) {
-		if(this._tileFrame != null) {
-			this.regenGraphic();
-		}
-	}
-	,scaleCallback: function(Scale) {
-		if(this._tileFrame != null) {
-			this.regenGraphic();
-		}
-	}
-	,setTileFrame: function(Frame) {
-		if(Frame != this._tileFrame) {
-			if(this._tileFrame != null) {
-				var fh = this._tileFrame.parent;
-				fh.set_useCount(fh.get_useCount() - 1);
-			}
-			if(Frame != null) {
-				var fh = Frame.parent;
-				fh.set_useCount(fh.get_useCount() + 1);
-			}
-		}
-		return this._tileFrame = Frame;
-	}
-	,__class__: flixel_addons_display_FlxBackdrop
-});
 var flixel_addons_display_FlxGridOverlay = function() { };
 $hxClasses["flixel.addons.display.FlxGridOverlay"] = flixel_addons_display_FlxGridOverlay;
 flixel_addons_display_FlxGridOverlay.__name__ = "flixel.addons.display.FlxGridOverlay";
@@ -83237,7 +84558,7 @@ flixel_tweens_FlxTweenManager.prototype = $extend(flixel_FlxBasic.prototype,{
 		}
 		return Tween;
 	}
-	,add_flixel_tweens_FlxTween: function(Tween,Start) {
+	,add_flixel_tweens_misc_VarTween: function(Tween,Start) {
 		if(Start == null) {
 			Start = false;
 		}
@@ -83250,7 +84571,7 @@ flixel_tweens_FlxTweenManager.prototype = $extend(flixel_FlxBasic.prototype,{
 		}
 		return Tween;
 	}
-	,add_flixel_tweens_misc_VarTween: function(Tween,Start) {
+	,add_flixel_tweens_FlxTween: function(Tween,Start) {
 		if(Start == null) {
 			Start = false;
 		}
@@ -85282,7 +86603,7 @@ flixel_util_FlxArrayUtil.setLength_cacheValue_T = function(array,newLength) {
 	}
 	return array;
 };
-flixel_util_FlxArrayUtil.fastSplice_flixel_util_FlxTimer = function(array,element) {
+flixel_util_FlxArrayUtil.fastSplice_flixel_tweens_FlxTween = function(array,element) {
 	var index = array.indexOf(element);
 	if(index != -1) {
 		array[index] = array[array.length - 1];
@@ -85291,7 +86612,7 @@ flixel_util_FlxArrayUtil.fastSplice_flixel_util_FlxTimer = function(array,elemen
 	}
 	return array;
 };
-flixel_util_FlxArrayUtil.fastSplice_flixel_tweens_FlxTween = function(array,element) {
+flixel_util_FlxArrayUtil.fastSplice_flixel_util_FlxTimer = function(array,element) {
 	var index = array.indexOf(element);
 	if(index != -1) {
 		array[index] = array[array.length - 1];
@@ -117425,7 +118746,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 945625;
+	this.version = 962392;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
@@ -171471,9 +172792,27 @@ GoldenMenuTransition.busy = false;
 GoldenMenuTransition.installed = false;
 GoldenMenuTransition.pendingReveal = false;
 GoldenMenuTransition.DURATION = 0.45;
+GoldenMobileControls.enabled = false;
+GoldenMobileControls.installed = false;
+GoldenMobileControls.pointers = new haxe_ds_IntMap();
+GoldenMobileControls.counts = new haxe_ds_IntMap();
+GoldenMobileControls.context = "";
+GoldenMobileControls.holdLanes = new haxe_ds_IntMap();
+GoldenMobileControls.skin = "default";
+GoldenMobileControls.images = new haxe_ds_StringMap();
+GoldenMobileControls.atlasFrames = new haxe_ds_StringMap();
+GoldenMobileControls.pending = new haxe_ds_IntMap();
+GoldenMobileControls.keyboardDown = new haxe_ds_IntMap();
+GoldenMobileControls.frameSignature = "";
+GoldenNoteSkin.assigned = new haxe_ds_ObjectMap();
 GoldenNoteSplash.paletteShaders = new haxe_ds_StringMap();
 GoldenOverworld.area = "House";
+GoldenQuality.superLow = false;
+GoldenTunnelBackdrop.MIN_ZOOM = .57;
+GoldenTunnelVision.FLOAT_RATE = 75.6;
 GoldenTunnelVision.STEP = 81.5217391304347814;
+GoldenTunnelVisionTrail.COPY_COUNT = 4;
+GoldenTunnelVisionTrail.SAMPLE_MS = 33.3333333333333357;
 Highscore.songScores = new haxe_ds_StringMap();
 LoadingState.MIN_TIME = 1.0;
 MainMenuState.kadeEngineVer = "1.2";

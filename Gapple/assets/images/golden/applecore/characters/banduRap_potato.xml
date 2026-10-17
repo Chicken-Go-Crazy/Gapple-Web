@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Created with Funkin Packer v0.1.3 https://neeeoo.github.io/funkin-packer/
+-->
+<TextureAtlas imagePath="banduRap.png" width="3140" height="3351">
+	<SubTexture name="altidleL0001" x="2138" y="2814" width="226" height="245" frameX="-128" frameY="-119" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="altidleL0002" x="2138" y="2814" width="226" height="245" frameX="-128" frameY="-119" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="altidleL0003" x="2873" y="503" width="225" height="242" frameX="-126" frameY="-122" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="altidleL0004" x="2873" y="503" width="225" height="242" frameX="-126" frameY="-122" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="altidleL0005" x="736" y="3106" width="225" height="241" frameX="-125" frameY="-123" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="altidleL0006" x="736" y="3106" width="225" height="241" frameX="-125" frameY="-123" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="altidleL0007" x="2693" y="2552" width="225" height="242" frameX="-126" frameY="-122" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="altidleL0008" x="2693" y="2552" width="225" height="242" frameX="-126" frameY="-122" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="altidleL0009" x="2367" y="2814" width="226" height="245" frameX="-128" frameY="-119" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="altidleL0010" x="2367" y="2814" width="226" height="245" frameX="-128" frameY="-119" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="altidleL0011" x="2656" y="1785" width="225" height="247" frameX="-131" frameY="-117" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="altidleL0012" x="2656" y="1785" width="225" height="247" frameX="-131" frameY="-117" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="altidleR0001" x="2710" y="256" width="226" height="244" frameX="-134" frameY="-120" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="altidleR0002" x="2710" y="256" width="226" height="244" frameX="-134" frameY="-120" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="altidleR0003" x="964" y="3092" width="226" height="241" frameX="-137" frameY="-123" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="altidleR0004" x="964" y="3092" width="226" height="241" frameX="-137" frameY="-123" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="altidleR0005" x="2140" y="3062" width="227" height="240" frameX="-138" frameY="-124" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="altidleR0006" x="2140" y="3062" width="227" height="240" frameX="-138" frameY="-124" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="altidleR0007" x="1911" y="3084" width="226" height="241" frameX="-137" frameY="-123" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="altidleR0008" x="1911" y="3084" width="226" height="241" frameX="-137" frameY="-123" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="altidleR0009" x="2848" y="763" width="226" height="244" frameX="-134" frameY="-120" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="altidleR0010" x="2848" y="763" width="226" height="244" frameX="-134" frameY="-120" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="altidleR0011" x="1" y="2864" width="225" height="247" frameX="-131" frameY="-117" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="altidleR0012" x="1" y="2864" width="225" height="247" frameX="-131" frameY="-117" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="phones galore0001" x="2596" y="2814" width="245" height="239" frameX="-147" frameY="-137" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0002" x="2596" y="2814" width="245" height="239" frameX="-147" frameY="-137" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0003" x="1687" y="2326" width="252" height="236" frameX="-142" frameY="-141" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0004" x="1687" y="2326" width="252" height="236" frameX="-142" frameY="-141" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0005" x="797" y="2331" width="253" height="235" frameX="-141" frameY="-143" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0006" x="797" y="2331" width="253" height="235" frameX="-141" frameY="-143" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0007" x="508" y="1817" width="251" height="265" frameX="-144" frameY="-112" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0008" x="508" y="1817" width="251" height="265" frameX="-144" frameY="-112" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0009" x="544" y="1450" width="336" height="304" frameX="-87" frameY="-68" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0010" x="544" y="1450" width="336" height="304" frameX="-87" frameY="-68" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0011" x="816" y="1" width="381" height="349" frameX="-64" frameY="-21" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0012" x="816" y="1" width="381" height="349" frameX="-64" frameY="-21" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0013" x="1" y="365" width="401" height="357" frameX="-54" frameY="-14" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0014" x="1" y="365" width="401" height="357" frameX="-54" frameY="-14" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0015" x="1" y="1" width="408" height="361" frameX="-51" frameY="-6" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0016" x="1" y="1" width="408" height="361" frameX="-51" frameY="-6" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0017" x="412" y="1" width="401" height="356" frameX="-55" frameY="-10" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0018" x="412" y="1" width="401" height="356" frameX="-55" frameY="-10" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0019" x="412" y="360" width="401" height="355" frameX="-55" frameY="-11" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0020" x="412" y="360" width="401" height="355" frameX="-55" frameY="-11" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0021" x="1" y="725" width="401" height="355" frameX="-55" frameY="-11" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0022" x="1" y="725" width="401" height="355" frameX="-55" frameY="-11" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0023" x="405" y="718" width="387" height="360" frameX="-59" frameY="-12" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0024" x="405" y="718" width="387" height="360" frameX="-59" frameY="-12" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0025" x="1" y="1450" width="272" height="363" frameX="-121" frameY="-12" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0026" x="1" y="1450" width="272" height="363" frameX="-121" frameY="-12" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0027" x="816" y="353" width="273" height="365" frameX="-151" frameY="-12" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0028" x="816" y="353" width="273" height="365" frameX="-151" frameY="-12" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0029" x="1" y="1083" width="294" height="364" frameX="-137" frameY="-12" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0030" x="1" y="1083" width="294" height="364" frameX="-137" frameY="-12" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0031" x="298" y="1083" width="293" height="364" frameX="-137" frameY="-12" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0032" x="298" y="1083" width="293" height="364" frameX="-137" frameY="-12" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0033" x="594" y="1081" width="293" height="364" frameX="-137" frameY="-12" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0034" x="594" y="1081" width="293" height="364" frameX="-137" frameY="-12" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0035" x="890" y="721" width="293" height="364" frameX="-137" frameY="-12" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0036" x="890" y="721" width="293" height="364" frameX="-137" frameY="-12" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0037" x="1200" y="1" width="293" height="364" frameX="-137" frameY="-12" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0038" x="1200" y="1" width="293" height="364" frameX="-137" frameY="-12" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0039" x="1186" y="368" width="293" height="364" frameX="-137" frameY="-12" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0040" x="1186" y="368" width="293" height="364" frameX="-137" frameY="-12" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0041" x="1186" y="735" width="293" height="364" frameX="-137" frameY="-12" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0042" x="1186" y="735" width="293" height="364" frameX="-137" frameY="-12" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0043" x="1186" y="735" width="293" height="364" frameX="-137" frameY="-12" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0044" x="890" y="1088" width="293" height="364" frameX="-137" frameY="-12" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0045" x="890" y="1088" width="293" height="364" frameX="-137" frameY="-12" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0046" x="276" y="1455" width="265" height="359" frameX="-163" frameY="-17" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0047" x="276" y="1455" width="265" height="359" frameX="-163" frameY="-17" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0048" x="883" y="1455" width="237" height="327" frameX="-169" frameY="-49" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0049" x="883" y="1455" width="237" height="327" frameX="-169" frameY="-49" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0050" x="1788" y="1265" width="284" height="283" frameX="-110" frameY="-93" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0051" x="1788" y="1265" width="284" height="283" frameX="-110" frameY="-93" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0052" x="1788" y="761" width="290" height="253" frameX="-107" frameY="-123" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0053" x="1788" y="761" width="290" height="253" frameX="-107" frameY="-123" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0054" x="1788" y="506" width="292" height="252" frameX="-106" frameY="-124" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0055" x="1788" y="506" width="292" height="252" frameX="-106" frameY="-124" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0056" x="1796" y="1" width="294" height="252" frameX="-105" frameY="-124" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0057" x="1796" y="1" width="294" height="252" frameX="-105" frameY="-124" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0058" x="1486" y="1500" width="295" height="252" frameX="-105" frameY="-124" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0059" x="1486" y="1500" width="295" height="252" frameX="-105" frameY="-124" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0060" x="1186" y="1352" width="297" height="251" frameX="-104" frameY="-125" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0061" x="1186" y="1352" width="297" height="251" frameX="-104" frameY="-125" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0062" x="2442" y="2562" width="248" height="249" frameX="-115" frameY="-127" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0063" x="2442" y="2562" width="248" height="249" frameX="-115" frameY="-127" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0064" x="2712" y="1" width="179" height="249" frameX="-158" frameY="-127" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0065" x="2712" y="1" width="179" height="249" frameX="-158" frameY="-127" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0066" x="2704" y="1018" width="182" height="248" frameX="-160" frameY="-128" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0067" x="2704" y="1018" width="182" height="248" frameX="-160" frameY="-128" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0068" x="2704" y="1269" width="187" height="248" frameX="-158" frameY="-128" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0069" x="2704" y="1269" width="187" height="248" frameX="-158" frameY="-128" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0070" x="2647" y="1534" width="187" height="248" frameX="-158" frameY="-128" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0071" x="2647" y="1534" width="187" height="248" frameX="-158" frameY="-128" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0072" x="2647" y="1534" width="187" height="248" frameX="-158" frameY="-128" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0073" x="2690" y="2301" width="187" height="248" frameX="-158" frameY="-128" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0074" x="2690" y="2301" width="187" height="248" frameX="-158" frameY="-128" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0075" x="2640" y="766" width="205" height="249" frameX="-150" frameY="-127" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0076" x="2640" y="766" width="205" height="249" frameX="-150" frameY="-127" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0077" x="1942" y="2326" width="244" height="252" frameX="-135" frameY="-124" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0078" x="1942" y="2326" width="244" height="252" frameX="-135" frameY="-124" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0079" x="1053" y="2331" width="246" height="253" frameX="-134" frameY="-123" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0080" x="1053" y="2331" width="246" height="253" frameX="-134" frameY="-123" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0081" x="2444" y="2308" width="243" height="251" frameX="-135" frameY="-125" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0082" x="2921" y="1256" width="215" height="242" frameX="-137" frameY="-135" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0083" x="2921" y="1256" width="215" height="242" frameX="-137" frameY="-135" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0084" x="1437" y="3078" width="179" height="240" frameX="-140" frameY="-137" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0085" x="1437" y="3078" width="179" height="240" frameX="-140" frameY="-137" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0086" x="2921" y="2463" width="184" height="238" frameX="-136" frameY="-139" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0087" x="2921" y="2463" width="184" height="238" frameX="-136" frameY="-139" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0088" x="2611" y="3056" width="185" height="238" frameX="-135" frameY="-139" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0089" x="2611" y="3056" width="185" height="238" frameX="-135" frameY="-139" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0090" x="2939" y="239" width="180" height="241" frameX="-138" frameY="-136" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0091" x="2939" y="239" width="180" height="241" frameX="-138" frameY="-136" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0092" x="2889" y="1010" width="217" height="243" frameX="-141" frameY="-133" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0093" x="1788" y="1017" width="289" height="245" frameX="-119" frameY="-131" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0094" x="1788" y="1017" width="289" height="245" frameX="-119" frameY="-131" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0095" x="1186" y="1102" width="300" height="247" frameX="-115" frameY="-129" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0096" x="1186" y="1102" width="300" height="247" frameX="-115" frameY="-129" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0097" x="1496" y="1" width="297" height="246" frameX="-116" frameY="-131" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0098" x="1496" y="1" width="297" height="246" frameX="-116" frameY="-131" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0099" x="1496" y="250" width="296" height="247" frameX="-116" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0100" x="1496" y="250" width="296" height="247" frameX="-116" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0101" x="1489" y="500" width="296" height="247" frameX="-116" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0102" x="1489" y="500" width="296" height="247" frameX="-116" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0103" x="1489" y="750" width="296" height="247" frameX="-116" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0104" x="1489" y="750" width="296" height="247" frameX="-116" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0105" x="1489" y="1000" width="296" height="247" frameX="-116" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0106" x="1489" y="1000" width="296" height="247" frameX="-116" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0107" x="1489" y="1250" width="296" height="247" frameX="-116" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0108" x="1489" y="1250" width="296" height="247" frameX="-116" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0109" x="1489" y="1250" width="296" height="247" frameX="-116" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0110" x="1795" y="256" width="293" height="247" frameX="-119" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0111" x="1795" y="256" width="293" height="247" frameX="-119" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0112" x="1422" y="2582" width="199" height="250" frameX="-143" frameY="-129" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0113" x="1422" y="2582" width="199" height="250" frameX="-143" frameY="-129" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0114" x="2356" y="1" width="201" height="252" frameX="-147" frameY="-127" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0115" x="2356" y="1" width="201" height="252" frameX="-147" frameY="-127" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0116" x="2356" y="256" width="199" height="252" frameX="-148" frameY="-127" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0117" x="2356" y="256" width="199" height="252" frameX="-148" frameY="-127" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0118" x="2286" y="769" width="199" height="252" frameX="-148" frameY="-127" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0119" x="2286" y="769" width="199" height="252" frameX="-148" frameY="-127" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0120" x="2294" y="511" width="199" height="252" frameX="-148" frameY="-127" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0121" x="2294" y="511" width="199" height="252" frameX="-148" frameY="-127" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0122" x="2294" y="511" width="199" height="252" frameX="-148" frameY="-127" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0123" x="2294" y="511" width="199" height="252" frameX="-148" frameY="-127" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0124" x="2294" y="511" width="199" height="252" frameX="-148" frameY="-127" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0125" x="2294" y="511" width="199" height="252" frameX="-148" frameY="-127" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0126" x="2294" y="511" width="199" height="252" frameX="-148" frameY="-127" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0127" x="2294" y="511" width="199" height="252" frameX="-148" frameY="-127" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0128" x="2293" y="1543" width="199" height="252" frameX="-148" frameY="-127" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0129" x="2293" y="1543" width="199" height="252" frameX="-148" frameY="-127" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0130" x="1" y="2353" width="211" height="254" frameX="-143" frameY="-125" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0131" x="1" y="2353" width="211" height="254" frameX="-143" frameY="-125" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0132" x="1927" y="1804" width="224" height="259" frameX="-143" frameY="-120" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0133" x="1927" y="1804" width="224" height="259" frameX="-143" frameY="-120" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0134" x="1026" y="2068" width="223" height="260" frameX="-140" frameY="-119" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0135" x="1026" y="2068" width="223" height="260" frameX="-140" frameY="-119" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0136" x="1027" y="1804" width="222" height="261" frameX="-138" frameY="-118" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0137" x="1027" y="1804" width="222" height="261" frameX="-138" frameY="-118" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0138" x="1252" y="1606" width="222" height="261" frameX="-137" frameY="-118" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0139" x="1252" y="1606" width="222" height="261" frameX="-137" frameY="-118" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0140" x="1477" y="1804" width="222" height="261" frameX="-137" frameY="-118" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0141" x="1477" y="1804" width="222" height="261" frameX="-137" frameY="-118" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0142" x="1702" y="1804" width="222" height="261" frameX="-137" frameY="-118" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0143" x="1702" y="1804" width="222" height="261" frameX="-137" frameY="-118" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0144" x="1702" y="1804" width="222" height="261" frameX="-137" frameY="-118" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0145" x="1702" y="1804" width="222" height="261" frameX="-137" frameY="-118" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0146" x="1702" y="1804" width="222" height="261" frameX="-137" frameY="-118" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0147" x="1702" y="1804" width="222" height="261" frameX="-137" frameY="-118" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0148" x="1702" y="1804" width="222" height="261" frameX="-137" frameY="-118" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0149" x="1702" y="1804" width="222" height="261" frameX="-137" frameY="-118" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0150" x="1702" y="1804" width="222" height="261" frameX="-137" frameY="-118" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0151" x="1702" y="1804" width="222" height="261" frameX="-137" frameY="-118" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0152" x="1702" y="1804" width="222" height="261" frameX="-137" frameY="-118" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0153" x="1252" y="1870" width="222" height="261" frameX="-137" frameY="-118" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0154" x="1252" y="1870" width="222" height="261" frameX="-137" frameY="-118" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0155" x="1" y="2090" width="225" height="260" frameX="-136" frameY="-119" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0156" x="1" y="2090" width="225" height="260" frameX="-136" frameY="-119" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0157" x="239" y="1817" width="266" height="242" frameX="-124" frameY="-137" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0158" x="239" y="1817" width="266" height="242" frameX="-124" frameY="-137" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0159" x="1741" y="2068" width="260" height="250" frameX="-119" frameY="-131" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0160" x="1741" y="2068" width="260" height="250" frameX="-119" frameY="-131" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0161" x="2093" y="1" width="260" height="249" frameX="-119" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0162" x="2093" y="1" width="260" height="249" frameX="-119" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0163" x="762" y="1804" width="262" height="249" frameX="-118" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0164" x="762" y="1804" width="262" height="249" frameX="-118" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0165" x="762" y="2056" width="261" height="249" frameX="-118" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0166" x="762" y="2056" width="261" height="249" frameX="-118" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0167" x="239" y="2062" width="261" height="249" frameX="-118" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0168" x="239" y="2062" width="261" height="249" frameX="-118" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0169" x="1477" y="2068" width="261" height="249" frameX="-118" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0170" x="1477" y="2068" width="261" height="249" frameX="-118" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0171" x="1477" y="2068" width="261" height="249" frameX="-118" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0172" x="1477" y="2068" width="261" height="249" frameX="-118" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0173" x="1477" y="2068" width="261" height="249" frameX="-118" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0174" x="1477" y="2068" width="261" height="249" frameX="-118" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0175" x="1477" y="2068" width="261" height="249" frameX="-118" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0176" x="1477" y="2068" width="261" height="249" frameX="-118" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0177" x="1477" y="2068" width="261" height="249" frameX="-118" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0178" x="1477" y="2068" width="261" height="249" frameX="-118" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0179" x="1477" y="2068" width="261" height="249" frameX="-118" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0180" x="1477" y="2068" width="261" height="249" frameX="-118" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0181" x="1477" y="2068" width="261" height="249" frameX="-118" frameY="-130" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0182" x="1784" y="1551" width="263" height="250" frameX="-116" frameY="-129" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0183" x="1784" y="1551" width="263" height="250" frameX="-116" frameY="-129" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0184" x="1" y="2610" width="251" height="251" frameX="-117" frameY="-127" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0185" x="1" y="2610" width="251" height="251" frameX="-117" frameY="-127" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0186" x="2083" y="510" width="208" height="256" frameX="-119" frameY="-122" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0187" x="2083" y="510" width="208" height="256" frameX="-119" frameY="-122" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0188" x="2081" y="769" width="202" height="256" frameX="-123" frameY="-122" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0189" x="2081" y="769" width="202" height="256" frameX="-123" frameY="-122" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0190" x="215" y="2353" width="193" height="254" frameX="-134" frameY="-123" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0191" x="215" y="2353" width="193" height="254" frameX="-134" frameY="-123" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0192" x="2154" y="1802" width="195" height="254" frameX="-132" frameY="-123" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0193" x="2154" y="1802" width="195" height="254" frameX="-132" frameY="-123" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0194" x="411" y="2345" width="184" height="254" frameX="-142" frameY="-123" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0195" x="411" y="2345" width="184" height="254" frameX="-142" frameY="-123" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0196" x="2311" y="1284" width="191" height="252" frameX="-128" frameY="-124" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0197" x="2311" y="1284" width="191" height="252" frameX="-128" frameY="-124" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0198" x="2339" y="1024" width="210" height="252" frameX="-127" frameY="-125" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="phones galore0199" x="2339" y="1024" width="210" height="252" frameX="-127" frameY="-125" frameWidth="484" frameHeight="480"/>
+	<SubTexture name="wow0001" x="229" y="2864" width="226" height="247" frameX="-130" frameY="-117" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0002" x="229" y="2864" width="226" height="247" frameX="-130" frameY="-117" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0003" x="458" y="2864" width="226" height="247" frameX="-130" frameY="-117" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0004" x="458" y="2864" width="226" height="247" frameX="-130" frameY="-117" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0005" x="458" y="2864" width="226" height="247" frameX="-130" frameY="-117" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0006" x="458" y="2864" width="226" height="247" frameX="-130" frameY="-117" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0007" x="687" y="2856" width="226" height="247" frameX="-130" frameY="-117" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0008" x="687" y="2856" width="226" height="247" frameX="-130" frameY="-117" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0009" x="255" y="2610" width="245" height="251" frameX="-106" frameY="-113" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0010" x="255" y="2610" width="245" height="251" frameX="-106" frameY="-113" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0011" x="2080" y="1028" width="256" height="253" frameX="-101" frameY="-111" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0012" x="2080" y="1028" width="256" height="253" frameX="-101" frameY="-111" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0013" x="2093" y="253" width="260" height="254" frameX="-98" frameY="-110" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0014" x="2093" y="253" width="260" height="254" frameX="-98" frameY="-110" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0015" x="503" y="2602" width="229" height="251" frameX="-126" frameY="-113" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0016" x="503" y="2602" width="229" height="251" frameX="-126" frameY="-113" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0017" x="735" y="2602" width="226" height="251" frameX="-127" frameY="-113" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0018" x="735" y="2602" width="226" height="251" frameX="-127" frameY="-113" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0019" x="964" y="2587" width="226" height="251" frameX="-127" frameY="-113" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0020" x="964" y="2587" width="226" height="251" frameX="-127" frameY="-113" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0021" x="1193" y="2587" width="226" height="251" frameX="-127" frameY="-113" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0022" x="1193" y="2587" width="226" height="251" frameX="-127" frameY="-113" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0023" x="1687" y="2565" width="226" height="251" frameX="-127" frameY="-113" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0024" x="1687" y="2565" width="226" height="251" frameX="-127" frameY="-113" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0025" x="1687" y="2565" width="226" height="251" frameX="-127" frameY="-113" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0026" x="1687" y="2565" width="226" height="251" frameX="-127" frameY="-113" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0027" x="1687" y="2565" width="226" height="251" frameX="-127" frameY="-113" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0028" x="2648" y="511" width="222" height="249" frameX="-129" frameY="-115" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0029" x="2648" y="511" width="222" height="249" frameX="-129" frameY="-115" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0030" x="2894" y="1501" width="232" height="242" frameX="-134" frameY="-122" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0031" x="2894" y="1501" width="232" height="242" frameX="-134" frameY="-122" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0032" x="2370" y="3062" width="238" height="239" frameX="-139" frameY="-125" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0033" x="2370" y="3062" width="238" height="239" frameX="-139" frameY="-125" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0034" x="1193" y="3078" width="241" height="236" frameX="-140" frameY="-128" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0035" x="1193" y="3078" width="241" height="236" frameX="-140" frameY="-128" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0036" x="2884" y="1746" width="242" height="236" frameX="-138" frameY="-128" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0037" x="2884" y="1746" width="242" height="236" frameX="-138" frameY="-128" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0038" x="2884" y="1985" width="242" height="236" frameX="-138" frameY="-128" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0039" x="2884" y="1985" width="242" height="236" frameX="-138" frameY="-128" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0040" x="2880" y="2224" width="242" height="236" frameX="-138" frameY="-128" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0041" x="2880" y="2224" width="242" height="236" frameX="-138" frameY="-128" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0042" x="2844" y="2797" width="242" height="236" frameX="-138" frameY="-128" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0043" x="2844" y="2797" width="242" height="236" frameX="-138" frameY="-128" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0044" x="1" y="3114" width="242" height="236" frameX="-138" frameY="-128" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0045" x="1" y="3114" width="242" height="236" frameX="-138" frameY="-128" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0046" x="246" y="3114" width="242" height="236" frameX="-138" frameY="-128" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0047" x="246" y="3114" width="242" height="236" frameX="-138" frameY="-128" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0048" x="491" y="3114" width="242" height="236" frameX="-138" frameY="-128" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0049" x="491" y="3114" width="242" height="236" frameX="-138" frameY="-128" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0050" x="1666" y="3056" width="242" height="236" frameX="-138" frameY="-128" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0051" x="1666" y="3056" width="242" height="236" frameX="-138" frameY="-128" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0052" x="1666" y="3056" width="242" height="236" frameX="-138" frameY="-128" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0053" x="2189" y="2559" width="250" height="235" frameX="-132" frameY="-129" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0054" x="2189" y="2559" width="250" height="235" frameX="-132" frameY="-129" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0055" x="2189" y="2326" width="252" height="230" frameX="-139" frameY="-134" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0056" x="2189" y="2326" width="252" height="230" frameX="-139" frameY="-134" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0057" x="916" y="2856" width="247" height="233" frameX="-138" frameY="-131" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0058" x="916" y="2856" width="247" height="233" frameX="-138" frameY="-131" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0059" x="1166" y="2841" width="247" height="234" frameX="-137" frameY="-130" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0060" x="1166" y="2841" width="247" height="234" frameX="-137" frameY="-130" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0061" x="1416" y="2841" width="247" height="234" frameX="-137" frameY="-130" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0062" x="1416" y="2841" width="247" height="234" frameX="-137" frameY="-130" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0063" x="1666" y="2819" width="247" height="234" frameX="-137" frameY="-130" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0064" x="1666" y="2819" width="247" height="234" frameX="-137" frameY="-130" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0065" x="1666" y="2819" width="247" height="234" frameX="-137" frameY="-130" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0066" x="1666" y="2819" width="247" height="234" frameX="-137" frameY="-130" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0067" x="1666" y="2819" width="247" height="234" frameX="-137" frameY="-130" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0068" x="1666" y="2819" width="247" height="234" frameX="-137" frameY="-130" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0069" x="1666" y="2819" width="247" height="234" frameX="-137" frameY="-130" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0070" x="1666" y="2819" width="247" height="234" frameX="-137" frameY="-130" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0071" x="1666" y="2819" width="247" height="234" frameX="-137" frameY="-130" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0072" x="1666" y="2819" width="247" height="234" frameX="-137" frameY="-130" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0073" x="1666" y="2819" width="247" height="234" frameX="-137" frameY="-130" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0074" x="1666" y="2819" width="247" height="234" frameX="-137" frameY="-130" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0075" x="1666" y="2819" width="247" height="234" frameX="-137" frameY="-130" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0076" x="1666" y="2819" width="247" height="234" frameX="-137" frameY="-130" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0077" x="1666" y="2819" width="247" height="234" frameX="-137" frameY="-130" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0078" x="1666" y="2819" width="247" height="234" frameX="-137" frameY="-130" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0079" x="1666" y="2819" width="247" height="234" frameX="-137" frameY="-130" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0080" x="1666" y="2819" width="247" height="234" frameX="-137" frameY="-130" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0081" x="2894" y="1" width="245" height="235" frameX="-139" frameY="-129" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0082" x="2894" y="1" width="245" height="235" frameX="-139" frameY="-129" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0083" x="2799" y="3056" width="209" height="238" frameX="-160" frameY="-126" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0084" x="2799" y="3056" width="209" height="238" frameX="-160" frameY="-126" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0085" x="1302" y="2326" width="230" height="253" frameX="-110" frameY="-111" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0086" x="1302" y="2326" width="230" height="253" frameX="-110" frameY="-111" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0087" x="2075" y="1284" width="233" height="256" frameX="-108" frameY="-108" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0088" x="2075" y="1284" width="233" height="256" frameX="-108" frameY="-108" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0089" x="503" y="2085" width="235" height="257" frameX="-107" frameY="-107" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0090" x="503" y="2085" width="235" height="257" frameX="-107" frameY="-107" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0091" x="2004" y="2066" width="234" height="257" frameX="-108" frameY="-107" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0092" x="2004" y="2066" width="234" height="257" frameX="-108" frameY="-107" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0093" x="2075" y="1543" width="215" height="256" frameX="-123" frameY="-108" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0094" x="2075" y="1543" width="215" height="256" frameX="-123" frameY="-108" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0095" x="2552" y="1021" width="149" height="250" frameX="-166" frameY="-114" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0096" x="2552" y="1021" width="149" height="250" frameX="-166" frameY="-114" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0097" x="1535" y="2326" width="149" height="253" frameX="-165" frameY="-111" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0098" x="1535" y="2326" width="149" height="253" frameX="-165" frameY="-111" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0099" x="2241" y="2059" width="149" height="252" frameX="-166" frameY="-112" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0100" x="2241" y="2059" width="149" height="252" frameX="-166" frameY="-112" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0101" x="2352" y="1798" width="149" height="252" frameX="-166" frameY="-112" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0102" x="2352" y="1798" width="149" height="252" frameX="-166" frameY="-112" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0103" x="2393" y="2053" width="149" height="252" frameX="-166" frameY="-112" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0104" x="2393" y="2053" width="149" height="252" frameX="-166" frameY="-112" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0105" x="2560" y="1" width="149" height="252" frameX="-166" frameY="-112" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0106" x="2560" y="1" width="149" height="252" frameX="-166" frameY="-112" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0107" x="2558" y="256" width="149" height="252" frameX="-166" frameY="-112" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0108" x="2558" y="256" width="149" height="252" frameX="-166" frameY="-112" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0109" x="2488" y="766" width="149" height="252" frameX="-166" frameY="-112" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0110" x="2488" y="766" width="149" height="252" frameX="-166" frameY="-112" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0111" x="2496" y="511" width="149" height="252" frameX="-166" frameY="-112" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0112" x="2496" y="511" width="149" height="252" frameX="-166" frameY="-112" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0113" x="2495" y="1539" width="149" height="252" frameX="-166" frameY="-112" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0114" x="2495" y="1539" width="149" height="252" frameX="-166" frameY="-112" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0115" x="2504" y="1794" width="149" height="252" frameX="-166" frameY="-112" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0116" x="2504" y="1794" width="149" height="252" frameX="-166" frameY="-112" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0117" x="2505" y="1279" width="149" height="252" frameX="-166" frameY="-112" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0118" x="2505" y="1279" width="149" height="252" frameX="-166" frameY="-112" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0119" x="598" y="2345" width="196" height="254" frameX="-136" frameY="-110" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0120" x="598" y="2345" width="196" height="254" frameX="-136" frameY="-110" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0121" x="1916" y="2581" width="207" height="250" frameX="-130" frameY="-113" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0122" x="1916" y="2581" width="207" height="250" frameX="-130" frameY="-113" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0123" x="2545" y="2049" width="213" height="249" frameX="-126" frameY="-114" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0124" x="2545" y="2049" width="213" height="249" frameX="-126" frameY="-114" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0125" x="1916" y="2834" width="219" height="247" frameX="-123" frameY="-117" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0126" x="1916" y="2834" width="219" height="247" frameX="-123" frameY="-117" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0127" x="1" y="1817" width="235" height="270" frameX="-133" frameY="-162" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0128" x="1" y="1817" width="235" height="270" frameX="-133" frameY="-162" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0129" x="1252" y="2134" width="145" height="115" frameX="-172" frameY="-328" frameWidth="469" frameHeight="443"/>
+	<SubTexture name="wow0130" x="1252" y="2134" width="145" height="115" frameX="-172" frameY="-328" frameWidth="469" frameHeight="443"/>
+</TextureAtlas>

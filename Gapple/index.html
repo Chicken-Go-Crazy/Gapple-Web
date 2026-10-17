@@ -6,7 +6,7 @@
 
 	<title>Golden Apple</title>
 
-	<meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 	<meta name="mobile-web-app-capable" content="yes">
 
 	
@@ -27,17 +27,31 @@
 
 	<script>
 		window.addEventListener ("touchmove", function (event) { event.preventDefault (); }, { capture: false, passive: false });
-		if (typeof window.devicePixelRatio != 'undefined' && window.devicePixelRatio > 2) {
-			var meta = document.getElementById ("viewport");
-			meta.setAttribute ('content', 'width=device-width, initial-scale=' + (2 / window.devicePixelRatio) + ', user-scalable=no');
-		}
 	</script>
 
 	<style>
 		html,body { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+        #game-shell { position:relative;width:100%;height:100%;background:black; }
+        #game-shell:fullscreen, #game-shell:-webkit-full-screen { width:100vw;height:100vh; }
+        #game-frame-overlay { position:fixed;inset:0;z-index:5;pointer-events:none; }
 		#start-screen { position:fixed; inset:0; background:#111; color:white; display:grid; place-content:center; text-align:center; font:20px system-ui; z-index:10; }
 		#start-screen button { font:inherit; padding:16px 28px; cursor:pointer; }
 		#content { background: #000000; width: 100%; height: 100%; }
+        body { background:#000; --touch-height:clamp(58px,17vh,104px); }
+        #touch-controls[hidden], #touch-controls button[hidden], #touch-tools button[hidden] { display:none; }
+        #touch-controls { position:absolute;inset:0;pointer-events:none;user-select:none;-webkit-user-select:none; }
+        #touch-tools { position:absolute;top:max(6px,env(safe-area-inset-top));left:max(6px,env(safe-area-inset-left));display:flex;gap:6px;z-index:6; }
+        #touch-tools button { pointer-events:auto;min-height:32px;padding:6px 9px;border:1px solid #ffffff80;border-radius:10px;background:#171927cc;color:white;font:bold 12px system-ui;touch-action:manipulation; }
+        #landscape-hint { position:absolute;left:15%;right:15%;bottom:23%;margin:0;padding:8px;border-radius:10px;background:#000c;color:white;text-align:center;font:14px system-ui; }
+        #touch-lanes { position:absolute;left:max(10px,env(safe-area-inset-left));right:max(10px,env(safe-area-inset-right));bottom:max(10px,env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(4,1fr);gap:10px;height:var(--touch-height); }
+        #touch-controls button { pointer-events:auto;touch-action:none;cursor:pointer;border:2px solid #ffffff80;border-radius:14px;background:#171927;color:#fff;font:bold 32px system-ui;-webkit-tap-highlight-color:transparent; }
+        #touch-controls button.pressed { background:var(--lane,#507fd9);border-color:white;box-shadow:inset 0 0 18px #ffffff66; }
+        #touch-lanes button { display:flex;align-items:center;justify-content:center;padding:0;background:#17192766; }
+        #touch-lanes canvas { height:100%;width:auto;max-width:100%;aspect-ratio:1;pointer-events:none; }
+        #touch-actions { position:absolute;top:max(8px,env(safe-area-inset-top));right:max(10px,env(safe-area-inset-right));display:flex;gap:8px; }
+        #touch-actions button { font-size:12px;min-width:44px;min-height:32px;padding:6px 9px;background:#171927cc; }
+        #touch-controls #touch-dodge { position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:clamp(150px,30%,300px);height:clamp(76px,22%,150px);z-index:7;font-size:clamp(24px,5vh,42px);border:3px solid #fff;background:#331b37bb;box-shadow:0 0 22px #ffb64d88;text-shadow:0 2px 4px #000; }
+        @media (orientation:portrait) { #touch-actions { top:46px; } #touch-tools button { font-size:10px; } }
 		@font-face {
 			font-family: 'Comic Sans MS';
 			src: url('assets/fonts/comic_normal.eot?#iefix') format('embedded-opentype'),
@@ -104,10 +118,95 @@
 	<span style="font-family: flixel/fonts/nokiafc22.ttf"> </span>
 	<span style="font-family: flixel/fonts/monsterrat.ttf"> </span>
 
+    <div id="game-shell">
 	<div id="content"></div>
+    <div id="game-frame-overlay">
+    <div id="touch-tools">
+        <button type="button" id="touch-toggle" role="switch" aria-label="Touch controls" aria-checked="false">TOUCH: OFF</button>
+        <button type="button" id="touch-fullscreen" aria-label="Enter fullscreen and landscape" aria-pressed="false">FULLSCREEN</button>
+    </div>
+    <nav id="touch-controls" aria-label="Game touch controls" hidden>
+        <button type="button" id="touch-dodge" data-key="32" aria-label="Dodge pitchfork" hidden>DODGE</button>
+        <div id="touch-actions">
+            <button type="button" data-key="27" aria-label="Back">BACK</button>
+            <button type="button" id="touch-world" data-key="79" aria-label="Open overworld" hidden>WORLD</button>
+            <button type="button" id="touch-action" data-key="32" aria-label="Space action">SPACE</button>
+            <button type="button" id="touch-accept" data-key="13" aria-label="Confirm">OK</button>
+            <button type="button" id="touch-pause" data-key="13" aria-label="Pause song" hidden>PAUSE</button>
+        </div>
+        <div id="touch-lanes">
+            <button type="button" data-key="37" data-lane="0" aria-label="Left note" style="--lane:#b24ee0"><canvas width="256" height="256" aria-hidden="true"></canvas></button>
+            <button type="button" data-key="40" data-lane="1" aria-label="Down note" style="--lane:#22a9d8"><canvas width="256" height="256" aria-hidden="true"></canvas></button>
+            <button type="button" data-key="38" data-lane="2" aria-label="Up note" style="--lane:#28b94b"><canvas width="256" height="256" aria-hidden="true"></canvas></button>
+            <button type="button" data-key="39" data-lane="3" aria-label="Right note" style="--lane:#df4263"><canvas width="256" height="256" aria-hidden="true"></canvas></button>
+        </div>
+    </nav>
+    <p id="landscape-hint" role="status" hidden></p>
+    </div>
+    </div>
 	<div id="start-screen"><button id="start-game">Click to start</button><p>Enter also starts the game</p></div>
 
 	<script type="text/javascript">
+        // Fullscreen the shared shell: canvas, note buttons and all action controls.
+        const shell = document.getElementById('game-shell');
+        const fullscreenButton = document.getElementById('touch-fullscreen');
+        const landscapeHint = document.getElementById('landscape-hint');
+        let wantsLandscape = false;
+        let fullscreenBusy = false;
+        let fullscreenError = '';
+        const fullscreenElement = () => document.fullscreenElement || document.webkitFullscreenElement;
+        function updateFullscreenControls() {
+            const active = !!fullscreenElement();
+            fullscreenButton.textContent = active ? 'EXIT FULLSCREEN' : 'FULLSCREEN';
+            fullscreenButton.setAttribute('aria-pressed', String(active));
+            fullscreenButton.setAttribute('aria-label', active ? 'Exit fullscreen' : 'Enter fullscreen and landscape');
+            const portrait = window.innerHeight > window.innerWidth;
+            landscapeHint.textContent = wantsLandscape && portrait
+                ? 'Rotate your phone sideways for landscape.' : fullscreenError;
+            landscapeHint.hidden = !landscapeHint.textContent;
+        }
+        fullscreenButton.addEventListener('click', async () => {
+            if (fullscreenBusy) return;
+            fullscreenBusy = true;
+            fullscreenError = '';
+            try {
+                if (fullscreenElement()) {
+                    wantsLandscape = false;
+                    if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
+                    const exit = document.exitFullscreen || document.webkitExitFullscreen;
+                    if (exit) await exit.call(document);
+                } else {
+                    wantsLandscape = true;
+                    const enter = shell.requestFullscreen || shell.webkitRequestFullscreen;
+                    if (enter) {
+                        try { await enter.call(shell); }
+                        catch (_) { fullscreenError = 'Fullscreen is unavailable in this browser.'; }
+                    } else fullscreenError = 'Fullscreen is unavailable in this browser.';
+                    if (screen.orientation && screen.orientation.lock) {
+                        try { await screen.orientation.lock('landscape'); } catch (_) {}
+                    }
+                }
+            } catch (_) { fullscreenError = 'Fullscreen is unavailable in this browser.'; }
+            finally {
+                fullscreenBusy = false;
+                updateFullscreenControls();
+                window.dispatchEvent(new Event('resize'));
+                const canvas = document.querySelector('#content canvas');
+                if (canvas) canvas.focus();
+            }
+        });
+        function fullscreenChanged() {
+            if (!fullscreenElement()) {
+                wantsLandscape = false;
+                if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
+            }
+            updateFullscreenControls();
+            window.dispatchEvent(new Event('resize'));
+        }
+        document.addEventListener('fullscreenchange', fullscreenChanged);
+        document.addEventListener('webkitfullscreenchange', fullscreenChanged);
+        window.addEventListener('resize', updateFullscreenControls);
+
 		let started = false;
         function startGame() {
             if (started) return;
