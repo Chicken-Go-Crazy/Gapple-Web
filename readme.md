@@ -1,9 +1,9 @@
 # golden apple 1.5 ( HTML port edition !)
-hi, welcome here, i warning you this is not my port !!1!!1, 
+hi, welcome here, ***i warning you this is not my port !!1!!1***, 
 it a remake of the original port make by [**Chicken-go-Crazy**](https://github.com/chicken-go-crazy)
 
 # i just want to play it
-play it [here]() now !!!
+play it [here](https://hansy2577.github.io/Golden-apple-1.5/Gapple/) now !!!
 
 # credits
 credits to the Original golden apple port !
