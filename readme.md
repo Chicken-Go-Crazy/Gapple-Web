@@ -8,5 +8,5 @@ play it [here](https://hansy2577.github.io/Golden-apple-1.5/Gapple/) now !!!
 # credits
 credits to the Original golden apple port !
 * [Sky!](https://www.youtube.com/@SkyFactorial/) - director, creator
-* [Lancey](https://www.youtube.com/c/Lancey170) - director
-* and other awesome personne ( or not ) work in this new Golden apple !
+* [Lancey](https://www.youtube.com/c/Lancey170) - director ( don't support him )
+* and other awesome personne ( or not for some ) work in this new Golden apple !
