@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="drill mode indicator.png">
+	<!-- Created with Adobe Animate version 19.2.1.408 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="10000" x="0" y="0" width="266" height="263" />
+	<SubTexture name="10001" x="0" y="0" width="266" height="263" />
+	<SubTexture name="10002" x="266" y="0" width="266" height="263" />
+	<SubTexture name="10003" x="266" y="0" width="266" height="263" />
+	<SubTexture name="10004" x="532" y="0" width="266" height="263" />
+	<SubTexture name="10005" x="532" y="0" width="266" height="263" />
+	<SubTexture name="10006" x="0" y="263" width="266" height="263" />
+	<SubTexture name="10007" x="0" y="263" width="266" height="263" />
+	<SubTexture name="10008" x="266" y="263" width="266" height="263" />
+	<SubTexture name="10009" x="266" y="263" width="266" height="263" />
+	<SubTexture name="10010" x="532" y="263" width="266" height="263" />
+	<SubTexture name="10011" x="532" y="263" width="266" height="263" />
+	<SubTexture name="10012" x="0" y="526" width="266" height="263" />
+	<SubTexture name="10013" x="0" y="526" width="266" height="263" />
+	<SubTexture name="10014" x="266" y="526" width="266" height="263" />
+	<SubTexture name="10015" x="266" y="526" width="266" height="263" />
+	<SubTexture name="10016" x="532" y="526" width="266" height="263" />
+	<SubTexture name="10017" x="532" y="526" width="266" height="263" />
+	<SubTexture name="10018" x="0" y="789" width="266" height="263" />
+	<SubTexture name="20000" x="266" y="789" width="266" height="266" />
+</TextureAtlas>

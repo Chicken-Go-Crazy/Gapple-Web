@@ -1,0 +1,7 @@
+{
+	"anims": [
+		{"name": "neutral"},
+		{"name": "losing", "prefix": "Losing Icon", "loops": true}
+	],
+	"canDance": false
+}

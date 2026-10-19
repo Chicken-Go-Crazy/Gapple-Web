@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="ticking.png">
+	<!-- Created with Adobe Animate version 24.0.8.70 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="Losing Icon0000" x="4" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0001" x="4" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0002" x="4" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0003" x="4" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0004" x="4" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0005" x="4" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0006" x="4" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0007" x="4" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0008" x="463" y="157" width="145" height="120" frameX="-3" frameY="-13" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="Losing Icon0009" x="611" y="157" width="145" height="120" frameX="-3" frameY="-13" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="Losing Icon0010" x="759" y="157" width="145" height="120" frameX="-3" frameY="-13" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="Losing Icon0011" x="463" y="280" width="145" height="120" frameX="-3" frameY="-13" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="Losing Icon0012" x="157" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0013" x="157" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0014" x="157" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0015" x="157" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0016" x="157" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0017" x="157" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0018" x="157" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0019" x="157" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0020" x="463" y="157" width="145" height="120" frameX="-3" frameY="-13" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="Losing Icon0021" x="611" y="157" width="145" height="120" frameX="-3" frameY="-13" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="Losing Icon0022" x="759" y="157" width="145" height="120" frameX="-3" frameY="-13" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="Losing Icon0023" x="463" y="280" width="145" height="120" frameX="-3" frameY="-13" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="Losing Icon0024" x="310" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0025" x="310" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0026" x="310" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0027" x="310" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0028" x="310" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0029" x="310" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0030" x="310" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0031" x="310" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0032" x="463" y="157" width="145" height="120" frameX="-3" frameY="-13" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="Losing Icon0033" x="611" y="157" width="145" height="120" frameX="-3" frameY="-13" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="Losing Icon0034" x="759" y="157" width="145" height="120" frameX="-3" frameY="-13" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="Losing Icon0035" x="463" y="280" width="145" height="120" frameX="-3" frameY="-13" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="Losing Icon0036" x="463" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0037" x="463" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0038" x="463" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0039" x="463" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0040" x="463" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0041" x="463" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0042" x="463" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0043" x="463" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0044" x="463" y="157" width="145" height="120" frameX="-3" frameY="-13" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="Losing Icon0045" x="611" y="157" width="145" height="120" frameX="-3" frameY="-13" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="Losing Icon0046" x="759" y="157" width="145" height="120" frameX="-3" frameY="-13" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="Losing Icon0047" x="463" y="280" width="145" height="120" frameX="-3" frameY="-13" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="Losing Icon0048" x="616" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0049" x="616" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0050" x="616" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0051" x="616" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0052" x="616" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0053" x="616" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0054" x="616" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0055" x="616" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0056" x="463" y="157" width="145" height="120" frameX="-3" frameY="-13" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="Losing Icon0057" x="611" y="157" width="145" height="120" frameX="-3" frameY="-13" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="Losing Icon0058" x="759" y="157" width="145" height="120" frameX="-3" frameY="-13" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="Losing Icon0059" x="463" y="280" width="145" height="120" frameX="-3" frameY="-13" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="Losing Icon0060" x="769" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0061" x="769" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0062" x="769" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0063" x="769" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0064" x="769" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0065" x="769" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0066" x="769" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0067" x="769" y="4" width="150" height="150"/>
+	<SubTexture name="Losing Icon0068" x="463" y="157" width="145" height="120" frameX="-3" frameY="-13" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="Losing Icon0069" x="611" y="157" width="145" height="120" frameX="-3" frameY="-13" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="Losing Icon0070" x="759" y="157" width="145" height="120" frameX="-3" frameY="-13" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="Losing Icon0071" x="463" y="280" width="145" height="120" frameX="-3" frameY="-13" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="Losing Icon0072" x="4" y="157" width="150" height="150"/>
+	<SubTexture name="Losing Icon0073" x="4" y="157" width="150" height="150"/>
+	<SubTexture name="Losing Icon0074" x="4" y="157" width="150" height="150"/>
+	<SubTexture name="Losing Icon0075" x="4" y="157" width="150" height="150"/>
+	<SubTexture name="Losing Icon0076" x="4" y="157" width="150" height="150"/>
+	<SubTexture name="Losing Icon0077" x="4" y="157" width="150" height="150"/>
+	<SubTexture name="Losing Icon0078" x="4" y="157" width="150" height="150"/>
+	<SubTexture name="Losing Icon0079" x="4" y="157" width="150" height="150"/>
+	<SubTexture name="Losing Icon0080" x="463" y="157" width="145" height="120" frameX="-3" frameY="-13" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="Losing Icon0081" x="611" y="157" width="145" height="120" frameX="-3" frameY="-13" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="Losing Icon0082" x="759" y="157" width="145" height="120" frameX="-3" frameY="-13" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="Losing Icon0083" x="463" y="280" width="145" height="120" frameX="-3" frameY="-13" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="Losing Icon0084" x="157" y="157" width="150" height="150"/>
+	<SubTexture name="Losing Icon0085" x="157" y="157" width="150" height="150"/>
+	<SubTexture name="Losing Icon0086" x="157" y="157" width="150" height="150"/>
+	<SubTexture name="Losing Icon0087" x="157" y="157" width="150" height="150"/>
+	<SubTexture name="Losing Icon0088" x="157" y="157" width="150" height="150"/>
+	<SubTexture name="Losing Icon0089" x="157" y="157" width="150" height="150"/>
+	<SubTexture name="Losing Icon0090" x="157" y="157" width="150" height="150"/>
+	<SubTexture name="Losing Icon0091" x="157" y="157" width="150" height="150"/>
+	<SubTexture name="Losing Icon0092" x="463" y="157" width="145" height="120" frameX="-3" frameY="-13" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="Losing Icon0093" x="611" y="157" width="145" height="120" frameX="-3" frameY="-13" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="Losing Icon0094" x="759" y="157" width="145" height="120" frameX="-3" frameY="-13" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="Losing Icon0095" x="463" y="280" width="145" height="120" frameX="-3" frameY="-13" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="neutral0000" x="310" y="157" width="150" height="150"/>
+</TextureAtlas>

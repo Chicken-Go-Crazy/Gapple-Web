@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="tv opening.png">
+	<!-- Created with Adobe Animate version 21.0.6.41649 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="tv open instance 10000" x="0" y="0" width="301" height="170" />
+	<SubTexture name="tv open instance 10001" x="0" y="0" width="301" height="170" />
+	<SubTexture name="tv open instance 10002" x="306" y="0" width="301" height="170" />
+	<SubTexture name="tv open instance 10003" x="306" y="0" width="301" height="170" />
+	<SubTexture name="tv open instance 10004" x="612" y="0" width="301" height="170" />
+	<SubTexture name="tv open instance 10005" x="612" y="0" width="301" height="170" />
+	<SubTexture name="tv open instance 10006" x="0" y="175" width="301" height="170" />
+	<SubTexture name="tv open instance 10007" x="0" y="175" width="301" height="170" />
+	<SubTexture name="tv open instance 10008" x="306" y="175" width="301" height="170" />
+	<SubTexture name="tv open instance 10009" x="306" y="175" width="301" height="170" />
+	<SubTexture name="tv open instance 10010" x="612" y="175" width="301" height="170" />
+	<SubTexture name="tv open instance 10011" x="612" y="175" width="301" height="170" />
+	<SubTexture name="tv open instance 10012" x="0" y="350" width="301" height="170" />
+	<SubTexture name="tv open instance 10013" x="0" y="350" width="301" height="170" />
+</TextureAtlas>

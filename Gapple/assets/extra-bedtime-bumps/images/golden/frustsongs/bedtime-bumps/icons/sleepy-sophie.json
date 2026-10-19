@@ -1,0 +1,6 @@
+{
+  "anims": [{ "name": "sleepy-sophie" }],
+  "canDance": true,
+  "danceSnap": 1,
+  "iconOffset": [25, 10]
+}

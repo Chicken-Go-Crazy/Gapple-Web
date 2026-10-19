@@ -3894,9 +3894,7 @@ Alphabet.prototype = $extend(flixel_group_FlxTypedSpriteGroup.prototype,{
 var AlphaCharacter = function(x,y) {
 	this.row = 0;
 	flixel_FlxSprite.call(this,x,y);
-	var library = null;
-	var potatoKey = "alphabet" + "_potato";
-	var tex = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "alphabet" + ".png","IMAGE",library),Paths.getPath("images/" + "alphabet" + ".xml","TEXT",library));
+	var tex = Paths.getSparrowAtlas("alphabet");
 	this.set_frames(tex);
 	this.set_antialiasing(true);
 };
@@ -7664,9 +7662,7 @@ DocumentClass.prototype = $extend(Main.prototype,{
 var BackgroundDancer = function(x,y) {
 	this.danceDir = false;
 	flixel_FlxSprite.call(this,x,y);
-	var library = null;
-	var potatoKey = "limo/limoDancer" + "_potato";
-	this.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "limo/limoDancer" + ".png","IMAGE",library),Paths.getPath("images/" + "limo/limoDancer" + ".xml","TEXT",library)));
+	this.set_frames(Paths.getSparrowAtlas("limo/limoDancer"));
 	this.animation.addByIndices("danceLeft","bg dancer sketch PINK",[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14],"",24,false);
 	this.animation.addByIndices("danceRight","bg dancer sketch PINK",[15,16,17,18,19,20,21,22,23,24,25,26,27,28,29],"",24,false);
 	this.animation.play("danceLeft");
@@ -7690,9 +7686,7 @@ BackgroundDancer.prototype = $extend(flixel_FlxSprite.prototype,{
 var BackgroundGirls = function(x,y) {
 	this.danceDir = false;
 	flixel_FlxSprite.call(this,x,y);
-	var library = null;
-	var potatoKey = "weeb/bgFreaks" + "_potato";
-	this.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "weeb/bgFreaks" + ".png","IMAGE",library),Paths.getPath("images/" + "weeb/bgFreaks" + ".xml","TEXT",library)));
+	this.set_frames(Paths.getSparrowAtlas("weeb/bgFreaks"));
 	this.animation.addByIndices("danceLeft","BG girls group",CoolUtil.numberArray(14),"",24,false);
 	this.animation.addByIndices("danceRight","BG girls group",CoolUtil.numberArray(30,15),"",24,false);
 	this.animation.play("danceLeft");
@@ -7747,6 +7741,7 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 	this.completedSpecial = null;
 	this.specialAnimation = null;
 	this.idleSuffix = "";
+	this.extraHoldFrames = new haxe_ds_StringMap();
 	this.holdFrame = 6;
 	this.holdStyle = "stay";
 	this.allIdleEase = true;
@@ -7767,9 +7762,7 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 		switch(this.curCharacter) {
 		case "badai":case "dave-decimated":case "dave-decimated-final":case "tunnel-3d-bf":case "tunnel-bf":
 			var config = JSON.parse(openfl_utils_Assets.getText(Paths.getPath("data/" + ("golden/tunnelvision/characters/" + this.curCharacter) + ".json","TEXT","tunnelvision")));
-			var key = "golden/tunnelvision/" + Std.string(config.path);
-			var potatoKey = key + "_potato";
-			this.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","tunnelvision"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","tunnelvision"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","tunnelvision"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","tunnelvision")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE","tunnelvision"),Paths.getPath("images/" + key + ".xml","TEXT","tunnelvision")));
+			this.set_frames(Paths.getSparrowAtlas("golden/tunnelvision/" + Std.string(config.path),"tunnelvision"));
 			var instance = this.curCharacter == "badai" || this.curCharacter == "dave-decimated-final";
 			this.addExactFrameTrack("idle",instance ? "idle instance " : "idle",24,this.curCharacter == "dave-decimated");
 			var dir = "LEFT";
@@ -7832,9 +7825,7 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 			this.setReferenceScale(nativeScale);
 			break;
 		case "bandu":
-			var library = null;
-			var potatoKey = "golden/applecore/characters/bandu" + "_potato";
-			tex = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/applecore/characters/bandu" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/applecore/characters/bandu" + ".xml","TEXT",library));
+			tex = Paths.getSparrowAtlas("golden/applecore/characters/bandu");
 			this.set_frames(tex);
 			this.animation.addByPrefix("idle","idle",24,false);
 			this.animation.addByPrefix("singLEFT","left",24,false);
@@ -7851,9 +7842,7 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 			this.playAnim("idle");
 			break;
 		case "bandu-first":
-			var library = null;
-			var potatoKey = "golden/applecore/characters/banduFirst" + "_potato";
-			tex = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/applecore/characters/banduFirst" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/applecore/characters/banduFirst" + ".xml","TEXT",library));
+			tex = Paths.getSparrowAtlas("golden/applecore/characters/banduFirst");
 			var combined = new flixel_graphics_frames_FlxAtlasFrames(tex.parent);
 			var _g = 0;
 			var _g1 = tex.frames;
@@ -7862,9 +7851,7 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 				++_g;
 				combined.pushFrame(frame.copyTo());
 			}
-			var library = null;
-			var potatoKey = "golden/applecore/characters/banduRap" + "_potato";
-			var extra = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/applecore/characters/banduRap" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/applecore/characters/banduRap" + ".xml","TEXT",library));
+			var extra = Paths.getSparrowAtlas("golden/applecore/characters/banduRap");
 			var _g = 0;
 			var _g1 = extra.frames;
 			while(_g < _g1.length) {
@@ -7900,9 +7887,7 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 			this.playAnim("danceLeft");
 			break;
 		case "bandu-sad":
-			var library = null;
-			var potatoKey = "golden/applecore/characters/bandu_sad" + "_potato";
-			tex = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/applecore/characters/bandu_sad" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/applecore/characters/bandu_sad" + ".xml","TEXT",library));
+			tex = Paths.getSparrowAtlas("golden/applecore/characters/bandu_sad");
 			this.set_frames(tex);
 			this.animation.addByPrefix("idle","idle",24,false);
 			this.animation.addByPrefix("become","Become",24,false);
@@ -7929,9 +7914,7 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 			break;
 		case "bf-golden":
 			this.holdStyle = "frames";
-			var library = null;
-			var potatoKey = "golden/characters/bf" + "_potato";
-			this.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/characters/bf" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/characters/bf" + ".xml","TEXT",library)));
+			this.set_frames(Paths.getSparrowAtlas("golden/characters/bf"));
 			if(frustrationSheets) {
 				this.set_frames(this.withFrustrationSheet(this.frames,"bf_cutscene"));
 			}
@@ -7967,9 +7950,7 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 			this.playAnim("idle");
 			break;
 		case "bf-golden-dead":
-			var library = null;
-			var potatoKey = "golden/characters/bf-dead" + "_potato";
-			this.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/characters/bf-dead" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/characters/bf-dead" + ".xml","TEXT",library)));
+			this.set_frames(Paths.getSparrowAtlas("golden/characters/bf-dead"));
 			var _g = [];
 			var _g1 = 0;
 			var _g2 = this.frames.frames;
@@ -7989,8 +7970,7 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 			this.set_flipX(true);
 			break;
 		case "dave":
-			var potatoKey = "golden/orthogonal/dave" + "_potato";
-			this.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","orthogonal"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","orthogonal"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","orthogonal"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","orthogonal")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/orthogonal/dave" + ".png","IMAGE","orthogonal"),Paths.getPath("images/" + "golden/orthogonal/dave" + ".xml","TEXT","orthogonal")));
+			this.set_frames(Paths.getSparrowAtlas("golden/orthogonal/dave","orthogonal"));
 			this.addExactFrameTrack("idle","idle",24,false);
 			this.addExactFrameTrack("singLEFT","left",24,false);
 			this.addExactFrameTrack("singDOWN","down",24,false);
@@ -8004,8 +7984,7 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 			this.playAnim("idle");
 			break;
 		case "dave-frustration":
-			var potatoKey = "golden/frustration/characters/dave_frustration" + "_potato";
-			var main = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","frustration"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","frustration"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","frustration"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","frustration")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/frustration/characters/dave_frustration" + ".png","IMAGE","frustration"),Paths.getPath("images/" + "golden/frustration/characters/dave_frustration" + ".xml","TEXT","frustration"));
+			var main = Paths.getSparrowAtlas("golden/frustration/characters/dave_frustration","frustration");
 			var combined = new flixel_graphics_frames_FlxAtlasFrames(main.parent);
 			var _g = 0;
 			var _g1 = main.frames;
@@ -8014,8 +7993,7 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 				++_g;
 				combined.pushFrame(frame.copyTo());
 			}
-			var potatoKey = "golden/frustration/characters/dave_cutscene" + "_potato";
-			var extra = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","frustration"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","frustration"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","frustration"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","frustration")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/frustration/characters/dave_cutscene" + ".png","IMAGE","frustration"),Paths.getPath("images/" + "golden/frustration/characters/dave_cutscene" + ".xml","TEXT","frustration"));
+			var extra = Paths.getSparrowAtlas("golden/frustration/characters/dave_cutscene","frustration");
 			var _g = 0;
 			var _g1 = extra.frames;
 			while(_g < _g1.length) {
@@ -8059,9 +8037,7 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 			break;
 		case "disruption-bambi":
 			this.referenceNativeScale = 2.296;
-			var library = null;
-			var potatoKey = "golden/applecore/characters/bambi" + "_potato";
-			tex = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/applecore/characters/bambi" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/applecore/characters/bambi" + ".xml","TEXT",library));
+			tex = Paths.getSparrowAtlas("golden/applecore/characters/bambi");
 			var combined = new flixel_graphics_frames_FlxAtlasFrames(tex.parent);
 			var _g = 0;
 			var _g1 = tex.frames;
@@ -8070,9 +8046,7 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 				++_g;
 				combined.pushFrame(frame.copyTo());
 			}
-			var library = null;
-			var potatoKey = "golden/applecore/characters/bambiExtra" + "_potato";
-			var extra = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/applecore/characters/bambiExtra" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/applecore/characters/bambiExtra" + ".xml","TEXT",library));
+			var extra = Paths.getSparrowAtlas("golden/applecore/characters/bambiExtra");
 			var _g = 0;
 			var _g1 = extra.frames;
 			while(_g < _g1.length) {
@@ -8110,9 +8084,7 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 			this.playAnim("idle");
 			break;
 		case "gf-golden":
-			var library = null;
-			var potatoKey = "golden/characters/gf" + "_potato";
-			this.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/characters/gf" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/characters/gf" + ".xml","TEXT",library)));
+			this.set_frames(Paths.getSparrowAtlas("golden/characters/gf"));
 			if(frustrationSheets) {
 				this.set_frames(this.withFrustrationSheet(this.frames,"gf_cutscene"));
 			}
@@ -8146,8 +8118,7 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 			this.playAnim("danceLeft");
 			break;
 		case "inspicable":
-			var potatoKey = "golden/inspicable/characters/inspicable" + "_potato";
-			var main = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","inspicable"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","inspicable"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","inspicable"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","inspicable")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/inspicable/characters/inspicable" + ".png","IMAGE","inspicable"),Paths.getPath("images/" + "golden/inspicable/characters/inspicable" + ".xml","TEXT","inspicable"));
+			var main = Paths.getSparrowAtlas("golden/inspicable/characters/inspicable","inspicable");
 			var combined = new flixel_graphics_frames_FlxAtlasFrames(main.parent);
 			var _g = 0;
 			var _g1 = main.frames;
@@ -8157,8 +8128,7 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 				combined.pushFrame(frame.copyTo());
 			}
 			var _g = 0;
-			var potatoKey = "golden/inspicable/characters/inspicableTalking" + "_potato";
-			var _g1 = (GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","inspicable"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","inspicable"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","inspicable"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","inspicable")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/inspicable/characters/inspicableTalking" + ".png","IMAGE","inspicable"),Paths.getPath("images/" + "golden/inspicable/characters/inspicableTalking" + ".xml","TEXT","inspicable"))).frames;
+			var _g1 = Paths.getSparrowAtlas("golden/inspicable/characters/inspicableTalking","inspicable").frames;
 			while(_g < _g1.length) {
 				var frame = _g1[_g];
 				++_g;
@@ -8211,9 +8181,7 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 			this.playAnim("idle");
 			break;
 		case "unfair-expunged-forward":
-			var library = null;
-			var potatoKey = "golden/applecore/characters/unfairguy" + "_potato";
-			tex = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/applecore/characters/unfairguy" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/applecore/characters/unfairguy" + ".xml","TEXT",library));
+			tex = Paths.getSparrowAtlas("golden/applecore/characters/unfairguy");
 			this.set_frames(tex);
 			this.animation.addByPrefix("danceLeft","idlel",24,false);
 			this.animation.addByPrefix("danceRight","idler",24,false);
@@ -8251,6 +8219,7 @@ Character.prototype = $extend(flixel_FlxSprite.prototype,{
 	,allIdleEase: null
 	,holdStyle: null
 	,holdFrame: null
+	,extraHoldFrames: null
 	,idleSuffix: null
 	,specialAnimation: null
 	,completedSpecial: null
@@ -8272,6 +8241,15 @@ Character.prototype = $extend(flixel_FlxSprite.prototype,{
 	,referenceNativeScale: null
 	,danced: null
 	,draw: function() {
+		if(this.frame != null && ((this.shader) instanceof GoldenWavyShader)) {
+			var wave = this.shader;
+			var uv = this.frame.uv;
+			var values = wave.frameUv.value;
+			values[0] = uv.x;
+			values[1] = uv.y;
+			values[2] = uv.width;
+			values[3] = uv.height;
+		}
 		GoldenPoseOffsets.apply(this);
 		if(!this.useReferenceAnchor && (this.curCharacter == "badai" || this.curCharacter == "dave-decimated")) {
 			this.origin.set(this.frameWidth * .5,this.frameHeight * .5);
@@ -8305,7 +8283,7 @@ Character.prototype = $extend(flixel_FlxSprite.prototype,{
 			if(StringTools.startsWith(this.animation._curAnim.name,"sing") || StringTools.startsWith(this.animation._curAnim.name,"smash")) {
 				this.holdTimer += elapsed;
 			}
-			if(!this.allIdleEase && this.holdTimer >= Conductor.stepCrochet * 4 * 0.001) {
+			if(!this.allIdleEase && this.holdTimer >= Conductor.stepCrochet * (this.extraConfig != null && this.extraConfig.singDuration != null ? this.extraConfig.singDuration : 4) * 0.001) {
 				this.dance();
 				this.holdTimer = 0;
 			}
@@ -8385,6 +8363,14 @@ Character.prototype = $extend(flixel_FlxSprite.prototype,{
 		}
 		if(Force == null) {
 			Force = false;
+		}
+		var h = this.extraHoldFrames.h;
+		var inlStringMapValueIterator_h = h;
+		var inlStringMapValueIterator_keys = Object.keys(h);
+		var inlStringMapValueIterator_length = inlStringMapValueIterator_keys.length;
+		var inlStringMapValueIterator_current = 0;
+		if(inlStringMapValueIterator_current < inlStringMapValueIterator_length) {
+			this.holdFrame = Object.prototype.hasOwnProperty.call(this.extraHoldFrames.h,AnimName) ? this.extraHoldFrames.h[AnimName] : 6;
 		}
 		if(!this.animation.exists(AnimName) && StringTools.endsWith(AnimName,"-alt")) {
 			AnimName = HxOverrides.substr(AnimName,0,AnimName.length - 4);
@@ -8512,9 +8498,7 @@ Character.prototype = $extend(flixel_FlxSprite.prototype,{
 			combined.pushFrame(frame.copyTo());
 		}
 		var _g = 0;
-		var key = "golden/frustration/characters/" + name;
-		var potatoKey = key + "_potato";
-		var _g1 = (GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","frustration"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","frustration"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","frustration"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","frustration")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE","frustration"),Paths.getPath("images/" + key + ".xml","TEXT","frustration"))).frames;
+		var _g1 = Paths.getSparrowAtlas("golden/frustration/characters/" + name,"frustration").frames;
 		while(_g < _g1.length) {
 			var frame = _g1[_g];
 			++_g;
@@ -15790,25 +15774,19 @@ var DialogueBox = function(talkingRight,dialogueList) {
 	case "roses":
 		hasDialog = true;
 		flixel_FlxG.sound.play(Paths.sound("ANGRY_TEXT_BOX"));
-		var library = null;
-		var potatoKey = "weeb/pixelUI/dialogueBox-senpaiMad" + "_potato";
-		this.box.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "weeb/pixelUI/dialogueBox-senpaiMad" + ".png","IMAGE",library),Paths.getPath("images/" + "weeb/pixelUI/dialogueBox-senpaiMad" + ".xml","TEXT",library)));
+		this.box.set_frames(Paths.getSparrowAtlas("weeb/pixelUI/dialogueBox-senpaiMad"));
 		this.box.animation.addByPrefix("normalOpen","SENPAI ANGRY IMPACT SPEECH",24,false);
 		this.box.animation.addByIndices("normal","SENPAI ANGRY IMPACT SPEECH",[4],"",24);
 		break;
 	case "senpai":
 		hasDialog = true;
-		var library = null;
-		var potatoKey = "weeb/pixelUI/dialogueBox-pixel" + "_potato";
-		this.box.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "weeb/pixelUI/dialogueBox-pixel" + ".png","IMAGE",library),Paths.getPath("images/" + "weeb/pixelUI/dialogueBox-pixel" + ".xml","TEXT",library)));
+		this.box.set_frames(Paths.getSparrowAtlas("weeb/pixelUI/dialogueBox-pixel"));
 		this.box.animation.addByPrefix("normalOpen","Text Box Appear",24,false);
 		this.box.animation.addByIndices("normal","Text Box Appear",[4],"",24);
 		break;
 	case "thorns":
 		hasDialog = true;
-		var library = null;
-		var potatoKey = "weeb/pixelUI/dialogueBox-evil" + "_potato";
-		this.box.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "weeb/pixelUI/dialogueBox-evil" + ".png","IMAGE",library),Paths.getPath("images/" + "weeb/pixelUI/dialogueBox-evil" + ".xml","TEXT",library)));
+		this.box.set_frames(Paths.getSparrowAtlas("weeb/pixelUI/dialogueBox-evil"));
 		this.box.animation.addByPrefix("normalOpen","Spirit Textbox spawn",24,false);
 		this.box.animation.addByIndices("normal","Spirit Textbox spawn",[11],"",24);
 		var face = new flixel_FlxSprite(320,170).loadGraphic(Paths.getPath("images/" + "weeb/spiritFaceForward" + ".png","IMAGE",null));
@@ -15821,9 +15799,7 @@ var DialogueBox = function(talkingRight,dialogueList) {
 		return;
 	}
 	this.portraitLeft = new flixel_FlxSprite(-20,40);
-	var library = null;
-	var potatoKey = "weeb/senpaiPortrait" + "_potato";
-	this.portraitLeft.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "weeb/senpaiPortrait" + ".png","IMAGE",library),Paths.getPath("images/" + "weeb/senpaiPortrait" + ".xml","TEXT",library)));
+	this.portraitLeft.set_frames(Paths.getSparrowAtlas("weeb/senpaiPortrait"));
 	this.portraitLeft.animation.addByPrefix("enter","Senpai Portrait Enter",24,false);
 	this.portraitLeft.setGraphicSize(this.portraitLeft.get_width() * PlayState.daPixelZoom * 0.9 | 0);
 	this.portraitLeft.updateHitbox();
@@ -15831,9 +15807,7 @@ var DialogueBox = function(talkingRight,dialogueList) {
 	this.add(this.portraitLeft);
 	this.portraitLeft.set_visible(false);
 	this.portraitRight = new flixel_FlxSprite(0,40);
-	var library = null;
-	var potatoKey = "weeb/bfPortrait" + "_potato";
-	this.portraitRight.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "weeb/bfPortrait" + ".png","IMAGE",library),Paths.getPath("images/" + "weeb/bfPortrait" + ".xml","TEXT",library)));
+	this.portraitRight.set_frames(Paths.getSparrowAtlas("weeb/bfPortrait"));
 	this.portraitRight.animation.addByPrefix("enter","Boyfriend portrait enter",24,false);
 	this.portraitRight.setGraphicSize(this.portraitRight.get_width() * PlayState.daPixelZoom * 0.9 | 0);
 	this.portraitRight.updateHitbox();
@@ -16426,6 +16400,9 @@ var GameOverSubstate = function(x,y) {
 	this.stageSuffix = "";
 	var daBf;
 	switch(PlayState.SONG.song.toLowerCase()) {
+	case "cuberoot":
+		daBf = "extra-cuberoot--bambi-root-death";
+		break;
 	case "lofthouse":
 		daBf = "extra-lofthouse--bf-loft-dies";
 		break;
@@ -16529,9 +16506,7 @@ GitarooPause.prototype = $extend(MusicBeatState.prototype,{
 		var bg = new flixel_FlxSprite().loadGraphic(Paths.getPath("images/" + "pauseAlt/pauseBG" + ".png","IMAGE",null));
 		this.add(bg);
 		var bf = new flixel_FlxSprite(0,30);
-		var library = null;
-		var potatoKey = "pauseAlt/bfLol" + "_potato";
-		bf.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "pauseAlt/bfLol" + ".png","IMAGE",library),Paths.getPath("images/" + "pauseAlt/bfLol" + ".xml","TEXT",library)));
+		bf.set_frames(Paths.getSparrowAtlas("pauseAlt/bfLol"));
 		bf.animation.addByPrefix("lol","funnyThing",13);
 		bf.animation.play("lol");
 		this.add(bf);
@@ -16562,17 +16537,13 @@ GitarooPause.prototype = $extend(MusicBeatState.prototype,{
 			bf.set_y((flixel_FlxG.height - bf.get_height()) / 2);
 		}
 		this.replayButton = new flixel_FlxSprite(flixel_FlxG.width * 0.28,flixel_FlxG.height * 0.7);
-		var library = null;
-		var potatoKey = "pauseAlt/pauseUI" + "_potato";
-		this.replayButton.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "pauseAlt/pauseUI" + ".png","IMAGE",library),Paths.getPath("images/" + "pauseAlt/pauseUI" + ".xml","TEXT",library)));
+		this.replayButton.set_frames(Paths.getSparrowAtlas("pauseAlt/pauseUI"));
 		this.replayButton.animation.addByPrefix("selected","bluereplay",0,false);
 		this.replayButton.animation.appendByPrefix("selected","yellowreplay");
 		this.replayButton.animation.play("selected");
 		this.add(this.replayButton);
 		this.cancelButton = new flixel_FlxSprite(flixel_FlxG.width * 0.58,this.replayButton.y);
-		var library = null;
-		var potatoKey = "pauseAlt/pauseUI" + "_potato";
-		this.cancelButton.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "pauseAlt/pauseUI" + ".png","IMAGE",library),Paths.getPath("images/" + "pauseAlt/pauseUI" + ".xml","TEXT",library)));
+		this.cancelButton.set_frames(Paths.getSparrowAtlas("pauseAlt/pauseUI"));
 		this.cancelButton.animation.addByPrefix("selected","bluecancel",0,false);
 		this.cancelButton.animation.appendByPrefix("selected","cancelyellow");
 		this.cancelButton.animation.play("selected");
@@ -16638,8 +16609,7 @@ var GoldenAnimateScene = function(documentPath,sheetPath,library) {
 		this.rootMatrix = this.document.AN.STI.SI.MX;
 	}
 	var _g = 0;
-	var potatoKey = sheetPath + "_potato";
-	var _g1 = (GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + sheetPath + ".png","IMAGE",library),Paths.getPath("images/" + sheetPath + ".xml","TEXT",library))).frames;
+	var _g1 = Paths.getSparrowAtlas(sheetPath,library).frames;
 	while(_g < _g1.length) {
 		var frame = _g1[_g];
 		++_g;
@@ -17358,9 +17328,7 @@ GoldenBambiScenes.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 	,banduInFront: null
 	,clip: function(path,prefix) {
 		var sprite = new flixel_FlxSprite();
-		var key = "golden/applecore/native-stage/bambi/" + path;
-		var potatoKey = key + "_potato";
-		sprite.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","applecorestage"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","applecorestage"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","applecorestage"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","applecorestage")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE","applecorestage"),Paths.getPath("images/" + key + ".xml","TEXT","applecorestage")));
+		sprite.set_frames(Paths.getSparrowAtlas("golden/applecore/native-stage/bambi/" + path,"applecorestage"));
 		sprite.animation.addByPrefix("play",prefix,24,false);
 		sprite.animation.play("play");
 		var _this = sprite.animation;
@@ -17538,6 +17506,8 @@ GoldenBanduOrbit.prototype = {
 };
 var GoldenCamera = function(owner) {
 	this.lastDispatchedBeat = -1;
+	this.zoomEvery = 4;
+	this.zoomIntensity = 1;
 	this.pulse = 0;
 	this.followSections = true;
 	this.zoom = 0.425;
@@ -17551,6 +17521,8 @@ GoldenCamera.prototype = {
 	,zoom: null
 	,followSections: null
 	,pulse: null
+	,zoomIntensity: null
+	,zoomEvery: null
 	,zoomTween: null
 	,panTween: null
 	,lastDispatchedBeat: null
@@ -17572,6 +17544,11 @@ GoldenCamera.prototype = {
 	}
 	,beat: function(beat) {
 		var crochet = Conductor.crochet;
+		if(beat > 0 && beat % this.zoomEvery == 0 && this.zoomIntensity > 0 && this.zoom + this.pulse < this.zoomIntensity * 1.35) {
+			this.pulse += .015 * this.zoomIntensity;
+			var fh = this.owner.camHUD;
+			fh.set_zoom(fh.zoom + .03 * this.zoomIntensity);
+		}
 		switch(beat) {
 		case 1:
 			this.zoomTo(0.525,crochet / 1500);
@@ -17582,11 +17559,15 @@ GoldenCamera.prototype = {
 		case 4:
 			this.zoomTo(0.425,crochet / 500);
 			break;
+		case 101:case 103:
+			this.owner.applecoreStage.pizzaCue(beat);
+			break;
 		case 113:
 			this.pan(900,420,crochet / 50);
 			this.zoomTo(0.45,crochet / 50);
 			break;
 		case 132:
+			this.zoomIntensity = 0;
 			this.pan(640,400,0.4);
 			this.zoomTo(0.6,4.75);
 			break;
@@ -17594,19 +17575,25 @@ GoldenCamera.prototype = {
 			this.zoomTo(0.45,0.001);
 			this.followSections = true;
 			break;
+		case 198:
+			this.zoomIntensity = 1;
+			break;
 		case 322:
 			this.followSections = false;
 			break;
 		case 324:
+			this.zoomEvery = 8;
 			this.pulse += 0.175;
 			flixel_FlxG.camera.shake(0.015,1);
 			this.owner.camHUD.shake(0.02,1);
 			break;
 		case 332:
+			this.zoomIntensity = 0;
 			this.pan(-900,390,9);
 			this.zoomTo(1,8);
 			break;
 		case 358:
+			this.zoomIntensity = 1;
 			this.zoomTo(0.45,0.001);
 			break;
 		case 364:
@@ -17671,7 +17658,9 @@ GoldenCamera.prototype = {
 				fh.set_y(fh.y + (y - this.owner.camFollow.y) * amount);
 			}
 		}
-		this.pulse *= Math.exp(-elapsed * 6);
+		this.pulse *= Math.exp(-elapsed * 3);
+		var fh = this.owner.camHUD;
+		fh.set_zoom(fh.zoom + (1 - this.owner.camHUD.zoom) * (1 - Math.exp(-elapsed * 3)));
 		flixel_FlxG.camera.set_zoom((this.zoom + this.pulse) / 0.425);
 		this.owner.applecoreStage.nativeZoom = this.zoom;
 	}
@@ -17680,6 +17669,7 @@ GoldenCamera.prototype = {
 var GoldenChartCamera = function(owner,events,bpm,zoom) {
 	this.focuses = new haxe_ds_StringMap();
 	this.dispatched = 0;
+	this.zeroMeansRelative = false;
 	this.clampStage = true;
 	this.automatic = true;
 	this.releaseSection = -1;
@@ -17705,9 +17695,13 @@ GoldenChartCamera.__name__ = "GoldenChartCamera";
 GoldenChartCamera.easing = function(name,t) {
 	t = Math.max(0,Math.min(1,t));
 	switch(name.toLowerCase()) {
+	case "backin":
+		return t * t * (2.70158 * t - 1.70158);
 	case "backout":
 		var t1 = t;
 		return 1 - --t1 * t1 * (-2.70158 * t1 - 1.70158);
+	case "circin":
+		return -(Math.sqrt(1 - t * t) - 1);
 	case "circinout":
 		return flixel_tweens_FlxEase.circInOut(t);
 	case "circout":
@@ -17729,6 +17723,10 @@ GoldenChartCamera.easing = function(name,t) {
 		return Math.pow(2,10 * (t - 1));
 	case "expoout":
 		return -Math.pow(2,-10 * t) + 1;
+	case "quadin":
+		return t * t;
+	case "quadout":
+		return -t * (t - 2);
 	case "quartinout":
 		var t1 = t;
 		if(t1 <= .5) {
@@ -17774,13 +17772,15 @@ GoldenChartCamera.prototype = {
 	,zoom: null
 	,automatic: null
 	,clampStage: null
+	,zeroMeansRelative: null
+	,onCinematicBars: null
 	,onSongEvent: null
 	,onCharacterChange: null
 	,dispatched: null
 	,focuses: null
 	,duration: function(values,amount,unit) {
 		var scale = unit < values.length ? values[unit] : "BEATS";
-		return GoldenChartCamera.value(values,amount) * (scale == "SECONDS" ? 1000 : 60000 / this.bpm * (scale == "SECTIONS" ? 4 : 1));
+		return GoldenChartCamera.value(values,amount) * (scale == "SECONDS" ? 1000 : 60000 / this.bpm * (scale == "SECTIONS" ? 4 : scale == "STEPS" ? .25 : 1));
 	}
 	,settle: function(time) {
 		if(this.zoomTrack != null) {
@@ -17819,6 +17819,11 @@ GoldenChartCamera.prototype = {
 						this.onCharacterChange(v);
 					}
 					break;
+				case "Cinematic Bars":
+					if(this.onCinematicBars != null) {
+						this.onCinematicBars(v,pack.strumTime);
+					}
+					break;
 				case "Move Camera":
 					var f = this.focuses.h[v[0].toUpperCase()];
 					if(f == null) {
@@ -17844,7 +17849,11 @@ GoldenChartCamera.prototype = {
 					this.releaseSection = -1;
 					break;
 				case "Zoom Camera":
-					var target = GoldenChartCamera.value(v,0,this.owner.defaultCamZoom) + GoldenChartCamera.value(v,1);
+					var base = GoldenChartCamera.value(v,0,this.owner.defaultCamZoom);
+					if(this.zeroMeansRelative && base == 0) {
+						base = this.owner.defaultCamZoom;
+					}
+					var target = base + GoldenChartCamera.value(v,1);
 					this.owner.defaultCamZoom = target;
 					this.zoomTrack = { start : pack.strumTime, from : this.zoom, to : target, duration : this.duration(v,2,4), ease : v[3]};
 					break;
@@ -17897,7 +17906,7 @@ GoldenCombo.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 	,tweens: null
 	,label: function(camera) {
 		var value = new flixel_text_FlxText(0,0,300,"",32);
-		value.setFormat("assets/fonts/" + "vcr.ttf",32,-1,"center",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
+		value.setFormat("assets/fonts/" + "comic.ttf",32,-1,"center",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
 		value.set_borderSize(2);
 		value.scrollFactor.set();
 		value.set_cameras([camera]);
@@ -18042,6 +18051,7 @@ var PlayState = function(TransIn,TransOut) {
 	this.fastCarCanDrive = true;
 	this.replayHeld = [false,false,false,false];
 	this.controlledSingers = [null,null,null,null];
+	this.drillMode = false;
 	this.leftHold = false;
 	this.rightHold = false;
 	this.downHold = false;
@@ -18075,6 +18085,7 @@ var PlayState = function(TransIn,TransOut) {
 	this.curSong = "";
 	this.camZooming = false;
 	this.curSection = 0;
+	this.spawnIndex = 0;
 	this.unspawnNotes = [];
 	this.applecoreSpecialCue = -1;
 	this.applecoreSucking = false;
@@ -18157,6 +18168,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 	,boyfriend: null
 	,notes: null
 	,unspawnNotes: null
+	,spawnIndex: null
 	,strumLine: null
 	,curSection: null
 	,camFollow: null
@@ -18206,6 +18218,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 		if(PlayState.loadRep) {
 			PlayState.opponentMode = false;
 		}
+		GoldenPlayback.begin();
 		GoldenQuality.load();
 		GoldenHoldPath.frustration = null;
 		PlayState.theFunne = flixel_FlxG.save.data.newInput;
@@ -18266,9 +18279,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 		if(PlayState.SONG.song.toLowerCase() == "spookeez" || PlayState.SONG.song.toLowerCase() == "monster" || PlayState.SONG.song.toLowerCase() == "south") {
 			PlayState.curStage = "spooky";
 			this.halloweenLevel = true;
-			var library = null;
-			var potatoKey = "halloween_bg" + "_potato";
-			var hallowTex = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "halloween_bg" + ".png","IMAGE",library),Paths.getPath("images/" + "halloween_bg" + ".xml","TEXT",library));
+			var hallowTex = Paths.getSparrowAtlas("halloween_bg");
 			this.halloweenBG = new flixel_FlxSprite(-200,-100);
 			this.halloweenBG.set_frames(hallowTex);
 			this.halloweenBG.animation.addByPrefix("idle","halloweem bg0");
@@ -18339,9 +18350,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 			skyBG.scrollFactor.set(0.1,0.1);
 			this.add(skyBG);
 			var bgLimo = new flixel_FlxSprite(-200,480);
-			var library = null;
-			var potatoKey = "limo/bgLimo" + "_potato";
-			bgLimo.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "limo/bgLimo" + ".png","IMAGE",library),Paths.getPath("images/" + "limo/bgLimo" + ".xml","TEXT",library)));
+			bgLimo.set_frames(Paths.getSparrowAtlas("limo/bgLimo"));
 			bgLimo.animation.addByPrefix("drive","background limo pink",24);
 			bgLimo.animation.play("drive");
 			bgLimo.scrollFactor.set(0.4,0.4);
@@ -18365,9 +18374,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 			this.grpLimoDancers.add(dancer);
 			var overlayShit = new flixel_FlxSprite(-500,-600).loadGraphic(Paths.getPath("images/" + "limo/limoOverlay" + ".png","IMAGE",null));
 			overlayShit.set_alpha(0.5);
-			var library = null;
-			var potatoKey = "limo/limoDrive" + "_potato";
-			var limoTex = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "limo/limoDrive" + ".png","IMAGE",library),Paths.getPath("images/" + "limo/limoDrive" + ".xml","TEXT",library));
+			var limoTex = Paths.getSparrowAtlas("limo/limoDrive");
 			this.limo = new flixel_FlxSprite(-120,550);
 			this.limo.set_frames(limoTex);
 			this.limo.animation.addByPrefix("drive","Limo stage",24);
@@ -18385,9 +18392,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 			bg.updateHitbox();
 			this.add(bg);
 			this.upperBoppers = new flixel_FlxSprite(-240,-90);
-			var library = null;
-			var potatoKey = "christmas/upperBop" + "_potato";
-			this.upperBoppers.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "christmas/upperBop" + ".png","IMAGE",library),Paths.getPath("images/" + "christmas/upperBop" + ".xml","TEXT",library)));
+			this.upperBoppers.set_frames(Paths.getSparrowAtlas("christmas/upperBop"));
 			this.upperBoppers.animation.addByPrefix("bop","Upper Crowd Bob",24,false);
 			this.upperBoppers.set_antialiasing(true);
 			this.upperBoppers.scrollFactor.set(0.33,0.33);
@@ -18406,9 +18411,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 			tree.scrollFactor.set(0.40,0.40);
 			this.add(tree);
 			this.bottomBoppers = new flixel_FlxSprite(-300,140);
-			var library = null;
-			var potatoKey = "christmas/bottomBop" + "_potato";
-			this.bottomBoppers.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "christmas/bottomBop" + ".png","IMAGE",library),Paths.getPath("images/" + "christmas/bottomBop" + ".xml","TEXT",library)));
+			this.bottomBoppers.set_frames(Paths.getSparrowAtlas("christmas/bottomBop"));
 			this.bottomBoppers.animation.addByPrefix("bop","Bottom Level Boppers",24,false);
 			this.bottomBoppers.set_antialiasing(true);
 			this.bottomBoppers.scrollFactor.set(0.9,0.9);
@@ -18420,9 +18423,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 			fgSnow.set_antialiasing(true);
 			this.add(fgSnow);
 			this.santa = new flixel_FlxSprite(-840,150);
-			var library = null;
-			var potatoKey = "christmas/santa" + "_potato";
-			this.santa.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "christmas/santa" + ".png","IMAGE",library),Paths.getPath("images/" + "christmas/santa" + ".xml","TEXT",library)));
+			this.santa.set_frames(Paths.getSparrowAtlas("christmas/santa"));
 			this.santa.animation.addByPrefix("idle","santa idle in fear",24,false);
 			this.santa.set_antialiasing(true);
 			this.add(this.santa);
@@ -18466,9 +18467,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 			bgTrees.scrollFactor.set(0.85,0.85);
 			this.add(bgTrees);
 			var treeLeaves = new flixel_FlxSprite(repositionShit,-40);
-			var library = null;
-			var potatoKey = "weeb/petals" + "_potato";
-			treeLeaves.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "weeb/petals" + ".png","IMAGE",library),Paths.getPath("images/" + "weeb/petals" + ".xml","TEXT",library)));
+			treeLeaves.set_frames(Paths.getSparrowAtlas("weeb/petals"));
 			treeLeaves.animation.addByPrefix("leaves","PETALS ALL",24,true);
 			treeLeaves.animation.play("leaves");
 			treeLeaves.scrollFactor.set(0.85,0.85);
@@ -18501,9 +18500,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 			var posX = 400;
 			var posY = 200;
 			var bg = new flixel_FlxSprite(posX,posY);
-			var library = null;
-			var potatoKey = "weeb/animatedEvilSchool" + "_potato";
-			bg.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "weeb/animatedEvilSchool" + ".png","IMAGE",library),Paths.getPath("images/" + "weeb/animatedEvilSchool" + ".xml","TEXT",library)));
+			bg.set_frames(Paths.getSparrowAtlas("weeb/animatedEvilSchool"));
 			bg.animation.addByPrefix("idle","background 2",24);
 			bg.animation.play("idle");
 			bg.scrollFactor.set(0.8,0.9);
@@ -18561,6 +18558,9 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 		}
 		if(PlayState.goldenSong()) {
 			gfVersion = "gf-golden";
+		}
+		if(GoldenLegacySongs.supports(PlayState.curStage)) {
+			gfVersion = "extra-" + PlayState.curStage + "--" + (GoldenRemaining.supports(PlayState.curStage) ? GoldenRemaining.record(PlayState.curStage).gf : "legacy-gf");
 		}
 		if(PlayState.curStage == "aug") {
 			gfVersion = "extra-aug--aug-gf";
@@ -18900,9 +18900,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 		var red = new flixel_FlxSprite(-100,-100).makeGraphic(flixel_FlxG.width * 2,flixel_FlxG.height * 2,-58575);
 		red.scrollFactor.set();
 		var senpaiEvil = new flixel_FlxSprite();
-		var library = null;
-		var potatoKey = "weeb/senpaiCrazy" + "_potato";
-		senpaiEvil.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "weeb/senpaiCrazy" + ".png","IMAGE",library),Paths.getPath("images/" + "weeb/senpaiCrazy" + ".xml","TEXT",library)));
+		senpaiEvil.set_frames(Paths.getSparrowAtlas("weeb/senpaiCrazy"));
 		senpaiEvil.animation.addByPrefix("idle","Senpai Pre Explosion",24,false);
 		senpaiEvil.setGraphicSize(senpaiEvil.get_width() * 6 | 0);
 		senpaiEvil.scrollFactor.set();
@@ -18985,6 +18983,10 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 		this.startedCountdown = true;
 		Conductor.songPosition = 0;
 		Conductor.songPosition -= Conductor.crochet * 5;
+		if(PlayState.curStage == "ticking") {
+			Conductor.songPosition = 0;
+			return;
+		}
 		var swagCounter = 0;
 		this.startTimer = new flixel_util_FlxTimer().start(Conductor.crochet / 1000,function(tmr) {
 			_gthis.dad.dance();
@@ -19144,6 +19146,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 		if(this.opponentVocals != null) {
 			this.opponentVocals.play();
 		}
+		GoldenPlayback.applySongs(this);
 	}
 	,debugNum: null
 	,generateSong: function(dataPath) {
@@ -19277,11 +19280,15 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 	}
 	,openSubState: function(SubState) {
 		if(this.paused) {
+			GoldenPlayback.pause();
 			if(this.applecoreVideo != null) {
 				this.applecoreVideo.setSuspended(true);
 			}
 			if(this.tunnelVision != null) {
 				this.tunnelVision.setSuspended(true);
+			}
+			if(this.frustExtras != null) {
+				this.frustExtras.setSuspended(true);
 			}
 			if(flixel_FlxG.sound.music != null) {
 				flixel_FlxG.sound.music.pause();
@@ -19290,7 +19297,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 					this.opponentVocals.pause();
 				}
 			}
-			if(!this.startTimer.finished) {
+			if(this.startTimer != null && !this.startTimer.finished) {
 				this.startTimer.active = false;
 			}
 		}
@@ -19298,16 +19305,20 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 	}
 	,closeSubState: function() {
 		if(this.paused) {
+			GoldenPlayback.resume();
 			if(this.applecoreVideo != null) {
 				this.applecoreVideo.setSuspended(false);
 			}
 			if(this.tunnelVision != null) {
 				this.tunnelVision.setSuspended(false);
 			}
+			if(this.frustExtras != null) {
+				this.frustExtras.setSuspended(false);
+			}
 			if(flixel_FlxG.sound.music != null && !this.startingSong) {
 				this.resyncVocals();
 			}
-			if(!this.startTimer.finished) {
+			if(this.startTimer != null && !this.startTimer.finished) {
 				this.startTimer.active = true;
 			}
 			this.paused = false;
@@ -19320,13 +19331,14 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 			this.opponentVocals.pause();
 		}
 		flixel_FlxG.sound.music.play();
-		Conductor.songPosition = flixel_FlxG.sound.music._time;
+		Conductor.songPosition = GoldenInput.audioTime();
 		this.vocals.set_time(Conductor.songPosition);
 		this.vocals.play();
 		if(this.opponentVocals != null) {
 			this.opponentVocals.set_time(Conductor.songPosition);
 			this.opponentVocals.play();
 		}
+		GoldenPlayback.applySongs(this);
 	}
 	,paused: null
 	,startedCountdown: null
@@ -19339,6 +19351,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 	}
 	,update: function(elapsed) {
 		var _gthis = this;
+		GoldenPlayback.update(this,elapsed);
 		this.touchLayout.restore();
 		this.perfectMode = false;
 		if(PlayState.curStage == "philly") {
@@ -19394,14 +19407,14 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 			this.health = 2;
 		}
 		if(this.healthBar.get_percent() < 20) {
-			this.iconP1.animation._curAnim.set_curFrame(1);
+			this.iconP1.setLosing(true);
 		} else {
-			this.iconP1.animation._curAnim.set_curFrame(0);
+			this.iconP1.setLosing(false);
 		}
 		if(this.healthBar.get_percent() > 80) {
-			this.iconP2.animation._curAnim.set_curFrame(1);
+			this.iconP2.setLosing(true);
 		} else {
-			this.iconP2.animation._curAnim.set_curFrame(0);
+			this.iconP2.setLosing(false);
 		}
 		if(this.startingSong) {
 			if(this.startedCountdown) {
@@ -19534,8 +19547,9 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 			_this.cleanup(_this.autoDestroy,true);
 			this.openSubState(new GameOverSubstate(this.boyfriend.getScreenPosition().x,this.boyfriend.getScreenPosition().y));
 		}
-		while(this.unspawnNotes.length > 0 && this.unspawnNotes[0].strumTime - Conductor.songPosition < GoldenNoteGeometry.spawnLead(flixel_FlxG.height + 600,PlayState.SONG.speed * (PlayState.curStage == "frustration" ? 0.225 : PlayState.curStage == "applecore" && this.curBeat >= 628 ? 0.65 : 1))) {
-			var spawned = this.unspawnNotes.shift();
+		while(this.spawnIndex < this.unspawnNotes.length && this.unspawnNotes[this.spawnIndex].strumTime - Conductor.songPosition < GoldenNoteGeometry.spawnLead(flixel_FlxG.height + 600,PlayState.curStage == "ticking" ? 1.20000000000000018 : PlayState.SONG.speed * (PlayState.curStage == "frustration" ? 0.225 : PlayState.curStage == "applecore" && this.curBeat >= 628 ? 0.65 : 1))) {
+			var spawned = this.unspawnNotes[this.spawnIndex];
+			this.unspawnNotes[this.spawnIndex++] = null;
 			GoldenPartThree.positionNote(this,spawned);
 			this.notes.add(spawned);
 		}
@@ -19581,6 +19595,9 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 						break;
 					}
 					singer.holdTimer = 0;
+					if(_gthis.frustExtras != null && !daNote.mustPress) {
+						_gthis.frustExtras.noteHit(daNote,singer);
+					}
 					if(PlayState.SONG.needsVoices && _gthis.opponentVocals == null) {
 						_gthis.vocals.set_volume(1);
 					}
@@ -19620,6 +19637,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 			return;
 		}
 		this.endingSong = true;
+		GoldenPlayback.pause();
 		if(!PlayState.loadRep) {
 			if(!PlayState.opponentMode) {
 				PlayState.rep.SaveReplay();
@@ -19633,7 +19651,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 			_this.cleanup(_this.autoDestroy,true);
 		}
 		if(PlayState.SONG.validScore) {
-			Highscore.saveScore(PlayState.SONG.song + (PlayState.opponentMode ? "-opponent" : ""),this.songScore,PlayState.storyDifficulty);
+			Highscore.saveScore(PlayState.SONG.song + (PlayState.opponentMode ? "-opponent" : "") + GoldenPlayback.scoreSuffix(),this.songScore,PlayState.storyDifficulty);
 		}
 		if(PlayState.isStoryMode) {
 			PlayState.campaignScore += this.songScore;
@@ -19654,7 +19672,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 							medal.sendUnlock();
 						}
 					}
-					if(!PlayState.opponentMode) {
+					if(!PlayState.opponentMode && GoldenPlayback.rate == 1) {
 						Highscore.saveWeekScore(PlayState.storyWeek,PlayState.campaignScore,PlayState.storyDifficulty);
 					}
 				}
@@ -19668,8 +19686,8 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 				if(PlayState.storyDifficulty == 2) {
 					difficulty = "-hard";
 				}
-				haxe_Log.trace("LOADING NEXT SONG",{ fileName : "source/PlayState.hx", lineNumber : 1754, className : "PlayState", methodName : "endSong"});
-				haxe_Log.trace(PlayState.storyPlaylist[0].toLowerCase() + difficulty,{ fileName : "source/PlayState.hx", lineNumber : 1755, className : "PlayState", methodName : "endSong"});
+				haxe_Log.trace("LOADING NEXT SONG",{ fileName : "source/PlayState.hx", lineNumber : 1766, className : "PlayState", methodName : "endSong"});
+				haxe_Log.trace(PlayState.storyPlaylist[0].toLowerCase() + difficulty,{ fileName : "source/PlayState.hx", lineNumber : 1767, className : "PlayState", methodName : "endSong"});
 				if(PlayState.SONG.song.toLowerCase() == "eggnog") {
 					var blackShit = new flixel_FlxSprite(-flixel_FlxG.width * flixel_FlxG.camera.zoom,-flixel_FlxG.height * flixel_FlxG.camera.zoom).makeGraphic(flixel_FlxG.width * 3,flixel_FlxG.height * 3,-16777216);
 					blackShit.scrollFactor.set();
@@ -19918,6 +19936,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 	,downHold: null
 	,rightHold: null
 	,leftHold: null
+	,drillMode: null
 	,controlledStrum: function(lane) {
 		return this.strumLineNotes.members[lane + (PlayState.opponentMode ? 0 : 4)];
 	}
@@ -20046,6 +20065,25 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 				}
 			}
 		}
+		if(this.drillMode) {
+			var _g = [];
+			var _g1 = 0;
+			var _g2 = this.notes.members;
+			while(_g1 < _g2.length) {
+				var note = _g2[_g1];
+				++_g1;
+				if(note != null && note.alive && PlayState.controlsNote(note) && !note.isSustainNote && !note.wasGoodHit && held[note.noteData] && note.strumTime <= Conductor.songPosition && GoldenInputJudge.canHit(note.strumTime,Conductor.songPosition)) {
+					_g.push(note);
+				}
+			}
+			var heads = _g;
+			var _g = 0;
+			while(_g < heads.length) {
+				var note = heads[_g];
+				++_g;
+				this.goodNoteHit(note);
+			}
+		}
 		var _g = [];
 		var _g1 = 0;
 		var _g2 = this.notes.members;
@@ -20084,6 +20122,16 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 		}
 	}
 	,destroy: function() {
+		var _g = 0;
+		var _g1 = this.unspawnNotes;
+		while(_g < _g1.length) {
+			var note = _g1[_g];
+			++_g;
+			if(note != null) {
+				note.destroy();
+			}
+		}
+		this.unspawnNotes = [];
 		GoldenNoteSkin.clear();
 		if(this.opponentVocals != null) {
 			flixel_FlxG.sound.list.remove(this.opponentVocals,true);
@@ -20105,6 +20153,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 		if(this.goldenInput != null) {
 			this.goldenInput.destroy();
 		}
+		GoldenPlayback.finish();
 		MusicBeatState.prototype.destroy.call(this);
 	}
 	,noteMiss: function(direction) {
@@ -20168,6 +20217,9 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 			case 3:
 				singer.playSing("singRIGHT" + (note.altAnimation || PlayState.opponentMode && (singer.idleSuffix == "-alt" || this.frustration != null && this.frustration.angry) ? "-alt" : ""),note.isSustainNote,PlayState.singingEnd(note));
 				break;
+			}
+			if(this.frustExtras != null && !note.mustPress) {
+				this.frustExtras.noteHit(note,singer);
 			}
 			this.controlledStrum(note.noteData).animation.play("confirm",true);
 			note.wasGoodHit = true;
@@ -20565,10 +20617,11 @@ GoldenExtraCharacter.config = function(id) {
 GoldenExtraCharacter.apply = function(actor) {
 	var data = GoldenExtraCharacter.config(actor.curCharacter);
 	actor.extraConfig = data;
-	var key = data.atlas;
-	var library = data.library;
-	var potatoKey = key + "_potato";
-	actor.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE",library),Paths.getPath("images/" + key + ".xml","TEXT",library)));
+	if(data.goldenOrigin != null) {
+		actor.goldenOriginX = data.goldenOrigin[0];
+		actor.goldenOriginY = data.goldenOrigin[1];
+	}
+	actor.set_frames(Paths.getSparrowAtlas(data.atlas,data.library));
 	var tracks = data.tracks;
 	var _g = 0;
 	while(_g < tracks.length) {
@@ -20576,6 +20629,9 @@ GoldenExtraCharacter.apply = function(actor) {
 		++_g;
 		var names = track.frames;
 		actor.animation.addByNames(track.name,names,track.fps,track.loop);
+		if(track.holdFrame != null) {
+			actor.extraHoldFrames.h[track.name] = track.holdFrame;
+		}
 	}
 	actor.gfDanceStyle = data.gfDance == true;
 	actor.canSing = data.canSing != false;
@@ -20643,7 +20699,7 @@ var GoldenExtrasMenu = function(category) {
 	this.previewGeneration = 0;
 	this.delay = .25;
 	MusicBeatState.call(this);
-	if(category >= 0 && category < 6) {
+	if(category >= 0) {
 		GoldenExtrasMenu.categoryIndex = category;
 	}
 };
@@ -20681,6 +20737,10 @@ GoldenExtrasMenu.prototype = $extend(MusicBeatState.prototype,{
 			return;
 		}
 		this.categories = JSON.parse(openfl_utils_Assets.getText(Paths.getPath("data/" + "golden/extras/catalog" + ".json","TEXT","extras"))).categories;
+		while(GoldenExtrasMenu.songSelections.length < this.categories.length) GoldenExtrasMenu.songSelections.push(0);
+		if(GoldenExtrasMenu.categoryIndex < 0 || GoldenExtrasMenu.categoryIndex >= this.categories.length) {
+			GoldenExtrasMenu.categoryIndex = 0;
+		}
 		this.render();
 		flixel_FlxG.sound.playMusic(Paths.getPath("music/" + "golden/menu/play" + "." + "mp3","MUSIC",null),.6);
 	}
@@ -20792,10 +20852,13 @@ GoldenExtrasMenu.prototype = $extend(MusicBeatState.prototype,{
 		var _g1 = this.categories.length;
 		while(_g < _g1) {
 			var i = _g++;
-			var poster = this.image(this.categories[i].id,65 + i * 195,12,165);
+			var spacing = Math.min(195,(flixel_FlxG.width - 100) / this.categories.length);
+			var width = Math.min(165,spacing - 25) | 0;
+			var x = (flixel_FlxG.width - this.categories.length * spacing) / 2 + i * spacing + (spacing - width) / 2;
+			var poster = this.image(this.categories[i].id,x,12,width);
 			poster.set_alpha(i == GoldenExtrasMenu.categoryIndex ? 1 : .3);
 			if(i == GoldenExtrasMenu.categoryIndex) {
-				this.content.add(new flixel_FlxSprite(65 + i * 195,169).makeGraphic(165,3,-1));
+				this.content.add(new flixel_FlxSprite(x,169).makeGraphic(width,3,-1));
 			}
 		}
 		this.content.add(new flixel_FlxSprite(0,590).makeGraphic(flixel_FlxG.width,130,-16777216));
@@ -20917,1900 +20980,6 @@ GoldenExtrasMenu.prototype = $extend(MusicBeatState.prototype,{
 		MusicBeatState.prototype.destroy.call(this);
 	}
 	,__class__: GoldenExtrasMenu
-});
-var GoldenFrustExtras = function(owner) {
-	this.points = new haxe_ds_StringMap();
-	this.zoomIntensity = 1;
-	this.zoomEvery = 4;
-	this.pulseTarget = 1.1;
-	this.pulse = false;
-	this.lastStep = -1;
-	this.beat = -1;
-	this.captions = [];
-	this.owner = owner;
-	this.song = PlayState.SONG.song.toLowerCase();
-	GoldenFrustExtras.loadedLibrary = GoldenFrustExtras.library(this.song);
-	this.zoom = this.targetZoom = GoldenFrustExtras.initialZoom(this.song);
-	switch(this.song) {
-	case "aug":
-		owner.dad.setPosition(0,-145);
-		owner.boyfriend.setPosition(245,465);
-		owner.gf.setPosition(445,-680);
-		break;
-	case "cooking-lesson":
-		owner.dad.setPosition(10,-89);
-		owner.boyfriend.setPosition(951,615);
-		owner.gf.setReferenceScale(1);
-		owner.gf.setPosition(494,312);
-		owner.gf.scrollFactor.set(1,1);
-		break;
-	case "doughboy":
-		owner.gf.set_visible(false);
-		break;
-	case "enforcers":
-		owner.dad.setPosition(-200,200);
-		owner.boyfriend.setPosition(200,200);
-		owner.gf.set_visible(false);
-		break;
-	case "gift-card":
-		owner.dad.setPosition(-56,326);
-		owner.boyfriend.setPosition(871,382);
-		owner.gf.set_visible(false);
-		break;
-	case "keyboard":
-		owner.dad.setPosition(-300,50);
-		var fh = owner.boyfriend;
-		fh.set_x(fh.x + 200);
-		var fh = owner.gf;
-		fh.set_x(fh.x + 200);
-		break;
-	case "kooky":
-		owner.gf.set_visible(false);
-		owner.dad.setReferenceScale(.606060606);
-		owner.dad.setPosition(620,flixel_FlxG.save.data.downscroll ? 300 : -100);
-		owner.boyfriend.setPosition(275,flixel_FlxG.save.data.downscroll ? 135 : 475);
-		owner.dad.scrollFactor.set();
-		owner.boyfriend.scrollFactor.set();
-		break;
-	case "lofthouse":
-		owner.dad.setPosition(600,-45);
-		owner.boyfriend.setPosition(770,690);
-		owner.gf.setPosition(200,150);
-		break;
-	case "nft":
-		var fh = owner.dad;
-		fh.set_x(fh.x - 500);
-		var fh = owner.dad;
-		fh.set_y(fh.y - 400);
-		var fh = owner.gf;
-		fh.set_x(fh.x - 250);
-		break;
-	case "nutty":
-		owner.dad.setPosition(-75,140);
-		var fh = owner.boyfriend;
-		fh.set_x(fh.x + 200);
-		var fh = owner.gf;
-		fh.set_x(fh.x + 200);
-		break;
-	case "ready-loud":
-		owner.dad.setPosition(402,125);
-		owner.gf.set_visible(false);
-		break;
-	case "slices":
-		var fh = owner.dad;
-		fh.set_y(fh.y + 250);
-		owner.gf.set_visible(false);
-		owner.boyfriend.setReferenceScale(1);
-		break;
-	case "strawberry":
-		owner.dad.setPosition(-125,165);
-		var fh = owner.boyfriend;
-		fh.set_x(fh.x + 200);
-		var fh = owner.gf;
-		fh.set_x(fh.x + 200);
-		break;
-	case "sugar-rush":
-		owner.dad.setPosition(-85,-40);
-		owner.boyfriend.setReferenceScale(1);
-		owner.boyfriend.setPosition(880,605);
-		owner.gf.setPosition(911,212);
-		owner.gf.scrollFactor.set(1,1);
-		break;
-	case "tantalum":
-		owner.dad.setPosition(150,-63);
-		var fh = owner.boyfriend;
-		fh.set_x(fh.x + 400);
-		var fh = owner.gf;
-		fh.set_x(fh.x + 400);
-		break;
-	case "the-big-dingle":
-		var fh = owner.dad;
-		fh.set_y(fh.y + 150);
-		var fh = owner.boyfriend;
-		fh.set_x(fh.x + 50);
-		var fh = owner.boyfriend;
-		fh.set_y(fh.y - 65);
-		owner.gf.set_visible(false);
-		break;
-	}
-	GoldenFrustExtras.alignBoyfriend(owner.boyfriend);
-	var pair_key = "DAD";
-	var pair_actor = owner.dad;
-	var this1 = this.points;
-	var value = this.focusPoint(pair_actor,pair_key);
-	this1.h[pair_key] = value;
-	var pair_key = "BF";
-	var pair_actor = owner.boyfriend;
-	var this1 = this.points;
-	var value = this.focusPoint(pair_actor,pair_key);
-	this1.h[pair_key] = value;
-	var pair_key = "GF";
-	var pair_actor = owner.gf;
-	var this1 = this.points;
-	var value = this.focusPoint(pair_actor,pair_key);
-	this1.h[pair_key] = value;
-	if(this.song == "aug") {
-		this.points.h["DAD"][1] -= 65;
-	}
-	var initial = this.points.h["DAD"];
-	owner.camFollow.setPosition(initial[0],initial[1]);
-	flixel_FlxG.camera.set_followLerp(1);
-	flixel_FlxG.camera.set_zoom(this.zoom);
-	var dadColor = -12784090;
-	var bfColor = -13520687;
-	if(owner.dad.extraConfig != null) {
-		dadColor = GoldenFrustExtras.color(owner.dad.extraConfig.healthBarRGB);
-	}
-	if(owner.boyfriend.extraConfig != null) {
-		bfColor = GoldenFrustExtras.color(owner.boyfriend.extraConfig.healthBarRGB);
-	}
-	owner.healthBar.createFilledBar(dadColor,bfColor);
-	this.dim = new flixel_FlxSprite(-flixel_FlxG.width / 2,-flixel_FlxG.height / 2).makeGraphic(flixel_FlxG.width * 2,flixel_FlxG.height * 2,-16777216);
-	this.dim.set_alpha(0);
-	this.dim.scrollFactor.set();
-	owner.insert(owner.members.indexOf(owner.gf),this.dim);
-	var file = "data/golden/frustsongs/" + this.song + "/subtitles.srt";
-	var type = "TEXT";
-	var library = GoldenFrustExtras.library(this.song);
-	if(type == null) {
-		type = "TEXT";
-	}
-	var subtitles = Paths.getPath(file,type,library);
-	if(openfl_utils_Assets.exists(subtitles)) {
-		this.captions = GoldenSubtitles.load(openfl_utils_Assets.getText(subtitles));
-	}
-	if(this.song == "sugar-rush") {
-		this.topBar = new flixel_FlxSprite(0,-500).makeGraphic(flixel_FlxG.width,90,-16777216);
-		this.bottomBar = new flixel_FlxSprite(0,1145).makeGraphic(flixel_FlxG.width,90,-16777216);
-		var bar = this.topBar;
-		bar.set_cameras([owner.camHUD]);
-		bar.scrollFactor.set();
-		owner.add(bar);
-		var bar = this.bottomBar;
-		bar.set_cameras([owner.camHUD]);
-		bar.scrollFactor.set();
-		owner.add(bar);
-	}
-	if(this.song == "enforcers" || this.song == "gift-card" || this.song == "nft") {
-		this.chartCamera = new GoldenChartCamera(owner,JSON.parse(openfl_utils_Assets.getText(Paths.getPath("data/" + ("golden/frustsongs/" + this.song + "/events") + ".json","TEXT",GoldenFrustExtras.library(this.song)))),PlayState.SONG.bpm,this.zoom);
-		this.chartCamera.focuses = this.points;
-		this.chartCamera.automatic = this.song != "enforcers";
-		this.chartCamera.clampStage = false;
-		this.chartCamera.onCharacterChange = $bind(this,this.changeCharacter);
-		if(this.song == "enforcers") {
-			var fh = owner.camFollow;
-			fh.set_x(fh.x - 100);
-			this.dim.set_alpha(1);
-			this.dim.set_cameras([owner.camHUD]);
-		}
-		this.chartCamera.onSongEvent = function(name,value) {
-			if(name == "gittyReveal") {
-				owner.goldenTweens.tween(owner.camHUD,{ alpha : 1},Conductor.crochet / 500,{ ease : flixel_tweens_FlxEase.quartInOut});
-			}
-		};
-	}
-	if(GoldenGlitchedLevels.supports(this.song)) {
-		this.glitched = new GoldenGlitchedLevels(owner,this);
-	}
-	if(this.song == "ready-loud") {
-		this.readyLoud = new GoldenReadyLoud(owner);
-	}
-	if(["tantalum","strawberry","nutty","keyboard"].indexOf(this.song) >= 0) {
-		this.ocSongs = new GoldenOCSongs(owner,this);
-	}
-	if(this.song == "nft") {
-		this.points.h["BF"][0] -= 250;
-		this.points.h["BF"][1] -= 100;
-		this.nft = new GoldenNFT(owner);
-	}
-};
-$hxClasses["GoldenFrustExtras"] = GoldenFrustExtras;
-GoldenFrustExtras.__name__ = "GoldenFrustExtras";
-GoldenFrustExtras.releaseLibrary = function() {
-	if(GoldenFrustExtras.loadedLibrary == null) {
-		return;
-	}
-	flixel_FlxG.bitmap.clearCache();
-	openfl_utils_Assets.cache.clear(GoldenFrustExtras.loadedLibrary + ":");
-	openfl_utils_Assets.unloadLibrary(GoldenFrustExtras.loadedLibrary);
-	GoldenFrustExtras.loadedLibrary = null;
-};
-GoldenFrustExtras.splitVocals = function(song) {
-	if(song.toLowerCase() != "enforcers") {
-		return song.toLowerCase() == "nft";
-	} else {
-		return true;
-	}
-};
-GoldenFrustExtras.opponentPath = function(song) {
-	return "songs:assets/songs/" + song.toLowerCase() + "/Opponent." + "mp3";
-};
-GoldenFrustExtras.library = function(song) {
-	return "extra-" + song.toLowerCase();
-};
-GoldenFrustExtras.supports = function(song) {
-	return ["sugar-rush","gift-card","ready-loud","tantalum","strawberry","nutty","keyboard","enforcers","nft","cooking-lesson","slices","aug","doughboy","the-big-dingle","lofthouse","kooky"].indexOf(song.toLowerCase()) >= 0;
-};
-GoldenFrustExtras.initialZoom = function(song) {
-	switch(song.toLowerCase()) {
-	case "aug":
-		return .725;
-	case "cooking-lesson":
-		return .69;
-	case "enforcers":
-		return 2.5;
-	case "gift-card":
-		return .375;
-	case "kooky":
-		return 1;
-	case "lofthouse":case "the-big-dingle":
-		return .8;
-	case "nft":case "tantalum":
-		return .5;
-	case "nutty":case "strawberry":
-		return .6;
-	case "ready-loud":
-		return .785;
-	case "keyboard":case "sugar-rush":
-		return .7;
-	default:
-		return .85;
-	}
-};
-GoldenFrustExtras.menu = function() {
-	if(GoldenFrustExtras.returnToExtras && GoldenFrustExtras.supports(PlayState.SONG.song)) {
-		return new GoldenExtrasMenu();
-	} else {
-		return new FreeplayState();
-	}
-};
-GoldenFrustExtras.skin = function(player,time) {
-	if(time == null) {
-		time = 0;
-	}
-	var song = PlayState.SONG.song.toLowerCase();
-	if(song == "the-big-dingle" || song == "kooky") {
-		return "bevel";
-	}
-	if(song == "doughboy") {
-		return "bready";
-	}
-	if(song == "lofthouse") {
-		return "default";
-	}
-	if(song == "aug") {
-		return "3d";
-	}
-	if(song == "slices") {
-		return "awesome";
-	}
-	if(song == "gift-card") {
-		if(player && time < 87272.727272729) {
-			return "3d";
-		} else {
-			return "default";
-		}
-	}
-	if(song == "nft" && player && time >= 124363.636363636) {
-		return "3d";
-	}
-	if(!player || song == "cooking-lesson" || song == "enforcers" || song == "ready-loud") {
-		return "3d";
-	} else {
-		return "default";
-	}
-};
-GoldenFrustExtras.countdown = function() {
-	if(PlayState.SONG.song.toLowerCase() == "slices") {
-		return "awesomeson";
-	} else {
-		return "bandu";
-	}
-};
-GoldenFrustExtras.credits = function(song) {
-	var meta = JSON.parse(openfl_utils_Assets.getText(Paths.getPath("data/" + ("golden/frustsongs/" + song + "/metadata") + ".json","TEXT",GoldenFrustExtras.library(song)))).metadata;
-	var source = meta.credits;
-	var result = [];
-	var pair_0 = "composer";
-	var pair_1 = "SONG";
-	var names = Reflect.field(source,pair_0);
-	if(names != null) {
-		result.push(pair_1 + "\n" + names.join(", "));
-	}
-	var pair_0 = "visuals";
-	var pair_1 = "VISUALS";
-	var names = Reflect.field(source,pair_0);
-	if(names != null) {
-		result.push(pair_1 + "\n" + names.join(", "));
-	}
-	var pair_0 = "chart";
-	var pair_1 = "CHART";
-	var names = Reflect.field(source,pair_0);
-	if(names != null) {
-		result.push(pair_1 + "\n" + names.join(", "));
-	}
-	return result.join("\n\n");
-};
-GoldenFrustExtras.alignBoyfriend = function(actor) {
-	if(actor.curCharacter != "bf-golden") {
-		return;
-	}
-	actor.goldenOriginY = 0;
-	actor.setReferenceScale(1);
-	actor.refreshAnimationOffset();
-};
-GoldenFrustExtras.color = function(rgb) {
-	if(rgb == null) {
-		return -1;
-	} else {
-		return -16777216 | rgb[0] << 16 | rgb[1] << 8 | rgb[2];
-	}
-};
-GoldenFrustExtras.prototype = {
-	owner: null
-	,song: null
-	,dim: null
-	,captions: null
-	,beat: null
-	,lastStep: null
-	,zoom: null
-	,targetZoom: null
-	,zoomTrack: null
-	,baseZoomTrack: null
-	,dimTrack: null
-	,barTrack: null
-	,topBar: null
-	,bottomBar: null
-	,pulse: null
-	,pulseTarget: null
-	,zoomEvery: null
-	,zoomIntensity: null
-	,points: null
-	,chartCamera: null
-	,readyLoud: null
-	,ocSongs: null
-	,nft: null
-	,glitched: null
-	,changeCharacter: function(values) {
-		var side = values[0].toUpperCase();
-		var player = side == "BF";
-		var old = player ? this.owner.boyfriend : side == "GF" ? this.owner.gf : this.owner.dad;
-		var id = "extra-" + this.song + "--" + values[1];
-		var actor = player ? new Boyfriend(old.x,old.y,id) : new Character(old.x,old.y,id);
-		actor.set_cameras(old.get_cameras());
-		var _this = actor.scrollFactor;
-		var point = old.scrollFactor;
-		_this.set_x(point.x);
-		_this.set_y(point.y);
-		if(point._weak) {
-			point.put();
-		}
-		if(values.length > 4 && values[4] == "true") {
-			actor.setPosition(parseFloat(values[2]),parseFloat(values[3]));
-		} else {
-			actor.setPosition(old.x,old.y);
-		}
-		if(player) {
-			GoldenFrustExtras.alignBoyfriend(actor);
-		}
-		var index = this.owner.members.indexOf(old);
-		this.owner.remove(old,true);
-		this.owner.insert(index,actor);
-		if(player) {
-			this.owner.boyfriend = actor;
-		} else if(side == "GF") {
-			this.owner.gf = actor;
-		} else {
-			this.owner.dad = actor;
-		}
-		this.owner.goldenTweens.cancelTweensOf(old);
-		this.owner.goldenTweens.cancelTweensOf(old.scale);
-		old.destroy();
-		var this1 = this.points;
-		var value = this.focusPoint(actor,side);
-		this1.h[side] = value;
-		if(side != "GF") {
-			this.replaceIcon(player,actor.curCharacter);
-		}
-		this.owner.healthBar.createFilledBar(this.owner.dad.extraConfig == null ? -12784090 : GoldenFrustExtras.color(this.owner.dad.extraConfig.healthBarRGB),this.owner.boyfriend.extraConfig == null ? -13520687 : GoldenFrustExtras.color(this.owner.boyfriend.extraConfig.healthBarRGB));
-		this.refreshSkins();
-	}
-	,replaceIcon: function(player,id) {
-		var old = player ? this.owner.iconP1 : this.owner.iconP2;
-		var icon = new HealthIcon(id,player);
-		icon.set_cameras(old.get_cameras());
-		icon.setPosition(old.x,old.y);
-		flixel_tweens_FlxTween.cancelTweensOf(old);
-		this.owner.goldenTweens.cancelTweensOf(old);
-		this.owner.goldenTweens.cancelTweensOf(old.scale);
-		var index = this.owner.members.indexOf(old);
-		this.owner.remove(old,true);
-		this.owner.insert(index,icon);
-		old.destroy();
-		if(player) {
-			this.owner.iconP1 = icon;
-		} else {
-			this.owner.iconP2 = icon;
-		}
-	}
-	,singerFor: function(note) {
-		if(note.extraSinger == "litt-le" && this.ocSongs != null && this.ocSongs.little != null) {
-			return this.ocSongs.little;
-		} else {
-			return this.owner.dad;
-		}
-	}
-	,refreshSkins: function() {
-		var _g = 0;
-		var _g1 = this.owner.strumLineNotes.members.length;
-		while(_g < _g1) {
-			var i = _g++;
-			var strum = this.owner.strumLineNotes.members[i];
-			if(strum == null) {
-				continue;
-			}
-			var player = this.owner.playerStrums.members.indexOf(strum) >= 0;
-			GoldenNoteSkin.setupStrum(strum,GoldenFrustExtras.skin(player,Conductor.songPosition),strum.ID);
-		}
-	}
-	,focusPoint: function(actor,key) {
-		var name = actor.animation.exists("danceLeft") ? "danceLeft" : "idle";
-		var track = actor.animation._animations.h[name];
-		if(track == null) {
-			return [actor.x + 150,actor.y - 100];
-		}
-		var frame = actor.frames.frames[track.frames[0]];
-		var x = actor.x + (frame.offset.x + frame.frame.width / 2 - actor.goldenOriginX) * actor.scale.x;
-		var y = actor.y + (frame.offset.y + frame.frame.height / 2 - actor.goldenOriginY) * actor.scale.y;
-		if(key != "GF") {
-			x += key == "BF" ? -100 : 150;
-			y -= 100;
-		}
-		var config = actor.extraConfig;
-		if(config != null && config.cameraOffset != null) {
-			x += config.cameraOffset[0];
-			y += config.cameraOffset[1];
-		}
-		return [x,y];
-	}
-	,sample: function(time) {
-		if(this.baseZoomTrack != null) {
-			var track = this.baseZoomTrack;
-			var q = Math.max(0,Math.min(1,(time - track.start) / track.duration));
-			q = track.ease == "sine" ? -Math.cos(Math.PI * q) / 2 + .5 : -q * (q - 2);
-			this.targetZoom = track.from + (track.to - track.from) * q;
-			if(time >= track.start + track.duration) {
-				this.baseZoomTrack = null;
-			}
-		}
-		if(this.zoomTrack != null) {
-			var q = Math.max(0,Math.min(1,(time - this.zoomTrack.start) / this.zoomTrack.duration));
-			q = this.zoomTrack.ease == "sine" ? -Math.cos(Math.PI * q) / 2 + .5 : -q * (q - 2);
-			this.zoom = this.zoomTrack.from + (this.zoomTrack.to - this.zoomTrack.from) * q;
-			if(time >= this.zoomTrack.start + this.zoomTrack.duration) {
-				this.zoomTrack = null;
-			}
-		}
-		if(this.dimTrack != null) {
-			var q = Math.max(0,Math.min(1,(time - this.dimTrack.start) / this.dimTrack.duration));
-			this.dim.set_alpha(this.dimTrack.from + (this.dimTrack.to - this.dimTrack.from) * q);
-			if(q >= 1) {
-				this.dimTrack = null;
-			}
-		}
-		if(this.barTrack != null) {
-			var q = Math.sin(flixel_tweens_FlxEase.PI2 * Math.max(0,Math.min(1,(time - this.barTrack.start) / 500)));
-			this.topBar.set_y(this.barTrack.top + (this.barTrack.targetTop - this.barTrack.top) * q);
-			this.bottomBar.set_y(this.barTrack.bottom + (this.barTrack.targetBottom - this.barTrack.bottom) * q);
-			if(time >= this.barTrack.start + 500) {
-				this.barTrack = null;
-			}
-		}
-	}
-	,zoomTo: function(time,value,seconds,ease,cameraOnly) {
-		if(cameraOnly == null) {
-			cameraOnly = false;
-		}
-		if(ease == null) {
-			ease = "sine";
-		}
-		var track = { start : time, from : cameraOnly ? this.zoom : this.targetZoom, to : value, duration : seconds * 1000, ease : ease};
-		if(cameraOnly) {
-			this.zoomTrack = track;
-		} else {
-			this.baseZoomTrack = track;
-		}
-	}
-	,shade: function(time,value) {
-		this.dimTrack = { start : time, from : this.dim.alpha, to : value, duration : Conductor.crochet * 2};
-	}
-	,bars: function(time,out) {
-		var delta = out ? -500 : 500;
-		this.barTrack = { start : time, top : this.topBar.y, bottom : this.bottomBar.y, targetTop : this.topBar.y + delta, targetBottom : this.bottomBar.y - delta};
-	}
-	,sugarBeat: function(b,time) {
-		if(b % this.zoomEvery == 0 && this.zoom < this.zoomIntensity * 1.35 && this.owner.camZooming) {
-			this.zoom += this.zoomIntensity * .015;
-			var fh = this.owner.camHUD;
-			fh.set_zoom(fh.zoom + this.zoomIntensity * .03);
-		}
-		if(this.pulse) {
-			this.zoomTo(time,this.pulseTarget,.3,"quad",true);
-		}
-		switch(b) {
-		case 1:
-			this.zoomEvery = 4;
-			this.zoomIntensity = .1;
-			this.pulseTarget = this.targetZoom + .15;
-			break;
-		case 2:
-			this.zoomTo(time,.95,.5,"quad");
-			break;
-		case 8:
-			this.zoomTo(time,1,.5,"quad",true);
-			break;
-		case 30:
-			this.targetZoom = .7;
-			this.zoomTo(time,1.2,.5,"quad",true);
-			break;
-		case 32:
-			this.bars(time,false);
-			this.zoomIntensity = 1.5;
-			break;
-		case 64:
-			this.bars(time,true);
-			this.zoomTo(time,1.2,2);
-			this.zoomIntensity = .1;
-			break;
-		case 76:
-			this.bars(time,false);
-			this.pulse = true;
-			this.zoomTo(time,.7,Conductor.crochet / 500);
-			this.zoomIntensity = 1.5;
-			this.zoomEvery = 2;
-			break;
-		case 142:
-			this.pulse = false;
-			this.zoomIntensity = .5;
-			this.zoomEvery = 4;
-			this.targetZoom = 1;
-			this.zoomTo(time,1.3,1.2);
-			break;
-		case 268:
-			flixel_FlxG.camera.flash(-1,2);
-			this.pulse = false;
-			break;
-		case 300:
-			this.shade(time,.35);
-			this.zoomIntensity = .5;
-			this.zoomEvery = 4;
-			this.zoomTo(time,.9,2);
-			break;
-		case 336:
-			this.shade(time,0);
-			this.pulse = true;
-			this.zoomIntensity = 1.5;
-			this.zoomEvery = 2;
-			this.zoomTo(time,.7,Conductor.crochet / 500);
-			break;
-		case 204:case 368:
-			this.zoomTo(time,.7,1);
-			this.shade(time,0);
-			this.bars(time,false);
-			this.zoomIntensity = 1.5;
-			this.zoomEvery = 2;
-			this.pulse = true;
-			break;
-		case 172:case 352:case 384:
-			this.zoomTo(time,1,2);
-			this.shade(time,.35);
-			this.bars(time,true);
-			break;
-		case 400:
-			this.zoomTo(time,1.3,2,"sine",true);
-			this.targetZoom = 1.25;
-			this.pulse = false;
-			this.zoomIntensity = .1;
-			this.zoomEvery = 16;
-			break;
-		case 412:
-			this.zoomTo(time,.7,2);
-			this.bars(time,false);
-			this.shade(time,0);
-			break;
-		}
-	}
-	,update: function(time,elapsed) {
-		var nextStep = Math.floor(time / (60000 / PlayState.SONG.bpm / 4)) | 0;
-		var nextBeat = Math.floor(time / (60000 / PlayState.SONG.bpm)) | 0;
-		if(this.song == "enforcers" && time >= 0 && this.lastStep < 0) {
-			this.dim.set_alpha(0);
-			this.owner.camHUD.set_alpha(0);
-		}
-		if(this.song == "sugar-rush") {
-			while(this.beat < nextBeat) {
-				this.beat++;
-				var at = this.beat * 60000 / PlayState.SONG.bpm;
-				this.sample(at);
-				if(this.beat >= 0) {
-					this.sugarBeat(this.beat,at);
-				}
-			}
-			var s = 1338;
-			if(this.lastStep < s && nextStep >= s) {
-				var at = s * 60000 / PlayState.SONG.bpm / 4;
-				this.sample(at);
-				this.zoomTo(at,1.1,.5,"quad",true);
-			}
-			var s = 1340;
-			if(this.lastStep < s && nextStep >= s) {
-				var at = s * 60000 / PlayState.SONG.bpm / 4;
-				this.sample(at);
-				this.zoomTo(at,1.1,.5,"quad",true);
-			}
-			var s = 1342;
-			if(this.lastStep < s && nextStep >= s) {
-				var at = s * 60000 / PlayState.SONG.bpm / 4;
-				this.sample(at);
-				this.zoomTo(at,1.1,.5,"quad",true);
-			}
-			this.sample(time);
-			if(this.zoomTrack == null) {
-				this.zoom += (this.targetZoom - this.zoom) * (1 - Math.exp(-elapsed * 3));
-			}
-		} else {
-			this.zoom += (this.targetZoom - this.zoom) * (1 - Math.exp(-elapsed * 3));
-			if(nextBeat > this.beat && time >= 0 && nextBeat % this.zoomEvery == 0 && this.owner.camZooming) {
-				this.zoom += .015;
-			}
-			this.beat = nextBeat;
-		}
-		var section = Math.max(0,time) / (60000 / PlayState.SONG.bpm * 4) | 0;
-		var key = section < PlayState.SONG.notes.length && PlayState.SONG.notes[section].mustHitSection ? "BF" : "DAD";
-		var point = this.points.h[key];
-		var q = 1 - Math.exp(-elapsed * 3);
-		if(this.chartCamera != null) {
-			this.chartCamera.update(time,elapsed);
-		} else {
-			if(this.readyLoud == null) {
-				var fh = this.owner.camFollow;
-				fh.set_x(fh.x + (point[0] - this.owner.camFollow.x) * q);
-				var fh = this.owner.camFollow;
-				fh.set_y(fh.y + (point[1] - this.owner.camFollow.y) * q);
-			}
-			flixel_FlxG.camera.set_zoom(this.zoom);
-			var fh = this.owner.camHUD;
-			fh.set_zoom(fh.zoom + (1 - this.owner.camHUD.zoom) * (1 - Math.exp(-elapsed * 3)));
-		}
-		if(this.readyLoud != null) {
-			this.readyLoud.update(time);
-		}
-		if(this.ocSongs != null) {
-			this.ocSongs.update(time,elapsed);
-		}
-		if(this.nft != null) {
-			this.nft.update(time,elapsed);
-		}
-		if(this.glitched != null) {
-			this.glitched.update(time,elapsed);
-		}
-		this.owner.frustStage.sync(time,elapsed);
-		var text = "";
-		var _g = 0;
-		var _g1 = this.captions;
-		while(_g < _g1.length) {
-			var cue = _g1[_g];
-			++_g;
-			if(time >= cue.startTime && time < cue.endTime) {
-				text = cue.text;
-			}
-		}
-		if(this.song == "enforcers" && time >= 73000) {
-			text = "The chart was unfinished";
-		}
-		this.owner.applecoreSubtitles.set_text(text);
-		var seconds = Math.max(0,time) / 1000 | 0;
-		this.owner.applecoreClock.set_text((seconds / 60 | 0) + ":" + (seconds % 60 < 10 ? "0" : "") + seconds % 60);
-		this.lastStep = nextStep;
-	}
-	,destroy: function() {
-		if(this.readyLoud != null) {
-			this.readyLoud.destroy();
-		}
-		if(this.nft != null) {
-			this.nft.destroy();
-		}
-		if(this.glitched != null) {
-			this.glitched.destroy();
-		}
-	}
-	,__class__: GoldenFrustExtras
-};
-var GoldenFrustStage = function(song) {
-	this.sceneLayers = new haxe_ds_StringMap();
-	this.ocActors = new haxe_ds_StringMap();
-	this.shaderTime = 0;
-	flixel_group_FlxTypedGroup.call(this);
-	switch(song) {
-	case "aug":
-		this.back = this.layer(song,"bg",0,0,1.35);
-		var _this = this.back;
-		var axes = flixel_util_FlxAxes.XY;
-		var tmp;
-		switch(axes._hx_index) {
-		case 0:case 2:
-			tmp = true;
-			break;
-		default:
-			tmp = false;
-		}
-		if(tmp) {
-			_this.set_x((flixel_FlxG.width - _this.get_width()) / 2);
-		}
-		var tmp;
-		switch(axes._hx_index) {
-		case 1:case 2:
-			tmp = true;
-			break;
-		default:
-			tmp = false;
-		}
-		if(tmp) {
-			_this.set_y((flixel_FlxG.height - _this.get_height()) / 2);
-		}
-		break;
-	case "cooking-lesson":
-		var back = this.layer(song,"cooking_lesson",-600,-200);
-		back.scrollFactor.set();
-		this.glitch = new GoldenGlitchShader();
-		if(!GoldenQuality.superLow) {
-			back.shader = this.glitch;
-		}
-		this.sizedLayer(song,"zamb_set",-706,-267,2611,1232);
-		this.sizedLayer(song,"zamb_lights",-757,-424,2611,1148);
-		this.sizedLayer(song,"zamb_floor",-987,76,3288,1507);
-		break;
-	case "doughboy":
-		this.back = this.layer(song,"breadworld",0,0,1.35);
-		var _this = this.back;
-		var axes = flixel_util_FlxAxes.XY;
-		var tmp;
-		switch(axes._hx_index) {
-		case 0:case 2:
-			tmp = true;
-			break;
-		default:
-			tmp = false;
-		}
-		if(tmp) {
-			_this.set_x((flixel_FlxG.width - _this.get_width()) / 2);
-		}
-		var tmp;
-		switch(axes._hx_index) {
-		case 1:case 2:
-			tmp = true;
-			break;
-		default:
-			tmp = false;
-		}
-		if(tmp) {
-			_this.set_y((flixel_FlxG.height - _this.get_height()) / 2);
-		}
-		break;
-	case "enforcers":
-		this.layer(song,"first_bg_back",-300,-100);
-		this.layer(song,"first_bg",-300,-100);
-		break;
-	case "gift-card":
-		var name = "bg_junk";
-		var sprite = this.layer(song,"pixel/" + name,-1710,-1251,4);
-		var parallax = name == "bg_junk" ? 0.5 : name == "upper_junk" ? 1.25 : 1;
-		sprite.scrollFactor.set(parallax,parallax);
-		var name = "main_junk";
-		var sprite = this.layer(song,"pixel/" + name,-1710,-1251,4);
-		var parallax = name == "bg_junk" ? 0.5 : name == "upper_junk" ? 1.25 : 1;
-		sprite.scrollFactor.set(parallax,parallax);
-		var name = "upper_junk";
-		var sprite = this.layer(song,"pixel/" + name,-1710,-1251,4);
-		var parallax = name == "bg_junk" ? 0.5 : name == "upper_junk" ? 1.25 : 1;
-		sprite.scrollFactor.set(parallax,parallax);
-		break;
-	case "keyboard":
-		this.back = this.layer(song,"ocWeek/keyboard",-600,-200);
-		this.scaleOnly(this.back,1.25);
-		this.glitchBack(this.back);
-		this.oc(song,"ringi",-500,70);
-		this.oc(song,"bambom-nutty",325,140,"bg",.9);
-		this.oc(song,"bendu",-100,120,"huh");
-		this.ocActors.h["bendu"].set_alpha(.0001);
-		break;
-	case "kooky":
-		this.back = this.layer(song,"yoMamaSoBrown/sdfsdfsdfv-min",229,flixel_FlxG.save.data.downscroll ? 48 : 298);
-		this.back.setGraphicSize(448,0);
-		this.back.updateHitbox();
-		this.back.scrollFactor.set();
-		break;
-	case "lofthouse":
-		this.back = this.layer(song,"loftbg",-600,-400,.9);
-		break;
-	case "nft":
-		this.back = this.layer(song,"bg",-1600,-900,3);
-		this.back.scrollFactor.set(.3,.3);
-		this.wavy(this.back,.5,.6,.2);
-		var chains = this.layer(song,"chains",-1400,-760,3);
-		chains.scrollFactor.set(.6,.6);
-		this.ground = this.layer(song,"ground",-1500,-880,3);
-		break;
-	case "nutty":
-		this.back = this.layer(song,"ocWeek/strawberries",-800,-400,1.5);
-		this.back.set_antialiasing(!GoldenQuality.superLow);
-		this.glitchBack(this.back);
-		this.oc(song,"bendu",-550,170,"watch");
-		this.oc(song,"ringi",-200,20,"wtf");
-		break;
-	case "ready-loud":
-		var name = "back_hallway";
-		var sprite = this.layer(song,name,0,0);
-		sprite.setGraphicSize(0,917);
-		sprite.updateHitbox();
-		var axes = flixel_util_FlxAxes.XY;
-		var tmp;
-		switch(axes._hx_index) {
-		case 0:case 2:
-			tmp = true;
-			break;
-		default:
-			tmp = false;
-		}
-		if(tmp) {
-			sprite.set_x((flixel_FlxG.width - sprite.get_width()) / 2);
-		}
-		var tmp;
-		switch(axes._hx_index) {
-		case 1:case 2:
-			tmp = true;
-			break;
-		default:
-			tmp = false;
-		}
-		if(tmp) {
-			sprite.set_y((flixel_FlxG.height - sprite.get_height()) / 2);
-		}
-		sprite.scrollFactor.set();
-		sprite.set_antialiasing(!GoldenQuality.superLow);
-		if(name == "room") {
-			this.room = sprite;
-		}
-		if(name == "light_switch") {
-			this.light = sprite;
-		}
-		var name = "room";
-		var sprite = this.layer(song,name,0,0);
-		sprite.setGraphicSize(0,917);
-		sprite.updateHitbox();
-		var axes = flixel_util_FlxAxes.XY;
-		var tmp;
-		switch(axes._hx_index) {
-		case 0:case 2:
-			tmp = true;
-			break;
-		default:
-			tmp = false;
-		}
-		if(tmp) {
-			sprite.set_x((flixel_FlxG.width - sprite.get_width()) / 2);
-		}
-		var tmp;
-		switch(axes._hx_index) {
-		case 1:case 2:
-			tmp = true;
-			break;
-		default:
-			tmp = false;
-		}
-		if(tmp) {
-			sprite.set_y((flixel_FlxG.height - sprite.get_height()) / 2);
-		}
-		sprite.scrollFactor.set();
-		sprite.set_antialiasing(!GoldenQuality.superLow);
-		if(name == "room") {
-			this.room = sprite;
-		}
-		if(name == "light_switch") {
-			this.light = sprite;
-		}
-		var name = "light_switch";
-		var sprite = this.layer(song,name,0,0);
-		sprite.setGraphicSize(0,917);
-		sprite.updateHitbox();
-		var axes = flixel_util_FlxAxes.XY;
-		var tmp;
-		switch(axes._hx_index) {
-		case 0:case 2:
-			tmp = true;
-			break;
-		default:
-			tmp = false;
-		}
-		if(tmp) {
-			sprite.set_x((flixel_FlxG.width - sprite.get_width()) / 2);
-		}
-		var tmp;
-		switch(axes._hx_index) {
-		case 1:case 2:
-			tmp = true;
-			break;
-		default:
-			tmp = false;
-		}
-		if(tmp) {
-			sprite.set_y((flixel_FlxG.height - sprite.get_height()) / 2);
-		}
-		sprite.scrollFactor.set();
-		sprite.set_antialiasing(!GoldenQuality.superLow);
-		if(name == "room") {
-			this.room = sprite;
-		}
-		if(name == "light_switch") {
-			this.light = sprite;
-		}
-		break;
-	case "slices":
-		var back = this.layer(song,"slices",0,0,1.35);
-		var axes = flixel_util_FlxAxes.XY;
-		var tmp;
-		switch(axes._hx_index) {
-		case 0:case 2:
-			tmp = true;
-			break;
-		default:
-			tmp = false;
-		}
-		if(tmp) {
-			back.set_x((flixel_FlxG.width - back.get_width()) / 2);
-		}
-		var tmp;
-		switch(axes._hx_index) {
-		case 1:case 2:
-			tmp = true;
-			break;
-		default:
-			tmp = false;
-		}
-		if(tmp) {
-			back.set_y((flixel_FlxG.height - back.get_height()) / 2);
-		}
-		break;
-	case "strawberry":
-		this.back = this.layer(song,"ocWeek/bom",-700,-400);
-		this.scaleOnly(this.back,1.2);
-		this.back.scrollFactor.set();
-		this.glitchBack(this.back,.05,2.5,1.25);
-		this.overlay = this.layer(song,"ocWeek/ysm",0,0,2);
-		var _this = this.overlay;
-		var axes = flixel_util_FlxAxes.XY;
-		var tmp;
-		switch(axes._hx_index) {
-		case 0:case 2:
-			tmp = true;
-			break;
-		default:
-			tmp = false;
-		}
-		if(tmp) {
-			_this.set_x((flixel_FlxG.width - _this.get_width()) / 2);
-		}
-		var tmp;
-		switch(axes._hx_index) {
-		case 1:case 2:
-			tmp = true;
-			break;
-		default:
-			tmp = false;
-		}
-		if(tmp) {
-			_this.set_y((flixel_FlxG.height - _this.get_height()) / 2);
-		}
-		var fh = this.overlay;
-		fh.set_x(fh.x + 300);
-		var fh = this.overlay;
-		fh.set_y(fh.y - 150);
-		this.oc(song,"ringi",200,0);
-		this.oc(song,"bendu",-450,20);
-		this.oc(song,"bambom",-50,165,"flung");
-		this.ocActors.h["bambom"].set_alpha(.0001);
-		break;
-	case "sugar-rush":
-		this.layer(song,"pissing_too",-1130,0,2.08725926);
-		break;
-	case "tantalum":
-		this.back = this.layer(song,"back",100,-85);
-		this.scaleOnly(this.back,2);
-		this.back.scrollFactor.set(.15,.15);
-		this.wavy(this.back,.01,4,1.75);
-		var front = new flixel_FlxSprite(this.back.x,this.back.y + 200);
-		var key = "golden/frustsongs/" + song + "/front";
-		var library = GoldenFrustExtras.library(song);
-		var potatoKey = key + "_potato";
-		front.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE",library),Paths.getPath("images/" + key + ".xml","TEXT",library)));
-		front.animation.addByPrefix("idle","front",24,true);
-		front.animation.play("idle");
-		this.scaleOnly(front,2.2);
-		front.scrollFactor.set(.45,.45);
-		this.add(front);
-		this.oc(song,"bambom",-600,190);
-		this.oc(song,"ringi",-50,120,"walk");
-		this.ocActors.h["ringi"].set_alpha(.000001);
-		this.oc(song,"bendu",-100,20);
-		break;
-	case "the-big-dingle":
-		this.back = this.layer(song,"sky",-100,0,2);
-		this.sceneLayers.h["sky"] = this.back;
-		this.back.scrollFactor.set(.1,.1);
-		var city = this.layer(song,"city",-10,-50,2);
-		this.sceneLayers.h["city"] = city;
-		city.scrollFactor.set(.3,.3);
-		var this1 = this.sceneLayers;
-		var value = this.layer(song,"behindTrain",-40,47.5,2);
-		this1.h["behindTrain"] = value;
-		var this1 = this.sceneLayers;
-		var value = this.layer(song,"street",-40,47.5,2);
-		this1.h["street"] = value;
-		var name = "sludd";
-		var sprite = this.layer(song,name,name == "sand" || name == "tree" ? -840 : 0,name == "sand" || name == "tree" ? 20 : 0,2);
-		sprite.set_visible(false);
-		this.sceneLayers.h[name] = sprite;
-		var name = "water";
-		var sprite = this.layer(song,name,name == "sand" || name == "tree" ? -840 : 0,name == "sand" || name == "tree" ? 20 : 0,2);
-		sprite.set_visible(false);
-		this.sceneLayers.h[name] = sprite;
-		var name = "sand";
-		var sprite = this.layer(song,name,name == "sand" || name == "tree" ? -840 : 0,name == "sand" || name == "tree" ? 20 : 0,2);
-		sprite.set_visible(false);
-		this.sceneLayers.h[name] = sprite;
-		var name = "tree";
-		var sprite = this.layer(song,name,name == "sand" || name == "tree" ? -840 : 0,name == "sand" || name == "tree" ? 20 : 0,2);
-		sprite.set_visible(false);
-		this.sceneLayers.h[name] = sprite;
-		break;
-	default:
-		throw haxe_Exception.thrown("Missing reconstructed extra stage: " + song);
-	}
-};
-$hxClasses["GoldenFrustStage"] = GoldenFrustStage;
-GoldenFrustStage.__name__ = "GoldenFrustStage";
-GoldenFrustStage.__super__ = flixel_group_FlxTypedGroup;
-GoldenFrustStage.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
-	glitch: null
-	,wave: null
-	,shaderTime: null
-	,back: null
-	,overlay: null
-	,ground: null
-	,ocActors: null
-	,oc: function(song,id,x,y,state,scale) {
-		if(scale == null) {
-			scale = 1;
-		}
-		if(state == null) {
-			state = "bg";
-		}
-		var actor = new GoldenOCActor(song,id,x,y,state);
-		if(scale != 1) {
-			this.scaleOnly(actor,scale);
-		}
-		actor.applyStateOffset();
-		this.ocActors.h[id] = actor;
-		this.add(actor);
-	}
-	,glitchBack: function(sprite,amplitude,frequency,speed) {
-		if(speed == null) {
-			speed = 2;
-		}
-		if(frequency == null) {
-			frequency = 5;
-		}
-		if(amplitude == null) {
-			amplitude = .1;
-		}
-		this.glitch = new GoldenGlitchShader();
-		this.glitch.uWaveAmplitude.value[0] = amplitude;
-		this.glitch.uFrequency.value[0] = frequency;
-		this.glitch.uSpeed.value[0] = speed;
-		if(!GoldenQuality.superLow) {
-			sprite.shader = this.glitch;
-		}
-	}
-	,wavy: function(sprite,amplitude,frequency,speed) {
-		this.wave = new GoldenWavyShader();
-		this.wave.uWaveAmplitude.value[0] = amplitude;
-		this.wave.uFrequency.value[0] = frequency;
-		this.wave.uSpeed.value[0] = speed;
-		if(!GoldenQuality.superLow) {
-			sprite.shader = this.wave;
-		}
-	}
-	,room: null
-	,light: null
-	,sceneLayers: null
-	,layer: function(song,name,x,y,scale) {
-		if(scale == null) {
-			scale = 1;
-		}
-		var sprite = new flixel_FlxSprite(x,y).loadGraphic(Paths.getPath("images/" + ("golden/frustsongs/" + song + "/" + name) + ".png","IMAGE",GoldenFrustExtras.library(song)));
-		sprite.scale.set(scale,scale);
-		sprite.updateHitbox();
-		sprite.origin.set();
-		sprite.offset.set();
-		sprite.set_antialiasing(false);
-		sprite.set_active(false);
-		this.add(sprite);
-		return sprite;
-	}
-	,sizedLayer: function(song,name,x,y,width,height) {
-		var sprite = this.layer(song,name,x,y);
-		sprite.setGraphicSize(width,height);
-		sprite.updateHitbox();
-		sprite.origin.set();
-		sprite.offset.set();
-		return sprite;
-	}
-	,scaleOnly: function(sprite,value) {
-		sprite.scale.set(value,value);
-		sprite.origin.set(sprite.frameWidth / 2,sprite.frameHeight / 2);
-		sprite.offset.set();
-	}
-	,sync: function(time,elapsed) {
-		this.shaderTime += Math.max(0,elapsed);
-		if(this.glitch != null) {
-			this.glitch.uTime.value[0] = this.shaderTime;
-		}
-		if(this.wave != null) {
-			this.wave.iTime.value[0] = this.shaderTime;
-		}
-	}
-	,__class__: GoldenFrustStage
-});
-var GoldenFrustration = function(owner) {
-	this.chairStart = 275604.395604395599;
-	this.lastTime = -1;
-	this.lastStep = -1;
-	this.angry = false;
-	this.owner = owner;
-	this.mods = new GoldenFrustrationMods();
-	GoldenHoldPath.frustration = this.mods;
-	owner.dad.setPosition(-76,22);
-	owner.gf.setReferenceScale(0.9);
-	owner.gf.setPosition(393,-31);
-	owner.gf.scrollFactor.set(1,1);
-	owner.boyfriend.setReferenceScale(0.93);
-	owner.boyfriend.setPosition(950,440);
-	this.camera = new GoldenChartCamera(owner,JSON.parse(openfl_utils_Assets.getText(Paths.getPath("data/" + "golden/frustration/events" + ".json","TEXT","frustration"))),182,0.7);
-	var idle = owner.dad.frames.frames[owner.dad.animation._animations.h["idle0"].frames[0]];
-	this.camera.focuses.h["DAD"] = [-76 + (idle.offset.x + idle.frame.width / 2) * owner.dad.scale.x - 80,22 + (idle.offset.y + idle.frame.height / 2) * owner.dad.scale.y];
-	var bounds = JSON.parse(openfl_utils_Assets.getText(Paths.getPath("data/" + "golden/characters/bf-bounds" + ".json","TEXT",null))).reference;
-	this.camera.focuses.h["BF"] = [owner.boyfriend.x + (bounds.x + bounds.width / 2) * 0.93 - 60,owner.boyfriend.y + (bounds.y + bounds.height / 2) * 0.93];
-	this.camera.focuses.h["GF"] = [owner.gf.x + 75,this.camera.focuses.h["DAD"][1] + 50];
-	owner.camFollow.setPosition(this.camera.focuses.h["GF"][0],this.camera.focuses.h["GF"][1]);
-	owner.healthBar.createFilledBar(-12238874,-13520687);
-	this.backdrop = new flixel_FlxSprite().makeGraphic(1280,720,-16777216);
-	this.backdrop.scrollFactor.set();
-	this.backdrop.set_cameras([owner.camHUD]);
-	this.backdrop.set_alpha(0);
-	owner.add(this.backdrop);
-	this.closeup = new flixel_FlxSprite();
-	var potatoKey = "golden/frustration/dave_closeup" + "_potato";
-	this.closeup.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","frustration"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","frustration"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","frustration"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","frustration")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/frustration/dave_closeup" + ".png","IMAGE","frustration"),Paths.getPath("images/" + "golden/frustration/dave_closeup" + ".xml","TEXT","frustration")));
-	var pair_0 = "idle";
-	var pair_1 = "closeup";
-	this.closeup.animation.addByPrefix(pair_0,pair_1,24,true);
-	var pair_0 = "first";
-	var pair_1 = "firstglitch";
-	this.closeup.animation.addByPrefix(pair_0,pair_1,24,true);
-	var pair_0 = "second";
-	var pair_1 = "secondglitch";
-	this.closeup.animation.addByPrefix(pair_0,pair_1,24,true);
-	var pair_0 = "third";
-	var pair_1 = "third glitch";
-	this.closeup.animation.addByPrefix(pair_0,pair_1,24,true);
-	this.closeup.animation.play("idle");
-	this.closeup.scale.set(1.5,1.5);
-	this.closeup.updateHitbox();
-	var _this = this.closeup;
-	var axes = flixel_util_FlxAxes.X;
-	if(axes == null) {
-		axes = flixel_util_FlxAxes.XY;
-	}
-	var tmp;
-	switch(axes._hx_index) {
-	case 0:case 2:
-		tmp = true;
-		break;
-	default:
-		tmp = false;
-	}
-	if(tmp) {
-		_this.set_x((flixel_FlxG.width - _this.get_width()) / 2);
-	}
-	var tmp;
-	switch(axes._hx_index) {
-	case 1:case 2:
-		tmp = true;
-		break;
-	default:
-		tmp = false;
-	}
-	if(tmp) {
-		_this.set_y((flixel_FlxG.height - _this.get_height()) / 2);
-	}
-	this.closeup.set_y(flixel_FlxG.height - this.closeup.get_height());
-	this.closeup.set_alpha(0);
-	this.closeup.scrollFactor.set();
-	this.closeup.set_cameras([owner.camHUD]);
-	owner.add(this.closeup);
-	this.black = new flixel_FlxSprite().makeGraphic(1280,720,-16777216);
-	this.black.scrollFactor.set();
-	this.black.set_cameras([owner.camHUD]);
-	this.black.set_alpha(0);
-	owner.add(this.black);
-	owner.frustrationStage.screen.set_cameras([owner.camHUD]);
-	owner.insert(owner.members.indexOf(owner.strumLineNotes),owner.frustrationStage.screen);
-};
-$hxClasses["GoldenFrustration"] = GoldenFrustration;
-GoldenFrustration.__name__ = "GoldenFrustration";
-GoldenFrustration.idleAt = function(step) {
-	if(step >= 1600) {
-		return "-alt";
-	} else if(step >= 1152) {
-		return "2";
-	} else if(step >= 640) {
-		return "1";
-	} else {
-		return "";
-	}
-};
-GoldenFrustration.prototype = {
-	owner: null
-	,camera: null
-	,mods: null
-	,angry: null
-	,lastStep: null
-	,lastTime: null
-	,chairStart: null
-	,closeup: null
-	,backdrop: null
-	,black: null
-	,update: function(time,elapsed) {
-		var step = Math.max(0,time) / 82.4175824175824232 | 0;
-		var suffix = GoldenFrustration.idleAt(step);
-		this.owner.dad.idleSuffix = suffix;
-		this.angry = step >= 1600;
-		if(step >= 1600 && this.lastStep < 1600) {
-			this.owner.dad.playSpecialAnim("grr");
-		}
-		if(step >= 3232 && this.lastStep < 3232) {
-			this.owner.boyfriend.canAutoDance = false;
-			this.owner.boyfriend.playSpecialAnim("think");
-		}
-		if(step >= 3248 && this.lastStep < 3248) {
-			this.owner.boyfriend.playSpecialAnim("run");
-		}
-		this.camera.update(time,elapsed);
-		this.mods.update(this.owner,time);
-		this.owner.frustrationStage.sync(time);
-		var fade = Math.max(0,Math.min(1,(time - 271648.351648351643) / 1000));
-		this.closeup.set_alpha(fade);
-		this.backdrop.set_alpha(0);
-		this.owner.frustrationStage.screen.set_alpha(fade);
-		if(step >= 3296) {
-			var name = step >= 3328 ? "third" : step >= 3320 ? "second" : step >= 3312 ? "first" : "idle";
-			var start = (name == "third" ? 3328 : name == "second" ? 3320 : name == "first" ? 3312 : 3296) * 60000 / 182 / 4;
-			this.closeup.animation.play(name);
-			this.closeup.animation._curAnim.set_curFrame(((time - start) * 24 / 1000 | 0) % this.closeup.animation._curAnim.frames.length);
-			var _this = this.closeup.animation;
-			if(_this._curAnim != null) {
-				_this._curAnim.pause();
-			}
-			var q = Math.max(0,Math.min(1,(time - 271648.351648351643) / 5000));
-			this.closeup.scale.set(1.5 + 0.25 * q,1.5 + 0.25 * q);
-		}
-		var runEnd = 268525.641025641;
-		var collideEnd = runEnd + 833.333333333333371;
-		if(time >= runEnd && time < this.chairStart) {
-			this.owner.dad.canAutoDance = false;
-			this.owner.gf.canAutoDance = false;
-			if(this.lastTime < runEnd) {
-				this.owner.boyfriend.playSpecialAnim("collide");
-				this.owner.dad.playSpecialAnim("fall");
-				this.owner.gf.playSpecialAnim("huh");
-			}
-			this.owner.dad.set_x(-76 - Math.max(0,time - runEnd) / 10);
-			if(time >= collideEnd) {
-				var t = (time - collideEnd) / 1000;
-				this.owner.boyfriend.set_x(950 + 4000 * t + 500 * t * t);
-			}
-		}
-		if(step >= 3342) {
-			this.black.set_alpha(Math.min(1,(time - 275439.560439560446) / 164.835164835164846));
-		}
-		if(step >= 3344) {
-			this.closeup.set_visible(this.backdrop.set_visible(false));
-			this.black.set_alpha(Math.max(0,1 - (time - this.chairStart) / 500));
-			this.owner.dad.set_x(-76);
-			this.owner.dad.set_y(22);
-			if(this.lastStep < 3344) {
-				this.owner.dad.canAutoDance = false;
-				this.owner.dad.playSpecialAnim("chair");
-				this.owner.gf.canAutoDance = false;
-				this.owner.gf.playSpecialAnim("fall");
-				var _this = this.owner.gf.animation;
-				if(_this._curAnim != null) {
-					_this._curAnim.pause();
-				}
-			}
-			var frame = Math.min(89,(time - this.chairStart) * 24 / 1000 | 0) | 0;
-			this.owner.dad.playAnim("chair");
-			this.owner.dad.animation._curAnim.set_curFrame(frame);
-			var _this = this.owner.dad.animation;
-			if(_this._curAnim != null) {
-				_this._curAnim.pause();
-			}
-			var chairEnd = this.chairStart + 3750.;
-			if(time >= chairEnd) {
-				var fallFrame = (time - chairEnd) * 24 / 1000 | 0;
-				this.owner.gf.playSpecialAnim(fallFrame >= 46 ? "portalLoop" : "fall");
-				this.owner.gf.animation._curAnim.set_curFrame(fallFrame >= 46 ? (fallFrame - 46) % 12 : fallFrame);
-				var _this = this.owner.gf.animation;
-				if(_this._curAnim != null) {
-					_this._curAnim.pause();
-				}
-				var q = Math.min(1,(time - chairEnd) / 6000);
-				flixel_FlxG.camera.set_zoom(0.7 + -0.399999999999999967 * q);
-			}
-		}
-		if(step >= 3410) {
-			this.black.set_alpha(Math.min(1,(time - 281043.956043956045) / 5000));
-		}
-		var seconds = Math.max(0,time) / 1000 | 0;
-		this.owner.applecoreClock.set_text((seconds / 60 | 0) + ":" + (seconds % 60 < 10 ? "0" : "") + seconds % 60);
-		this.lastStep = step;
-		this.lastTime = time;
-	}
-	,__class__: GoldenFrustration
-};
-var GoldenFrustrationMods = function() {
-	this.downscroll = false;
-	this.dispatched = 0;
-	this.songTime = 0;
-	this.lastBeat = 0;
-	this.base = [];
-	this.tracks = [new haxe_ds_StringMap(),new haxe_ds_StringMap()];
-	this.values = [new haxe_ds_StringMap(),new haxe_ds_StringMap()];
-	this.index = 0;
-	var data = JSON.parse(openfl_utils_Assets.getText(Paths.getPath("data/" + "golden/frustration/modchart" + ".json","TEXT","frustration")));
-	this.defaults = data.defaults;
-	this.events = data.events;
-	var _g = 0;
-	var _g1 = Reflect.fields(this.defaults);
-	while(_g < _g1.length) {
-		var name = _g1[_g];
-		++_g;
-		this.values[0].h[name] = Reflect.field(this.defaults,name);
-	}
-	var name = "zoom";
-	this.values[0].h[name] = 100;
-	var name = "zoomx";
-	this.values[0].h[name] = 100;
-	var name = "zoomy";
-	this.values[0].h[name] = 100;
-	this.values[0].h["xmod"] = 1;
-	var _g = 0;
-	var _g1 = Reflect.fields(this.defaults);
-	while(_g < _g1.length) {
-		var name = _g1[_g];
-		++_g;
-		this.values[1].h[name] = Reflect.field(this.defaults,name);
-	}
-	var name = "zoom";
-	this.values[1].h[name] = 100;
-	var name = "zoomx";
-	this.values[1].h[name] = 100;
-	var name = "zoomy";
-	this.values[1].h[name] = 100;
-	this.values[1].h["xmod"] = 1;
-};
-$hxClasses["GoldenFrustrationMods"] = GoldenFrustrationMods;
-GoldenFrustrationMods.__name__ = "GoldenFrustrationMods";
-GoldenFrustrationMods.easing = function(name,q) {
-	q = Math.max(0,Math.min(1,q));
-	switch(name) {
-	case "inBack":
-		return q * q * (2.70158 * q - 1.70158);
-	case "inCubic":
-		return q * q * q;
-	case "inExpo":
-		return Math.pow(2,10 * (q - 1));
-	case "inOutCubic":
-		var t = q;
-		if(t <= .5) {
-			return t * t * t * 4;
-		} else {
-			return 1 + --t * t * t * 4;
-		}
-		break;
-	case "inOutExpo":
-		return flixel_tweens_FlxEase.expoInOut(q);
-	case "inQuad":
-		return q * q;
-	case "inSine":
-		return -Math.cos(flixel_tweens_FlxEase.PI2 * q) + 1;
-	case "outCubic":
-		var t = q;
-		return 1 + --t * t * t;
-	case "outExpo":
-		return -Math.pow(2,-10 * q) + 1;
-	case "outQuad":
-		return -q * (q - 2);
-	case "outSine":
-		return Math.sin(flixel_tweens_FlxEase.PI2 * q);
-	default:
-		return q;
-	}
-};
-GoldenFrustrationMods.fastSin = function(angle) {
-	var q = angle * 0.3183098862;
-	if(q > 1) {
-		q -= (Math.ceil(q) | 0) & -2;
-	} else if(q < -1) {
-		q += (Math.ceil(-q) | 0) & -2;
-	}
-	var a = q <= 0 ? 3.1 - ((q * 3.6 + 7.2) * q + 0.5) * q : ((q * 3.6 - 7.2) * q + 0.5) * q + 3.1;
-	return a * q;
-};
-GoldenFrustrationMods.triangle = function(angle) {
-	var q = (angle % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) / Math.PI;
-	if(q < 0.5) {
-		return q * 2;
-	} else if(q < 1.5) {
-		return 2 - q * 2;
-	} else {
-		return q * 2 - 4;
-	}
-};
-GoldenFrustrationMods.prototype = {
-	events: null
-	,defaults: null
-	,index: null
-	,values: null
-	,tracks: null
-	,base: null
-	,lastBeat: null
-	,songTime: null
-	,dispatched: null
-	,downscroll: null
-	,get: function(p,name,fallback) {
-		if(fallback == null) {
-			fallback = 0;
-		}
-		if(Object.prototype.hasOwnProperty.call(this.values[p].h,name)) {
-			return this.values[p].h[name];
-		} else {
-			return fallback;
-		}
-	}
-	,settle: function(beat) {
-		var h = this.tracks[0].h;
-		var name_h = h;
-		var name_keys = Object.keys(h);
-		var name_length = name_keys.length;
-		var name_current = 0;
-		while(name_current < name_length) {
-			var name = name_keys[name_current++];
-			var t = this.tracks[0].h[name];
-			var q = GoldenFrustrationMods.easing(t.ease,(beat - t.beat) / Math.max(0.000001,t.duration));
-			this.values[0].h[name] = t.from + (t.to - t.from) * q;
-			if(beat >= t.beat + t.duration) {
-				var _this = this.tracks[0];
-				if(Object.prototype.hasOwnProperty.call(_this.h,name)) {
-					delete(_this.h[name]);
-				}
-			}
-		}
-		var h = this.tracks[1].h;
-		var name_h = h;
-		var name_keys = Object.keys(h);
-		var name_length = name_keys.length;
-		var name_current = 0;
-		while(name_current < name_length) {
-			var name = name_keys[name_current++];
-			var t = this.tracks[1].h[name];
-			var q = GoldenFrustrationMods.easing(t.ease,(beat - t.beat) / Math.max(0.000001,t.duration));
-			this.values[1].h[name] = t.from + (t.to - t.from) * q;
-			if(beat >= t.beat + t.duration) {
-				var _this = this.tracks[1];
-				if(Object.prototype.hasOwnProperty.call(_this.h,name)) {
-					delete(_this.h[name]);
-				}
-			}
-		}
-	}
-	,advance: function(beat) {
-		while(this.lastBeat < beat) {
-			var next = Math.min(beat,this.lastBeat + 0.0126388888888888887);
-			var dt = (next - this.lastBeat) * 60 / 182;
-			this.settle((this.lastBeat + next) / 2);
-			var seconds = (this.lastBeat + next) * 30 / 182;
-			var amount = this.get(0,"classics") / 100;
-			if(!Object.prototype.hasOwnProperty.call(this.tracks[0].h,"angle")) {
-				var this1 = this.values[0];
-				var value = (this.get(0,"angle") + amount * 300 * (1 + Math.sin(2.5 * (seconds + this.get(0,"classicsoffset")))) * dt) % 360;
-				this1.h["angle"] = value;
-			}
-			var seconds1 = (this.lastBeat + next) * 30 / 182;
-			var amount1 = this.get(1,"classics") / 100;
-			if(!Object.prototype.hasOwnProperty.call(this.tracks[1].h,"angle")) {
-				var this2 = this.values[1];
-				var value1 = (this.get(1,"angle") + amount1 * 300 * (1 + Math.sin(2.5 * (seconds1 + this.get(1,"classicsoffset")))) * dt) % 360;
-				this2.h["angle"] = value1;
-			}
-			this.lastBeat = next;
-		}
-		this.settle(beat);
-	}
-	,update: function(owner,time) {
-		var beat = Math.max(0,time) * 182 / 60000;
-		while(this.index < this.events.length && this.events[this.index].beat <= beat) {
-			var event = this.events[this.index++];
-			this.advance(event.beat);
-			var _g = 0;
-			while(_g < 2) {
-				var p = _g++;
-				if(event.player != 0 && event.player != p + 1) {
-					continue;
-				}
-				var _g1 = 0;
-				var _g2 = Reflect.fields(event.values);
-				while(_g1 < _g2.length) {
-					var name = _g2[_g1];
-					++_g1;
-					if(name == "__moduloangles") {
-						var this1 = this.values[p];
-						var value = this.get(p,"angle") % 360;
-						this1.h["angle"] = value;
-						var _this = this.tracks[p];
-						if(Object.prototype.hasOwnProperty.call(_this.h,"angle")) {
-							delete(_this.h["angle"]);
-						}
-						continue;
-					}
-					var to = Reflect.field(event.values,name);
-					if(event.duration == 0) {
-						this.values[p].h[name] = to;
-						var _this1 = this.tracks[p];
-						if(Object.prototype.hasOwnProperty.call(_this1.h,name)) {
-							delete(_this1.h[name]);
-						}
-					} else {
-						var this2 = this.tracks[p];
-						var value1 = { from : this.get(p,name), to : to, beat : event.beat, duration : event.duration, ease : event.ease};
-						this2.h[name] = value1;
-					}
-				}
-			}
-			this.dispatched++;
-		}
-		this.advance(beat);
-		this.songTime = time;
-		if(this.base.length != owner.strumLineNotes.length) {
-			this.base = [];
-			var _g = 0;
-			var _g1 = owner.strumLineNotes.members;
-			while(_g < _g1.length) {
-				var s = _g1[_g];
-				++_g;
-				var frame = s.frames.frames[s.animation._animations.h["static"].frames[0]].sourceSize;
-				this.base.push({ x : s.x, y : s.y, sx : s.scale.x, sy : s.scale.y, cx : s.x + frame.x * s.scale.x / 2, cy : s.y + frame.y * s.scale.y / 2});
-			}
-		}
-		var _g = 0;
-		var _g1 = owner.strumLineNotes.length;
-		while(_g < _g1) {
-			var i = _g++;
-			var s = owner.strumLineNotes.members[i];
-			var p = i < 4 ? 0 : 1;
-			var lane = i % 4;
-			var frame = s.frames.frames[s.animation._animations.h["static"].frames[0]].sourceSize;
-			var middle = (this.base[p * 4].cx + this.base[p * 4 + 3].cx) / 2;
-			var laneCenter = this.base[i].cx;
-			this.downscroll = flixel_FlxG.save.data.downscroll;
-			var radians = this.get(p,"rotationz") * Math.PI / 180;
-			var cos = Math.cos(radians);
-			var sin = Math.sin(radians);
-			var dx = (3 - 2 * lane) * Note.swagWidth * this.get(p,"flip") / 100;
-			dx += (lane % 2 == 0 ? 1 : -1) * Note.swagWidth * this.get(p,"invert") / 100 + this.lateral(p,lane,0);
-			s.scale.set(this.base[i].sx * this.scaleX(p,lane),this.base[i].sy * this.scaleY(p,lane));
-			var localX = laneCenter - middle + dx;
-			var localY = this.base[i].cy - flixel_FlxG.height / 2 + this.get(p,"y") + this.get(p,"movey" + lane) + this.tipsy(p,lane);
-			s.set_x(middle + (localX * cos - localY * sin) * this.fieldScaleX(p) - frame.x * s.scale.x / 2);
-			s.set_y(flixel_FlxG.height / 2 + (localX * sin + localY * cos) * this.fieldScaleY(p) - frame.y * s.scale.y / 2);
-			s.set_angle(this.get(p,"rotationz") + this.get(p,"angle") + this.get(p,"angle" + lane) + this.get(p,"confusionoffset" + lane) * 180 / (Math.PI * 100));
-			s.set_alpha(Math.max(0,Math.min(1,1 - this.get(p,"dark") / 100)));
-		}
-	}
-	,fieldScaleX: function(p) {
-		return this.get(p,"zoom",100) / 100 * this.get(p,"zoomx",100) / 100;
-	}
-	,fieldScaleY: function(p) {
-		return this.get(p,"zoom",100) / 100 * this.get(p,"zoomy",100) / 100;
-	}
-	,scaleX: function(p,lane) {
-		return Math.max(0.01,this.fieldScaleX(p) * (1 - (this.get(p,"tiny") + this.get(p,"tiny" + lane)) / 200) * (1 - this.get(p,"tinyx") / 200) * (1 - this.get(p,"mini") / 200));
-	}
-	,scaleY: function(p,lane) {
-		return Math.max(0.01,this.fieldScaleY(p) * (1 - (this.get(p,"tiny") + this.get(p,"tiny" + lane)) / 200) * (1 - this.get(p,"tinyy") / 200) * (1 - this.get(p,"mini") / 200));
-	}
-	,speed: function(p) {
-		return 2.8 * this.get(p,"xmod",1);
-	}
-	,drunk: function(p,lane,distance) {
-		return this.get(p,"drunk") / 100 * 56 * GoldenFrustrationMods.fastSin(this.songTime * 182 / 60000 + lane * 0.2 + distance * 10 / 720 + 1.570796327);
-	}
-	,lateral: function(p,lane,distance) {
-		var amount = (this.get(p,"zigzag") + this.get(p,"zigzag" + lane)) / 100;
-		var period = 1 + (this.get(p,"zigzagperiod") + this.get(p,"zigzagperiod" + lane)) / 100;
-		var offset = this.get(p,"zigzagoffset") + this.get(p,"zigzagoffset" + lane);
-		return this.drunk(p,lane,distance) + amount * 56 * GoldenFrustrationMods.triangle((distance + offset) * Math.PI / (112 * period));
-	}
-	,headAngle: function(p,lane,time,now,baseAngle) {
-		return baseAngle + (this.get(p,"dizzy") + this.get(p,"dizzy" + lane)) / 100 * this.rawDistance(time,now,p) * 0.5;
-	}
-	,tipsy: function(p,lane) {
-		return this.get(p,"tipsy") / 100 * 44.8 * GoldenFrustrationMods.fastSin(this.songTime * 182 / 60000 * 1.2 + lane * 1.8 + 1.570796327);
-	}
-	,rawDistance: function(time,now,p) {
-		var y = (time - now) * GoldenNoteGeometry.velocity(this.speed(p));
-		if(y >= 0) {
-			var delta = this.get(p,"brake") / 100 * (y * y / 720 - y);
-			y += Math.max(-400,Math.min(400,delta)) + this.get(p,"wave") / 100 * 20 * GoldenFrustrationMods.fastSin(y / 38);
-		}
-		return y;
-	}
-	,distance: function(time,now,p,down) {
-		return this.rawDistance(time,now,p) * (down ? -1 : 1) * this.fieldScaleY(p);
-	}
-	,pathX: function(time,now,anchor,lane,opponent) {
-		var p = opponent ? 0 : 1;
-		var distance = this.rawDistance(time,now,p);
-		var radians = this.get(p,"rotationz") * Math.PI / 180;
-		var dx = this.lateral(p,lane,distance) - this.lateral(p,lane,0);
-		return anchor + (dx * Math.cos(radians) - distance * (this.downscroll ? -1 : 1) * Math.sin(radians)) * this.fieldScaleX(p);
-	}
-	,pathY: function(time,now,anchor,lane,opponent,down) {
-		var p = opponent ? 0 : 1;
-		var distance = this.rawDistance(time,now,p);
-		var radians = this.get(p,"rotationz") * Math.PI / 180;
-		var dx = this.lateral(p,lane,distance) - this.lateral(p,lane,0);
-		return anchor + (dx * Math.sin(radians) + distance * (down ? -1 : 1) * Math.cos(radians)) * this.fieldScaleY(p);
-	}
-	,position: function(note,owner) {
-		var p = note.mustPress ? 1 : 0;
-		var strum = owner.strumLineNotes.members[note.noteData + (p == 1 ? 4 : 0)];
-		var now = Conductor.songPosition;
-		var down = flixel_FlxG.save.data.downscroll;
-		note.curvedHold = true;
-		var staticSize = strum.frames.frames[strum.animation._animations.h["static"].frames[0]].sourceSize;
-		var cx = strum.x + staticSize.x * strum.scale.x / 2;
-		var cy = strum.y + staticSize.y * strum.scale.y / 2;
-		var sx = 0.7 * this.scaleX(p,note.noteData);
-		var sy = 0.7 * this.scaleY(p,note.noteData);
-		if(Math.abs(note.scale.x - sx) > 0.000001 || !note.isSustainNote && Math.abs(note.scale.y - sy) > 0.000001) {
-			note.scale.set_x(sx);
-			if(!note.isSustainNote) {
-				note.scale.set_y(sy);
-			}
-			note.updateHitbox();
-		}
-		note.positionOnStrum(now,cy - Note.swagWidth / 2,this.speed(p),down,cx - Note.swagWidth / 2);
-		if(note.endCap != null) {
-			if(Math.abs(note.endCap.scale.x - note.scale.x) > 0.000001 || Math.abs(note.endCap.scale.y - sy) > 0.000001) {
-				note.endCap.scale.set(note.scale.x,sy);
-				note.endCap.updateHitbox();
-			}
-			note.endCap.origin.set();
-			note.endCap.offset.set();
-		}
-		if(!note.isSustainNote) {
-			note.set_angle(this.headAngle(p,note.noteData,note.strumTime,now,strum.angle));
-			note.origin.set(note.frameWidth / 2,note.frameHeight / 2);
-			note.offset.set();
-			note.set_x(this.pathX(note.strumTime,now,cx,note.noteData,!note.mustPress) - note.origin.x);
-			note.set_y(this.pathY(note.strumTime,now,cy,note.noteData,!note.mustPress,down) - note.origin.y);
-		}
-	}
-	,__class__: GoldenFrustrationMods
-};
-var GoldenFrustrationPreviewState = function(TransIn,TransOut) {
-	PlayState.call(this,TransIn,TransOut);
-};
-$hxClasses["GoldenFrustrationPreviewState"] = GoldenFrustrationPreviewState;
-GoldenFrustrationPreviewState.__name__ = "GoldenFrustrationPreviewState";
-GoldenFrustrationPreviewState.__super__ = PlayState;
-GoldenFrustrationPreviewState.prototype = $extend(PlayState.prototype,{
-	create: function() {
-		PlayerSettings.init();
-		flixel_FlxG.save.bind("funkin","ninjamuffin99");
-		flixel_FlxG.save.data.offset = Conductor.validOffset(flixel_FlxG.save.data.offset);
-		if(flixel_FlxG.save.data.downscroll == null) {
-			flixel_FlxG.save.data.downscroll = false;
-		}
-		if(flixel_FlxG.save.data.dfjk == null) {
-			flixel_FlxG.save.data.dfjk = false;
-		}
-		if(flixel_FlxG.save.data.accuracyDisplay == null) {
-			flixel_FlxG.save.data.accuracyDisplay = true;
-		}
-		PlayState.SONG = Song.loadFromJson("frustration","frustration");
-		PlayState.isStoryMode = false;
-		PlayState.storyDifficulty = 1;
-		PlayState.loadRep = false;
-		if(!openfl_utils_Assets.cache.hasSound("songs:assets/songs/" + "frustration".toLowerCase() + "/Inst." + "mp3") || !openfl_utils_Assets.cache.hasSound("songs:assets/songs/" + "frustration".toLowerCase() + "/Voices." + "mp3") || openfl_utils_Assets.getLibrary("frustration") == null) {
-			var nextState = LoadingState.getNextState(new GoldenFrustrationPreviewState(),false);
-			if(flixel_FlxG.game._state.switchTo(nextState)) {
-				flixel_FlxG.game._requestedState = nextState;
-			}
-			return;
-		}
-		PlayState.prototype.create.call(this);
-		var hint = new flixel_text_FlxText(0,650,1280,"FRUSTRATION MODCHART CHECK — health protected / Esc: title",18);
-		hint.set_alignment("center");
-		hint.set_cameras([this.camHUD]);
-		this.add(hint);
-	}
-	,startSong: function() {
-		PlayState.prototype.startSong.call(this);
-		var beat = 164.0;
-		var query = new URLSearchParams($global.location.search).get("beat");
-		var value = parseFloat(query);
-		if(isFinite(value)) {
-			beat = Math.max(0,Math.min(880,value));
-		}
-		var start = beat * 60000 / 182;
-		var _g = [];
-		var _g1 = 0;
-		var _g2 = this.unspawnNotes;
-		while(_g1 < _g2.length) {
-			var v = _g2[_g1];
-			++_g1;
-			if(v.sustainRoot.strumTime < start) {
-				_g.push(v);
-			}
-		}
-		var skipped = _g;
-		var _g = [];
-		var _g1 = 0;
-		var _g2 = this.unspawnNotes;
-		while(_g1 < _g2.length) {
-			var v = _g2[_g1];
-			++_g1;
-			if(v.sustainRoot.strumTime >= start) {
-				_g.push(v);
-			}
-		}
-		this.unspawnNotes = _g;
-		var _g = 0;
-		while(_g < skipped.length) {
-			var note = skipped[_g];
-			++_g;
-			note.destroy();
-		}
-		var time = 0.0;
-		while(time < start) {
-			var next = Math.min(start,time + 16.6666666666666679);
-			var dt = (next - time) / 1000;
-			this.dad.update(dt);
-			this.boyfriend.update(dt);
-			this.gf.update(dt);
-			this.frustration.update(next,dt);
-			time = next;
-		}
-		flixel_FlxG.sound.music.set_time(start);
-		this.vocals.set_time(start);
-		Conductor.songPosition = start;
-	}
-	,update: function(elapsed) {
-		var _this = flixel_FlxG.keys.justPressed;
-		if(_this.keyManager.checkStatusUnsafe(27,_this.status)) {
-			var nextState = new TitleState();
-			if(flixel_FlxG.game._state.switchTo(nextState)) {
-				flixel_FlxG.game._requestedState = nextState;
-			}
-			return;
-		}
-		this.health = 2;
-		PlayState.prototype.update.call(this,elapsed);
-	}
-	,__class__: GoldenFrustrationPreviewState
-});
-var GoldenFrustrationStage = function() {
-	flixel_group_FlxTypedGroup.call(this);
-	this.world = new flixel_addons_display_FlxBackdrop(Paths.getPath("images/" + "golden/frustration/frustables" + ".png","IMAGE","frustration"));
-	this.world.setPosition(-1000,-800);
-	this.glitch = new GoldenGlitchShader();
-	if(!GoldenQuality.superLow) {
-		this.world.shader = this.glitch;
-	}
-	this.world.scale.set(1.5,1.5);
-	this.world.updateHitbox();
-	this.world.origin.set();
-	this.world.offset.set();
-	this.add(this.world);
-	this.screen = new GoldenWavySprite();
-	this.screen.loadGraphic(Paths.getPath("images/" + "golden/frustration/frustables" + ".png","IMAGE","frustration"));
-	this.screen.scale.set(1.75,1.75);
-	this.screen.updateHitbox();
-	var _this = this.screen;
-	var axes = flixel_util_FlxAxes.XY;
-	var tmp;
-	switch(axes._hx_index) {
-	case 0:case 2:
-		tmp = true;
-		break;
-	default:
-		tmp = false;
-	}
-	if(tmp) {
-		_this.set_x((flixel_FlxG.width - _this.get_width()) / 2);
-	}
-	var tmp;
-	switch(axes._hx_index) {
-	case 1:case 2:
-		tmp = true;
-		break;
-	default:
-		tmp = false;
-	}
-	if(tmp) {
-		_this.set_y((flixel_FlxG.height - _this.get_height()) / 2);
-	}
-	this.screen.scrollFactor.set();
-	this.screen.set_alpha(0);
-	this.screen.waveShader.uSpeed.value[0] = 2;
-	this.screen.waveShader.uFrequency.value[0] = 2;
-	this.screen.waveShader.uWaveAmplitude.value[0] = 0.1;
-	this.screen.waveShader.wrap.value[0] = true;
-};
-$hxClasses["GoldenFrustrationStage"] = GoldenFrustrationStage;
-GoldenFrustrationStage.__name__ = "GoldenFrustrationStage";
-GoldenFrustrationStage.__super__ = flixel_group_FlxTypedGroup;
-GoldenFrustrationStage.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
-	world: null
-	,glitch: null
-	,screen: null
-	,sync: function(time) {
-		this.glitch.uTime.value[0] = Math.max(0,time) / 1000;
-		this.screen.waveShader.iTime.value[0] = Math.max(0,time) / 1000;
-	}
-	,__class__: GoldenFrustrationStage
 });
 var openfl_display_Shader = function(code) {
 	this.byteCode = code;
@@ -23533,6 +21702,2693 @@ flixel_graphics_tile_FlxGraphicsShader.prototype = $extend(openfl_display_Graphi
 	,hasTransform: null
 	,__class__: flixel_graphics_tile_FlxGraphicsShader
 });
+var GoldenEyesoreShader = function() {
+	if(this.__glFragmentSource == null) {
+		this.__glFragmentSource = "varying float openfl_Alphav;\n\t\tvarying vec4 openfl_ColorMultiplierv;\n\t\tvarying vec4 openfl_ColorOffsetv;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform bool openfl_HasColorTransform;\n\t\tuniform vec2 openfl_TextureSize;\n\t\tuniform sampler2D bitmap;\n\n\t\tuniform bool hasTransform;\n\t\tuniform bool hasColorTransform;\n\n\t\tvec4 flixel_texture2D(sampler2D bitmap, vec2 coord)\n\t\t{\n\t\t\tvec4 color = texture2D(bitmap, coord);\n\t\t\tif (!hasTransform)\n\t\t\t{\n\t\t\t\treturn color;\n\t\t\t}\n\n\t\t\tif (color.a == 0.0)\n\t\t\t{\n\t\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\n\t\t\t}\n\n\t\t\tif (!hasColorTransform)\n\t\t\t{\n\t\t\t\treturn color * openfl_Alphav;\n\t\t\t}\n\n\t\t\tcolor = vec4(color.rgb / color.a, color.a);\n\n\t\t\tmat4 colorMultiplier = mat4(0);\n\t\t\tcolorMultiplier[0][0] = openfl_ColorMultiplierv.x;\n\t\t\tcolorMultiplier[1][1] = openfl_ColorMultiplierv.y;\n\t\t\tcolorMultiplier[2][2] = openfl_ColorMultiplierv.z;\n\t\t\tcolorMultiplier[3][3] = openfl_ColorMultiplierv.w;\n\n\t\t\tcolor = clamp(openfl_ColorOffsetv + (color * colorMultiplier), 0.0, 1.0);\n\n\t\t\tif (color.a > 0.0)\n\t\t\t{\n\t\t\t\treturn vec4(color.rgb * color.a * openfl_Alphav, color.a * openfl_Alphav);\n\t\t\t}\n\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\n\t\t}\n\t\n\nuniform float uampmul;\n\n//modified version of the wave shader to create weird garbled corruption like messes\nuniform float uTime;\n\n/**\n * How fast the waves move over time\n */\nuniform float uSpeed;\n\n/**\n * Number of waves over time\n */\nuniform float uFrequency;\n\nuniform bool uEnabled;\n\n/**\n * How much the pixels are going to stretch over the waves\n */\nuniform float uWaveAmplitude;\n\nvec4 sineWave(vec4 pt, vec2 pos)\n{\n    if (uampmul > 0.0)\n    {\n        float offsetX = sin(pt.y * uFrequency + uTime * uSpeed);\n        float offsetY = sin(pt.x * (uFrequency * 2) - (uTime / 2) * uSpeed);\n        float offsetZ = sin(pt.z * (uFrequency / 2) + (uTime / 3) * uSpeed);\n        pt.x = mix(pt.x,sin(pt.x / 2 * pt.y + (5 * offsetX) * pt.z),uWaveAmplitude * uampmul);\n        pt.y = mix(pt.y,sin(pt.y / 3 * pt.z + (2 * offsetZ) - pt.x),uWaveAmplitude * uampmul);\n        pt.z = mix(pt.z,sin(pt.z / 6 * (pt.x * offsetY) - (50 * offsetZ) * (pt.z * offsetX)),uWaveAmplitude * uampmul);\n    }\n\n\n    return vec4(pt.x, pt.y, pt.z, pt.w);\n}\n\nvoid main()\n{\n    vec2 uv = openfl_TextureCoordv;\n    gl_FragColor = sineWave(texture2D(bitmap, uv),uv);\n}";
+	}
+	if(this.__glVertexSource == null) {
+		this.__glVertexSource = "\n\t\tattribute float openfl_Alpha;\n\t\tattribute vec4 openfl_ColorMultiplier;\n\t\tattribute vec4 openfl_ColorOffset;\n\t\tattribute vec4 openfl_Position;\n\t\tattribute vec2 openfl_TextureCoord;\n\n\t\tvarying float openfl_Alphav;\n\t\tvarying vec4 openfl_ColorMultiplierv;\n\t\tvarying vec4 openfl_ColorOffsetv;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform mat4 openfl_Matrix;\n\t\tuniform bool openfl_HasColorTransform;\n\t\tuniform vec2 openfl_TextureSize;\n\n\t\t\n\t\tattribute float alpha;\n\t\tattribute vec4 colorMultiplier;\n\t\tattribute vec4 colorOffset;\n\t\tuniform bool hasColorTransform;\n\t\t\n\t\tvoid main(void)\n\t\t{\n\t\t\topenfl_Alphav = openfl_Alpha;\n\t\topenfl_TextureCoordv = openfl_TextureCoord;\n\n\t\tif (openfl_HasColorTransform) {\n\n\t\t\topenfl_ColorMultiplierv = openfl_ColorMultiplier;\n\t\t\topenfl_ColorOffsetv = openfl_ColorOffset / 255.0;\n\n\t\t}\n\n\t\tgl_Position = openfl_Matrix * openfl_Position;\n\n\t\t\t\n\t\t\topenfl_Alphav = openfl_Alpha * alpha;\n\t\t\t\n\t\t\tif (hasColorTransform)\n\t\t\t{\n\t\t\t\topenfl_ColorOffsetv = colorOffset / 255.0;\n\t\t\t\topenfl_ColorMultiplierv = colorMultiplier;\n\t\t\t}\n\t\t}";
+	}
+	flixel_graphics_tile_FlxGraphicsShader.call(this);
+	this.uampmul.value = [0.];
+	this.uTime.value = [0.];
+	this.uSpeed.value = [1.];
+	this.uFrequency.value = [2.];
+	this.uWaveAmplitude.value = [1.];
+	this.uEnabled.value = [false];
+	this.__isGenerated = true;
+	this.__initGL();
+};
+$hxClasses["GoldenEyesoreShader"] = GoldenEyesoreShader;
+GoldenEyesoreShader.__name__ = "GoldenEyesoreShader";
+GoldenEyesoreShader.__super__ = flixel_graphics_tile_FlxGraphicsShader;
+GoldenEyesoreShader.prototype = $extend(flixel_graphics_tile_FlxGraphicsShader.prototype,{
+	uampmul: null
+	,uTime: null
+	,uSpeed: null
+	,uFrequency: null
+	,uEnabled: null
+	,uWaveAmplitude: null
+	,__class__: GoldenEyesoreShader
+});
+var GoldenFrustExtras = function(owner) {
+	this.points = new haxe_ds_StringMap();
+	this.zoomIntensity = 1;
+	this.zoomEvery = 4;
+	this.pulseTarget = 1.1;
+	this.pulse = false;
+	this.lastStep = -1;
+	this.beat = -1;
+	this.captions = [];
+	var _gthis = this;
+	this.owner = owner;
+	this.song = PlayState.SONG.song.toLowerCase();
+	GoldenFrustExtras.loadedLibrary = GoldenFrustExtras.library(this.song);
+	this.zoom = this.targetZoom = GoldenFrustExtras.initialZoom(this.song);
+	if(GoldenRemaining.supports(this.song)) {
+		GoldenRemaining.position(owner,this.song);
+	}
+	switch(this.song) {
+	case "aug":
+		owner.dad.setPosition(0,-145);
+		owner.boyfriend.setPosition(245,465);
+		owner.gf.setPosition(445,-680);
+		break;
+	case "bedtime-bumps":
+		owner.dad.setPosition(1365,1524);
+		owner.gf.setPosition(2096,1588);
+		owner.boyfriend.setPosition(3006,2065);
+		break;
+	case "cell":case "collision":case "galactic":case "left-unchecked":case "og":case "poopers":case "sick-tricks":case "the-boopadoop-song":case "thunderstorm":case "wheels":
+		var stage = JSON.parse(openfl_utils_Assets.getText(Paths.getPath("data/" + ("golden/frustsongs/" + this.song + "/stage") + ".json","TEXT",GoldenFrustExtras.library(this.song))));
+		var pair_actor = owner.dad;
+		var pair_key = "opponent";
+		var pos = Reflect.field(stage,pair_key);
+		var offset = pair_actor.extraConfig.positionOffset;
+		pair_actor.setPosition(pos[0] + offset[0],pos[1] + offset[1]);
+		var pair_actor = owner.boyfriend;
+		var pair_key = "boyfriend";
+		var pos = Reflect.field(stage,pair_key);
+		var offset = pair_actor.extraConfig.positionOffset;
+		pair_actor.setPosition(pos[0] + offset[0],pos[1] + offset[1]);
+		var pair_actor = owner.gf;
+		var pair_key = "girlfriend";
+		var pos = Reflect.field(stage,pair_key);
+		var offset = pair_actor.extraConfig.positionOffset;
+		pair_actor.setPosition(pos[0] + offset[0],pos[1] + offset[1]);
+		owner.gf.set_visible(stage.hide_girlfriend != true);
+		if(this.song == "cell") {
+			owner.insert(owner.members.indexOf(owner.boyfriend) + 1,owner.frustStage.foreground);
+		}
+		break;
+	case "cooking-lesson":
+		owner.dad.setPosition(10,-89);
+		owner.boyfriend.setPosition(951,615);
+		owner.gf.setReferenceScale(1);
+		owner.gf.setPosition(494,312);
+		owner.gf.scrollFactor.set(1,1);
+		break;
+	case "cuberoot":
+		var fh = owner.dad;
+		fh.set_y(fh.y + 250);
+		var fh = owner.boyfriend;
+		fh.set_y(fh.y + 30);
+		owner.gf.set_visible(false);
+		break;
+	case "dale":
+		var fh = owner.dad;
+		fh.set_y(fh.y - 160);
+		owner.gf.set_visible(false);
+		break;
+	case "doughboy":
+		owner.gf.set_visible(false);
+		break;
+	case "enforcers":
+		owner.dad.setPosition(-200,200);
+		owner.boyfriend.setPosition(200,200);
+		owner.gf.set_visible(false);
+		break;
+	case "gift-card":
+		owner.dad.setPosition(-56,326);
+		owner.boyfriend.setPosition(871,382);
+		owner.gf.set_visible(false);
+		break;
+	case "keyboard":
+		owner.dad.setPosition(-300,50);
+		var fh = owner.boyfriend;
+		fh.set_x(fh.x + 200);
+		var fh = owner.gf;
+		fh.set_x(fh.x + 200);
+		break;
+	case "kooky":
+		owner.gf.set_visible(false);
+		owner.dad.setReferenceScale(.606060606);
+		owner.dad.setPosition(620,flixel_FlxG.save.data.downscroll ? 300 : -100);
+		owner.boyfriend.setPosition(275,flixel_FlxG.save.data.downscroll ? 135 : 475);
+		owner.dad.scrollFactor.set();
+		owner.boyfriend.scrollFactor.set();
+		break;
+	case "lofthouse":
+		owner.dad.setPosition(600,-45);
+		owner.boyfriend.setPosition(770,690);
+		owner.gf.setPosition(200,150);
+		break;
+	case "mine":
+		owner.dad.setPosition(-192,99);
+		owner.boyfriend.setPosition(948,463);
+		owner.gf.setPosition(610,213);
+		break;
+	case "nft":
+		var fh = owner.dad;
+		fh.set_x(fh.x - 500);
+		var fh = owner.dad;
+		fh.set_y(fh.y - 400);
+		var fh = owner.gf;
+		fh.set_x(fh.x - 250);
+		break;
+	case "nutty":
+		owner.dad.setPosition(-75,140);
+		var fh = owner.boyfriend;
+		fh.set_x(fh.x + 200);
+		var fh = owner.gf;
+		fh.set_x(fh.x + 200);
+		break;
+	case "piehole":
+		owner.dad.setPosition(-500,490);
+		owner.boyfriend.setPosition(500,400);
+		owner.gf.setPosition(0,0);
+		break;
+	case "ready-loud":
+		owner.dad.setPosition(402,125);
+		owner.gf.set_visible(false);
+		break;
+	case "recovered-project":
+		owner.dad.setPosition(-307,-10);
+		var fh = owner.boyfriend;
+		fh.set_x(fh.x + 135);
+		owner.gf.set_visible(false);
+		owner.dad.scrollFactor.set();
+		owner.boyfriend.scrollFactor.set();
+		break;
+	case "roupiniphobia":
+		owner.gf.set_visible(false);
+		var fh = owner.dad;
+		fh.set_x(fh.x - 300);
+		var fh = owner.dad;
+		fh.set_y(fh.y - owner.dad.get_height() * .2);
+		var fh = owner.dad;
+		fh.set_y(fh.y + 110);
+		var fh = owner.boyfriend;
+		fh.set_y(fh.y - owner.dad.get_height() * .5);
+		owner.boyfriend.setReferenceScale(.5);
+		var fh = owner.boyfriend;
+		fh.set_x(fh.x + owner.boyfriend.get_width() * .5);
+		var fh = owner.boyfriend;
+		fh.set_y(fh.y + owner.boyfriend.get_height() * .5);
+		break;
+	case "slices":
+		var fh = owner.dad;
+		fh.set_y(fh.y + 250);
+		owner.gf.set_visible(false);
+		owner.boyfriend.setReferenceScale(1);
+		break;
+	case "strawberry":
+		owner.dad.setPosition(-125,165);
+		var fh = owner.boyfriend;
+		fh.set_x(fh.x + 200);
+		var fh = owner.gf;
+		fh.set_x(fh.x + 200);
+		break;
+	case "sugar-rush":
+		owner.dad.setPosition(-85,-40);
+		owner.boyfriend.setReferenceScale(1);
+		owner.boyfriend.setPosition(880,605);
+		owner.gf.setPosition(911,212);
+		owner.gf.scrollFactor.set(1,1);
+		break;
+	case "tantalum":
+		owner.dad.setPosition(150,-63);
+		var fh = owner.boyfriend;
+		fh.set_x(fh.x + 400);
+		var fh = owner.gf;
+		fh.set_x(fh.x + 400);
+		break;
+	case "the-big-dingle":
+		var fh = owner.dad;
+		fh.set_y(fh.y + 150);
+		var fh = owner.boyfriend;
+		fh.set_x(fh.x + 50);
+		var fh = owner.boyfriend;
+		fh.set_y(fh.y - 65);
+		owner.gf.set_visible(false);
+		break;
+	case "ticking":
+		var fh = owner.dad;
+		fh.set_x(fh.x - 1100);
+		var fh = owner.dad;
+		fh.set_y(fh.y - 800);
+		var fh = owner.gf;
+		fh.set_x(fh.x - 175);
+		break;
+	case "too-shiny":
+		var fh = owner.dad;
+		fh.set_x(fh.x + 150);
+		var fh = owner.dad;
+		fh.set_y(fh.y + 175);
+		owner.dad.setReferenceScale(1.25);
+		var fh = owner.boyfriend;
+		fh.set_x(fh.x + 125);
+		var fh = owner.boyfriend;
+		fh.set_y(fh.y + 75);
+		owner.gf.set_visible(false);
+		break;
+	}
+	GoldenFrustExtras.alignBoyfriend(owner.boyfriend);
+	var pair_key = "DAD";
+	var pair_actor = owner.dad;
+	var this1 = this.points;
+	var value = this.focusPoint(pair_actor,pair_key);
+	this1.h[pair_key] = value;
+	var pair_key = "BF";
+	var pair_actor = owner.boyfriend;
+	var this1 = this.points;
+	var value = this.focusPoint(pair_actor,pair_key);
+	this1.h[pair_key] = value;
+	var pair_key = "GF";
+	var pair_actor = owner.gf;
+	var this1 = this.points;
+	var value = this.focusPoint(pair_actor,pair_key);
+	this1.h[pair_key] = value;
+	if(this.song == "too-shiny") {
+		this.points.h["DAD"][1] -= 100;
+	}
+	if(this.song == "piehole") {
+		var a = this.points.h["DAD"];
+		var b = this.points.h["BF"];
+		this.points.h["OTHER"] = [(a[0] + b[0]) / 2,(a[1] + b[1]) / 2];
+	}
+	if(this.song == "dale") {
+		this.points.h["DAD"][1] -= 20;
+	}
+	if(this.song == "aug") {
+		this.points.h["DAD"][1] -= 65;
+	}
+	var initial = this.points.h["DAD"];
+	owner.camFollow.setPosition(initial[0],initial[1]);
+	flixel_FlxG.camera.set_followLerp(1);
+	flixel_FlxG.camera.set_zoom(this.zoom);
+	var dadColor = -12784090;
+	var bfColor = -13520687;
+	if(owner.dad.extraConfig != null) {
+		dadColor = GoldenFrustExtras.color(owner.dad.extraConfig.healthBarRGB);
+	}
+	if(owner.boyfriend.extraConfig != null) {
+		bfColor = GoldenFrustExtras.color(owner.boyfriend.extraConfig.healthBarRGB);
+	}
+	owner.healthBar.createFilledBar(dadColor,bfColor);
+	this.dim = new flixel_FlxSprite(-flixel_FlxG.width / 2,-flixel_FlxG.height / 2).makeGraphic(flixel_FlxG.width * 2,flixel_FlxG.height * 2,-16777216);
+	this.dim.set_alpha(0);
+	this.dim.scrollFactor.set();
+	owner.insert(owner.members.indexOf(owner.gf),this.dim);
+	var file = "data/golden/frustsongs/" + this.song + "/subtitles.srt";
+	var type = "TEXT";
+	var library = GoldenFrustExtras.library(this.song);
+	if(type == null) {
+		type = "TEXT";
+	}
+	var subtitles = Paths.getPath(file,type,library);
+	if(openfl_utils_Assets.exists(subtitles)) {
+		this.captions = GoldenSubtitles.load(openfl_utils_Assets.getText(subtitles));
+	}
+	if(this.song == "sugar-rush") {
+		this.topBar = new flixel_FlxSprite(0,-500).makeGraphic(flixel_FlxG.width,90,-16777216);
+		this.bottomBar = new flixel_FlxSprite(0,1145).makeGraphic(flixel_FlxG.width,90,-16777216);
+		var bar = this.topBar;
+		bar.set_cameras([owner.camHUD]);
+		bar.scrollFactor.set();
+		owner.add(bar);
+		var bar = this.bottomBar;
+		bar.set_cameras([owner.camHUD]);
+		bar.scrollFactor.set();
+		owner.add(bar);
+	}
+	if(this.song == "enforcers" || this.song == "gift-card" || this.song == "nft" || this.song == "ticking" || this.song == "piehole") {
+		this.chartCamera = new GoldenChartCamera(owner,JSON.parse(openfl_utils_Assets.getText(Paths.getPath("data/" + ("golden/frustsongs/" + this.song + "/events") + ".json","TEXT",GoldenFrustExtras.library(this.song)))),PlayState.SONG.bpm,this.zoom);
+		this.chartCamera.focuses = this.points;
+		this.chartCamera.automatic = this.song != "enforcers";
+		this.chartCamera.clampStage = false;
+		this.chartCamera.onCharacterChange = $bind(this,this.changeCharacter);
+		this.chartCamera.zeroMeansRelative = this.song == "piehole";
+		this.chartCamera.onCinematicBars = function(values,time) {
+			if(_gthis.orthoExtras != null) {
+				_gthis.orthoExtras.cinematicBars(values,time);
+			}
+		};
+		if(this.song == "enforcers") {
+			var fh = owner.camFollow;
+			fh.set_x(fh.x - 100);
+			this.dim.set_alpha(1);
+			this.dim.set_cameras([owner.camHUD]);
+		}
+		this.chartCamera.onSongEvent = function(name,value) {
+			if(_gthis.secret != null) {
+				_gthis.secret.songEvent(name,value);
+			}
+			if(_gthis.orthoExtras != null) {
+				_gthis.orthoExtras.songEvent(name,value);
+			}
+			if(name == "gittyReveal") {
+				owner.goldenTweens.tween(owner.camHUD,{ alpha : 1},Conductor.crochet / 500,{ ease : flixel_tweens_FlxEase.quartInOut});
+			}
+		};
+	}
+	if(GoldenLegacySongs.supports(this.song)) {
+		this.legacy = new GoldenLegacySongs(owner,this);
+	}
+	if(["cuberoot","too-shiny","piehole"].indexOf(this.song) >= 0) {
+		this.orthoExtras = new GoldenOrthoExtras(owner,this);
+	}
+	if(GoldenSecretSongs.supports(this.song)) {
+		this.secret = new GoldenSecretSongs(owner,this);
+	}
+	if(this.song == "mine" || this.song == "roupiniphobia") {
+		this.mineRoup = new GoldenMineRoup(owner,this);
+	}
+	if(GoldenGlitchedLevels.supports(this.song)) {
+		this.glitched = new GoldenGlitchedLevels(owner,this);
+	}
+	if(this.song == "ready-loud") {
+		this.readyLoud = new GoldenReadyLoud(owner);
+	}
+	if(["tantalum","strawberry","nutty","keyboard"].indexOf(this.song) >= 0) {
+		this.ocSongs = new GoldenOCSongs(owner,this);
+	}
+	if(this.song == "nft") {
+		this.points.h["BF"][0] -= 250;
+		this.points.h["BF"][1] -= 100;
+		this.nft = new GoldenNFT(owner);
+	}
+};
+$hxClasses["GoldenFrustExtras"] = GoldenFrustExtras;
+GoldenFrustExtras.__name__ = "GoldenFrustExtras";
+GoldenFrustExtras.releaseLibrary = function() {
+	if(GoldenFrustExtras.loadedLibrary == null) {
+		return;
+	}
+	GoldenPagedAtlas.clear();
+	flixel_FlxG.bitmap.clearCache();
+	openfl_utils_Assets.cache.clear(GoldenFrustExtras.loadedLibrary + ":");
+	openfl_utils_Assets.unloadLibrary(GoldenFrustExtras.loadedLibrary);
+	GoldenFrustExtras.loadedLibrary = null;
+};
+GoldenFrustExtras.splitVocals = function(song) {
+	if(song.toLowerCase() != "enforcers") {
+		return song.toLowerCase() == "nft";
+	} else {
+		return true;
+	}
+};
+GoldenFrustExtras.opponentPath = function(song) {
+	return "songs:assets/songs/" + song.toLowerCase() + "/Opponent." + "mp3";
+};
+GoldenFrustExtras.library = function(song) {
+	return "extra-" + song.toLowerCase();
+};
+GoldenFrustExtras.supports = function(song) {
+	if(!GoldenRemaining.supports(song)) {
+		return ["left-unchecked","thunderstorm","cell","collision","wheels","poopers","the-boopadoop-song","og","sick-tricks","galactic","cuberoot","too-shiny","piehole","sugar-rush","gift-card","ready-loud","tantalum","strawberry","nutty","keyboard","enforcers","nft","cooking-lesson","slices","aug","doughboy","the-big-dingle","lofthouse","kooky","mine","roupiniphobia","ticking","recovered-project","dale","bedtime-bumps"].indexOf(song.toLowerCase()) >= 0;
+	} else {
+		return true;
+	}
+};
+GoldenFrustExtras.initialZoom = function(song) {
+	if(GoldenRemaining.supports(song)) {
+		return GoldenRemaining.record(song).zoom;
+	}
+	switch(song.toLowerCase()) {
+	case "aug":
+		return .725;
+	case "bedtime-bumps":
+		return 1.2;
+	case "cell":case "collision":case "left-unchecked":case "og":case "poopers":case "sick-tricks":case "the-boopadoop-song":case "thunderstorm":case "wheels":
+		return .9;
+	case "cooking-lesson":
+		return .69;
+	case "cuberoot":
+		return .9;
+	case "dale":
+		return .9;
+	case "enforcers":
+		return 2.5;
+	case "gift-card":
+		return .375;
+	case "kooky":
+		return 1;
+	case "lofthouse":case "the-big-dingle":
+		return .8;
+	case "mine":
+		return .455;
+	case "nft":case "tantalum":
+		return .5;
+	case "nutty":case "strawberry":
+		return .6;
+	case "piehole":
+		return .6;
+	case "ready-loud":
+		return .785;
+	case "recovered-project":
+		return .5;
+	case "roupiniphobia":
+		return .811;
+	case "keyboard":case "sugar-rush":
+		return .7;
+	case "ticking":
+		return .6;
+	default:
+		return .85;
+	}
+};
+GoldenFrustExtras.menu = function() {
+	if(GoldenFrustExtras.returnToExtras && GoldenFrustExtras.supports(PlayState.SONG.song)) {
+		return new GoldenExtrasMenu();
+	} else {
+		return new FreeplayState();
+	}
+};
+GoldenFrustExtras.skin = function(player,time) {
+	if(time == null) {
+		time = 0;
+	}
+	var song = PlayState.SONG.song.toLowerCase();
+	if(GoldenRemaining.supports(song)) {
+		return GoldenRemaining.record(song).skin;
+	}
+	if(["left-unchecked","cell","collision"].indexOf(song) >= 0) {
+		return "3d";
+	}
+	if(GoldenLegacySongs.supports(song) || song == "piehole") {
+		return "default";
+	}
+	if(song == "cuberoot") {
+		if(time >= 21333.3333333333321) {
+			return "3d";
+		} else {
+			return "default";
+		}
+	}
+	if(song == "too-shiny") {
+		if(player) {
+			return "default";
+		} else {
+			return "3d";
+		}
+	}
+	if(song == "the-big-dingle" || song == "kooky") {
+		return "bevel";
+	}
+	if(song == "doughboy") {
+		return "bready";
+	}
+	if(song == "lofthouse") {
+		return "default";
+	}
+	if(song == "aug" || song == "roupiniphobia") {
+		return "3d";
+	}
+	if(song == "ticking" || song == "recovered-project" || song == "dale" || song == "bedtime-bumps") {
+		if(player) {
+			return "default";
+		} else {
+			return "3d";
+		}
+	}
+	if(song == "mine") {
+		if(player) {
+			return "default";
+		} else {
+			return "3d";
+		}
+	}
+	if(song == "slices") {
+		return "awesome";
+	}
+	if(song == "gift-card") {
+		if(player && time < 87272.727272729) {
+			return "3d";
+		} else {
+			return "default";
+		}
+	}
+	if(song == "nft" && player && time >= 124363.636363636) {
+		return "3d";
+	}
+	if(!player || song == "cooking-lesson" || song == "enforcers" || song == "ready-loud") {
+		return "3d";
+	} else {
+		return "default";
+	}
+};
+GoldenFrustExtras.countdown = function() {
+	if(PlayState.SONG.song.toLowerCase() == "slices") {
+		return "awesomeson";
+	} else {
+		return "bandu";
+	}
+};
+GoldenFrustExtras.credits = function(song) {
+	var meta = JSON.parse(openfl_utils_Assets.getText(Paths.getPath("data/" + ("golden/frustsongs/" + song + "/metadata") + ".json","TEXT",GoldenFrustExtras.library(song)))).metadata;
+	var source = meta.credits;
+	var result = [];
+	var pair_0 = "composer";
+	var pair_1 = "SONG";
+	var names = Reflect.field(source,pair_0);
+	if(names != null) {
+		result.push(pair_1 + "\n" + names.join(", "));
+	}
+	var pair_0 = "visuals";
+	var pair_1 = "VISUALS";
+	var names = Reflect.field(source,pair_0);
+	if(names != null) {
+		result.push(pair_1 + "\n" + names.join(", "));
+	}
+	var pair_0 = "chart";
+	var pair_1 = "CHART";
+	var names = Reflect.field(source,pair_0);
+	if(names != null) {
+		result.push(pair_1 + "\n" + names.join(", "));
+	}
+	return result.join("\n\n");
+};
+GoldenFrustExtras.alignBoyfriend = function(actor) {
+	if(actor.curCharacter != "bf-golden") {
+		return;
+	}
+	actor.goldenOriginY = 0;
+	actor.setReferenceScale(1);
+	actor.refreshAnimationOffset();
+};
+GoldenFrustExtras.color = function(rgb) {
+	if(rgb == null) {
+		return -1;
+	} else {
+		return -16777216 | rgb[0] << 16 | rgb[1] << 8 | rgb[2];
+	}
+};
+GoldenFrustExtras.prototype = {
+	owner: null
+	,song: null
+	,dim: null
+	,captions: null
+	,beat: null
+	,lastStep: null
+	,zoom: null
+	,targetZoom: null
+	,zoomTrack: null
+	,baseZoomTrack: null
+	,dimTrack: null
+	,barTrack: null
+	,topBar: null
+	,bottomBar: null
+	,pulse: null
+	,pulseTarget: null
+	,zoomEvery: null
+	,zoomIntensity: null
+	,points: null
+	,chartCamera: null
+	,readyLoud: null
+	,ocSongs: null
+	,nft: null
+	,glitched: null
+	,mineRoup: null
+	,secret: null
+	,orthoExtras: null
+	,legacy: null
+	,changeCharacter: function(values) {
+		var side = values[0].toUpperCase();
+		var player = side == "BF";
+		var old = player ? this.owner.boyfriend : side == "GF" ? this.owner.gf : this.owner.dad;
+		var id = "extra-" + this.song + "--" + values[1];
+		var actor = player ? new Boyfriend(old.x,old.y,id) : new Character(old.x,old.y,id);
+		actor.set_cameras(old.get_cameras());
+		var _this = actor.scrollFactor;
+		var point = old.scrollFactor;
+		_this.set_x(point.x);
+		_this.set_y(point.y);
+		if(point._weak) {
+			point.put();
+		}
+		if(values.length > 4 && values[4] == "true") {
+			actor.setPosition(parseFloat(values[2]),parseFloat(values[3]));
+		} else {
+			actor.setPosition(old.x,old.y);
+		}
+		if(player) {
+			GoldenFrustExtras.alignBoyfriend(actor);
+		}
+		var index = this.owner.members.indexOf(old);
+		this.owner.remove(old,true);
+		this.owner.insert(index,actor);
+		if(player) {
+			this.owner.boyfriend = actor;
+		} else if(side == "GF") {
+			this.owner.gf = actor;
+		} else {
+			this.owner.dad = actor;
+		}
+		this.owner.goldenTweens.cancelTweensOf(old);
+		this.owner.goldenTweens.cancelTweensOf(old.scale);
+		old.destroy();
+		var this1 = this.points;
+		var value = this.focusPoint(actor,side);
+		this1.h[side] = value;
+		if(side != "GF") {
+			this.replaceIcon(player,actor.curCharacter);
+		}
+		this.owner.healthBar.createFilledBar(this.owner.dad.extraConfig == null ? -12784090 : GoldenFrustExtras.color(this.owner.dad.extraConfig.healthBarRGB),this.owner.boyfriend.extraConfig == null ? -13520687 : GoldenFrustExtras.color(this.owner.boyfriend.extraConfig.healthBarRGB));
+		this.refreshSkins();
+	}
+	,replaceIcon: function(player,id) {
+		var old = player ? this.owner.iconP1 : this.owner.iconP2;
+		var icon = new HealthIcon(id,player);
+		icon.set_cameras(old.get_cameras());
+		icon.setPosition(old.x,old.y);
+		flixel_tweens_FlxTween.cancelTweensOf(old);
+		this.owner.goldenTweens.cancelTweensOf(old);
+		this.owner.goldenTweens.cancelTweensOf(old.scale);
+		var index = this.owner.members.indexOf(old);
+		this.owner.remove(old,true);
+		this.owner.insert(index,icon);
+		old.destroy();
+		if(player) {
+			this.owner.iconP1 = icon;
+		} else {
+			this.owner.iconP2 = icon;
+		}
+	}
+	,noteHit: function(note,singer) {
+		if(this.secret != null) {
+			this.secret.noteHit(note,singer);
+		}
+	}
+	,singerFor: function(note) {
+		if(this.secret != null) {
+			return this.secret.singerFor(note);
+		} else if(this.mineRoup != null) {
+			return this.mineRoup.singerFor(note);
+		} else if(note.extraSinger == "litt-le" && this.ocSongs != null && this.ocSongs.little != null) {
+			return this.ocSongs.little;
+		} else {
+			return this.owner.dad;
+		}
+	}
+	,refreshSkins: function() {
+		var _g = 0;
+		var _g1 = this.owner.strumLineNotes.members.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var strum = this.owner.strumLineNotes.members[i];
+			if(strum == null) {
+				continue;
+			}
+			var player = this.owner.playerStrums.members.indexOf(strum) >= 0;
+			GoldenNoteSkin.setupStrum(strum,GoldenFrustExtras.skin(player,Conductor.songPosition),strum.ID);
+		}
+	}
+	,focusPoint: function(actor,key) {
+		var name = actor.animation.exists("danceLeft") ? "danceLeft" : "idle";
+		var track = actor.animation._animations.h[name];
+		if(track == null) {
+			return [actor.x + 150,actor.y - 100];
+		}
+		var frame = actor.frames.frames[track.frames[0]];
+		var x = actor.x + (frame.offset.x + frame.frame.width / 2 - actor.goldenOriginX) * actor.scale.x;
+		var y = actor.y + (frame.offset.y + frame.frame.height / 2 - actor.goldenOriginY) * actor.scale.y;
+		if(key != "GF") {
+			x += key == "BF" ? -100 : 150;
+			y -= 100;
+		}
+		var config = actor.extraConfig;
+		if(config != null && config.cameraOffset != null) {
+			x += config.cameraOffset[0] * (GoldenLegacySongs.supports(this.song) && key == "BF" ? -1 : 1);
+			y += config.cameraOffset[1];
+		}
+		return [x,y];
+	}
+	,sample: function(time) {
+		if(this.baseZoomTrack != null) {
+			var track = this.baseZoomTrack;
+			var q = Math.max(0,Math.min(1,(time - track.start) / track.duration));
+			q = track.ease == "sine" ? -Math.cos(Math.PI * q) / 2 + .5 : -q * (q - 2);
+			this.targetZoom = track.from + (track.to - track.from) * q;
+			if(time >= track.start + track.duration) {
+				this.baseZoomTrack = null;
+			}
+		}
+		if(this.zoomTrack != null) {
+			var q = Math.max(0,Math.min(1,(time - this.zoomTrack.start) / this.zoomTrack.duration));
+			q = this.zoomTrack.ease == "sine" ? -Math.cos(Math.PI * q) / 2 + .5 : -q * (q - 2);
+			this.zoom = this.zoomTrack.from + (this.zoomTrack.to - this.zoomTrack.from) * q;
+			if(time >= this.zoomTrack.start + this.zoomTrack.duration) {
+				this.zoomTrack = null;
+			}
+		}
+		if(this.dimTrack != null) {
+			var q = Math.max(0,Math.min(1,(time - this.dimTrack.start) / this.dimTrack.duration));
+			this.dim.set_alpha(this.dimTrack.from + (this.dimTrack.to - this.dimTrack.from) * q);
+			if(q >= 1) {
+				this.dimTrack = null;
+			}
+		}
+		if(this.barTrack != null) {
+			var q = Math.sin(flixel_tweens_FlxEase.PI2 * Math.max(0,Math.min(1,(time - this.barTrack.start) / 500)));
+			this.topBar.set_y(this.barTrack.top + (this.barTrack.targetTop - this.barTrack.top) * q);
+			this.bottomBar.set_y(this.barTrack.bottom + (this.barTrack.targetBottom - this.barTrack.bottom) * q);
+			if(time >= this.barTrack.start + 500) {
+				this.barTrack = null;
+			}
+		}
+	}
+	,zoomTo: function(time,value,seconds,ease,cameraOnly) {
+		if(cameraOnly == null) {
+			cameraOnly = false;
+		}
+		if(ease == null) {
+			ease = "sine";
+		}
+		var track = { start : time, from : cameraOnly ? this.zoom : this.targetZoom, to : value, duration : seconds * 1000, ease : ease};
+		if(cameraOnly) {
+			this.zoomTrack = track;
+		} else {
+			this.baseZoomTrack = track;
+		}
+	}
+	,shade: function(time,value) {
+		this.dimTrack = { start : time, from : this.dim.alpha, to : value, duration : Conductor.crochet * 2};
+	}
+	,bars: function(time,out) {
+		var delta = out ? -500 : 500;
+		this.barTrack = { start : time, top : this.topBar.y, bottom : this.bottomBar.y, targetTop : this.topBar.y + delta, targetBottom : this.bottomBar.y - delta};
+	}
+	,sugarBeat: function(b,time) {
+		if(b % this.zoomEvery == 0 && this.zoom < this.zoomIntensity * 1.35 && this.owner.camZooming) {
+			this.zoom += this.zoomIntensity * .015;
+			var fh = this.owner.camHUD;
+			fh.set_zoom(fh.zoom + this.zoomIntensity * .03);
+		}
+		if(this.pulse) {
+			this.zoomTo(time,this.pulseTarget,.3,"quad",true);
+		}
+		switch(b) {
+		case 1:
+			this.zoomEvery = 4;
+			this.zoomIntensity = .1;
+			this.pulseTarget = this.targetZoom + .15;
+			break;
+		case 2:
+			this.zoomTo(time,.95,.5,"quad");
+			break;
+		case 8:
+			this.zoomTo(time,1,.5,"quad",true);
+			break;
+		case 30:
+			this.targetZoom = .7;
+			this.zoomTo(time,1.2,.5,"quad",true);
+			break;
+		case 32:
+			this.bars(time,false);
+			this.zoomIntensity = 1.5;
+			break;
+		case 64:
+			this.bars(time,true);
+			this.zoomTo(time,1.2,2);
+			this.zoomIntensity = .1;
+			break;
+		case 76:
+			this.bars(time,false);
+			this.pulse = true;
+			this.zoomTo(time,.7,Conductor.crochet / 500);
+			this.zoomIntensity = 1.5;
+			this.zoomEvery = 2;
+			break;
+		case 142:
+			this.pulse = false;
+			this.zoomIntensity = .5;
+			this.zoomEvery = 4;
+			this.targetZoom = 1;
+			this.zoomTo(time,1.3,1.2);
+			break;
+		case 268:
+			flixel_FlxG.camera.flash(-1,2);
+			this.pulse = false;
+			break;
+		case 300:
+			this.shade(time,.35);
+			this.zoomIntensity = .5;
+			this.zoomEvery = 4;
+			this.zoomTo(time,.9,2);
+			break;
+		case 336:
+			this.shade(time,0);
+			this.pulse = true;
+			this.zoomIntensity = 1.5;
+			this.zoomEvery = 2;
+			this.zoomTo(time,.7,Conductor.crochet / 500);
+			break;
+		case 204:case 368:
+			this.zoomTo(time,.7,1);
+			this.shade(time,0);
+			this.bars(time,false);
+			this.zoomIntensity = 1.5;
+			this.zoomEvery = 2;
+			this.pulse = true;
+			break;
+		case 172:case 352:case 384:
+			this.zoomTo(time,1,2);
+			this.shade(time,.35);
+			this.bars(time,true);
+			break;
+		case 400:
+			this.zoomTo(time,1.3,2,"sine",true);
+			this.targetZoom = 1.25;
+			this.pulse = false;
+			this.zoomIntensity = .1;
+			this.zoomEvery = 16;
+			break;
+		case 412:
+			this.zoomTo(time,.7,2);
+			this.bars(time,false);
+			this.shade(time,0);
+			break;
+		}
+	}
+	,update: function(time,elapsed) {
+		if(this.orthoExtras != null) {
+			this.orthoExtras.beforeUpdate();
+		}
+		var nextStep = Math.floor(time / (60000 / PlayState.SONG.bpm / 4)) | 0;
+		if(this.legacy != null) {
+			nextStep = this.legacy.stepAt(time);
+		}
+		var nextBeat = Math.floor(time / (60000 / PlayState.SONG.bpm)) | 0;
+		if(this.legacy != null) {
+			nextBeat = Math.floor(nextStep / 4) | 0;
+		}
+		if(this.song == "enforcers" && time >= 0 && this.lastStep < 0) {
+			this.dim.set_alpha(0);
+			this.owner.camHUD.set_alpha(0);
+		}
+		if(this.song == "sugar-rush") {
+			while(this.beat < nextBeat) {
+				this.beat++;
+				var at = this.beat * 60000 / PlayState.SONG.bpm;
+				this.sample(at);
+				if(this.beat >= 0) {
+					this.sugarBeat(this.beat,at);
+				}
+			}
+			var s = 1338;
+			if(this.lastStep < s && nextStep >= s) {
+				var at = s * 60000 / PlayState.SONG.bpm / 4;
+				this.sample(at);
+				this.zoomTo(at,1.1,.5,"quad",true);
+			}
+			var s = 1340;
+			if(this.lastStep < s && nextStep >= s) {
+				var at = s * 60000 / PlayState.SONG.bpm / 4;
+				this.sample(at);
+				this.zoomTo(at,1.1,.5,"quad",true);
+			}
+			var s = 1342;
+			if(this.lastStep < s && nextStep >= s) {
+				var at = s * 60000 / PlayState.SONG.bpm / 4;
+				this.sample(at);
+				this.zoomTo(at,1.1,.5,"quad",true);
+			}
+			this.sample(time);
+			if(this.zoomTrack == null) {
+				this.zoom += (this.targetZoom - this.zoom) * (1 - Math.exp(-elapsed * 3));
+			}
+		} else {
+			this.zoom += (this.targetZoom - this.zoom) * (1 - Math.exp(-elapsed * 3));
+			if(nextBeat > this.beat && time >= 0 && nextBeat % this.zoomEvery == 0 && this.owner.camZooming) {
+				this.zoom += .015 * this.zoomIntensity;
+			}
+			this.beat = nextBeat;
+		}
+		var section = Math.max(0,time) / (60000 / PlayState.SONG.bpm * 4) | 0;
+		if(this.legacy != null) {
+			section = this.legacy.sectionAt(time);
+		}
+		var key = section < PlayState.SONG.notes.length && PlayState.SONG.notes[section].mustHitSection ? "BF" : "DAD";
+		var point = this.points.h[key];
+		var q = 1 - Math.exp(-elapsed * 3);
+		if(this.chartCamera != null) {
+			this.chartCamera.update(time,elapsed);
+		} else {
+			if(this.readyLoud == null) {
+				var fh = this.owner.camFollow;
+				fh.set_x(fh.x + (point[0] - this.owner.camFollow.x) * q);
+				var fh = this.owner.camFollow;
+				fh.set_y(fh.y + (point[1] - this.owner.camFollow.y) * q);
+			}
+			flixel_FlxG.camera.set_zoom(this.zoom);
+			var fh = this.owner.camHUD;
+			fh.set_zoom(fh.zoom + (1 - this.owner.camHUD.zoom) * (1 - Math.exp(-elapsed * 3)));
+		}
+		if(this.readyLoud != null) {
+			this.readyLoud.update(time);
+		}
+		if(this.ocSongs != null) {
+			this.ocSongs.update(time,elapsed);
+		}
+		if(this.nft != null) {
+			this.nft.update(time,elapsed);
+		}
+		if(this.glitched != null) {
+			this.glitched.update(time,elapsed);
+		}
+		if(this.mineRoup != null) {
+			this.mineRoup.update(time,elapsed);
+		}
+		if(this.secret != null) {
+			this.secret.update(time,elapsed);
+		}
+		if(this.orthoExtras != null) {
+			this.orthoExtras.update(time,elapsed);
+		}
+		if(this.legacy != null) {
+			this.legacy.update(time,elapsed);
+		}
+		this.owner.frustStage.sync(time,elapsed);
+		var text = "";
+		var _g = 0;
+		var _g1 = this.captions;
+		while(_g < _g1.length) {
+			var cue = _g1[_g];
+			++_g;
+			if(time >= cue.startTime && time < cue.endTime) {
+				text = cue.text;
+			}
+		}
+		if(this.song == "enforcers" && time >= 73000) {
+			text = "The chart was unfinished";
+		}
+		if(this.legacy != null) {
+			text = this.legacy.subtitle(text);
+		}
+		this.owner.applecoreSubtitles.set_text(text);
+		var seconds = Math.max(0,time) / 1000 | 0;
+		this.owner.applecoreClock.set_text((seconds / 60 | 0) + ":" + (seconds % 60 < 10 ? "0" : "") + seconds % 60);
+		if(this.secret != null) {
+			this.secret.updateHud(time);
+		}
+		this.lastStep = nextStep;
+	}
+	,setSuspended: function(value) {
+		if(this.mineRoup != null) {
+			this.mineRoup.setSuspended(value);
+		}
+	}
+	,destroy: function() {
+		if(this.legacy != null) {
+			this.legacy.destroy();
+		}
+		if(this.orthoExtras != null) {
+			this.orthoExtras.destroy();
+		}
+		if(this.secret != null) {
+			this.secret.destroy();
+		}
+		if(this.mineRoup != null) {
+			this.mineRoup.destroy();
+		}
+		if(this.readyLoud != null) {
+			this.readyLoud.destroy();
+		}
+		if(this.nft != null) {
+			this.nft.destroy();
+		}
+		if(this.glitched != null) {
+			this.glitched.destroy();
+		}
+	}
+	,__class__: GoldenFrustExtras
+};
+var GoldenFrustStage = function(song) {
+	this.sceneLayers = new haxe_ds_StringMap();
+	this.ocActors = new haxe_ds_StringMap();
+	this.foregrounds = [];
+	this.shaderTime = 0;
+	flixel_group_FlxTypedGroup.call(this);
+	switch(song) {
+	case "aug":
+		this.back = this.layer(song,"bg",0,0,1.35);
+		var _this = this.back;
+		var axes = flixel_util_FlxAxes.XY;
+		var tmp;
+		switch(axes._hx_index) {
+		case 0:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			_this.set_x((flixel_FlxG.width - _this.get_width()) / 2);
+		}
+		var tmp;
+		switch(axes._hx_index) {
+		case 1:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			_this.set_y((flixel_FlxG.height - _this.get_height()) / 2);
+		}
+		break;
+	case "bedtime-bumps":
+		this.back = this.layer(song,"grand_cake",0,0);
+		var folk = this.animated(song,"spoar_folk",1992,11391,"danceLeft",24,1,1);
+		folk.animation.addByPrefix("danceLeft","danceLeft",24,false);
+		folk.animation.addByPrefix("danceRight","danceRight",24,false);
+		folk.animation.addByPrefix("vanish","uncle klunk move",24,false);
+		this.sceneLayers.h["folk"] = folk;
+		break;
+	case "cell":
+		this.back = this.layer(song,"secret/secret_room",-760,-70,1.3);
+		this.back.set_antialiasing(!GoldenQuality.superLow);
+		this.foreground = new flixel_FlxSprite(-220,800).loadGraphic(Paths.getPath("images/" + "golden/frustsongs/cell/secret/desk" + ".png","IMAGE",GoldenFrustExtras.library(song)));
+		this.foreground.scale.set(1.4,1.4);
+		this.foreground.updateHitbox();
+		this.foreground.origin.set();
+		this.foreground.offset.set();
+		this.foreground.set_antialiasing(!GoldenQuality.superLow);
+		break;
+	case "collision":
+		this.back = this.layer(song,"covers/mugen_basics",-400,-100,1.1);
+		this.back.set_antialiasing(!GoldenQuality.superLow);
+		break;
+	case "cooking-lesson":
+		var back = this.layer(song,"cooking_lesson",-600,-200);
+		back.scrollFactor.set();
+		this.glitch = new GoldenGlitchShader();
+		if(!GoldenQuality.superLow) {
+			back.shader = this.glitch;
+		}
+		this.sizedLayer(song,"zamb_set",-706,-267,2611,1232);
+		this.sizedLayer(song,"zamb_lights",-757,-424,2611,1148);
+		this.sizedLayer(song,"zamb_floor",-987,76,3288,1507);
+		break;
+	case "cuberoot":
+		this.back = this.layer(song,"cuberoot",-600,-200);
+		this.glitchBack(this.back);
+		this.overlay = new flixel_FlxSprite().makeGraphic(flixel_FlxG.width * 2,flixel_FlxG.height * 2,-1);
+		var _this = this.overlay;
+		var axes = flixel_util_FlxAxes.XY;
+		var tmp;
+		switch(axes._hx_index) {
+		case 0:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			_this.set_x((flixel_FlxG.width - _this.get_width()) / 2);
+		}
+		var tmp;
+		switch(axes._hx_index) {
+		case 1:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			_this.set_y((flixel_FlxG.height - _this.get_height()) / 2);
+		}
+		this.overlay.scrollFactor.set();
+		this.overlay.set_alpha(0);
+		this.overlay.set_blend(11);
+		this.add(this.overlay);
+		break;
+	case "dale":
+		this.back = this.layer(song,"dale_bg_new_maybe",-1005,-1025,1.4);
+		break;
+	case "doughboy":
+		this.back = this.layer(song,"breadworld",0,0,1.35);
+		var _this = this.back;
+		var axes = flixel_util_FlxAxes.XY;
+		var tmp;
+		switch(axes._hx_index) {
+		case 0:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			_this.set_x((flixel_FlxG.width - _this.get_width()) / 2);
+		}
+		var tmp;
+		switch(axes._hx_index) {
+		case 1:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			_this.set_y((flixel_FlxG.height - _this.get_height()) / 2);
+		}
+		break;
+	case "enforcers":
+		this.layer(song,"first_bg_back",-300,-100);
+		this.layer(song,"first_bg",-300,-100);
+		break;
+	case "galactic":
+		this.back = this.layer(song,"secret/galaxy",-400,-300);
+		this.back.scrollFactor.set(.6,.6);
+		this.back.set_antialiasing(!GoldenQuality.superLow);
+		this.galaxy = new GoldenGalacticShader();
+		if(!GoldenQuality.superLow) {
+			this.back.shader = this.galaxy;
+		}
+		break;
+	case "gift-card":
+		var name = "bg_junk";
+		var sprite = this.layer(song,"pixel/" + name,-1710,-1251,4);
+		var parallax = name == "bg_junk" ? 0.5 : name == "upper_junk" ? 1.25 : 1;
+		sprite.scrollFactor.set(parallax,parallax);
+		var name = "main_junk";
+		var sprite = this.layer(song,"pixel/" + name,-1710,-1251,4);
+		var parallax = name == "bg_junk" ? 0.5 : name == "upper_junk" ? 1.25 : 1;
+		sprite.scrollFactor.set(parallax,parallax);
+		var name = "upper_junk";
+		var sprite = this.layer(song,"pixel/" + name,-1710,-1251,4);
+		var parallax = name == "bg_junk" ? 0.5 : name == "upper_junk" ? 1.25 : 1;
+		sprite.scrollFactor.set(parallax,parallax);
+		break;
+	case "keyboard":
+		this.back = this.layer(song,"ocWeek/keyboard",-600,-200);
+		this.scaleOnly(this.back,1.25);
+		this.glitchBack(this.back);
+		this.oc(song,"ringi",-500,70);
+		this.oc(song,"bambom-nutty",325,140,"bg",.9);
+		this.oc(song,"bendu",-100,120,"huh");
+		this.ocActors.h["bendu"].set_alpha(.0001);
+		break;
+	case "kooky":
+		this.back = this.layer(song,"yoMamaSoBrown/sdfsdfsdfv-min",229,flixel_FlxG.save.data.downscroll ? 48 : 298);
+		this.back.setGraphicSize(448,0);
+		this.back.updateHitbox();
+		this.back.scrollFactor.set();
+		break;
+	case "left-unchecked":
+		this.back = this.layer(song,"covers/hypno",-400,0,.5);
+		this.back.set_antialiasing(!GoldenQuality.superLow);
+		break;
+	case "lofthouse":
+		this.back = this.layer(song,"loftbg",-600,-400,.9);
+		break;
+	case "mine":
+		this.back = this.layer(song,"wtf",0,0,3);
+		var _this = this.back;
+		var axes = flixel_util_FlxAxes.XY;
+		var tmp;
+		switch(axes._hx_index) {
+		case 0:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			_this.set_x((flixel_FlxG.width - _this.get_width()) / 2);
+		}
+		var tmp;
+		switch(axes._hx_index) {
+		case 1:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			_this.set_y((flixel_FlxG.height - _this.get_height()) / 2);
+		}
+		this.back.scrollFactor.set();
+		this.glitchBack(this.back);
+		var main = this.layer(song,"mine",-1626,-1305,3);
+		this.sceneLayers.h["mine"] = main;
+		this.back.set_alpha(0);
+		var hat = new flixel_FlxSprite(984,153);
+		hat.set_frames(Paths.getSparrowAtlas("golden/frustsongs/mine/hatguy",GoldenFrustExtras.library(song)));
+		hat.animation.addByPrefix("idle","sleep_loop",2,true);
+		var name = "resleep";
+		hat.animation.addByPrefix(name,name == "wakeup" ? "wakeup0" : name,24,false);
+		var name = "wakeup";
+		hat.animation.addByPrefix(name,name == "wakeup" ? "wakeup0" : name,24,false);
+		var name = "wakeup_end";
+		hat.animation.addByPrefix(name,name == "wakeup" ? "wakeup0" : name,24,false);
+		hat.animation.play("idle");
+		hat.scale.set(3,3);
+		hat.updateHitbox();
+		hat.set_antialiasing(false);
+		this.add(hat);
+		this.sceneLayers.h["hatguy"] = hat;
+		break;
+	case "nft":
+		this.back = this.layer(song,"bg",-1600,-900,3);
+		this.back.scrollFactor.set(.3,.3);
+		this.wavy(this.back,.5,.6,.2);
+		var chains = this.layer(song,"chains",-1400,-760,3);
+		chains.scrollFactor.set(.6,.6);
+		this.ground = this.layer(song,"ground",-1500,-880,3);
+		break;
+	case "nutty":
+		this.back = this.layer(song,"ocWeek/strawberries",-800,-400,1.5);
+		this.back.set_antialiasing(!GoldenQuality.superLow);
+		this.glitchBack(this.back);
+		this.oc(song,"bendu",-550,170,"watch");
+		this.oc(song,"ringi",-200,20,"wtf");
+		break;
+	case "og":
+		this.back = this.layer(song,"ogStage/ogBackground",-800,-300);
+		this.back.scrollFactor.set(.9,.9);
+		var clouds = this.layer(song,"ogStage/ogClouds",-400,100,.6);
+		clouds.scrollFactor.set(.9,.9);
+		var $window = this.layer(song,"ogStage/ogWindow",-800,-600);
+		$window.scrollFactor.set(.9,.9);
+		this.ground = this.layer(song,"ogStage/ogGrass",-800,600);
+		this.ground.scrollFactor.set(.9,.9);
+		var _g = 0;
+		var _g1 = this.members;
+		while(_g < _g1.length) {
+			var sprite = _g1[_g];
+			++_g;
+			sprite.set_antialiasing(!GoldenQuality.superLow);
+		}
+		break;
+	case "piehole":
+		var _g = 0;
+		var _g1 = [{ name : "sky", x : -500., y : -300., sx : 0., sy : 0.},{ name : "clouds", x : -500., y : -300., sx : .1, sy : .1},{ name : "hills", x : -600., y : 270., sx : .2, sy : .5},{ name : "backgrass", x : -1200., y : 500., sx : .3, sy : .7}];
+		while(_g < _g1.length) {
+			var spec = _g1[_g];
+			++_g;
+			var parent = this.layer(song,spec.name,spec.x,spec.y);
+			parent.scrollFactor.set(spec.sx,spec.sy);
+			parent.set_antialiasing(!GoldenQuality.superLow);
+			this.sceneLayers.h[spec.name] = parent;
+			if(spec.name == "sky") {
+				this.back = parent;
+			}
+			if(!GoldenQuality.superLow) {
+				var glow = this.layer(song,spec.name + "-glow",spec.x - 24,spec.y - 24);
+				var _this = glow.scrollFactor;
+				var point = parent.scrollFactor;
+				_this.set_x(point.x);
+				_this.set_y(point.y);
+				if(point._weak) {
+					point.put();
+				}
+				glow.set_antialiasing(true);
+				glow.set_blend(0);
+				glow.set_color(-8586080);
+				glow.set_alpha(0);
+				this.sceneLayers.h[spec.name + "Glow"] = glow;
+			}
+		}
+		var gradient = flixel_util_FlxGradient.createGradientFlxSprite(16,16,[-1,-16777216]);
+		gradient.setGraphicSize(flixel_FlxG.width * 3,flixel_FlxG.height * 3);
+		gradient.updateHitbox();
+		var axes = flixel_util_FlxAxes.XY;
+		var tmp;
+		switch(axes._hx_index) {
+		case 0:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			gradient.set_x((flixel_FlxG.width - gradient.get_width()) / 2);
+		}
+		var tmp;
+		switch(axes._hx_index) {
+		case 1:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			gradient.set_y((flixel_FlxG.height - gradient.get_height()) / 2);
+		}
+		gradient.set_y(gradient.y - 400);
+		gradient.scrollFactor.set();
+		gradient.set_antialiasing(!GoldenQuality.superLow);
+		gradient.set_blend(9);
+		gradient.set_alpha(0);
+		this.add(gradient);
+		this.sceneLayers.h["gradient"] = gradient;
+		if(!GoldenQuality.superLow) {
+			var _g = 0;
+			while(_g < 128) {
+				var i = _g++;
+				var particle = new flixel_FlxSprite().makeGraphic(16,16,0,true);
+				flixel_util_FlxSpriteUtil.drawCircle(particle,-1,-1,-1,-1);
+				particle.set_antialiasing(true);
+				particle.set_blend(1);
+				particle.set_active(false);
+				particle.set_visible(false);
+				this.add(particle);
+				this.sceneLayers.h["particle" + i] = particle;
+			}
+		}
+		this.ground = this.layer(song,"grass",-1500,250);
+		this.ground.set_antialiasing(!GoldenQuality.superLow);
+		break;
+	case "poopers":case "wheels":
+		this.back = this.layer(song,"wheels/swag",-400,60);
+		this.back.scale.set(6,4);
+		this.back.updateHitbox();
+		this.back.origin.set();
+		this.back.offset.set();
+		this.back.set_antialiasing(!GoldenQuality.superLow);
+		var girlfriend = this.layer(song,"characters/best_gf",400,260,2.3);
+		girlfriend.set_antialiasing(!GoldenQuality.superLow);
+		break;
+	case "ready-loud":
+		var name = "back_hallway";
+		var sprite = this.layer(song,name,0,0);
+		sprite.setGraphicSize(0,917);
+		sprite.updateHitbox();
+		var axes = flixel_util_FlxAxes.XY;
+		var tmp;
+		switch(axes._hx_index) {
+		case 0:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			sprite.set_x((flixel_FlxG.width - sprite.get_width()) / 2);
+		}
+		var tmp;
+		switch(axes._hx_index) {
+		case 1:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			sprite.set_y((flixel_FlxG.height - sprite.get_height()) / 2);
+		}
+		sprite.scrollFactor.set();
+		sprite.set_antialiasing(!GoldenQuality.superLow);
+		if(name == "room") {
+			this.room = sprite;
+		}
+		if(name == "light_switch") {
+			this.light = sprite;
+		}
+		var name = "room";
+		var sprite = this.layer(song,name,0,0);
+		sprite.setGraphicSize(0,917);
+		sprite.updateHitbox();
+		var axes = flixel_util_FlxAxes.XY;
+		var tmp;
+		switch(axes._hx_index) {
+		case 0:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			sprite.set_x((flixel_FlxG.width - sprite.get_width()) / 2);
+		}
+		var tmp;
+		switch(axes._hx_index) {
+		case 1:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			sprite.set_y((flixel_FlxG.height - sprite.get_height()) / 2);
+		}
+		sprite.scrollFactor.set();
+		sprite.set_antialiasing(!GoldenQuality.superLow);
+		if(name == "room") {
+			this.room = sprite;
+		}
+		if(name == "light_switch") {
+			this.light = sprite;
+		}
+		var name = "light_switch";
+		var sprite = this.layer(song,name,0,0);
+		sprite.setGraphicSize(0,917);
+		sprite.updateHitbox();
+		var axes = flixel_util_FlxAxes.XY;
+		var tmp;
+		switch(axes._hx_index) {
+		case 0:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			sprite.set_x((flixel_FlxG.width - sprite.get_width()) / 2);
+		}
+		var tmp;
+		switch(axes._hx_index) {
+		case 1:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			sprite.set_y((flixel_FlxG.height - sprite.get_height()) / 2);
+		}
+		sprite.scrollFactor.set();
+		sprite.set_antialiasing(!GoldenQuality.superLow);
+		if(name == "room") {
+			this.room = sprite;
+		}
+		if(name == "light_switch") {
+			this.light = sprite;
+		}
+		break;
+	case "recovered-project":
+		this.back = this.sizedLayer(song,"q",0,0,2560,1440);
+		var _this = this.back;
+		var axes = flixel_util_FlxAxes.XY;
+		var tmp;
+		switch(axes._hx_index) {
+		case 0:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			_this.set_x((flixel_FlxG.width - _this.get_width()) / 2);
+		}
+		var tmp;
+		switch(axes._hx_index) {
+		case 1:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			_this.set_y((flixel_FlxG.height - _this.get_height()) / 2);
+		}
+		this.back.scrollFactor.set();
+		var picture = this.sizedLayer(song,"q (" + 0 + ")",this.back.x,this.back.y,2560,1440);
+		var axes = flixel_util_FlxAxes.XY;
+		var tmp;
+		switch(axes._hx_index) {
+		case 0:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			picture.set_x((flixel_FlxG.width - picture.get_width()) / 2);
+		}
+		var tmp;
+		switch(axes._hx_index) {
+		case 1:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			picture.set_y((flixel_FlxG.height - picture.get_height()) / 2);
+		}
+		picture.scrollFactor.set();
+		picture.set_alpha(.00001);
+		this.sceneLayers.h["q" + 0] = picture;
+		var picture = this.sizedLayer(song,"q (" + 1 + ")",this.back.x,this.back.y,2560,1440);
+		var axes = flixel_util_FlxAxes.XY;
+		var tmp;
+		switch(axes._hx_index) {
+		case 0:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			picture.set_x((flixel_FlxG.width - picture.get_width()) / 2);
+		}
+		var tmp;
+		switch(axes._hx_index) {
+		case 1:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			picture.set_y((flixel_FlxG.height - picture.get_height()) / 2);
+		}
+		picture.scrollFactor.set();
+		picture.set_alpha(.00001);
+		this.sceneLayers.h["q" + 1] = picture;
+		var picture = this.sizedLayer(song,"q (" + 2 + ")",this.back.x,this.back.y,2560,1440);
+		var axes = flixel_util_FlxAxes.XY;
+		var tmp;
+		switch(axes._hx_index) {
+		case 0:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			picture.set_x((flixel_FlxG.width - picture.get_width()) / 2);
+		}
+		var tmp;
+		switch(axes._hx_index) {
+		case 1:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			picture.set_y((flixel_FlxG.height - picture.get_height()) / 2);
+		}
+		picture.scrollFactor.set();
+		picture.set_alpha(.00001);
+		this.sceneLayers.h["q" + 2] = picture;
+		var picture = this.sizedLayer(song,"q (" + 3 + ")",this.back.x,this.back.y,2560,1440);
+		var axes = flixel_util_FlxAxes.XY;
+		var tmp;
+		switch(axes._hx_index) {
+		case 0:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			picture.set_x((flixel_FlxG.width - picture.get_width()) / 2);
+		}
+		var tmp;
+		switch(axes._hx_index) {
+		case 1:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			picture.set_y((flixel_FlxG.height - picture.get_height()) / 2);
+		}
+		picture.scrollFactor.set();
+		picture.set_alpha(.00001);
+		this.sceneLayers.h["q" + 3] = picture;
+		break;
+	case "roupiniphobia":
+		this.back = this.layer(song,"zoonuck",-600,-200);
+		this.back.scrollFactor.set(.1,.1);
+		break;
+	case "sick-tricks":
+		this.back = this.layer(song,"dave/sick_tricks",-250,-50,.8);
+		this.back.set_antialiasing(!GoldenQuality.superLow);
+		break;
+	case "slices":
+		var back = this.layer(song,"slices",0,0,1.35);
+		var axes = flixel_util_FlxAxes.XY;
+		var tmp;
+		switch(axes._hx_index) {
+		case 0:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			back.set_x((flixel_FlxG.width - back.get_width()) / 2);
+		}
+		var tmp;
+		switch(axes._hx_index) {
+		case 1:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			back.set_y((flixel_FlxG.height - back.get_height()) / 2);
+		}
+		break;
+	case "strawberry":
+		this.back = this.layer(song,"ocWeek/bom",-700,-400);
+		this.scaleOnly(this.back,1.2);
+		this.back.scrollFactor.set();
+		this.glitchBack(this.back,.05,2.5,1.25);
+		this.overlay = this.layer(song,"ocWeek/ysm",0,0,2);
+		var _this = this.overlay;
+		var axes = flixel_util_FlxAxes.XY;
+		var tmp;
+		switch(axes._hx_index) {
+		case 0:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			_this.set_x((flixel_FlxG.width - _this.get_width()) / 2);
+		}
+		var tmp;
+		switch(axes._hx_index) {
+		case 1:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			_this.set_y((flixel_FlxG.height - _this.get_height()) / 2);
+		}
+		var fh = this.overlay;
+		fh.set_x(fh.x + 300);
+		var fh = this.overlay;
+		fh.set_y(fh.y - 150);
+		this.oc(song,"ringi",200,0);
+		this.oc(song,"bendu",-450,20);
+		this.oc(song,"bambom",-50,165,"flung");
+		this.ocActors.h["bambom"].set_alpha(.0001);
+		break;
+	case "sugar-rush":
+		this.layer(song,"pissing_too",-1130,0,2.08725926);
+		break;
+	case "tantalum":
+		this.back = this.layer(song,"back",100,-85);
+		this.scaleOnly(this.back,2);
+		this.back.scrollFactor.set(.15,.15);
+		this.wavy(this.back,.01,4,1.75);
+		var front = new flixel_FlxSprite(this.back.x,this.back.y + 200);
+		front.set_frames(Paths.getSparrowAtlas("golden/frustsongs/" + song + "/front",GoldenFrustExtras.library(song)));
+		front.animation.addByPrefix("idle","front",24,true);
+		front.animation.play("idle");
+		this.scaleOnly(front,2.2);
+		front.scrollFactor.set(.45,.45);
+		this.add(front);
+		this.oc(song,"bambom",-600,190);
+		this.oc(song,"ringi",-50,120,"walk");
+		this.ocActors.h["ringi"].set_alpha(.000001);
+		this.oc(song,"bendu",-100,20);
+		break;
+	case "the-big-dingle":
+		this.back = this.layer(song,"sky",-100,0,2);
+		this.sceneLayers.h["sky"] = this.back;
+		this.back.scrollFactor.set(.1,.1);
+		var city = this.layer(song,"city",-10,-50,2);
+		this.sceneLayers.h["city"] = city;
+		city.scrollFactor.set(.3,.3);
+		var this1 = this.sceneLayers;
+		var value = this.layer(song,"behindTrain",-40,47.5,2);
+		this1.h["behindTrain"] = value;
+		var this1 = this.sceneLayers;
+		var value = this.layer(song,"street",-40,47.5,2);
+		this1.h["street"] = value;
+		var name = "sludd";
+		var sprite = this.layer(song,name,name == "sand" || name == "tree" ? -840 : 0,name == "sand" || name == "tree" ? 20 : 0,2);
+		sprite.set_visible(false);
+		this.sceneLayers.h[name] = sprite;
+		var name = "water";
+		var sprite = this.layer(song,name,name == "sand" || name == "tree" ? -840 : 0,name == "sand" || name == "tree" ? 20 : 0,2);
+		sprite.set_visible(false);
+		this.sceneLayers.h[name] = sprite;
+		var name = "sand";
+		var sprite = this.layer(song,name,name == "sand" || name == "tree" ? -840 : 0,name == "sand" || name == "tree" ? 20 : 0,2);
+		sprite.set_visible(false);
+		this.sceneLayers.h[name] = sprite;
+		var name = "tree";
+		var sprite = this.layer(song,name,name == "sand" || name == "tree" ? -840 : 0,name == "sand" || name == "tree" ? 20 : 0,2);
+		sprite.set_visible(false);
+		this.sceneLayers.h[name] = sprite;
+		break;
+	case "the-boopadoop-song":
+		this.back = this.layer(song,"BlackVoid",-600,-300);
+		this.back.scrollFactor.set(.9,.9);
+		this.back.set_antialiasing(!GoldenQuality.superLow);
+		break;
+	case "thunderstorm":
+		this.back = this.layer(song,"thunda/sky",-600,-300,.9);
+		this.layer(song,"thunda/backmount",-700,60,.9);
+		this.layer(song,"thunda/middlemount",-400,300);
+		this.ground = this.layer(song,"thunda/ground",-400,560,.6);
+		var _g = 0;
+		var _g1 = this.members;
+		while(_g < _g1.length) {
+			var sprite = _g1[_g];
+			++_g;
+			sprite.set_antialiasing(!GoldenQuality.superLow);
+		}
+		break;
+	case "ticking":
+		this.back = this.layer(song,"back",-1900,-900,2.3);
+		this.back.scrollFactor.set(.3,.3);
+		var balls = new GoldenTickingShader();
+		if(!GoldenQuality.superLow) {
+			this.back.shader = balls;
+		}
+		this.sceneLayers.h["ballsShader"] = this.back;
+		this.animated(song,"ball",-520,250,"ball",12,2.3,.3);
+		this.animated(song,"dna",-175,-900,"strand",12,2.3,.4);
+		var atlas = Paths.getSparrowAtlas("golden/frustsongs/ticking/otheritems",GoldenFrustExtras.library(song));
+		var item = new flixel_FlxSprite(-1900,-900);
+		item.set_frames(atlas);
+		item.set_frame(atlas.frames[0]);
+		item.scale.set(2.3,2.3);
+		item.updateHitbox();
+		item.scrollFactor.set(.5,.5);
+		item.set_antialiasing(false);
+		this.add(item);
+		var item = new flixel_FlxSprite(-1900,-900);
+		item.set_frames(atlas);
+		item.set_frame(atlas.frames[1]);
+		item.scale.set(2.3,2.3);
+		item.updateHitbox();
+		item.scrollFactor.set(.5,.5);
+		item.set_antialiasing(false);
+		this.add(item);
+		var item = new flixel_FlxSprite(-1900,-900);
+		item.set_frames(atlas);
+		item.set_frame(atlas.frames[2]);
+		item.scale.set(2.3,2.3);
+		item.updateHitbox();
+		item.scrollFactor.set(.5,.5);
+		item.set_antialiasing(false);
+		this.add(item);
+		var item = new flixel_FlxSprite(-1900,-900);
+		item.set_frames(atlas);
+		item.set_frame(atlas.frames[3]);
+		item.scale.set(2.3,2.3);
+		item.updateHitbox();
+		item.scrollFactor.set(.5,.5);
+		item.set_antialiasing(false);
+		this.add(item);
+		break;
+	case "too-shiny":
+		this.back = this.layer(song,"diamondBg",-601,-2);
+		break;
+	default:
+		if(GoldenRemaining.supports(song)) {
+			GoldenRemaining.buildStage(this,song);
+		} else {
+			throw haxe_Exception.thrown("Missing reconstructed extra stage: " + song);
+		}
+	}
+};
+$hxClasses["GoldenFrustStage"] = GoldenFrustStage;
+GoldenFrustStage.__name__ = "GoldenFrustStage";
+GoldenFrustStage.__super__ = flixel_group_FlxTypedGroup;
+GoldenFrustStage.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
+	glitch: null
+	,wave: null
+	,shaderTime: null
+	,galaxy: null
+	,back: null
+	,overlay: null
+	,ground: null
+	,foreground: null
+	,foregrounds: null
+	,ocActors: null
+	,oc: function(song,id,x,y,state,scale) {
+		if(scale == null) {
+			scale = 1;
+		}
+		if(state == null) {
+			state = "bg";
+		}
+		var actor = new GoldenOCActor(song,id,x,y,state);
+		if(scale != 1) {
+			this.scaleOnly(actor,scale);
+		}
+		actor.applyStateOffset();
+		this.ocActors.h[id] = actor;
+		this.add(actor);
+	}
+	,glitchBack: function(sprite,amplitude,frequency,speed) {
+		if(speed == null) {
+			speed = 2;
+		}
+		if(frequency == null) {
+			frequency = 5;
+		}
+		if(amplitude == null) {
+			amplitude = .1;
+		}
+		this.glitch = new GoldenGlitchShader();
+		this.glitch.uWaveAmplitude.value[0] = amplitude;
+		this.glitch.uFrequency.value[0] = frequency;
+		this.glitch.uSpeed.value[0] = speed;
+		if(!GoldenQuality.superLow) {
+			sprite.shader = this.glitch;
+		}
+	}
+	,wavy: function(sprite,amplitude,frequency,speed) {
+		this.wave = new GoldenWavyShader();
+		this.wave.uWaveAmplitude.value[0] = amplitude;
+		this.wave.uFrequency.value[0] = frequency;
+		this.wave.uSpeed.value[0] = speed;
+		if(!GoldenQuality.superLow) {
+			sprite.shader = this.wave;
+		}
+	}
+	,room: null
+	,light: null
+	,sceneLayers: null
+	,animated: function(song,name,x,y,prefix,fps,scale,scroll) {
+		var sprite = new flixel_FlxSprite(x,y);
+		sprite.set_frames(Paths.getSparrowAtlas("golden/frustsongs/" + song + "/" + name,GoldenFrustExtras.library(song)));
+		sprite.animation.addByPrefix(prefix,prefix,fps,true);
+		sprite.animation.play(prefix);
+		sprite.scale.set(scale,scale);
+		sprite.updateHitbox();
+		sprite.scrollFactor.set(scroll,scroll);
+		sprite.set_antialiasing(false);
+		this.add(sprite);
+		return sprite;
+	}
+	,layer: function(song,name,x,y,scale) {
+		if(scale == null) {
+			scale = 1;
+		}
+		var sprite = new flixel_FlxSprite(x,y).loadGraphic(Paths.getPath("images/" + ("golden/frustsongs/" + song + "/" + name) + ".png","IMAGE",GoldenFrustExtras.library(song)));
+		sprite.scale.set(scale,scale);
+		sprite.updateHitbox();
+		sprite.origin.set();
+		sprite.offset.set();
+		sprite.set_antialiasing(false);
+		sprite.set_active(false);
+		this.add(sprite);
+		return sprite;
+	}
+	,sizedLayer: function(song,name,x,y,width,height) {
+		var sprite = this.layer(song,name,x,y);
+		sprite.setGraphicSize(width,height);
+		sprite.updateHitbox();
+		sprite.origin.set();
+		sprite.offset.set();
+		return sprite;
+	}
+	,scaleOnly: function(sprite,value) {
+		sprite.scale.set(value,value);
+		sprite.origin.set(sprite.frameWidth / 2,sprite.frameHeight / 2);
+		sprite.offset.set();
+	}
+	,sync: function(time,elapsed) {
+		this.shaderTime += Math.max(0,elapsed);
+		if(this.back != null && ((this.back.shader) instanceof GoldenTickingShader)) {
+			var balls = this.back.shader;
+			balls.iTime.value[0] = this.shaderTime;
+		}
+		if(this.galaxy != null) {
+			this.galaxy.uTime.value[0] = this.shaderTime;
+		}
+		if(this.glitch != null) {
+			this.glitch.uTime.value[0] = this.shaderTime;
+		}
+		if(this.wave != null) {
+			this.wave.iTime.value[0] = this.shaderTime;
+		}
+	}
+	,__class__: GoldenFrustStage
+});
+var GoldenFrustration = function(owner) {
+	this.chairStart = 275604.395604395599;
+	this.lastTime = -1;
+	this.lastStep = -1;
+	this.angry = false;
+	this.owner = owner;
+	this.mods = new GoldenFrustrationMods();
+	GoldenHoldPath.frustration = this.mods;
+	owner.dad.setPosition(-76,22);
+	owner.gf.setReferenceScale(0.9);
+	owner.gf.setPosition(393,-31);
+	owner.gf.scrollFactor.set(1,1);
+	owner.boyfriend.setReferenceScale(0.93);
+	owner.boyfriend.setPosition(950,440);
+	this.camera = new GoldenChartCamera(owner,JSON.parse(openfl_utils_Assets.getText(Paths.getPath("data/" + "golden/frustration/events" + ".json","TEXT","frustration"))),182,0.7);
+	var idle = owner.dad.frames.frames[owner.dad.animation._animations.h["idle0"].frames[0]];
+	this.camera.focuses.h["DAD"] = [-76 + (idle.offset.x + idle.frame.width / 2) * owner.dad.scale.x - 80,22 + (idle.offset.y + idle.frame.height / 2) * owner.dad.scale.y];
+	var bounds = JSON.parse(openfl_utils_Assets.getText(Paths.getPath("data/" + "golden/characters/bf-bounds" + ".json","TEXT",null))).reference;
+	this.camera.focuses.h["BF"] = [owner.boyfriend.x + (bounds.x + bounds.width / 2) * 0.93 - 60,owner.boyfriend.y + (bounds.y + bounds.height / 2) * 0.93];
+	this.camera.focuses.h["GF"] = [owner.gf.x + 75,this.camera.focuses.h["DAD"][1] + 50];
+	owner.camFollow.setPosition(this.camera.focuses.h["GF"][0],this.camera.focuses.h["GF"][1]);
+	owner.healthBar.createFilledBar(-12238874,-13520687);
+	this.backdrop = new flixel_FlxSprite().makeGraphic(1280,720,-16777216);
+	this.backdrop.scrollFactor.set();
+	this.backdrop.set_cameras([owner.camHUD]);
+	this.backdrop.set_alpha(0);
+	owner.add(this.backdrop);
+	this.closeup = new flixel_FlxSprite();
+	this.closeup.set_frames(Paths.getSparrowAtlas("golden/frustration/dave_closeup","frustration"));
+	var pair_0 = "idle";
+	var pair_1 = "closeup";
+	this.closeup.animation.addByPrefix(pair_0,pair_1,24,true);
+	var pair_0 = "first";
+	var pair_1 = "firstglitch";
+	this.closeup.animation.addByPrefix(pair_0,pair_1,24,true);
+	var pair_0 = "second";
+	var pair_1 = "secondglitch";
+	this.closeup.animation.addByPrefix(pair_0,pair_1,24,true);
+	var pair_0 = "third";
+	var pair_1 = "third glitch";
+	this.closeup.animation.addByPrefix(pair_0,pair_1,24,true);
+	this.closeup.animation.play("idle");
+	this.closeup.scale.set(1.5,1.5);
+	this.closeup.updateHitbox();
+	var _this = this.closeup;
+	var axes = flixel_util_FlxAxes.X;
+	if(axes == null) {
+		axes = flixel_util_FlxAxes.XY;
+	}
+	var tmp;
+	switch(axes._hx_index) {
+	case 0:case 2:
+		tmp = true;
+		break;
+	default:
+		tmp = false;
+	}
+	if(tmp) {
+		_this.set_x((flixel_FlxG.width - _this.get_width()) / 2);
+	}
+	var tmp;
+	switch(axes._hx_index) {
+	case 1:case 2:
+		tmp = true;
+		break;
+	default:
+		tmp = false;
+	}
+	if(tmp) {
+		_this.set_y((flixel_FlxG.height - _this.get_height()) / 2);
+	}
+	this.closeup.set_y(flixel_FlxG.height - this.closeup.get_height());
+	this.closeup.set_alpha(0);
+	this.closeup.scrollFactor.set();
+	this.closeup.set_cameras([owner.camHUD]);
+	owner.add(this.closeup);
+	this.black = new flixel_FlxSprite().makeGraphic(1280,720,-16777216);
+	this.black.scrollFactor.set();
+	this.black.set_cameras([owner.camHUD]);
+	this.black.set_alpha(0);
+	owner.add(this.black);
+	owner.frustrationStage.screen.set_cameras([owner.camHUD]);
+	owner.insert(owner.members.indexOf(owner.strumLineNotes),owner.frustrationStage.screen);
+};
+$hxClasses["GoldenFrustration"] = GoldenFrustration;
+GoldenFrustration.__name__ = "GoldenFrustration";
+GoldenFrustration.idleAt = function(step) {
+	if(step >= 1600) {
+		return "-alt";
+	} else if(step >= 1152) {
+		return "2";
+	} else if(step >= 640) {
+		return "1";
+	} else {
+		return "";
+	}
+};
+GoldenFrustration.prototype = {
+	owner: null
+	,camera: null
+	,mods: null
+	,angry: null
+	,lastStep: null
+	,lastTime: null
+	,chairStart: null
+	,closeup: null
+	,backdrop: null
+	,black: null
+	,update: function(time,elapsed) {
+		var step = Math.max(0,time) / 82.4175824175824232 | 0;
+		var suffix = GoldenFrustration.idleAt(step);
+		this.owner.dad.idleSuffix = suffix;
+		this.angry = step >= 1600;
+		if(step >= 1600 && this.lastStep < 1600) {
+			this.owner.dad.playSpecialAnim("grr");
+		}
+		if(step >= 3232 && this.lastStep < 3232) {
+			this.owner.boyfriend.canAutoDance = false;
+			this.owner.boyfriend.playSpecialAnim("think");
+		}
+		if(step >= 3248 && this.lastStep < 3248) {
+			this.owner.boyfriend.playSpecialAnim("run");
+		}
+		this.camera.update(time,elapsed);
+		this.mods.update(this.owner,time);
+		this.owner.frustrationStage.sync(time);
+		var fade = Math.max(0,Math.min(1,(time - 271648.351648351643) / 1000));
+		this.closeup.set_alpha(fade);
+		this.backdrop.set_alpha(0);
+		this.owner.frustrationStage.screen.set_alpha(fade);
+		if(step >= 3296) {
+			var name = step >= 3328 ? "third" : step >= 3320 ? "second" : step >= 3312 ? "first" : "idle";
+			var start = (name == "third" ? 3328 : name == "second" ? 3320 : name == "first" ? 3312 : 3296) * 60000 / 182 / 4;
+			this.closeup.animation.play(name);
+			this.closeup.animation._curAnim.set_curFrame(((time - start) * 24 / 1000 | 0) % this.closeup.animation._curAnim.frames.length);
+			var _this = this.closeup.animation;
+			if(_this._curAnim != null) {
+				_this._curAnim.pause();
+			}
+			var q = Math.max(0,Math.min(1,(time - 271648.351648351643) / 5000));
+			this.closeup.scale.set(1.5 + 0.25 * q,1.5 + 0.25 * q);
+		}
+		var runEnd = 268525.641025641;
+		var collideEnd = runEnd + 833.333333333333371;
+		if(time >= runEnd && time < this.chairStart) {
+			this.owner.dad.canAutoDance = false;
+			this.owner.gf.canAutoDance = false;
+			if(this.lastTime < runEnd) {
+				this.owner.boyfriend.playSpecialAnim("collide");
+				this.owner.dad.playSpecialAnim("fall");
+				this.owner.gf.playSpecialAnim("huh");
+			}
+			this.owner.dad.set_x(-76 - Math.max(0,time - runEnd) / 10);
+			if(time >= collideEnd) {
+				var t = (time - collideEnd) / 1000;
+				this.owner.boyfriend.set_x(950 + 4000 * t + 500 * t * t);
+			}
+		}
+		if(step >= 3342) {
+			this.black.set_alpha(Math.min(1,(time - 275439.560439560446) / 164.835164835164846));
+		}
+		if(step >= 3344) {
+			this.closeup.set_visible(this.backdrop.set_visible(false));
+			this.black.set_alpha(Math.max(0,1 - (time - this.chairStart) / 500));
+			this.owner.dad.set_x(-76);
+			this.owner.dad.set_y(22);
+			if(this.lastStep < 3344) {
+				this.owner.dad.canAutoDance = false;
+				this.owner.dad.playSpecialAnim("chair");
+				this.owner.gf.canAutoDance = false;
+				this.owner.gf.playSpecialAnim("fall");
+				var _this = this.owner.gf.animation;
+				if(_this._curAnim != null) {
+					_this._curAnim.pause();
+				}
+			}
+			var frame = Math.min(89,(time - this.chairStart) * 24 / 1000 | 0) | 0;
+			this.owner.dad.playAnim("chair");
+			this.owner.dad.animation._curAnim.set_curFrame(frame);
+			var _this = this.owner.dad.animation;
+			if(_this._curAnim != null) {
+				_this._curAnim.pause();
+			}
+			var chairEnd = this.chairStart + 3750.;
+			if(time >= chairEnd) {
+				var fallFrame = (time - chairEnd) * 24 / 1000 | 0;
+				this.owner.gf.playSpecialAnim(fallFrame >= 46 ? "portalLoop" : "fall");
+				this.owner.gf.animation._curAnim.set_curFrame(fallFrame >= 46 ? (fallFrame - 46) % 12 : fallFrame);
+				var _this = this.owner.gf.animation;
+				if(_this._curAnim != null) {
+					_this._curAnim.pause();
+				}
+				var q = Math.min(1,(time - chairEnd) / 6000);
+				flixel_FlxG.camera.set_zoom(0.7 + -0.399999999999999967 * q);
+			}
+		}
+		if(step >= 3410) {
+			this.black.set_alpha(Math.min(1,(time - 281043.956043956045) / 5000));
+		}
+		var seconds = Math.max(0,time) / 1000 | 0;
+		this.owner.applecoreClock.set_text((seconds / 60 | 0) + ":" + (seconds % 60 < 10 ? "0" : "") + seconds % 60);
+		this.lastStep = step;
+		this.lastTime = time;
+	}
+	,__class__: GoldenFrustration
+};
+var GoldenFrustrationMods = function(path,library,bpm,scrollSpeed) {
+	if(scrollSpeed == null) {
+		scrollSpeed = 2.8;
+	}
+	if(bpm == null) {
+		bpm = 182;
+	}
+	if(library == null) {
+		library = "frustration";
+	}
+	if(path == null) {
+		path = "golden/frustration/modchart";
+	}
+	this.downscroll = false;
+	this.dispatched = 0;
+	this.songTime = 0;
+	this.lastBeat = 0;
+	this.base = [];
+	this.tracks = [new haxe_ds_StringMap(),new haxe_ds_StringMap()];
+	this.values = [new haxe_ds_StringMap(),new haxe_ds_StringMap()];
+	this.index = 0;
+	this.bpm = bpm;
+	this.scrollSpeed = scrollSpeed;
+	if(library == "extra-ticking") {
+		this.lastBeat = -10;
+	}
+	var data = JSON.parse(openfl_utils_Assets.getText(Paths.getPath("data/" + path + ".json","TEXT",library)));
+	this.defaults = data.defaults;
+	this.events = data.events;
+	var _g = 0;
+	var _g1 = Reflect.fields(this.defaults);
+	while(_g < _g1.length) {
+		var name = _g1[_g];
+		++_g;
+		this.values[0].h[name] = Reflect.field(this.defaults,name);
+	}
+	var name = "zoom";
+	this.values[0].h[name] = 100;
+	var name = "zoomx";
+	this.values[0].h[name] = 100;
+	var name = "zoomy";
+	this.values[0].h[name] = 100;
+	this.values[0].h["xmod"] = 1;
+	var _g = 0;
+	var _g1 = Reflect.fields(this.defaults);
+	while(_g < _g1.length) {
+		var name = _g1[_g];
+		++_g;
+		this.values[1].h[name] = Reflect.field(this.defaults,name);
+	}
+	var name = "zoom";
+	this.values[1].h[name] = 100;
+	var name = "zoomx";
+	this.values[1].h[name] = 100;
+	var name = "zoomy";
+	this.values[1].h[name] = 100;
+	this.values[1].h["xmod"] = 1;
+};
+$hxClasses["GoldenFrustrationMods"] = GoldenFrustrationMods;
+GoldenFrustrationMods.__name__ = "GoldenFrustrationMods";
+GoldenFrustrationMods.easing = function(name,q) {
+	q = Math.max(0,Math.min(1,q));
+	switch(name) {
+	case "inBack":
+		return q * q * (2.70158 * q - 1.70158);
+	case "inCubic":
+		return q * q * q;
+	case "inExpo":
+		return Math.pow(2,10 * (q - 1));
+	case "inOutCubic":
+		var t = q;
+		if(t <= .5) {
+			return t * t * t * 4;
+		} else {
+			return 1 + --t * t * t * 4;
+		}
+		break;
+	case "inOutExpo":
+		return flixel_tweens_FlxEase.expoInOut(q);
+	case "inQuad":
+		return q * q;
+	case "inSine":
+		return -Math.cos(flixel_tweens_FlxEase.PI2 * q) + 1;
+	case "outBack":
+		var t = q;
+		return 1 - --t * t * (-2.70158 * t - 1.70158);
+	case "outCubic":
+		var t = q;
+		return 1 + --t * t * t;
+	case "outExpo":
+		return -Math.pow(2,-10 * q) + 1;
+	case "outQuad":
+		return -q * (q - 2);
+	case "outSine":
+		return Math.sin(flixel_tweens_FlxEase.PI2 * q);
+	default:
+		return q;
+	}
+};
+GoldenFrustrationMods.fastSin = function(angle) {
+	var q = angle * 0.3183098862;
+	if(q > 1) {
+		q -= (Math.ceil(q) | 0) & -2;
+	} else if(q < -1) {
+		q += (Math.ceil(-q) | 0) & -2;
+	}
+	var a = q <= 0 ? 3.1 - ((q * 3.6 + 7.2) * q + 0.5) * q : ((q * 3.6 - 7.2) * q + 0.5) * q + 3.1;
+	return a * q;
+};
+GoldenFrustrationMods.triangle = function(angle) {
+	var q = (angle % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) / Math.PI;
+	if(q < 0.5) {
+		return q * 2;
+	} else if(q < 1.5) {
+		return 2 - q * 2;
+	} else {
+		return q * 2 - 4;
+	}
+};
+GoldenFrustrationMods.prototype = {
+	events: null
+	,defaults: null
+	,index: null
+	,values: null
+	,tracks: null
+	,base: null
+	,lastBeat: null
+	,bpm: null
+	,scrollSpeed: null
+	,songTime: null
+	,dispatched: null
+	,downscroll: null
+	,get: function(p,name,fallback) {
+		if(fallback == null) {
+			fallback = 0;
+		}
+		if(Object.prototype.hasOwnProperty.call(this.values[p].h,name)) {
+			return this.values[p].h[name];
+		} else {
+			return fallback;
+		}
+	}
+	,settle: function(beat) {
+		var h = this.tracks[0].h;
+		var name_h = h;
+		var name_keys = Object.keys(h);
+		var name_length = name_keys.length;
+		var name_current = 0;
+		while(name_current < name_length) {
+			var name = name_keys[name_current++];
+			var t = this.tracks[0].h[name];
+			var q = GoldenFrustrationMods.easing(t.ease,(beat - t.beat) / Math.max(0.000001,t.duration));
+			this.values[0].h[name] = t.from + (t.to - t.from) * q;
+			if(beat >= t.beat + t.duration) {
+				var _this = this.tracks[0];
+				if(Object.prototype.hasOwnProperty.call(_this.h,name)) {
+					delete(_this.h[name]);
+				}
+			}
+		}
+		var h = this.tracks[1].h;
+		var name_h = h;
+		var name_keys = Object.keys(h);
+		var name_length = name_keys.length;
+		var name_current = 0;
+		while(name_current < name_length) {
+			var name = name_keys[name_current++];
+			var t = this.tracks[1].h[name];
+			var q = GoldenFrustrationMods.easing(t.ease,(beat - t.beat) / Math.max(0.000001,t.duration));
+			this.values[1].h[name] = t.from + (t.to - t.from) * q;
+			if(beat >= t.beat + t.duration) {
+				var _this = this.tracks[1];
+				if(Object.prototype.hasOwnProperty.call(_this.h,name)) {
+					delete(_this.h[name]);
+				}
+			}
+		}
+	}
+	,advance: function(beat) {
+		while(this.lastBeat < beat) {
+			var next = Math.min(beat,this.lastBeat + this.bpm / 60000 * 4.16666666666666696);
+			var dt = (next - this.lastBeat) * 60 / this.bpm;
+			this.settle((this.lastBeat + next) / 2);
+			var seconds = (this.lastBeat + next) * 30 / this.bpm;
+			var amount = this.get(0,"classics") / 100;
+			if(!Object.prototype.hasOwnProperty.call(this.tracks[0].h,"angle")) {
+				var this1 = this.values[0];
+				var value = (this.get(0,"angle") + amount * 300 * (1 + Math.sin(2.5 * (seconds + this.get(0,"classicsoffset")))) * dt) % 360;
+				this1.h["angle"] = value;
+			}
+			var seconds1 = (this.lastBeat + next) * 30 / this.bpm;
+			var amount1 = this.get(1,"classics") / 100;
+			if(!Object.prototype.hasOwnProperty.call(this.tracks[1].h,"angle")) {
+				var this2 = this.values[1];
+				var value1 = (this.get(1,"angle") + amount1 * 300 * (1 + Math.sin(2.5 * (seconds1 + this.get(1,"classicsoffset")))) * dt) % 360;
+				this2.h["angle"] = value1;
+			}
+			this.lastBeat = next;
+		}
+		this.settle(beat);
+	}
+	,update: function(owner,time) {
+		if(owner.strumLineNotes == null || owner.strumLineNotes.length < 8) {
+			return;
+		}
+		var beat = Math.max(0,time) * this.bpm / 60000;
+		while(this.index < this.events.length && this.events[this.index].beat <= beat) {
+			var event = this.events[this.index++];
+			this.advance(event.beat);
+			var _g = 0;
+			while(_g < 2) {
+				var p = _g++;
+				if(event.player != 0 && event.player != p + 1) {
+					continue;
+				}
+				var _g1 = 0;
+				var _g2 = Reflect.fields(event.values);
+				while(_g1 < _g2.length) {
+					var name = _g2[_g1];
+					++_g1;
+					if(name == "__moduloangles") {
+						var this1 = this.values[p];
+						var value = this.get(p,"angle") % 360;
+						this1.h["angle"] = value;
+						var _this = this.tracks[p];
+						if(Object.prototype.hasOwnProperty.call(_this.h,"angle")) {
+							delete(_this.h["angle"]);
+						}
+						continue;
+					}
+					var to = Reflect.field(event.values,name);
+					if(event.duration == 0) {
+						this.values[p].h[name] = to;
+						var _this1 = this.tracks[p];
+						if(Object.prototype.hasOwnProperty.call(_this1.h,name)) {
+							delete(_this1.h[name]);
+						}
+					} else {
+						var this2 = this.tracks[p];
+						var value1 = { from : this.get(p,name), to : to, beat : event.beat, duration : event.duration, ease : event.ease};
+						this2.h[name] = value1;
+					}
+				}
+			}
+			this.dispatched++;
+		}
+		this.advance(beat);
+		this.songTime = time;
+		if(this.base.length != owner.strumLineNotes.length) {
+			this.base = [];
+			var _g = 0;
+			var _g1 = owner.strumLineNotes.members;
+			while(_g < _g1.length) {
+				var s = _g1[_g];
+				++_g;
+				var frame = s.frames.frames[s.animation._animations.h["static"].frames[0]].sourceSize;
+				this.base.push({ x : s.x, y : s.y, sx : s.scale.x, sy : s.scale.y, cx : s.x + frame.x * s.scale.x / 2, cy : s.y + frame.y * s.scale.y / 2});
+			}
+		}
+		var _g = 0;
+		var _g1 = owner.strumLineNotes.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var s = owner.strumLineNotes.members[i];
+			var p = i < 4 ? 0 : 1;
+			var lane = i % 4;
+			var frame = s.frames.frames[s.animation._animations.h["static"].frames[0]].sourceSize;
+			var middle = (this.base[p * 4].cx + this.base[p * 4 + 3].cx) / 2;
+			var laneCenter = this.base[i].cx;
+			this.downscroll = flixel_FlxG.save.data.downscroll;
+			var radians = this.get(p,"rotationz") * Math.PI / 180;
+			var cos = Math.cos(radians);
+			var sin = Math.sin(radians);
+			var dx = (3 - 2 * lane) * Note.swagWidth * this.get(p,"flip") / 100;
+			dx += (lane % 2 == 0 ? 1 : -1) * Note.swagWidth * this.get(p,"invert") / 100 + this.lateral(p,lane,0);
+			s.scale.set(this.base[i].sx * this.scaleX(p,lane),this.base[i].sy * this.scaleY(p,lane));
+			var localX = laneCenter - middle + dx;
+			var localY = this.base[i].cy - flixel_FlxG.height / 2 + this.get(p,"y") + this.get(p,"movey" + lane) + this.tipsy(p,lane) + this.get(p,"movey") / 100 * flixel_FlxG.height;
+			s.set_x(middle + (localX * cos - localY * sin) * this.fieldScaleX(p) - frame.x * s.scale.x / 2);
+			s.set_y(flixel_FlxG.height / 2 + (localX * sin + localY * cos) * this.fieldScaleY(p) - frame.y * s.scale.y / 2);
+			s.set_angle(this.get(p,"rotationz") + this.get(p,"confusionoffset") * 180 / (Math.PI * 100) + this.get(p,"angle") + this.get(p,"angle" + lane) + this.get(p,"confusionoffset" + lane) * 180 / (Math.PI * 100));
+			s.set_alpha(Math.max(0,Math.min(1,1 - this.get(p,"dark") / 100)));
+		}
+	}
+	,fieldScaleX: function(p) {
+		return this.get(p,"zoom",100) / 100 * this.get(p,"zoomx",100) / 100;
+	}
+	,fieldScaleY: function(p) {
+		return this.get(p,"zoom",100) / 100 * this.get(p,"zoomy",100) / 100;
+	}
+	,scaleX: function(p,lane) {
+		return Math.max(0.01,this.fieldScaleX(p) * (1 - (this.get(p,"tiny") + this.get(p,"tiny" + lane)) / 200) * (1 - this.get(p,"tinyx") / 200) * (1 - this.get(p,"mini") / 200));
+	}
+	,scaleY: function(p,lane) {
+		return Math.max(0.01,this.fieldScaleY(p) * (1 - (this.get(p,"tiny") + this.get(p,"tiny" + lane)) / 200) * (1 - this.get(p,"tinyy") / 200) * (1 - this.get(p,"mini") / 200));
+	}
+	,speed: function(p) {
+		return this.scrollSpeed * this.get(p,"xmod",1);
+	}
+	,drunk: function(p,lane,distance) {
+		return this.get(p,"drunk") / 100 * 56 * GoldenFrustrationMods.fastSin(this.songTime * this.bpm / 60000 + lane * 0.2 + distance * 10 / 720 + 1.570796327);
+	}
+	,lateral: function(p,lane,distance) {
+		var amount = (this.get(p,"zigzag") + this.get(p,"zigzag" + lane)) / 100;
+		var period = 1 + (this.get(p,"zigzagperiod") + this.get(p,"zigzagperiod" + lane)) / 100;
+		var offset = this.get(p,"zigzagoffset") + this.get(p,"zigzagoffset" + lane);
+		return this.get(p,"movex") / 100 * flixel_FlxG.width + this.drunk(p,lane,distance) + amount * 56 * GoldenFrustrationMods.triangle((distance + offset) * Math.PI / (112 * period));
+	}
+	,headAngle: function(p,lane,time,now,baseAngle) {
+		return baseAngle + (this.get(p,"dizzy") + this.get(p,"dizzy" + lane)) / 100 * this.rawDistance(time,now,p) * 0.5;
+	}
+	,tipsy: function(p,lane) {
+		return this.get(p,"tipsy") / 100 * 44.8 * GoldenFrustrationMods.fastSin(this.songTime * this.bpm / 60000 * 1.2 + lane * 1.8 + 1.570796327);
+	}
+	,rawDistance: function(time,now,p) {
+		var y = (time - now) * GoldenNoteGeometry.velocity(this.speed(p));
+		if(y >= 0) {
+			var delta = this.get(p,"brake") / 100 * (y * y / 720 - y);
+			y += Math.max(-400,Math.min(400,delta)) + this.get(p,"wave") / 100 * 20 * GoldenFrustrationMods.fastSin(y / 38);
+		}
+		return y;
+	}
+	,distance: function(time,now,p,down) {
+		return this.rawDistance(time,now,p) * (down ? -1 : 1) * this.fieldScaleY(p);
+	}
+	,pathX: function(time,now,anchor,lane,opponent) {
+		var p = opponent ? 0 : 1;
+		var distance = this.rawDistance(time,now,p);
+		var radians = this.get(p,"rotationz") * Math.PI / 180;
+		var dx = this.lateral(p,lane,distance) - this.lateral(p,lane,0);
+		return anchor + (dx * Math.cos(radians) - distance * (this.downscroll ? -1 : 1) * Math.sin(radians)) * this.fieldScaleX(p);
+	}
+	,pathY: function(time,now,anchor,lane,opponent,down) {
+		var p = opponent ? 0 : 1;
+		var distance = this.rawDistance(time,now,p);
+		var radians = this.get(p,"rotationz") * Math.PI / 180;
+		var dx = this.lateral(p,lane,distance) - this.lateral(p,lane,0);
+		return anchor + (dx * Math.sin(radians) + distance * (down ? -1 : 1) * Math.cos(radians)) * this.fieldScaleY(p);
+	}
+	,position: function(note,owner) {
+		var p = note.mustPress ? 1 : 0;
+		var strum = owner.strumLineNotes.members[note.noteData + (p == 1 ? 4 : 0)];
+		var now = Conductor.songPosition;
+		var down = flixel_FlxG.save.data.downscroll;
+		note.curvedHold = true;
+		var staticSize = strum.frames.frames[strum.animation._animations.h["static"].frames[0]].sourceSize;
+		var cx = strum.x + staticSize.x * strum.scale.x / 2;
+		var cy = strum.y + staticSize.y * strum.scale.y / 2;
+		var sx = 0.7 * this.scaleX(p,note.noteData);
+		var sy = 0.7 * this.scaleY(p,note.noteData);
+		if(Math.abs(note.scale.x - sx) > 0.000001 || !note.isSustainNote && Math.abs(note.scale.y - sy) > 0.000001) {
+			note.scale.set_x(sx);
+			if(!note.isSustainNote) {
+				note.scale.set_y(sy);
+			}
+			note.updateHitbox();
+		}
+		note.positionOnStrum(now,cy - Note.swagWidth / 2,this.speed(p),down,cx - Note.swagWidth / 2);
+		if(note.endCap != null) {
+			if(Math.abs(note.endCap.scale.x - note.scale.x) > 0.000001 || Math.abs(note.endCap.scale.y - sy) > 0.000001) {
+				note.endCap.scale.set(note.scale.x,sy);
+				note.endCap.updateHitbox();
+			}
+			note.endCap.origin.set();
+			note.endCap.offset.set();
+		}
+		if(!note.isSustainNote) {
+			note.set_angle(this.headAngle(p,note.noteData,note.strumTime,now,strum.angle));
+			note.origin.set(note.frameWidth / 2,note.frameHeight / 2);
+			note.offset.set();
+			note.set_x(this.pathX(note.strumTime,now,cx,note.noteData,!note.mustPress) - note.origin.x);
+			note.set_y(this.pathY(note.strumTime,now,cy,note.noteData,!note.mustPress,down) - note.origin.y);
+		}
+	}
+	,__class__: GoldenFrustrationMods
+};
+var GoldenFrustrationPreviewState = function(TransIn,TransOut) {
+	PlayState.call(this,TransIn,TransOut);
+};
+$hxClasses["GoldenFrustrationPreviewState"] = GoldenFrustrationPreviewState;
+GoldenFrustrationPreviewState.__name__ = "GoldenFrustrationPreviewState";
+GoldenFrustrationPreviewState.__super__ = PlayState;
+GoldenFrustrationPreviewState.prototype = $extend(PlayState.prototype,{
+	create: function() {
+		PlayerSettings.init();
+		flixel_FlxG.save.bind("funkin","ninjamuffin99");
+		flixel_FlxG.save.data.offset = Conductor.validOffset(flixel_FlxG.save.data.offset);
+		if(flixel_FlxG.save.data.downscroll == null) {
+			flixel_FlxG.save.data.downscroll = false;
+		}
+		if(flixel_FlxG.save.data.dfjk == null) {
+			flixel_FlxG.save.data.dfjk = false;
+		}
+		if(flixel_FlxG.save.data.accuracyDisplay == null) {
+			flixel_FlxG.save.data.accuracyDisplay = true;
+		}
+		PlayState.SONG = Song.loadFromJson("frustration","frustration");
+		PlayState.isStoryMode = false;
+		PlayState.storyDifficulty = 1;
+		PlayState.loadRep = false;
+		if(!openfl_utils_Assets.cache.hasSound("songs:assets/songs/" + "frustration".toLowerCase() + "/Inst." + "mp3") || !openfl_utils_Assets.cache.hasSound("songs:assets/songs/" + "frustration".toLowerCase() + "/Voices." + "mp3") || openfl_utils_Assets.getLibrary("frustration") == null) {
+			var nextState = LoadingState.getNextState(new GoldenFrustrationPreviewState(),false);
+			if(flixel_FlxG.game._state.switchTo(nextState)) {
+				flixel_FlxG.game._requestedState = nextState;
+			}
+			return;
+		}
+		PlayState.prototype.create.call(this);
+		var hint = new flixel_text_FlxText(0,650,1280,"FRUSTRATION MODCHART CHECK — health protected / Esc: title",18);
+		hint.set_alignment("center");
+		hint.set_cameras([this.camHUD]);
+		this.add(hint);
+	}
+	,startSong: function() {
+		PlayState.prototype.startSong.call(this);
+		var beat = 164.0;
+		var query = new URLSearchParams($global.location.search).get("beat");
+		var value = parseFloat(query);
+		if(isFinite(value)) {
+			beat = Math.max(0,Math.min(880,value));
+		}
+		var start = beat * 60000 / 182;
+		var _g = [];
+		var _g1 = 0;
+		var _g2 = this.unspawnNotes;
+		while(_g1 < _g2.length) {
+			var v = _g2[_g1];
+			++_g1;
+			if(v.sustainRoot.strumTime < start) {
+				_g.push(v);
+			}
+		}
+		var skipped = _g;
+		var _g = [];
+		var _g1 = 0;
+		var _g2 = this.unspawnNotes;
+		while(_g1 < _g2.length) {
+			var v = _g2[_g1];
+			++_g1;
+			if(v.sustainRoot.strumTime >= start) {
+				_g.push(v);
+			}
+		}
+		this.unspawnNotes = _g;
+		var _g = 0;
+		while(_g < skipped.length) {
+			var note = skipped[_g];
+			++_g;
+			note.destroy();
+		}
+		var time = 0.0;
+		while(time < start) {
+			var next = Math.min(start,time + 16.6666666666666679);
+			var dt = (next - time) / 1000;
+			this.dad.update(dt);
+			this.boyfriend.update(dt);
+			this.gf.update(dt);
+			this.frustration.update(next,dt);
+			time = next;
+		}
+		flixel_FlxG.sound.music.set_time(start);
+		this.vocals.set_time(start);
+		Conductor.songPosition = start;
+	}
+	,update: function(elapsed) {
+		var _this = flixel_FlxG.keys.justPressed;
+		if(_this.keyManager.checkStatusUnsafe(27,_this.status)) {
+			var nextState = new TitleState();
+			if(flixel_FlxG.game._state.switchTo(nextState)) {
+				flixel_FlxG.game._requestedState = nextState;
+			}
+			return;
+		}
+		this.health = 2;
+		PlayState.prototype.update.call(this,elapsed);
+	}
+	,__class__: GoldenFrustrationPreviewState
+});
+var GoldenFrustrationStage = function() {
+	flixel_group_FlxTypedGroup.call(this);
+	this.world = new flixel_addons_display_FlxBackdrop(Paths.getPath("images/" + "golden/frustration/frustables" + ".png","IMAGE","frustration"));
+	this.world.setPosition(-1000,-800);
+	this.glitch = new GoldenGlitchShader();
+	if(!GoldenQuality.superLow) {
+		this.world.shader = this.glitch;
+	}
+	this.world.scale.set(1.5,1.5);
+	this.world.updateHitbox();
+	this.world.origin.set();
+	this.world.offset.set();
+	this.add(this.world);
+	this.screen = new GoldenWavySprite();
+	this.screen.loadGraphic(Paths.getPath("images/" + "golden/frustration/frustables" + ".png","IMAGE","frustration"));
+	this.screen.scale.set(1.75,1.75);
+	this.screen.updateHitbox();
+	var _this = this.screen;
+	var axes = flixel_util_FlxAxes.XY;
+	var tmp;
+	switch(axes._hx_index) {
+	case 0:case 2:
+		tmp = true;
+		break;
+	default:
+		tmp = false;
+	}
+	if(tmp) {
+		_this.set_x((flixel_FlxG.width - _this.get_width()) / 2);
+	}
+	var tmp;
+	switch(axes._hx_index) {
+	case 1:case 2:
+		tmp = true;
+		break;
+	default:
+		tmp = false;
+	}
+	if(tmp) {
+		_this.set_y((flixel_FlxG.height - _this.get_height()) / 2);
+	}
+	this.screen.scrollFactor.set();
+	this.screen.set_alpha(0);
+	this.screen.waveShader.uSpeed.value[0] = 2;
+	this.screen.waveShader.uFrequency.value[0] = 2;
+	this.screen.waveShader.uWaveAmplitude.value[0] = 0.1;
+	this.screen.waveShader.wrap.value[0] = true;
+};
+$hxClasses["GoldenFrustrationStage"] = GoldenFrustrationStage;
+GoldenFrustrationStage.__name__ = "GoldenFrustrationStage";
+GoldenFrustrationStage.__super__ = flixel_group_FlxTypedGroup;
+GoldenFrustrationStage.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
+	world: null
+	,glitch: null
+	,screen: null
+	,sync: function(time) {
+		this.glitch.uTime.value[0] = Math.max(0,time) / 1000;
+		this.screen.waveShader.iTime.value[0] = Math.max(0,time) / 1000;
+	}
+	,__class__: GoldenFrustrationStage
+});
+var GoldenGalacticShader = function() {
+	if(this.__glFragmentSource == null) {
+		this.__glFragmentSource = "\t\tvarying float openfl_Alphav;\n\t\tvarying vec4 openfl_ColorMultiplierv;\n\t\tvarying vec4 openfl_ColorOffsetv;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform bool openfl_HasColorTransform;\n\t\tuniform vec2 openfl_TextureSize;\n\t\tuniform sampler2D bitmap;\n\n\t\tuniform bool hasTransform;\n\t\tuniform bool hasColorTransform;\n\n\t\tvec4 flixel_texture2D(sampler2D bitmap, vec2 coord)\n\t\t{\n\t\t\tvec4 color = texture2D(bitmap, coord);\n\t\t\tif (!hasTransform)\n\t\t\t{\n\t\t\t\treturn color;\n\t\t\t}\n\n\t\t\tif (color.a == 0.0)\n\t\t\t{\n\t\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\n\t\t\t}\n\n\t\t\tif (!hasColorTransform)\n\t\t\t{\n\t\t\t\treturn color * openfl_Alphav;\n\t\t\t}\n\n\t\t\tcolor = vec4(color.rgb / color.a, color.a);\n\n\t\t\tmat4 colorMultiplier = mat4(0);\n\t\t\tcolorMultiplier[0][0] = openfl_ColorMultiplierv.x;\n\t\t\tcolorMultiplier[1][1] = openfl_ColorMultiplierv.y;\n\t\t\tcolorMultiplier[2][2] = openfl_ColorMultiplierv.z;\n\t\t\tcolorMultiplier[3][3] = openfl_ColorMultiplierv.w;\n\n\t\t\tcolor = clamp(openfl_ColorOffsetv + (color * colorMultiplier), 0.0, 1.0);\n\n\t\t\tif (color.a > 0.0)\n\t\t\t{\n\t\t\t\treturn vec4(color.rgb * color.a * openfl_Alphav, color.a * openfl_Alphav);\n\t\t\t}\n\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\n\t\t}\n\t\n\n\t\t//uniform float tx, ty; // x,y waves phase\n\t\tuniform float uTime;\n\t\t\n\t\tconst int EFFECT_TYPE_DREAMY = 1;\n\t\tconst int EFFECT_TYPE_WAVY = 2;\n\t\tconst int EFFECT_TYPE_HEAT_WAVE_HORIZONTAL = 3;\n\t\tconst int EFFECT_TYPE_HEAT_WAVE_VERTICAL = 4;\n\t\tconst int EFFECT_TYPE_FLAG = 0;\n\t\t\n\t\tuniform int effectType;\n\t\t\n\t\t/**\n\t\t * How fast the waves move over time\n\t\t */\n\t\tuniform float uSpeed;\n\t\t\n\t\t/**\n\t\t * Number of waves over time\n\t\t */\n\t\tuniform float uFrequency;\n\t\t\n\t\t/**\n\t\t * How much the pixels are going to stretch over the waves\n\t\t */\n\t\tuniform float uWaveAmplitude;\n\n\t\tvec2 sineWave(vec2 pt)\n\t\t{\n\t\t\tfloat x = 0.0;\n\t\t\tfloat y = 0.0;\n\t\t\t\n\t\t\tif (effectType == EFFECT_TYPE_DREAMY) \n\t\t\t{\n\t\t\t\tfloat offsetX = sin(pt.y * uFrequency + uTime * uSpeed) * uWaveAmplitude;\n                pt.x += offsetX; // * (pt.y - 1.0); // <- Uncomment to stop bottom part of the screen from moving\n\t\t\t}\n\t\t\telse if (effectType == EFFECT_TYPE_WAVY) \n\t\t\t{\n\t\t\t\tfloat offsetY = sin(pt.x * uFrequency + uTime * uSpeed) * uWaveAmplitude;\n\t\t\t\tpt.y += offsetY; // * (pt.y - 1.0); // <- Uncomment to stop bottom part of the screen from moving\n\t\t\t}\n\t\t\telse if (effectType == EFFECT_TYPE_HEAT_WAVE_HORIZONTAL)\n\t\t\t{\n\t\t\t\tx = sin(pt.x * uFrequency + uTime * uSpeed) * uWaveAmplitude;\n\t\t\t}\n\t\t\telse if (effectType == EFFECT_TYPE_HEAT_WAVE_VERTICAL)\n\t\t\t{\n\t\t\t\ty = sin(pt.y * uFrequency + uTime * uSpeed) * uWaveAmplitude;\n\t\t\t}\n\t\t\telse if (effectType == EFFECT_TYPE_FLAG)\n\t\t\t{\n\t\t\t\ty = sin(pt.y * uFrequency + 10.0 * pt.x + uTime * uSpeed) * uWaveAmplitude;\n\t\t\t\tx = sin(pt.x * uFrequency + 5.0 * pt.y + uTime * uSpeed) * uWaveAmplitude;\n\t\t\t}\n\t\t\t\n\t\t\treturn vec2(pt.x + x, pt.y + y);\n\t\t}\n\n\t\tvoid main()\n\t\t{\n\t\t\tvec2 uv = sineWave(openfl_TextureCoordv);\n\t\t\tgl_FragColor = texture2D(bitmap, uv);\n\t\t}";
+	}
+	if(this.__glVertexSource == null) {
+		this.__glVertexSource = "\n\t\tattribute float openfl_Alpha;\n\t\tattribute vec4 openfl_ColorMultiplier;\n\t\tattribute vec4 openfl_ColorOffset;\n\t\tattribute vec4 openfl_Position;\n\t\tattribute vec2 openfl_TextureCoord;\n\n\t\tvarying float openfl_Alphav;\n\t\tvarying vec4 openfl_ColorMultiplierv;\n\t\tvarying vec4 openfl_ColorOffsetv;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform mat4 openfl_Matrix;\n\t\tuniform bool openfl_HasColorTransform;\n\t\tuniform vec2 openfl_TextureSize;\n\n\t\t\n\t\tattribute float alpha;\n\t\tattribute vec4 colorMultiplier;\n\t\tattribute vec4 colorOffset;\n\t\tuniform bool hasColorTransform;\n\t\t\n\t\tvoid main(void)\n\t\t{\n\t\t\topenfl_Alphav = openfl_Alpha;\n\t\topenfl_TextureCoordv = openfl_TextureCoord;\n\n\t\tif (openfl_HasColorTransform) {\n\n\t\t\topenfl_ColorMultiplierv = openfl_ColorMultiplier;\n\t\t\topenfl_ColorOffsetv = openfl_ColorOffset / 255.0;\n\n\t\t}\n\n\t\tgl_Position = openfl_Matrix * openfl_Position;\n\n\t\t\t\n\t\t\topenfl_Alphav = openfl_Alpha * alpha;\n\t\t\t\n\t\t\tif (hasColorTransform)\n\t\t\t{\n\t\t\t\topenfl_ColorOffsetv = colorOffset / 255.0;\n\t\t\t\topenfl_ColorMultiplierv = colorMultiplier;\n\t\t\t}\n\t\t}";
+	}
+	flixel_graphics_tile_FlxGraphicsShader.call(this);
+	this.uTime.value = [0.];
+	this.uSpeed.value = [2.25];
+	this.uFrequency.value = [5.];
+	this.uWaveAmplitude.value = [.1];
+	this.effectType.value = [0];
+	this.__isGenerated = true;
+	this.__initGL();
+};
+$hxClasses["GoldenGalacticShader"] = GoldenGalacticShader;
+GoldenGalacticShader.__name__ = "GoldenGalacticShader";
+GoldenGalacticShader.__super__ = flixel_graphics_tile_FlxGraphicsShader;
+GoldenGalacticShader.prototype = $extend(flixel_graphics_tile_FlxGraphicsShader.prototype,{
+	tx: null
+	,uTime: null
+	,effectType: null
+	,uSpeed: null
+	,uFrequency: null
+	,uWaveAmplitude: null
+	,__class__: GoldenGalacticShader
+});
 var GoldenGlitchShader = function() {
 	if(this.__glFragmentSource == null) {
 		this.__glFragmentSource = "\r\n    varying float openfl_Alphav;\n\t\tvarying vec4 openfl_ColorMultiplierv;\n\t\tvarying vec4 openfl_ColorOffsetv;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform bool openfl_HasColorTransform;\n\t\tuniform vec2 openfl_TextureSize;\n\t\tuniform sampler2D bitmap;\n\n\t\tuniform bool hasTransform;\n\t\tuniform bool hasColorTransform;\n\n\t\tvec4 flixel_texture2D(sampler2D bitmap, vec2 coord)\n\t\t{\n\t\t\tvec4 color = texture2D(bitmap, coord);\n\t\t\tif (!hasTransform)\n\t\t\t{\n\t\t\t\treturn color;\n\t\t\t}\n\n\t\t\tif (color.a == 0.0)\n\t\t\t{\n\t\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\n\t\t\t}\n\n\t\t\tif (!hasColorTransform)\n\t\t\t{\n\t\t\t\treturn color * openfl_Alphav;\n\t\t\t}\n\n\t\t\tcolor = vec4(color.rgb / color.a, color.a);\n\n\t\t\tmat4 colorMultiplier = mat4(0);\n\t\t\tcolorMultiplier[0][0] = openfl_ColorMultiplierv.x;\n\t\t\tcolorMultiplier[1][1] = openfl_ColorMultiplierv.y;\n\t\t\tcolorMultiplier[2][2] = openfl_ColorMultiplierv.z;\n\t\t\tcolorMultiplier[3][3] = openfl_ColorMultiplierv.w;\n\n\t\t\tcolor = clamp(openfl_ColorOffsetv + (color * colorMultiplier), 0.0, 1.0);\n\n\t\t\tif (color.a > 0.0)\n\t\t\t{\n\t\t\t\treturn vec4(color.rgb * color.a * openfl_Alphav, color.a * openfl_Alphav);\n\t\t\t}\n\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\n\t\t}\n\t\n\r\n    //uniform float tx, ty; // x,y waves phase\r\n\r\n    //modified version of the wave shader to create weird garbled corruption like messes\r\n    uniform float uTime;\r\n    \r\n    /**\r\n     * How fast the waves move over time\r\n     */\r\n    uniform float uSpeed;\r\n    \r\n    /**\r\n     * Number of waves over time\r\n     */\r\n    uniform float uFrequency;\r\n\r\n    uniform bool uEnabled;\r\n    \r\n    /**\r\n     * How much the pixels are going to stretch over the waves\r\n     */\r\n    uniform float uWaveAmplitude;\r\n\r\n    vec2 sineWave(vec2 pt)\r\n    {\r\n        float offsetX = sin(pt.y * uFrequency + uTime * uSpeed) * (uWaveAmplitude / pt.x * pt.y);\r\n        float offsetY = sin(pt.x * uFrequency - uTime * uSpeed) * (uWaveAmplitude / pt.y * pt.x);\r\n        pt.x += offsetX; // * (pt.y - 1.0); // <- Uncomment to stop bottom part of the screen from moving\r\n        pt.y += offsetY;\r\n\r\n        return fract(pt);\r\n    }\r\n\r\n    void main()\r\n    {\r\n        vec2 uv = sineWave(openfl_TextureCoordv);\r\n        gl_FragColor = flixel_texture2D(bitmap, uv);\r\n    }";
@@ -23731,10 +24587,7 @@ GoldenGlitchedLevels.prototype = {
 	}
 	,animated: function(name,x,y,tracks,fps,scale,hud) {
 		var sprite = new flixel_FlxSprite(x,y);
-		var key = "golden/frustsongs/" + this.song + "/" + name;
-		var library = GoldenFrustExtras.library(this.song);
-		var potatoKey = key + "_potato";
-		sprite.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE",library),Paths.getPath("images/" + key + ".xml","TEXT",library)));
+		sprite.set_frames(Paths.getSparrowAtlas("golden/frustsongs/" + this.song + "/" + name,GoldenFrustExtras.library(this.song)));
 		var _g = 0;
 		while(_g < tracks.length) {
 			var track = tracks[_g];
@@ -24356,7 +25209,7 @@ GoldenHud.countdown = function(p,tick) {
 };
 GoldenHud.label = function(p) {
 	var text = new flixel_text_FlxText(0,p.healthBarBG.y + 20,0,"",20);
-	text.setFormat("assets/fonts/" + "vcr.ttf",20,-1,"center",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
+	text.setFormat("assets/fonts/" + "comic.ttf",20,-1,"center",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
 	text.set_borderSize(1);
 	text.scrollFactor.set();
 	text.set_cameras([p.camHUD]);
@@ -24371,9 +25224,16 @@ GoldenHud.create = function(p) {
 	p.scoreTxt.set_visible(false);
 	p.goldenCombo = new GoldenCombo(p.camHUD,p.goldenTweens);
 	p.add(p.goldenCombo);
+	if(GoldenPlayback.rate != 1) {
+		var speed = new flixel_text_FlxText(20,48,260,GoldenPlayback.label(GoldenPlayback.rate),18);
+		speed.setFormat("assets/fonts/" + "comic.ttf",18,-8323176,"left",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
+		speed.scrollFactor.set();
+		speed.set_cameras([p.camHUD]);
+		p.add(speed);
+	}
 	if(PlayState.opponentMode) {
 		var mode = new flixel_text_FlxText(flixel_FlxG.width - 280,48,260,"OPPONENT MODE",18);
-		mode.setFormat("assets/fonts/" + "vcr.ttf",18,-8323176,"right",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
+		mode.setFormat("assets/fonts/" + "comic.ttf",18,-8323176,"right",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
 		mode.scrollFactor.set();
 		mode.set_cameras([p.camHUD]);
 		p.add(mode);
@@ -24383,7 +25243,7 @@ GoldenHud.create = function(p) {
 	p.applecoreScore = GoldenHud.label(p);
 	p.applecoreClock.setPosition((flixel_FlxG.width - 400) / 2,flixel_FlxG.save.data.downscroll ? flixel_FlxG.height - 44 : 19);
 	p.applecoreClock.set_fieldWidth(400);
-	p.applecoreClock.setFormat("assets/fonts/" + "vcr.ttf",32,-1,"center",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
+	p.applecoreClock.setFormat("assets/fonts/" + "comic.ttf",32,-1,"center",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
 	p.applecoreClock.set_borderSize(2);
 	var overlay = new flixel_FlxSprite(p.healthBarBG.x,p.healthBarBG.y).loadGraphic(Paths.getPath("images/" + "golden/ui/healthBarOverlay" + ".png","IMAGE",null));
 	p.goldenHealthOverlay = overlay;
@@ -24606,10 +25466,10 @@ var GoldenInputJudge = function() { };
 $hxClasses["GoldenInputJudge"] = GoldenInputJudge;
 GoldenInputJudge.__name__ = "GoldenInputJudge";
 GoldenInputJudge.canHit = function(strumTime,inputTime) {
-	return Math.abs(strumTime - inputTime) <= Conductor.safeZoneOffset;
+	return Math.abs(strumTime - inputTime) <= Conductor.safeZoneOffset * GoldenPlayback.rate;
 };
 GoldenInputJudge.isTooLate = function(strumTime,songTime) {
-	return songTime - strumTime > Conductor.safeZoneOffset;
+	return songTime - strumTime > Conductor.safeZoneOffset * GoldenPlayback.rate;
 };
 GoldenInputJudge.firstTap = function(notes,lane,time) {
 	var best = null;
@@ -24643,7 +25503,7 @@ var GoldenInspicable = function(owner) {
 	flixel_FlxG.camera.set_followLerp(1);
 	owner.healthBar.createFilledBar(-16754686,-13520687);
 	var rawAttacks = JSON.parse(openfl_utils_Assets.getText(Paths.getPath("data/" + "golden/inspicable/attacks" + ".json","TEXT","inspicable")));
-	var offset = Conductor.validOffset(flixel_FlxG.save.data.offset);
+	var offset = GoldenPlayback.offset();
 	var _g = [];
 	var _g1 = 0;
 	while(_g1 < rawAttacks.length) {
@@ -24653,8 +25513,7 @@ var GoldenInspicable = function(owner) {
 	}
 	this.attacks = _g;
 	this.fork = new flixel_FlxSprite();
-	var potatoKey = "golden/inspicable/pitchfork" + "_potato";
-	this.fork.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","inspicable"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","inspicable"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","inspicable"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","inspicable")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/inspicable/pitchfork" + ".png","IMAGE","inspicable"),Paths.getPath("images/" + "golden/inspicable/pitchfork" + ".xml","TEXT","inspicable")));
+	this.fork.set_frames(Paths.getSparrowAtlas("golden/inspicable/pitchfork","inspicable"));
 	this.fork.animation.addByPrefix("scroll","scroll",24,false);
 	this.fork.animation.addByPrefix("confirm","confirm",24,false);
 	this.fork.set_antialiasing(true);
@@ -24911,7 +25770,7 @@ GoldenInspicable.prototype = {
 		note.positionOnStrum(Conductor.songPosition,r.y,PlayState.SONG.speed,flixel_FlxG.save.data.downscroll,r.x);
 	}
 	,expireForks: function(time) {
-		while(this.attackIndex < this.attacks.length && time > this.attacks[this.attackIndex] + Conductor.safeZoneOffset) {
+		while(this.attackIndex < this.attacks.length && time > this.attacks[this.attackIndex] + Conductor.safeZoneOffset * GoldenPlayback.rate) {
 			this.owner.health -= .4;
 			PlayState.misses++;
 			this.owner.boyfriend.playAnim("singDOWNmiss",true);
@@ -24939,7 +25798,7 @@ GoldenInspicable.prototype = {
 			var inputTime = _g1[_g];
 			++_g;
 			this.expireForks(inputTime);
-			if(this.attackIndex < this.attacks.length && Math.abs(this.attacks[this.attackIndex] - inputTime) <= Conductor.safeZoneOffset) {
+			if(this.attackIndex < this.attacks.length && Math.abs(this.attacks[this.attackIndex] - inputTime) <= Conductor.safeZoneOffset * GoldenPlayback.rate) {
 				this.confirmUntil = time + .15;
 				if(this.dodgeStrum != null) {
 					this.dodgeStrum.animation.play("confirm",true);
@@ -24962,10 +25821,10 @@ GoldenInspicable.prototype = {
 			return;
 		}
 		var difference = this.attacks[this.attackIndex] - time;
-		var distance = difference * .45 * PlayState.SONG.speed;
+		var distance = difference * GoldenNoteGeometry.velocity(PlayState.SONG.speed);
 		var direction = flixel_FlxG.save.data.downscroll ? -1 : 1;
 		var cy = target + direction * distance;
-		var shown = spawned && difference >= -Conductor.safeZoneOffset && cy >= -220 && cy <= flixel_FlxG.height + 220;
+		var shown = spawned && difference >= -(Conductor.safeZoneOffset * GoldenPlayback.rate) && cy >= -220 && cy <= flixel_FlxG.height + 220;
 		this.fork.set_visible(shown);
 		if(shown) {
 			this.fork.animation.play("scroll");
@@ -25307,14 +26166,147 @@ GoldenInspicableStage.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 	}
 	,__class__: GoldenInspicableStage
 });
+var GoldenInvertShader = function() {
+	if(this.__glFragmentSource == null) {
+		this.__glFragmentSource = "varying float openfl_Alphav;\n\t\tvarying vec4 openfl_ColorMultiplierv;\n\t\tvarying vec4 openfl_ColorOffsetv;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform bool openfl_HasColorTransform;\n\t\tuniform vec2 openfl_TextureSize;\n\t\tuniform sampler2D bitmap;\n\n\t\tuniform bool hasTransform;\n\t\tuniform bool hasColorTransform;\n\n\t\tvec4 flixel_texture2D(sampler2D bitmap, vec2 coord)\n\t\t{\n\t\t\tvec4 color = texture2D(bitmap, coord);\n\t\t\tif (!hasTransform)\n\t\t\t{\n\t\t\t\treturn color;\n\t\t\t}\n\n\t\t\tif (color.a == 0.0)\n\t\t\t{\n\t\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\n\t\t\t}\n\n\t\t\tif (!hasColorTransform)\n\t\t\t{\n\t\t\t\treturn color * openfl_Alphav;\n\t\t\t}\n\n\t\t\tcolor = vec4(color.rgb / color.a, color.a);\n\n\t\t\tmat4 colorMultiplier = mat4(0);\n\t\t\tcolorMultiplier[0][0] = openfl_ColorMultiplierv.x;\n\t\t\tcolorMultiplier[1][1] = openfl_ColorMultiplierv.y;\n\t\t\tcolorMultiplier[2][2] = openfl_ColorMultiplierv.z;\n\t\t\tcolorMultiplier[3][3] = openfl_ColorMultiplierv.w;\n\n\t\t\tcolor = clamp(openfl_ColorOffsetv + (color * colorMultiplier), 0.0, 1.0);\n\n\t\t\tif (color.a > 0.0)\n\t\t\t{\n\t\t\t\treturn vec4(color.rgb * color.a * openfl_Alphav, color.a * openfl_Alphav);\n\t\t\t}\n\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\n\t\t}\n\t\n\nuniform bool enabled;\nvoid main(){vec4 color=flixel_texture2D(bitmap,openfl_TextureCoordv);gl_FragColor=enabled?vec4(vec3(color.a)-color.rgb,color.a):color;}";
+	}
+	if(this.__glVertexSource == null) {
+		this.__glVertexSource = "\n\t\tattribute float openfl_Alpha;\n\t\tattribute vec4 openfl_ColorMultiplier;\n\t\tattribute vec4 openfl_ColorOffset;\n\t\tattribute vec4 openfl_Position;\n\t\tattribute vec2 openfl_TextureCoord;\n\n\t\tvarying float openfl_Alphav;\n\t\tvarying vec4 openfl_ColorMultiplierv;\n\t\tvarying vec4 openfl_ColorOffsetv;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform mat4 openfl_Matrix;\n\t\tuniform bool openfl_HasColorTransform;\n\t\tuniform vec2 openfl_TextureSize;\n\n\t\t\n\t\tattribute float alpha;\n\t\tattribute vec4 colorMultiplier;\n\t\tattribute vec4 colorOffset;\n\t\tuniform bool hasColorTransform;\n\t\t\n\t\tvoid main(void)\n\t\t{\n\t\t\topenfl_Alphav = openfl_Alpha;\n\t\topenfl_TextureCoordv = openfl_TextureCoord;\n\n\t\tif (openfl_HasColorTransform) {\n\n\t\t\topenfl_ColorMultiplierv = openfl_ColorMultiplier;\n\t\t\topenfl_ColorOffsetv = openfl_ColorOffset / 255.0;\n\n\t\t}\n\n\t\tgl_Position = openfl_Matrix * openfl_Position;\n\n\t\t\t\n\t\t\topenfl_Alphav = openfl_Alpha * alpha;\n\t\t\t\n\t\t\tif (hasColorTransform)\n\t\t\t{\n\t\t\t\topenfl_ColorOffsetv = colorOffset / 255.0;\n\t\t\t\topenfl_ColorMultiplierv = colorMultiplier;\n\t\t\t}\n\t\t}";
+	}
+	flixel_graphics_tile_FlxGraphicsShader.call(this);
+	this.enabled.value = [false];
+	this.__isGenerated = true;
+	this.__initGL();
+};
+$hxClasses["GoldenInvertShader"] = GoldenInvertShader;
+GoldenInvertShader.__name__ = "GoldenInvertShader";
+GoldenInvertShader.__super__ = flixel_graphics_tile_FlxGraphicsShader;
+GoldenInvertShader.prototype = $extend(flixel_graphics_tile_FlxGraphicsShader.prototype,{
+	enabled: null
+	,__class__: GoldenInvertShader
+});
 var GoldenJudgement = function() { };
 $hxClasses["GoldenJudgement"] = GoldenJudgement;
 GoldenJudgement.__name__ = "GoldenJudgement";
 GoldenJudgement.judge = function(diff) {
-	var time = Math.abs(diff);
+	var time = Math.abs(GoldenPlayback.realMilliseconds(diff));
 	var name = time < 45 ? "sick" : time < 90 ? "good" : time < 135 ? "bad" : "shit";
 	var accuracy = time < 45 ? 1.0 : 1.0 - 1.0 / (Math.exp(-0.08 * (time - 54.99)) + 1.0);
 	return { name : name, accuracy : accuracy, score : Math.round(accuracy * 350)};
+};
+var GoldenLegacySongs = function(owner,host) {
+	this.starts = [];
+	this.owner = owner;
+	this.host = host;
+	this.cameraX = owner.camFollow.x;
+	this.cameraY = owner.camFollow.y;
+	var time = 0.;
+	var bpm = PlayState.SONG.bpm;
+	var _g = 0;
+	var _g1 = PlayState.SONG.notes;
+	while(_g < _g1.length) {
+		var section = _g1[_g];
+		++_g;
+		this.starts.push(time);
+		if(section.changeBPM) {
+			bpm = section.bpm;
+		}
+		time += section.lengthInSteps * 60000 / bpm / 4;
+	}
+	if(GoldenRemaining.supports(host.song)) {
+		this.remaining = new GoldenRemaining(owner,host);
+	}
+};
+$hxClasses["GoldenLegacySongs"] = GoldenLegacySongs;
+GoldenLegacySongs.__name__ = "GoldenLegacySongs";
+GoldenLegacySongs.supports = function(song) {
+	if(!GoldenRemaining.supports(song)) {
+		return ["og","sick-tricks","galactic","wheels","poopers","the-boopadoop-song","left-unchecked","thunderstorm","cell","collision"].indexOf(song.toLowerCase()) >= 0;
+	} else {
+		return true;
+	}
+};
+GoldenLegacySongs.prototype = {
+	owner: null
+	,host: null
+	,starts: null
+	,cameraX: null
+	,cameraY: null
+	,remaining: null
+	,sectionAt: function(time) {
+		var low = 0;
+		var high = this.starts.length;
+		while(low < high) {
+			var mid = low + high >> 1;
+			if(this.starts[mid] <= time) {
+				low = mid + 1;
+			} else {
+				high = mid;
+			}
+		}
+		return Math.max(0,low - 1) | 0;
+	}
+	,stepAt: function(time) {
+		var base = 0.;
+		var step = 0;
+		var bpm = PlayState.SONG.bpm;
+		var _g = 0;
+		var _g1 = Conductor.bpmChangeMap;
+		while(_g < _g1.length) {
+			var change = _g1[_g];
+			++_g;
+			if(change.songTime > time) {
+				break;
+			}
+			base = change.songTime;
+			step = change.stepTime;
+			bpm = change.bpm;
+		}
+		return step + (Math.floor((time - base) / (60000 / bpm / 4)) | 0);
+	}
+	,subtitle: function(fallback) {
+		if(this.remaining != null && this.remaining.lyric != null) {
+			return this.remaining.lyric;
+		} else {
+			return fallback;
+		}
+	}
+	,destroy: function() {
+		if(this.remaining != null) {
+			this.remaining.destroy();
+		}
+	}
+	,update: function(time,elapsed) {
+		if(this.remaining != null) {
+			this.remaining.update(time,elapsed);
+		}
+		if(this.host.song == "sick-tricks") {
+			return;
+		}
+		var index = this.sectionAt(time);
+		var player = PlayState.SONG.notes[index].mustHitSection;
+		var actor = player ? this.owner.boyfriend : this.owner.dad;
+		var point = this.host.points.h[player ? "BF" : "DAD"];
+		var x = point[0];
+		var y = point[1];
+		if(actor.animation._curAnim != null) {
+			var name = actor.animation._curAnim.name;
+			if(StringTools.startsWith(name,"singLEFT")) {
+				x -= 38;
+			} else if(StringTools.startsWith(name,"singRIGHT")) {
+				x += 38;
+			} else if(StringTools.startsWith(name,"singUP")) {
+				y -= 38;
+			} else if(StringTools.startsWith(name,"singDOWN")) {
+				y += 38;
+			}
+		}
+		var q = 1 - Math.exp(-elapsed * 2.4);
+		this.cameraX += (x - this.cameraX) * q;
+		this.cameraY += (y - this.cameraY) * q;
+		this.owner.camFollow.setPosition(this.cameraX,this.cameraY);
+	}
+	,__class__: GoldenLegacySongs
 };
 var GoldenMenuBackground = function(title,color) {
 	if(color == null) {
@@ -25548,6 +26540,362 @@ GoldenMenuTransition.prototype = $extend(flixel_FlxSubState.prototype,{
 		flixel_FlxSubState.prototype.destroy.call(this);
 	}
 	,__class__: GoldenMenuTransition
+});
+var GoldenMineRoup = function(owner,host) {
+	this.wake = 0;
+	this.tvTime = -1;
+	this.videoStarted = false;
+	this.mix = { value : 0.0};
+	this.previous = -1;
+	this.beat = -1;
+	this.owner = owner;
+	this.host = host;
+	this.song = PlayState.SONG.song.toLowerCase();
+	if(this.song == "mine") {
+		this.hat = owner.frustStage.sceneLayers.h["hatguy"];
+		this.weird = new GoldenMineShader();
+		this.wave = new GoldenWavyShader();
+		this.wave.uSpeed.value[0] = 0;
+		this.wave.uFrequency.value[0] = 0;
+		this.wave.uWaveAmplitude.value[0] = .1;
+		if(!GoldenQuality.superLow) {
+			owner.frustStage.sceneLayers.h["mine"].shader = this.weird;
+			owner.dad.shader = this.wave;
+		}
+		this.dinner = this.graphic("dinner",0,0,.5,true);
+		this.dinner.set_visible(false);
+	} else {
+		this.bfX = owner.boyfriend.x;
+		this.bfY = owner.boyfriend.y;
+		this.tv = owner.dad;
+		this.cos = new Character(this.tv.x,this.tv.y,"extra-roupiniphobia--cos-bambi");
+		this.cos.set_alpha(.000001);
+		owner.add(this.cos);
+		this.cosX = this.cos.x;
+		this.cosY = this.cos.y;
+		this.drillBF = this.graphic("drillbf",this.bfX,this.bfY,.5,false);
+		this.drillBF.set_alpha(0);
+		this.thingies = this.graphic("thingies",0,0,2.2,false);
+		var _this = this.thingies;
+		var axes = flixel_util_FlxAxes.XY;
+		var tmp;
+		switch(axes._hx_index) {
+		case 0:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			_this.set_x((flixel_FlxG.width - _this.get_width()) / 2);
+		}
+		var tmp;
+		switch(axes._hx_index) {
+		case 1:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			_this.set_y((flixel_FlxG.height - _this.get_height()) / 2);
+		}
+		var fh = this.thingies;
+		fh.set_x(fh.x - 700);
+		this.thingies.set_alpha(.00001);
+		this.tv.set_cameras([owner.camHUD]);
+		this.tv.scrollFactor.set();
+		this.tv.setPosition(640,-this.tv.get_width() - 1000);
+		this.tv.set_alpha(0);
+		this.indicator = new flixel_FlxSprite(20,flixel_FlxG.save.data.downscroll ? 20 : flixel_FlxG.height - 160);
+		this.indicator.set_frames(Paths.getSparrowAtlas("golden/frustsongs/roupiniphobia/drill_mode_indicator",GoldenFrustExtras.library(this.song)));
+		this.indicator.animation.addByPrefix("activated","10",24,false);
+		this.indicator.set_cameras([owner.camHUD]);
+		this.indicator.scrollFactor.set();
+		this.indicator.scale.set(.3,.3);
+		this.indicator.updateHitbox();
+		this.indicator.set_visible(false);
+		owner.add(this.indicator);
+		this.blackout = new flixel_FlxSprite().makeGraphic(flixel_FlxG.width,flixel_FlxG.height,-16777216);
+		this.blackout.set_cameras([owner.camHUD]);
+		this.blackout.scrollFactor.set();
+		this.blackout.set_alpha(0);
+		owner.add(this.blackout);
+		this.video = new GoldenVideo(flixel_FlxG.camera,"assets/extra-roupiniphobia/videos/golden/result4.mp4");
+		this.video.setWorldBounds(flixel_FlxG.camera,-200,-180,1536,1536);
+		owner.add(this.video);
+		host.points.h["DAD"] = [723,545];
+	}
+};
+$hxClasses["GoldenMineRoup"] = GoldenMineRoup;
+GoldenMineRoup.__name__ = "GoldenMineRoup";
+GoldenMineRoup.prototype = {
+	owner: null
+	,host: null
+	,song: null
+	,beat: null
+	,previous: null
+	,dinner: null
+	,hat: null
+	,mix: null
+	,weird: null
+	,wave: null
+	,video: null
+	,videoStarted: null
+	,cos: null
+	,drillBF: null
+	,thingies: null
+	,indicator: null
+	,blackout: null
+	,tv: null
+	,bfX: null
+	,bfY: null
+	,cosX: null
+	,cosY: null
+	,tvTime: null
+	,wake: null
+	,graphic: function(name,x,y,scale,hud) {
+		var sprite = new flixel_FlxSprite(x,y).loadGraphic(Paths.getPath("images/" + ("golden/frustsongs/" + this.song + "/" + name) + ".png","IMAGE",GoldenFrustExtras.library(this.song)));
+		sprite.scale.set(scale,scale);
+		sprite.updateHitbox();
+		sprite.set_antialiasing(false);
+		if(hud) {
+			sprite.set_cameras([this.owner.camHUD]);
+			sprite.scrollFactor.set();
+		}
+		this.owner.add(sprite);
+		return sprite;
+	}
+	,fade: function(sprite,to,seconds) {
+		this.owner.goldenTweens.cancelTweensOf(sprite);
+		this.owner.goldenTweens.tween(sprite,{ alpha : to},seconds);
+	}
+	,drill: function(value) {
+		this.owner.drillMode = value;
+		this.drillBF.set_alpha(value ? 1 : 0);
+		this.owner.boyfriend.set_alpha(value ? 0 : 1);
+		this.indicator.set_visible(true);
+		this.indicator.animation.play("activated",true);
+		this.indicator.set_alpha(.5);
+		this.owner.goldenTweens.cancelTweensOf(this.indicator);
+		this.owner.goldenTweens.tween(this.indicator,{ alpha : 0},.5);
+	}
+	,cue: function(b,at) {
+		var two = 120 / PlayState.SONG.bpm;
+		if(this.song == "mine") {
+			switch(b) {
+			case 128:
+				this.owner.goldenTweens.tween(this.mix,{ value : 0},two);
+				break;
+			case 223:
+				this.owner.frustStage.sceneLayers.h["mine"].set_color(-1);
+				this.hat.set_color(-1);
+				break;
+			case 224:
+				this.fade(this.owner.frustStage.sceneLayers.h["mine"],0,two);
+				this.fade(this.hat,0,two);
+				this.fade(this.owner.frustStage.back,1,two);
+				break;
+			case 254:
+				this.fade(this.owner.frustStage.sceneLayers.h["mine"],1,two);
+				this.fade(this.hat,1,two);
+				this.fade(this.owner.frustStage.back,0,two);
+				break;
+			case 64:case 256:
+				this.dinner.set_visible(true);
+				this.dinner.set_alpha(0);
+				this.fade(this.dinner,1,two);
+				this.owner.goldenTweens.cancelTweensOf(this.mix);
+				this.owner.goldenTweens.tween(this.mix,{ value : 1},two);
+				break;
+			case 96:case 288:
+				this.fade(this.dinner,0,two);
+				break;
+			}
+			if(b >= 192 && b < 223) {
+				var colors = [-65536,-16744448,-16776961,-8388480];
+				this.hat.set_color(this.owner.frustStage.sceneLayers.h["mine"].set_color(colors[b % 4]));
+			}
+		} else {
+			switch(b) {
+			case 224:
+				this.drill(true);
+				break;
+			case 480:
+				this.drill(false);
+				this.video.setAlpha(0);
+				this.host.targetZoom = .5;
+				this.cos.set_alpha(1);
+				this.owner.dad = this.cos;
+				this.host.replaceIcon(false,this.cos.curCharacter);
+				var this1 = this.host.points;
+				var value = this.host.focusPoint(this.cos,"DAD");
+				this1.h["DAD"] = value;
+				this.owner.goldenTweens.tween(this.thingies,{ alpha : 1},2);
+				break;
+			case 580:
+				this.fade(this.blackout,1,2 * two);
+				break;
+			case 592:
+				this.tvTime = at;
+				this.tv.set_alpha(0);
+				this.tv.setReferenceScale(10);
+				this.tv.setPosition(620 - this.tv.get_width() / 2,-75);
+				this.owner.dad = this.tv;
+				this.host.replaceIcon(false,this.tv.curCharacter);
+				this.fade(this.tv,1,1);
+				this.fade(this.blackout,0,1);
+				this.fade(this.cos,0,1);
+				this.owner.goldenTweens.tween(this.owner.boyfriend,{ alpha : 0},1);
+				this.host.targetZoom = .5;
+				break;
+			case 622:
+				this.fade(this.blackout,1,two);
+				break;
+			case 624:
+				this.tvTime = -1;
+				this.video.setAlpha(0);
+				this.tv.set_alpha(0);
+				this.owner.dad = this.cos;
+				this.cos.set_alpha(1);
+				this.host.replaceIcon(false,this.cos.curCharacter);
+				this.host.targetZoom = .9;
+				this.fade(this.blackout,0,.4);
+				this.thingies.set_alpha(1);
+				this.drill(true);
+				break;
+			}
+		}
+	}
+	,mineWaves: function(time) {
+		var start = -1.0;
+		var at = 16642.3357664233;
+		if(time >= at) {
+			start = at;
+		}
+		var at = 72700.7299270069;
+		if(time >= at) {
+			start = at;
+		}
+		if(start < 0) {
+			return;
+		}
+		var age = time - start;
+		var step = 109.489051094890513;
+		var beatLength = step * 4;
+		var rise = step * 5;
+		var frequency = 0.0;
+		var amplitude = 0.0;
+		if(age < rise) {
+			frequency = Math.min(5,Math.floor(age / step) + 1) * .1;
+			amplitude = .1 + Math.min(5,Math.floor(age / step) + 1) * .05;
+		} else if(age < rise + beatLength) {
+			var q = (age - rise) / beatLength;
+			frequency = .5 + 1.5 * q;
+			amplitude = .35 + .65 * q;
+		} else {
+			var q = Math.max(0,1 - (age - rise - beatLength) / (step * 2));
+			frequency = 2 * q;
+			amplitude = q;
+		}
+		this.wave.uFrequency.value[0] = frequency;
+		this.wave.uSpeed.value[0] = frequency;
+		this.wave.uWaveAmplitude.value[0] = amplitude;
+		var phase = age < 200 ? 0 : age < rise + beatLength * 2 ? 1 : age < rise + beatLength * 3.5 ? 2 : 3;
+		if(phase != this.wake) {
+			this.wake = phase;
+			if(phase == 1) {
+				this.hat.animation.play("wakeup",true);
+			}
+			if(phase == 2) {
+				this.hat.animation.play("wakeup_end",true);
+			}
+			if(phase == 3) {
+				this.hat.animation.play("resleep",true);
+			}
+		}
+	}
+	,update: function(time,elapsed) {
+		var next = Math.floor(time / (60000 / PlayState.SONG.bpm)) | 0;
+		while(this.beat < next) {
+			this.beat++;
+			if(this.beat >= 0) {
+				this.cue(this.beat,this.beat * 60000 / PlayState.SONG.bpm);
+			}
+		}
+		if(this.song == "mine") {
+			this.weird.iTime.value[0] = Math.max(0,time) / 1000;
+			this.weird.mixy.value[0] = this.mix.value;
+			this.wave.iTime.value[0] = Math.max(0,time) / 1000;
+			this.mineWaves(time);
+			if(this.owner.dad.frame != null) {
+				var uv = this.owner.dad.frame.uv;
+				this.wave.frameUv.value = [uv.x,uv.y,uv.width,uv.height];
+			}
+			if(this.hat.animation._curAnim.name == "resleep" && this.hat.animation._curAnim.finished) {
+				this.hat.animation.play("idle");
+			}
+			if(this.dinner.visible) {
+				var phase = Math.max(0,time) / 437.956204379562053;
+				this.dinner.setPosition(100 * (phase % 1),-200 * (phase % 1) * (1 - phase % 1));
+			}
+		} else {
+			if(!this.videoStarted && time >= 0) {
+				this.videoStarted = true;
+				this.video.start(0);
+			}
+			this.video.sync(time);
+			var t = Math.max(0,time) / 1000;
+			if(this.tvTime < 0) {
+				this.drillBF.set_y(this.bfY + 36 * Math.sin(t));
+				this.cos.setPosition(this.cosX + 36 * Math.sin(t),this.cosY + 18 * (Math.cos(t * 2) - 1));
+			} else {
+				this.tv.set_y(-75 + 36 * Math.sin(t));
+				this.owner.camFollow.setPosition(723,545);
+			}
+			if(time >= 120000. && time < 129103.448275862072) {
+				this.host.points.h["DAD"] = [723,545];
+			}
+		}
+		this.previous = time;
+	}
+	,singerFor: function(note) {
+		return this.owner.dad;
+	}
+	,setSuspended: function(value) {
+		if(this.video != null) {
+			this.video.setSuspended(value,false);
+		}
+	}
+	,destroy: function() {
+		if(this.video != null) {
+			this.owner.remove(this.video,true);
+			this.video.destroy();
+			this.video = null;
+		}
+	}
+	,__class__: GoldenMineRoup
+};
+var GoldenMineShader = function() {
+	if(this.__glFragmentSource == null) {
+		this.__glFragmentSource = "varying float openfl_Alphav;\n\t\tvarying vec4 openfl_ColorMultiplierv;\n\t\tvarying vec4 openfl_ColorOffsetv;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform bool openfl_HasColorTransform;\n\t\tuniform vec2 openfl_TextureSize;\n\t\tuniform sampler2D bitmap;\n\n\t\tuniform bool hasTransform;\n\t\tuniform bool hasColorTransform;\n\n\t\tvec4 flixel_texture2D(sampler2D bitmap, vec2 coord)\n\t\t{\n\t\t\tvec4 color = texture2D(bitmap, coord);\n\t\t\tif (!hasTransform)\n\t\t\t{\n\t\t\t\treturn color;\n\t\t\t}\n\n\t\t\tif (color.a == 0.0)\n\t\t\t{\n\t\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\n\t\t\t}\n\n\t\t\tif (!hasColorTransform)\n\t\t\t{\n\t\t\t\treturn color * openfl_Alphav;\n\t\t\t}\n\n\t\t\tcolor = vec4(color.rgb / color.a, color.a);\n\n\t\t\tmat4 colorMultiplier = mat4(0);\n\t\t\tcolorMultiplier[0][0] = openfl_ColorMultiplierv.x;\n\t\t\tcolorMultiplier[1][1] = openfl_ColorMultiplierv.y;\n\t\t\tcolorMultiplier[2][2] = openfl_ColorMultiplierv.z;\n\t\t\tcolorMultiplier[3][3] = openfl_ColorMultiplierv.w;\n\n\t\t\tcolor = clamp(openfl_ColorOffsetv + (color * colorMultiplier), 0.0, 1.0);\n\n\t\t\tif (color.a > 0.0)\n\t\t\t{\n\t\t\t\treturn vec4(color.rgb * color.a * openfl_Alphav, color.a * openfl_Alphav);\n\t\t\t}\n\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\n\t\t}\n\t\n\n\nuniform float mixy;\nuniform float iTime;\nfloat overlayOffset = 0.005;\nfloat overlay2Offset = 0.001;\nvec4 texMult = vec4(0.4, 0.3, 0.7, 1.0);\nvec4 texOverlayMult = vec4(2.0, 0.1, 0.2, 1.0);\nvec4 texOverlaySubtract = vec4(0.3, 0.3, 0.3, 0.0);\n\nvoid main()\n{\n    // Normalized pixel coordinates (from 0 to 1)\n    vec2 uv = openfl_TextureCoordv.xy;\n\tvec4 color = flixel_texture2D(bitmap, uv);\n    vec4 tex = flixel_texture2D(bitmap, uv) * texMult;\n    vec4 texOverlay = flixel_texture2D(bitmap, uv + vec2(sin(iTime) * overlayOffset, 0));\n    vec4 texOverlay2 = flixel_texture2D(bitmap, uv + vec2((sin(iTime) * overlayOffset) + overlay2Offset, 0));\n    // Output to screen\n    gl_FragColor = mix(color, tex + ((texOverlay - texOverlay2) * texOverlayMult), mixy);\n}";
+	}
+	if(this.__glVertexSource == null) {
+		this.__glVertexSource = "\n\t\tattribute float openfl_Alpha;\n\t\tattribute vec4 openfl_ColorMultiplier;\n\t\tattribute vec4 openfl_ColorOffset;\n\t\tattribute vec4 openfl_Position;\n\t\tattribute vec2 openfl_TextureCoord;\n\n\t\tvarying float openfl_Alphav;\n\t\tvarying vec4 openfl_ColorMultiplierv;\n\t\tvarying vec4 openfl_ColorOffsetv;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform mat4 openfl_Matrix;\n\t\tuniform bool openfl_HasColorTransform;\n\t\tuniform vec2 openfl_TextureSize;\n\n\t\t\n\t\tattribute float alpha;\n\t\tattribute vec4 colorMultiplier;\n\t\tattribute vec4 colorOffset;\n\t\tuniform bool hasColorTransform;\n\t\t\n\t\tvoid main(void)\n\t\t{\n\t\t\topenfl_Alphav = openfl_Alpha;\n\t\topenfl_TextureCoordv = openfl_TextureCoord;\n\n\t\tif (openfl_HasColorTransform) {\n\n\t\t\topenfl_ColorMultiplierv = openfl_ColorMultiplier;\n\t\t\topenfl_ColorOffsetv = openfl_ColorOffset / 255.0;\n\n\t\t}\n\n\t\tgl_Position = openfl_Matrix * openfl_Position;\n\n\t\t\t\n\t\t\topenfl_Alphav = openfl_Alpha * alpha;\n\t\t\t\n\t\t\tif (hasColorTransform)\n\t\t\t{\n\t\t\t\topenfl_ColorOffsetv = colorOffset / 255.0;\n\t\t\t\topenfl_ColorMultiplierv = colorMultiplier;\n\t\t\t}\n\t\t}";
+	}
+	flixel_graphics_tile_FlxGraphicsShader.call(this);
+	this.mixy.value = [0.0];
+	this.iTime.value = [0.0];
+	this.__isGenerated = true;
+	this.__initGL();
+};
+$hxClasses["GoldenMineShader"] = GoldenMineShader;
+GoldenMineShader.__name__ = "GoldenMineShader";
+GoldenMineShader.__super__ = flixel_graphics_tile_FlxGraphicsShader;
+GoldenMineShader.prototype = $extend(flixel_graphics_tile_FlxGraphicsShader.prototype,{
+	mixy: null
+	,iTime: null
+	,__class__: GoldenMineShader
 });
 var GoldenMobileControls = function() { };
 $hxClasses["GoldenMobileControls"] = GoldenMobileControls;
@@ -26121,7 +27469,7 @@ GoldenNoteGeometry.laneInset = function(screenWidth,laneWidth) {
 	return (screenWidth / 2 - laneWidth * 4) / 2;
 };
 GoldenNoteGeometry.velocity = function(speed) {
-	return 0.45 * Math.max(0.01,speed);
+	return 0.45 * Math.max(0.01,speed) / GoldenPlayback.rate;
 };
 GoldenNoteGeometry.position = function(time,songTime,receptor,speed,downscroll) {
 	return receptor + (time - songTime) * GoldenNoteGeometry.velocity(speed) * (downscroll ? -1 : 1);
@@ -26156,10 +27504,7 @@ GoldenNoteSkin.baseScale = function(skin) {
 	}
 };
 GoldenNoteSkin.frames = function(skin) {
-	var key = GoldenNoteSkin.atlas(skin);
-	var library = null;
-	var potatoKey = key + "_potato";
-	var main = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE",library),Paths.getPath("images/" + key + ".xml","TEXT",library));
+	var main = Paths.getSparrowAtlas(GoldenNoteSkin.atlas(skin));
 	if(skin != "bevel") {
 		return main;
 	}
@@ -26172,9 +27517,7 @@ GoldenNoteSkin.frames = function(skin) {
 		combined.pushFrame(frame.copyTo());
 	}
 	var _g = 0;
-	var library = null;
-	var potatoKey = "golden/notes/bevel_ends" + "_potato";
-	var _g1 = (GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/notes/bevel_ends" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/notes/bevel_ends" + ".xml","TEXT",library))).frames;
+	var _g1 = Paths.getSparrowAtlas("golden/notes/bevel_ends").frames;
 	while(_g < _g1.length) {
 		var frame = _g1[_g];
 		++_g;
@@ -26184,10 +27527,7 @@ GoldenNoteSkin.frames = function(skin) {
 };
 GoldenNoteSkin.setupStrum = function(sprite,skin,direction) {
 	GoldenNoteSkin.assigned.set(sprite,skin);
-	var key = GoldenNoteSkin.atlas(skin);
-	var library = null;
-	var potatoKey = key + "_potato";
-	sprite.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE",library),Paths.getPath("images/" + key + ".xml","TEXT",library)));
+	sprite.set_frames(Paths.getSparrowAtlas(GoldenNoteSkin.atlas(skin)));
 	var dirs = ["LEFT","DOWN","UP","RIGHT"];
 	var key = dirs[direction];
 	sprite.animation.addByPrefix("static","arrow" + key,24,false);
@@ -26305,10 +27645,7 @@ GoldenNoteSplash.prototype = $extend(flixel_FlxSprite.prototype,{
 		this.receptor = receptor;
 		if(this.loadedSkin != skin) {
 			this.loadedSkin = skin;
-			var key = "golden/notes/" + (skin == "bevel" ? "bevel_splash" : skin == "3d" ? "splash_3d" : "noteSplashes");
-			var library = null;
-			var potatoKey = key + "_potato";
-			this.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE",library),Paths.getPath("images/" + key + ".xml","TEXT",library)));
+			this.set_frames(Paths.getSparrowAtlas("golden/notes/" + (skin == "bevel" ? "bevel_splash" : skin == "3d" ? "splash_3d" : "noteSplashes")));
 			if(skin == "3d" || skin == "bevel") {
 				var inlarr_0 = "purple";
 				var inlarr_1 = "blue";
@@ -26427,8 +27764,7 @@ GoldenOCActor.prototype = $extend(flixel_FlxSprite.prototype,{
 			type = "TEXT";
 		}
 		if(openfl_utils_Assets.exists(Paths.getPath("images/" + path + ".xml",type,library))) {
-			var potatoKey = path + "_potato";
-			this.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + path + ".png","IMAGE",library),Paths.getPath("images/" + path + ".xml","TEXT",library)));
+			this.set_frames(Paths.getSparrowAtlas(path,library));
 			var prefix = this.id == "bambom-nutty" ? value == "bg" ? "nutty back idle" : "nutty jump instance 1" : this.id + " " + (value == "bg" ? "back idle" : value);
 			this.animation.addByPrefix("idle",prefix,24,false);
 			this.animation.play("idle",true);
@@ -26842,6 +28178,432 @@ GoldenOCSongs.prototype = {
 	}
 	,__class__: GoldenOCSongs
 };
+var GoldenOrthoExtras = function(owner,host) {
+	this.particleIndex = 0;
+	this.nextParticle = 0;
+	this.particles = [];
+	this.borderY = 0;
+	this.borderX = 0;
+	this.borderHeight = flixel_FlxG.height;
+	this.borderWidth = flixel_FlxG.width;
+	this.border = [];
+	this.strength = 0;
+	this.wave = 0;
+	this.skyGlow = 0;
+	this.perlinScale = 0;
+	this.perlinStart = -1;
+	this.shake = 0;
+	this.clock = 0;
+	this.beat = -1;
+	this.owner = owner;
+	this.host = host;
+	this.song = PlayState.SONG.song.toLowerCase();
+	if(this.song == "piehole") {
+		this.noise = new _$GoldenOrthoExtras_GoldenPiePerlin();
+		var bar = new flixel_FlxSprite().makeGraphic(1,1,-16777216);
+		bar.set_cameras([owner.camHUD]);
+		bar.scrollFactor.set();
+		bar.set_visible(false);
+		owner.add(bar);
+		this.border.push(bar);
+		var bar = new flixel_FlxSprite().makeGraphic(1,1,-16777216);
+		bar.set_cameras([owner.camHUD]);
+		bar.scrollFactor.set();
+		bar.set_visible(false);
+		owner.add(bar);
+		this.border.push(bar);
+		var bar = new flixel_FlxSprite().makeGraphic(1,1,-16777216);
+		bar.set_cameras([owner.camHUD]);
+		bar.scrollFactor.set();
+		bar.set_visible(false);
+		owner.add(bar);
+		this.border.push(bar);
+		var bar = new flixel_FlxSprite().makeGraphic(1,1,-16777216);
+		bar.set_cameras([owner.camHUD]);
+		bar.scrollFactor.set();
+		bar.set_visible(false);
+		owner.add(bar);
+		this.border.push(bar);
+		if(!GoldenQuality.superLow) {
+			var _g = 0;
+			while(_g < 128) {
+				var i = _g++;
+				this.particles.push({ sprite : owner.frustStage.sceneLayers.h["particle" + i], start : -1e9, x : 0., angle : 0.});
+			}
+		}
+	}
+};
+$hxClasses["GoldenOrthoExtras"] = GoldenOrthoExtras;
+GoldenOrthoExtras.__name__ = "GoldenOrthoExtras";
+GoldenOrthoExtras.prototype = {
+	owner: null
+	,host: null
+	,song: null
+	,beat: null
+	,clock: null
+	,shake: null
+	,perlinStart: null
+	,perlinScale: null
+	,noise: null
+	,skyGlow: null
+	,waveTrack: null
+	,strengthTrack: null
+	,wave: null
+	,strength: null
+	,border: null
+	,borderTrack: null
+	,borderWidth: null
+	,borderHeight: null
+	,borderX: null
+	,borderY: null
+	,particles: null
+	,nextParticle: null
+	,particleIndex: null
+	,beforeUpdate: function() {
+		if(this.song == "piehole") {
+			var fh = this.owner.camFollow;
+			fh.set_x(fh.x - this.shake);
+			var fh = this.owner.camFollow;
+			fh.set_y(fh.y - this.shake);
+			this.shake = 0;
+		}
+	}
+	,songEvent: function(name,value) {
+		if(name == "perlinstart") {
+			this.perlinStart = 87898.0891719746;
+			this.nextParticle = this.perlinStart + 100;
+		}
+		if(name == "lespihey") {
+			this.owner.dad.canAutoDance = false;
+		}
+	}
+	,cinematicBars: function(values,time) {
+		this.sampleBorder(time);
+		var _g = [];
+		var _g1 = 0;
+		while(_g1 < values.length) {
+			var value = values[_g1];
+			++_g1;
+			_g.push(parseFloat(value));
+		}
+		var v = _g;
+		var unit = values[6];
+		var duration = v[4] * (unit == "SECONDS" ? 1000 : 60000 / PlayState.SONG.bpm * (unit == "STEPS" ? .25 : unit == "SECTIONS" ? 4 : 1));
+		this.borderTrack = { start : time, duration : duration, ease : values[5], w : this.borderWidth, h : this.borderHeight, x : this.borderX, y : this.borderY, tw : (1 - v[0]) * flixel_FlxG.width, th : (1 - v[1]) * flixel_FlxG.height, tx : v[2] * flixel_FlxG.width * .5, ty : v[3] * flixel_FlxG.height * .5};
+	}
+	,sampleBorder: function(time) {
+		if(this.borderTrack == null) {
+			return;
+		}
+		var t = this.borderTrack;
+		var q = GoldenChartCamera.easing(t.ease,(time - t.start) / Math.max(1,t.duration));
+		this.borderWidth = t.w + (t.tw - t.w) * q;
+		this.borderHeight = t.h + (t.th - t.h) * q;
+		this.borderX = t.x + (t.tx - t.x) * q;
+		this.borderY = t.y + (t.ty - t.y) * q;
+		var x = (flixel_FlxG.width - this.borderWidth) * .5 + this.borderX;
+		var y = (flixel_FlxG.height - this.borderHeight) * .5 + this.borderY;
+		this.rect(this.border[0],0,0,x,flixel_FlxG.height);
+		this.rect(this.border[1],x + this.borderWidth,0,flixel_FlxG.width - x - this.borderWidth,flixel_FlxG.height);
+		this.rect(this.border[2],0,0,flixel_FlxG.width,y);
+		this.rect(this.border[3],0,y + this.borderHeight,flixel_FlxG.width,flixel_FlxG.height - y - this.borderHeight);
+	}
+	,rect: function(sprite,x,y,w,h) {
+		sprite.set_visible(w > 0 && h > 0);
+		if(!sprite.visible) {
+			return;
+		}
+		sprite.setPosition(x,y);
+		sprite.scale.set(w,h);
+		sprite.origin.set();
+		sprite.offset.set();
+	}
+	,trackValue: function(track,time) {
+		var q = Math.max(0,Math.min(1,(time - track.start) / (60000 / PlayState.SONG.bpm * 4)));
+		return track.from + (track.to - track.from) * q;
+	}
+	,cuberootBeat: function(b,at) {
+		this.host.sample(at);
+		switch(b) {
+		case 64:
+			flixel_FlxG.camera.flash(-1,1);
+			this.host.zoomEvery = 1;
+			this.waveTrack = { start : at, from : this.wave, to : 1.};
+			this.host.changeCharacter(["DAD","dave-cuberoot"]);
+			this.host.changeCharacter(["BF","bambi-cuberoot"]);
+			break;
+		case 96:case 128:
+			flixel_FlxG.camera.flash(-1,1);
+			break;
+		case 184:case 185:case 186:case 187:case 188:case 189:case 190:case 191:
+			this.host.targetZoom += .025;
+			break;
+		case 192:
+			this.host.zoomTo(at,this.host.targetZoom - .2,1,"quad");
+			flixel_FlxG.camera.flash(-1,1);
+			this.host.zoomEvery = 8;
+			break;
+		case 248:
+			this.host.zoomEvery = 4;
+			break;
+		case 252:
+			this.host.zoomEvery = 2;
+			break;
+		case 256:
+			flixel_FlxG.camera.flash(-1,1);
+			this.host.zoomEvery = 1;
+			this.strengthTrack = { start : at, from : this.strength, to : 1.};
+			break;
+		case 368:
+			this.host.zoomIntensity *= 2;
+			break;
+		case 384:
+			flixel_FlxG.camera.flash(-1,1);
+			this.host.zoomEvery = 4;
+			this.host.zoomIntensity *= .5;
+			this.waveTrack = { start : at, from : this.wave, to : 0.};
+			this.strengthTrack = { start : at, from : this.strength, to : 0.};
+			break;
+		default:
+		}
+	}
+	,update: function(time,elapsed) {
+		this.clock += Math.max(0,elapsed);
+		var crochet = 60000 / PlayState.SONG.bpm;
+		var nextBeat = Math.floor(time / crochet) | 0;
+		if(this.song == "cuberoot") {
+			while(this.beat < nextBeat) {
+				this.beat++;
+				if(this.beat >= 0) {
+					this.cuberootBeat(this.beat,this.beat * crochet);
+				}
+			}
+			this.host.sample(time);
+			flixel_FlxG.camera.set_zoom(this.host.zoom);
+			if(this.waveTrack != null) {
+				this.wave = this.trackValue(this.waveTrack,time);
+			}
+			if(this.strengthTrack != null) {
+				this.strength = this.trackValue(this.strengthTrack,time);
+			}
+			if(this.owner.strumLineNotes != null) {
+				var _g = 0;
+				var _g1 = this.owner.strumLineNotes.members;
+				while(_g < _g1.length) {
+					var strum = _g1[_g];
+					++_g;
+					if(strum != null) {
+						strum.set_y((flixel_FlxG.save.data.downscroll ? 540 : 60) - Math.sin(strum.ID + this.clock) * this.wave * 45);
+					}
+				}
+			}
+			this.owner.frustStage.overlay.set_alpha((Math.sin(this.clock * 1.5) + 2) / 17 * this.strength);
+		}
+		if(this.song != "piehole") {
+			return;
+		}
+		if(this.perlinStart >= 0) {
+			var t = Math.max(0,Math.min(1,(time - this.perlinStart) / (crochet * 2)));
+			this.perlinScale = -(Math.sqrt(1 - t * t) - 1);
+		}
+		while(this.beat < nextBeat) {
+			this.beat++;
+			if(this.beat < 0) {
+				continue;
+			}
+			if(this.beat % 4 == 0) {
+				var name = "sky";
+				var glow = this.owner.frustStage.sceneLayers.h[name + "Glow"];
+				if(glow != null) {
+					glow.set_alpha(this.perlinScale * (name == "sky" ? .1 : .6));
+				}
+				var name1 = "clouds";
+				var glow1 = this.owner.frustStage.sceneLayers.h[name1 + "Glow"];
+				if(glow1 != null) {
+					glow1.set_alpha(this.perlinScale * (name1 == "sky" ? .1 : .6));
+				}
+				var name2 = "hills";
+				var glow2 = this.owner.frustStage.sceneLayers.h[name2 + "Glow"];
+				if(glow2 != null) {
+					glow2.set_alpha(this.perlinScale * (name2 == "sky" ? .1 : .6));
+				}
+				var name3 = "backgrass";
+				var glow3 = this.owner.frustStage.sceneLayers.h[name3 + "Glow"];
+				if(glow3 != null) {
+					glow3.set_alpha(this.perlinScale * (name3 == "sky" ? .1 : .6));
+				}
+				this.skyGlow = .05;
+			}
+			this.owner.frustStage.sceneLayers.h["gradient"].set_alpha(this.perlinScale * .6);
+		}
+		if(this.perlinScale > 0) {
+			var value = this.noise.octave(this.clock * .2,this.clock * .4,.5) - .5;
+			this.shake = value * 100 * this.perlinScale;
+			var fh = this.owner.camFollow;
+			fh.set_x(fh.x + this.shake);
+			var fh = this.owner.camFollow;
+			fh.set_y(fh.y + this.shake);
+			flixel_FlxG.camera.set_angle(value * 10 * this.perlinScale);
+			flixel_FlxG.camera.set_zoom(this.host.chartCamera.zoom * (1 + value * .1));
+		}
+		var name = "sky";
+		var glow = this.owner.frustStage.sceneLayers.h[name + "Glow"];
+		if(glow != null) {
+			glow.set_alpha(Math.max(0,glow.alpha - elapsed * crochet / 1000));
+		}
+		var name = "clouds";
+		var glow = this.owner.frustStage.sceneLayers.h[name + "Glow"];
+		if(glow != null) {
+			glow.set_alpha(Math.max(0,glow.alpha - elapsed * crochet / 1000));
+		}
+		var name = "hills";
+		var glow = this.owner.frustStage.sceneLayers.h[name + "Glow"];
+		if(glow != null) {
+			glow.set_alpha(Math.max(0,glow.alpha - elapsed * crochet / 1000));
+		}
+		var name = "backgrass";
+		var glow = this.owner.frustStage.sceneLayers.h[name + "Glow"];
+		if(glow != null) {
+			glow.set_alpha(Math.max(0,glow.alpha - elapsed * crochet / 1000));
+		}
+		this.skyGlow = Math.max(0,this.skyGlow - elapsed * (crochet / 4 / 100) * .05);
+		this.owner.frustStage.back.setColorTransform(1,1,1,1,this.skyGlow * 255 | 0,this.skyGlow * 255 | 0,this.skyGlow * 255 | 0);
+		this.sampleBorder(time);
+		if(this.perlinStart >= 0 && this.particles.length > 0) {
+			while(this.nextParticle <= time) {
+				var p = this.particles[this.particleIndex++ % this.particles.length];
+				p.start = this.nextParticle;
+				p.x = flixel_FlxG.random.float(-1500,-1500 + flixel_FlxG.width * 3);
+				p.angle = flixel_FlxG.random.float(-135,-45) * Math.PI / 180;
+				this.nextParticle += 100;
+			}
+			var _g = 0;
+			var _g1 = this.particles.length;
+			while(_g < _g1) {
+				var i = _g++;
+				var p = this.particles[i];
+				var sprite = p.sprite;
+				var age = (time - p.start) / 1000;
+				sprite.set_visible(age >= 0 && age < 5);
+				if(!sprite.visible) {
+					continue;
+				}
+				sprite.setPosition(p.x + Math.cos(p.angle) * 100 * age,650 + Math.sin(p.angle) * 100 * age);
+				var size = (1 + .5 * Math.sin(i + age * 2)) * .5;
+				sprite.scale.set(size,size);
+				sprite.set_alpha(1 - age / 5);
+			}
+		}
+	}
+	,destroy: function() {
+		if(this.song == "piehole") {
+			flixel_FlxG.camera.set_angle(0);
+		}
+	}
+	,__class__: GoldenOrthoExtras
+};
+var _$GoldenOrthoExtras_GoldenPiePerlin = function() {
+	var _g = [];
+	var _g1 = 0;
+	while(_g1 < 512) {
+		var i = _g1++;
+		_g.push(flixel_FlxG.random.int(0,256));
+	}
+	this.table = _g;
+};
+$hxClasses["_GoldenOrthoExtras.GoldenPiePerlin"] = _$GoldenOrthoExtras_GoldenPiePerlin;
+_$GoldenOrthoExtras_GoldenPiePerlin.__name__ = "_GoldenOrthoExtras.GoldenPiePerlin";
+_$GoldenOrthoExtras_GoldenPiePerlin.prototype = {
+	table: null
+	,p: function(i) {
+		return this.table[i & 511];
+	}
+	,fade: function(t) {
+		return t * t * t * (t * (t * 6 - 15) + 10);
+	}
+	,lerp: function(t,a,b) {
+		return a + t * (b - a);
+	}
+	,grad: function(hash,x,y,z) {
+		var h = hash & 15;
+		var u = h < 8 ? x : y;
+		var v = h < 4 ? y : h == 12 || h == 14 ? x : z;
+		return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
+	}
+	,sample: function(x,y,z) {
+		var X = (Math.floor(x) | 0) & 255;
+		var Y = (Math.floor(y) | 0) & 255;
+		var Z = (Math.floor(z) | 0) & 255;
+		x -= Math.floor(x);
+		y -= Math.floor(y);
+		z -= Math.floor(z);
+		var u = x * x * x * (x * (x * 6 - 15) + 10);
+		var v = y * y * y * (y * (y * 6 - 15) + 10);
+		var w = z * z * z * (z * (z * 6 - 15) + 10);
+		var a = this.table[X & 511] + Y;
+		var aa = this.table[a & 511] + Z;
+		var ab = this.table[a + 1 & 511] + Z;
+		var b = this.table[X + 1 & 511] + Y;
+		var ba = this.table[b & 511] + Z;
+		var bb = this.table[b + 1 & 511] + Z;
+		var a = this.grad(this.table[aa & 511],x,y,z);
+		var a1 = a + u * (this.grad(this.table[ba & 511],x - 1,y,z) - a);
+		var a = this.grad(this.table[ab & 511],x,y - 1,z);
+		var a2 = a1 + v * (a + u * (this.grad(this.table[bb & 511],x - 1,y - 1,z) - a) - a1);
+		var a = this.grad(this.table[aa + 1 & 511],x,y,z - 1);
+		var a1 = a + u * (this.grad(this.table[ba + 1 & 511],x - 1,y,z - 1) - a);
+		var a = this.grad(this.table[ab + 1 & 511],x,y - 1,z - 1);
+		return (a2 + w * (a1 + v * (a + u * (this.grad(this.table[bb + 1 & 511],x - 1,y - 1,z - 1) - a) - a1) - a2) + 1) * .5;
+	}
+	,octave: function(x,y,z) {
+		var sum = 0.;
+		var total = 0.;
+		var amplitude = 1.;
+		var frequency = .5;
+		sum += this.sample(x * frequency,y * frequency,z * frequency) * amplitude;
+		total += amplitude;
+		amplitude *= .5;
+		frequency *= 2;
+		sum += this.sample(x * frequency,y * frequency,z * frequency) * amplitude;
+		total += amplitude;
+		amplitude *= .5;
+		frequency *= 2;
+		sum += this.sample(x * frequency,y * frequency,z * frequency) * amplitude;
+		total += amplitude;
+		amplitude *= .5;
+		frequency *= 2;
+		sum += this.sample(x * frequency,y * frequency,z * frequency) * amplitude;
+		total += amplitude;
+		amplitude *= .5;
+		frequency *= 2;
+		sum += this.sample(x * frequency,y * frequency,z * frequency) * amplitude;
+		total += amplitude;
+		amplitude *= .5;
+		frequency *= 2;
+		sum += this.sample(x * frequency,y * frequency,z * frequency) * amplitude;
+		total += amplitude;
+		amplitude *= .5;
+		frequency *= 2;
+		sum += this.sample(x * frequency,y * frequency,z * frequency) * amplitude;
+		total += amplitude;
+		amplitude *= .5;
+		frequency *= 2;
+		sum += this.sample(x * frequency,y * frequency,z * frequency) * amplitude;
+		total += amplitude;
+		amplitude *= .5;
+		frequency *= 2;
+		sum += this.sample(x * frequency,y * frequency,z * frequency) * amplitude;
+		total += amplitude;
+		amplitude *= .5;
+		frequency *= 2;
+		sum += this.sample(x * frequency,y * frequency,z * frequency) * amplitude;
+		total += amplitude;
+		amplitude *= .5;
+		frequency *= 2;
+		return sum / total;
+	}
+	,__class__: _$GoldenOrthoExtras_GoldenPiePerlin
+};
 var GoldenOrthogonal = function(owner) {
 	this.dispatched = 0;
 	this.releaseSection = -1;
@@ -27065,9 +28827,7 @@ var GoldenOrthogonalPortal = function() {
 	this.addSymbol(this.document.AN.SN,this.document.AN.TL);
 	var sheet = "spritemap1";
 	var _g = 0;
-	var key = "golden/orthogonal/" + sheet;
-	var potatoKey = key + "_potato";
-	var _g1 = (GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","orthogonal"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","orthogonal"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","orthogonal"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","orthogonal")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE","orthogonal"),Paths.getPath("images/" + key + ".xml","TEXT","orthogonal"))).frames;
+	var _g1 = Paths.getSparrowAtlas("golden/orthogonal/" + sheet,"orthogonal").frames;
 	while(_g < _g1.length) {
 		var frame = _g1[_g];
 		++_g;
@@ -27075,9 +28835,7 @@ var GoldenOrthogonalPortal = function() {
 	}
 	var sheet = "spritemap2";
 	var _g = 0;
-	var key = "golden/orthogonal/" + sheet;
-	var potatoKey = key + "_potato";
-	var _g1 = (GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","orthogonal"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","orthogonal"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","orthogonal"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","orthogonal")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE","orthogonal"),Paths.getPath("images/" + key + ".xml","TEXT","orthogonal"))).frames;
+	var _g1 = Paths.getSparrowAtlas("golden/orthogonal/" + sheet,"orthogonal").frames;
 	while(_g < _g1.length) {
 		var frame = _g1[_g];
 		++_g;
@@ -27517,8 +29275,7 @@ GoldenOverworld.prototype = $extend(MusicBeatState.prototype,{
 		}
 		var sprite = new flixel_FlxSprite(e.x,e.y);
 		if(name == "door") {
-			var potatoKey = path + "_potato";
-			sprite.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","overworld"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","overworld"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","overworld"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","overworld")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + path + ".png","IMAGE","overworld"),Paths.getPath("images/" + path + ".xml","TEXT","overworld")));
+			sprite.set_frames(Paths.getSparrowAtlas(path,"overworld"));
 			sprite.animation.addByPrefix("door","door",12,false);
 			sprite.animation.play("door");
 			var _this = sprite.animation;
@@ -27924,9 +29681,7 @@ var GoldenOverworldPlayer = function(character) {
 	}
 	this.walkAngle = 90;
 	flixel_FlxSprite.call(this);
-	var key = "golden/overworld/" + character;
-	var potatoKey = key + "_potato";
-	this.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","overworld"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","overworld"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","overworld"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","overworld")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE","overworld"),Paths.getPath("images/" + key + ".xml","TEXT","overworld")));
+	this.set_frames(Paths.getSparrowAtlas("golden/overworld/" + character,"overworld"));
 	var angles = [0,-90,-135,-45,90,135,45,180];
 	var walks = [[7,2,12,2],[9,4,14,4],[8,3,13,3],[8,3,13,3],[5,0,10,0],[6,1,11,1],[6,1,11,1],[7,2,12,2]];
 	var idles = [2,4,3,3,0,1,1,2];
@@ -28166,6 +29921,60 @@ GoldenOverworldTiles.load = function(layer,path,metadata) {
 	result.setPosition(layer.offsetX,layer.offsetY);
 	return result;
 };
+var GoldenPagedAtlas = function() { };
+$hxClasses["GoldenPagedAtlas"] = GoldenPagedAtlas;
+GoldenPagedAtlas.__name__ = "GoldenPagedAtlas";
+GoldenPagedAtlas.clear = function() {
+	GoldenPagedAtlas.cache.h = Object.create(null);
+};
+GoldenPagedAtlas.get = function(key,library) {
+	var id = library + ":" + key;
+	if(Object.prototype.hasOwnProperty.call(GoldenPagedAtlas.cache.h,id)) {
+		return GoldenPagedAtlas.cache.h[id];
+	}
+	var type = "TEXT";
+	if(type == null) {
+		type = "TEXT";
+	}
+	var descriptor = JSON.parse(openfl_utils_Assets.getText(Paths.getPath("images/" + key + ".pages.json",type,library)));
+	var names = descriptor.pages;
+	var order = descriptor.order;
+	var lookup_h = Object.create(null);
+	var result = null;
+	var _g = 0;
+	while(_g < names.length) {
+		var name = names[_g];
+		++_g;
+		var page = Paths.getPath("images/" + name + ".png","IMAGE",library);
+		var type = "TEXT";
+		if(type == null) {
+			type = "TEXT";
+		}
+		var page1 = flixel_graphics_frames_FlxAtlasFrames.fromSparrow(page,Paths.getPath("images/" + name + ".xml",type,library));
+		if(result == null) {
+			result = new flixel_graphics_frames_FlxAtlasFrames(page1.parent);
+		}
+		var _g1 = 0;
+		var _g2 = page1.frames;
+		while(_g1 < _g2.length) {
+			var frame = _g2[_g1];
+			++_g1;
+			lookup_h[frame.name] = frame;
+		}
+	}
+	var _g = 0;
+	while(_g < order.length) {
+		var name = order[_g];
+		++_g;
+		var frame = lookup_h[name];
+		if(frame == null) {
+			throw haxe_Exception.thrown("Missing atlas frame: " + name);
+		}
+		result.pushFrame(frame.copyTo());
+	}
+	GoldenPagedAtlas.cache.h[id] = result;
+	return result;
+};
 var GoldenPartThree = function() { };
 $hxClasses["GoldenPartThree"] = GoldenPartThree;
 GoldenPartThree.__name__ = "GoldenPartThree";
@@ -28207,16 +30016,16 @@ GoldenPartThree.speedFactor = function(note) {
 	return root.visualSpeed;
 };
 GoldenPartThree.noteSpeed = function(p,note) {
-	if(p.frustration != null) {
-		return p.frustration.mods.speed(note.mustPress ? 1 : 0);
+	if(GoldenHoldPath.frustration != null) {
+		return GoldenHoldPath.frustration.speed(note.mustPress ? 1 : 0);
 	} else {
 		return PlayState.SONG.speed * (GoldenPartThree.active(p) ? GoldenPartThree.speedFactor(note) : 1);
 	}
 };
 GoldenPartThree.positionNote = function(p,note) {
 	note.set_visible(PlayState.controlsNote(note) || !GoldenMobileControls.enabled && PlayState.curStage != "kooky");
-	if(p.frustration != null) {
-		p.frustration.mods.position(note,p);
+	if(GoldenHoldPath.frustration != null) {
+		GoldenHoldPath.frustration.position(note,p);
 		return;
 	}
 	if(p.inspicable != null) {
@@ -28237,6 +30046,214 @@ GoldenPartThree.positionNote = function(p,note) {
 		if(!note.isSustainNote) {
 			note.set_x(GoldenHoldPath.x(note.strumTime,now,strum.x + Note.swagWidth / 2,note.noteData,!note.mustPress,true) - Note.swagWidth / 2);
 			note.set_y(GoldenHoldPath.y(note.strumTime,now,strum.y + Note.swagWidth / 2,speed,flixel_FlxG.save.data.downscroll,note.noteData,!note.mustPress,true) - Note.swagWidth / 2);
+		}
+	}
+};
+var GoldenPizza = function(owner,stage) {
+	this.wait = -1;
+	this.flying = true;
+	this.boxes = [];
+	this.owner = owner;
+	var atlas = Paths.getSparrowAtlas("golden/applecore/native-stage/pizza","applecorestage");
+	var sprite = new flixel_FlxSprite();
+	sprite.set_frames(atlas);
+	sprite.animation.addByPrefix("idle","pizza",12,true);
+	sprite.animation.play("idle");
+	sprite.scrollFactor.set(1,1);
+	sprite.set_antialiasing(false);
+	sprite.set_visible(false);
+	stage.add(sprite);
+	this.boxes.push({ sprite : sprite, x : flixel_FlxG.random.int(100,1000) * 1., baseY : flixel_FlxG.random.int(100,500) * 1., amplitude : flixel_FlxG.random.int(500,700) * 1., speed : flixel_FlxG.random.int(800,1200) * 1., done : false});
+	var sprite = new flixel_FlxSprite();
+	sprite.set_frames(atlas);
+	sprite.animation.addByPrefix("idle","pizza",12,true);
+	sprite.animation.play("idle");
+	sprite.scrollFactor.set(1,1);
+	sprite.set_antialiasing(false);
+	sprite.set_visible(false);
+	stage.add(sprite);
+	this.boxes.push({ sprite : sprite, x : flixel_FlxG.random.int(100,1000) * 1., baseY : flixel_FlxG.random.int(100,500) * 1., amplitude : flixel_FlxG.random.int(500,700) * 1., speed : flixel_FlxG.random.int(800,1200) * 1., done : false});
+	this.door = new flixel_FlxSprite();
+	this.door.set_frames(atlas);
+	this.door.animation.addByPrefix("idle","atMyDoor",12,false);
+	this.door.animation.play("idle");
+	this.door.scrollFactor.set(1,1);
+	this.door.set_antialiasing(false);
+	this.door.set_visible(false);
+	stage.add(this.door);
+	this.doorPose = { x : -2000., y : 100., scale : 1.};
+};
+$hxClasses["GoldenPizza"] = GoldenPizza;
+GoldenPizza.__name__ = "GoldenPizza";
+GoldenPizza.prototype = {
+	owner: null
+	,boxes: null
+	,flying: null
+	,wait: null
+	,door: null
+	,doorPose: null
+	,cue: function(beat) {
+		var _gthis = this;
+		this.owner.goldenTweens.cancelTweensOf(this.doorPose);
+		if(beat == 101) {
+			this.door.set_visible(true);
+			this.door.animation.play("idle",true);
+			this.owner.goldenTweens.tween(this.doorPose,{ x : 380, y : 450, scale : 2},Conductor.crochet / 500,{ ease : flixel_tweens_FlxEase.quadOut});
+		} else if(beat == 103) {
+			this.owner.goldenTweens.tween(this.doorPose,{ x : 1000, y : 1000, scale : 1},Conductor.crochet / 350,{ startDelay : .15, ease : flixel_tweens_FlxEase.quadIn, onComplete : function(_) {
+				_gthis.door.set_visible(false);
+				_gthis.doorPose.x = -2000;
+				_gthis.doorPose.y = 100;
+			}});
+		}
+	}
+	,project: function(sprite,x,y,scale) {
+		sprite.scale.set(scale * .425,scale * .425);
+		sprite.origin.set();
+		sprite.offset.set();
+		sprite.setPosition(640 + (x - 640) * .425,360 + (y - 360) * .425);
+	}
+	,update: function(elapsed) {
+		var clock = Math.max(0,Conductor.songPosition) / 1000;
+		var finished = 0;
+		var _g = 0;
+		var _g1 = this.boxes.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var data = this.boxes[i];
+			var sprite = data.sprite;
+			if(this.flying) {
+				data.x += Math.abs(Math.sin(elapsed)) * data.speed / 1.5;
+				if(data.x > 3000) {
+					data.done = true;
+				}
+				if(data.done) {
+					++finished;
+				}
+			}
+			var y = data.baseY + (i == 0 ? Math.sin(clock) : Math.cos(i + clock)) * data.amplitude + 45;
+			this.project(sprite,data.x,y,1.45 + Math.sin(clock * 1.5) * .05);
+		}
+		if(this.flying && finished == 2) {
+			this.flying = false;
+			this.wait = flixel_FlxG.random.float(3,6.3);
+		} else if(!this.flying) {
+			this.wait -= elapsed;
+			if(this.wait <= 0) {
+				var _g = 0;
+				var _g1 = this.boxes;
+				while(_g < _g1.length) {
+					var data = _g1[_g];
+					++_g;
+					data.x = flixel_FlxG.random.int(-3000,-2000) * 1.;
+					data.speed = flixel_FlxG.random.int(600,1200) * 1.;
+					data.done = false;
+					var sprite = data.sprite;
+					sprite.set_visible(true);
+				}
+				this.flying = true;
+			}
+		}
+		this.project(this.door,this.doorPose.x,this.doorPose.y,this.doorPose.scale);
+	}
+	,__class__: GoldenPizza
+};
+var GoldenPlayback = function() { };
+$hxClasses["GoldenPlayback"] = GoldenPlayback;
+GoldenPlayback.__name__ = "GoldenPlayback";
+GoldenPlayback.valid = function(value) {
+	if(value == null) {
+		return 1;
+	}
+	var n = parseFloat(Std.string(value));
+	if(!isFinite(n)) {
+		return 1;
+	}
+	return Math.round(Math.max(.5,Math.min(2,n)) * 20) / 20;
+};
+GoldenPlayback.setting = function() {
+	return GoldenPlayback.valid(flixel_FlxG.save.data.playbackRate);
+};
+GoldenPlayback.label = function(value) {
+	var n = Math.round(value * 100) | 0;
+	return (n / 100 | 0) + "." + (n % 100 < 10 ? "0" : "") + n % 100 + "x";
+};
+GoldenPlayback.setSetting = function(value) {
+	flixel_FlxG.save.data.playbackRate = GoldenPlayback.valid(value);
+	flixel_FlxG.save.flush();
+};
+GoldenPlayback.begin = function() {
+	GoldenPlayback.rate = PlayState.loadRep && PlayState.rep != null ? GoldenPlayback.valid(PlayState.rep.replay.playbackRate) : GoldenPlayback.setting();
+	GoldenPlayback.channels = new haxe_ds_ObjectMap();
+	GoldenPlayback.syncElapsed = 0;
+	flixel_FlxG.timeScale = GoldenPlayback.rate;
+};
+GoldenPlayback.pause = function() {
+	flixel_FlxG.timeScale = 1;
+};
+GoldenPlayback.resume = function() {
+	flixel_FlxG.timeScale = GoldenPlayback.rate;
+};
+GoldenPlayback.finish = function() {
+	flixel_FlxG.timeScale = 1;
+	GoldenPlayback.rate = 1;
+	GoldenPlayback.channels = new haxe_ds_ObjectMap();
+	GoldenPlayback.syncElapsed = 0;
+};
+GoldenPlayback.realMilliseconds = function(chartMilliseconds) {
+	return chartMilliseconds / GoldenPlayback.rate;
+};
+GoldenPlayback.offset = function() {
+	return Conductor.validOffset(flixel_FlxG.save.data.offset) * GoldenPlayback.rate;
+};
+GoldenPlayback.scoreSuffix = function() {
+	if(GoldenPlayback.rate == 1) {
+		return "";
+	} else {
+		return "-rate-" + (Math.round(GoldenPlayback.rate * 100) | 0);
+	}
+};
+GoldenPlayback.apply = function(sound) {
+	if(sound == null || sound._channel == null) {
+		return;
+	}
+	var channel = sound._channel;
+	if(GoldenPlayback.channels.h[sound.__id__] == channel) {
+		return;
+	}
+	if(channel.__audioSource == null) {
+		return;
+	}
+	channel.__audioSource.set_pitch(GoldenPlayback.rate);
+	GoldenPlayback.channels.set(sound,channel);
+};
+GoldenPlayback.applySongs = function(owner) {
+	GoldenPlayback.apply(flixel_FlxG.sound.music);
+	GoldenPlayback.apply(owner.vocals);
+	GoldenPlayback.apply(owner.opponentVocals);
+};
+GoldenPlayback.update = function(owner,elapsed) {
+	if(owner.startingSong || owner.paused || owner.endingSong) {
+		return;
+	}
+	GoldenPlayback.applySongs(owner);
+	GoldenPlayback.syncElapsed += elapsed / GoldenPlayback.rate;
+	if(GoldenPlayback.syncElapsed < .5) {
+		return;
+	}
+	GoldenPlayback.syncElapsed = 0;
+	var now = GoldenInput.audioTime();
+	var _g = 0;
+	var _g1 = [owner.vocals,owner.opponentVocals];
+	while(_g < _g1.length) {
+		var sound = _g1[_g];
+		++_g;
+		if(sound == null || sound._channel == null || sound._channel == null || now >= sound._length - 100 * GoldenPlayback.rate) {
+			continue;
+		}
+		if(Math.abs(sound._channel.get_position() - now) > 40 * GoldenPlayback.rate) {
+			sound.set_time(now);
+			GoldenPlayback.apply(sound);
 		}
 	}
 };
@@ -28394,8 +30411,7 @@ var GoldenReadyLoud = function(owner) {
 	owner.frustStage.remove(sprite,true);
 	owner.insert(owner.members.indexOf(owner.strumLineNotes),sprite);
 	this.owl = new flixel_FlxSprite(-226,-329);
-	var potatoKey = "golden/frustsongs/ready-loud/owl" + "_potato";
-	this.owl.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","extra-ready-loud"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","extra-ready-loud"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","extra-ready-loud"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","extra-ready-loud")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/frustsongs/ready-loud/owl" + ".png","IMAGE","extra-ready-loud"),Paths.getPath("images/" + "golden/frustsongs/ready-loud/owl" + ".xml","TEXT","extra-ready-loud")));
+	this.owl.set_frames(Paths.getSparrowAtlas("golden/frustsongs/ready-loud/owl","extra-ready-loud"));
 	this.owl.animation.addByPrefix("owlJumpscare","owl",24,false);
 	this.owl.scrollFactor.set();
 	this.owl.set_alpha(0);
@@ -28559,6 +30575,361 @@ GoldenReadyLoud.prototype = {
 	}
 	,__class__: GoldenReadyLoud
 };
+var GoldenRemaining = function(owner,host) {
+	this.lyric = null;
+	this.dynZoom = -1;
+	this.acid = false;
+	this.strums = [];
+	this.poses = new haxe_ds_StringMap();
+	this.eventIndex = 0;
+	this.owner = owner;
+	this.host = host;
+	this.song = PlayState.SONG.song.toLowerCase();
+	this.stageData = GoldenRemaining.scene(this.song);
+	this.originalSpeed = PlayState.SONG.speed;
+	this.events = JSON.parse(openfl_utils_Assets.getText(Paths.getPath("data/" + ("golden/frustsongs/" + this.song + "/psych-events") + ".json","TEXT",GoldenFrustExtras.library(this.song))));
+	var side = "BF";
+	this.remember(side);
+	var side = "DAD";
+	this.remember(side);
+	var side = "GF";
+	this.remember(side);
+	var _g = [];
+	var _g1 = 0;
+	var _g2 = this.events;
+	while(_g1 < _g2.length) {
+		var v = _g2[_g1];
+		++_g1;
+		if(v.type == "eyesores") {
+			_g.push(v);
+		}
+	}
+	if(_g.length > 0) {
+		this.eyesore = new GoldenEyesoreShader();
+	}
+	if(this.song == "dynamics") {
+		this.invert = new GoldenInvertShader();
+	}
+	var filters = [];
+	if(this.eyesore != null) {
+		filters.push(new openfl_filters_ShaderFilter(this.eyesore));
+	}
+	if(this.invert != null) {
+		filters.push(new openfl_filters_ShaderFilter(this.invert));
+	}
+	if(filters.length > 0 && !GoldenQuality.superLow) {
+		flixel_FlxG.camera.setFilters(filters);
+	}
+};
+$hxClasses["GoldenRemaining"] = GoldenRemaining;
+GoldenRemaining.__name__ = "GoldenRemaining";
+GoldenRemaining.records = null;
+GoldenRemaining.supports = function(song) {
+	return GoldenRemaining.ids.indexOf(song.toLowerCase()) >= 0;
+};
+GoldenRemaining.record = function(song) {
+	if(GoldenRemaining.records == null) {
+		GoldenRemaining.records = JSON.parse(openfl_utils_Assets.getText(Paths.getPath("data/" + "golden/remaining-extras" + ".json","TEXT",null))).songs;
+	}
+	return Reflect.field(GoldenRemaining.records,song.toLowerCase());
+};
+GoldenRemaining.scene = function(song) {
+	return JSON.parse(openfl_utils_Assets.getText(Paths.getPath("data/" + ("golden/frustsongs/" + song + "/stage") + ".json","TEXT",GoldenFrustExtras.library(song))));
+};
+GoldenRemaining.buildStage = function(stage,song) {
+	var data = GoldenRemaining.scene(song);
+	var layers = data.layers;
+	var _g = 0;
+	var _g1 = layers.length;
+	while(_g < _g1) {
+		var i = _g++;
+		var def = layers[i];
+		if(def.decorative == true && GoldenQuality.superLow) {
+			continue;
+		}
+		var sprite = new flixel_FlxSprite(def.x,def.y);
+		var path = "golden/frustsongs/" + song + "/" + def.path;
+		if(def.animated == true) {
+			sprite.set_frames(Paths.getSparrowAtlas(path,GoldenFrustExtras.library(song)));
+			sprite.animation.addByPrefix("idle",def.prefix,def.fps,def.loop);
+			sprite.animation.play("idle");
+		} else {
+			sprite.loadGraphic(Paths.getPath("images/" + path + ".png","IMAGE",GoldenFrustExtras.library(song)));
+		}
+		sprite.scale.set(def.sx,def.sy);
+		sprite.updateHitbox();
+		sprite.origin.set();
+		sprite.offset.set();
+		sprite.scrollFactor.set(def.scrollX,def.scrollY);
+		sprite.set_antialiasing(!GoldenQuality.superLow);
+		sprite.set_flipX(def.flipX == true);
+		if(def.wave == true && !GoldenQuality.superLow) {
+			sprite.shader = new GoldenGalacticShader();
+		}
+		if(stage.back == null) {
+			stage.back = sprite;
+		}
+		stage.sceneLayers.h["remaining" + i] = sprite;
+		if(def.front == true) {
+			stage.foregrounds.push(sprite);
+		} else {
+			stage.add(sprite);
+		}
+	}
+};
+GoldenRemaining.position = function(owner,song) {
+	var data = GoldenRemaining.scene(song);
+	var pair_actor = owner.dad;
+	var pair_key = "opponent";
+	var pos = Reflect.field(data,pair_key);
+	var offset = pair_actor.extraConfig.positionOffset;
+	pair_actor.setPosition(pos[0] + (offset == null ? 0 : offset[0]),pos[1] + (offset == null ? 0 : offset[1]));
+	var pair_actor = owner.boyfriend;
+	var pair_key = "boyfriend";
+	var pos = Reflect.field(data,pair_key);
+	var offset = pair_actor.extraConfig.positionOffset;
+	pair_actor.setPosition(pos[0] + (offset == null ? 0 : offset[0]),pos[1] + (offset == null ? 0 : offset[1]));
+	var pair_actor = owner.gf;
+	var pair_key = "girlfriend";
+	var pos = Reflect.field(data,pair_key);
+	var offset = pair_actor.extraConfig.positionOffset;
+	pair_actor.setPosition(pos[0] + (offset == null ? 0 : offset[0]),pos[1] + (offset == null ? 0 : offset[1]));
+	owner.gf.set_visible(data.hide_girlfriend != true);
+	var index = owner.members.indexOf(owner.boyfriend) + 1;
+	var _g = 0;
+	var _g1 = owner.frustStage.foregrounds;
+	while(_g < _g1.length) {
+		var sprite = _g1[_g];
+		++_g;
+		owner.insert(index++,sprite);
+	}
+};
+GoldenRemaining.side = function(value) {
+	switch(value.toLowerCase()) {
+	case "":case "0":case "bf":case "boyfriend":
+		return "BF";
+	case "2":case "gf":case "girlfriend":
+		return "GF";
+	default:
+		return "DAD";
+	}
+};
+GoldenRemaining.number = function(value,fallback) {
+	if(fallback == null) {
+		fallback = 0;
+	}
+	var n = parseFloat(value);
+	if(isFinite(n)) {
+		return n;
+	} else {
+		return fallback;
+	}
+};
+GoldenRemaining.prototype = {
+	owner: null
+	,host: null
+	,song: null
+	,stageData: null
+	,events: null
+	,eventIndex: null
+	,poses: null
+	,strums: null
+	,eyesore: null
+	,invert: null
+	,acid: null
+	,speedTrack: null
+	,originalSpeed: null
+	,dynZoom: null
+	,lyric: null
+	,actor: function(key) {
+		if(key == "BF") {
+			return this.owner.boyfriend;
+		} else if(key == "GF") {
+			return this.owner.gf;
+		} else {
+			return this.owner.dad;
+		}
+	}
+	,remember: function(key) {
+		var a = this.actor(key);
+		this.poses.h[key] = [a.x,a.y];
+	}
+	,change: function(key,name) {
+		var cfg = GoldenExtraCharacter.config("extra-" + this.song + "--" + name);
+		var pos = Reflect.field(this.stageData,key == "BF" ? "boyfriend" : key == "GF" ? "girlfriend" : "opponent");
+		var offset = cfg.positionOffset;
+		var x = pos[0] + (offset == null ? 0 : offset[0]);
+		var y = pos[1] + (offset == null ? 0 : offset[1]);
+		this.host.changeCharacter([key,name,x == null ? "null" : "" + x,y == null ? "null" : "" + y,"true"]);
+		this.remember(key);
+	}
+	,dispatch: function(event) {
+		var v = event.values;
+		switch(event.type) {
+		case "Alt Idle Animation":
+			var a = this.actor(GoldenRemaining.side(v[0]));
+			var suffix = v[1];
+			if(suffix == "alt" && a.animation.exists("idle-alt")) {
+				suffix = "-alt";
+			}
+			a.idleSuffix = suffix;
+			break;
+		case "Change Character":
+			this.change(GoldenRemaining.side(v[0]),v[1]);
+			break;
+		case "Flash Camera":
+			flixel_FlxG.camera.flash(-1,GoldenRemaining.number(v[0],1),null,true);
+			break;
+		case "Lyrics":
+			this.lyric = v[0];
+			var color = v.length > 1 ? Std.parseInt("0xff" + StringTools.replace(v[1],"#","")) : null;
+			if(color != null) {
+				this.owner.applecoreSubtitles.set_color(color);
+			}
+			break;
+		case "Play Animation":
+			this.actor(GoldenRemaining.side(v.length > 1 ? v[1] : "dad")).playSpecialAnim(v[0]);
+			break;
+		case "Web Change Scroll Speed":
+			var args = JSON.parse(v[0]);
+			var multiplier = args.length > 1 ? GoldenRemaining.number(args[1],1) : 1;
+			this.speedTrack = { start : event.time, from : PlayState.SONG.speed, to : GoldenRemaining.number(args[0],this.originalSpeed) * multiplier, duration : (args.length > 2 ? GoldenRemaining.number(args[2]) : 0) * 1000};
+			break;
+		case "Web Lock Character":
+			var args = JSON.parse(v[0]);
+			this.actor(GoldenRemaining.side(args[0])).canAutoDance = false;
+			break;
+		case "Web Play Animation":
+			var args = JSON.parse(v[0]);
+			this.actor(GoldenRemaining.side(args[0])).playSpecialAnim(args[1]);
+			break;
+		case "Web Song Event":
+			var args = JSON.parse(v[0]);
+			this.songEvent(args[0],args.length > 1 ? args[1] : "");
+			break;
+		case "eyesores":
+			this.acid = !this.acid;
+			break;
+		default:
+			throw haxe_Exception.thrown("Missing song event: " + Std.string(event.type));
+		}
+	}
+	,songEvent: function(name,value) {
+		switch(name) {
+		case "col":
+			var colors = [-41238,-15090945,-14221505,-9157889,-1774511,-56541];
+			this.owner.frustStage.back.set_color(colors[(Math.abs(GoldenRemaining.number(value)) | 0) % colors.length]);
+			break;
+		case "error":
+			this.owner.dad.idleSuffix = value == "off" ? "" : "-error";
+			if(this.owner.dad.animation.exists("idle" + this.owner.dad.idleSuffix)) {
+				this.owner.dad.dance();
+			}
+			break;
+		case "invert":
+			if(this.invert != null) {
+				this.invert.enabled.value[0] = value == "true";
+			}
+			break;
+		case "letsZoom":
+			var point = this.host.points.h[value == "bf" ? "BF" : "DAD"];
+			this.owner.camFollow.setPosition(point[0],point[1]);
+			this.dynZoom = GoldenRemaining.record(this.song).zoom + .15;
+			break;
+		case "letsZoomLast":
+			this.dynZoom = GoldenRemaining.record(this.song).zoom;
+			break;
+		default:
+		}
+	}
+	,update: function(time,elapsed) {
+		while(this.eventIndex < this.events.length && this.events[this.eventIndex].time <= time) this.dispatch(this.events[this.eventIndex++]);
+		if(this.speedTrack != null) {
+			var t = this.speedTrack;
+			var q = Math.max(0,Math.min(1,(time - t.start) / Math.max(1,t.duration)));
+			PlayState.SONG.speed = t.from + (t.to - t.from) * q;
+			if(q == 1) {
+				this.speedTrack = null;
+			}
+		}
+		if(this.eyesore != null) {
+			this.eyesore.uTime.value[0] = Math.max(0,time) / 5000 * (Conductor.bpm / 60);
+			this.eyesore.uampmul.value[0] = this.acid ? .5 : Math.max(0,this.eyesore.uampmul.value[0] - elapsed * .6);
+			if(this.acid && this.owner.gf.visible && this.owner.gf.animation.exists("scared")) {
+				this.owner.gf.playAnim("scared");
+			}
+		}
+		var layers = this.stageData.layers;
+		var _g = 0;
+		var _g1 = layers.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var sprite = this.owner.frustStage.sceneLayers.h["remaining" + i];
+			if(sprite == null) {
+				continue;
+			}
+			if(((sprite.shader) instanceof GoldenGalacticShader)) {
+				var shader = sprite.shader;
+				shader.uTime.value[0] = Math.max(0,time) / 1000;
+			}
+			if(layers[i].rotate != null) {
+				sprite.set_angle(layers[i].rotate * Math.max(0,Math.min(1,time / 1000 / layers[i].rotateDuration)));
+			}
+		}
+		var wave = Math.sin(time / 5000 * (Conductor.bpm / 120) * Math.PI);
+		if(["disruption","disability","wireframe","deformation"].indexOf(this.song) >= 0) {
+			var p = this.poses.h["DAD"];
+			var amount = this.song == "disruption" ? 250 : 200;
+			if(this.song != "deformation" || time >= 57600000 / PlayState.SONG.bpm) {
+				this.owner.dad.set_y(p[1] - amount * wave);
+			}
+			if(this.song == "wireframe") {
+				this.owner.boyfriend.set_y(this.poses.h["BF"][1] + 200 * wave);
+			}
+		}
+		if(this.strums.length == 0 && this.owner.strumLineNotes != null && this.owner.strumLineNotes.members.length >= 8) {
+			var _g = 0;
+			var _g1 = this.owner.strumLineNotes.members;
+			while(_g < _g1.length) {
+				var s = _g1[_g];
+				++_g;
+				this.strums.push({ sprite : s, x : s.x, y : s.y, sx : s.scale.x, sy : s.scale.y});
+			}
+		}
+		if(this.song == "disability" || this.song == "disruption") {
+			var _g = 0;
+			var _g1 = this.strums.length;
+			while(_g < _g1) {
+				var i = _g++;
+				var data = this.strums[i];
+				var sprite = data.sprite;
+				if(this.song == "disability") {
+					var seconds = Math.max(0,time / 1000);
+					var cycle = Math.floor(seconds / 3);
+					var q = seconds % 3 / 3;
+					sprite.set_angle((cycle + q * q * (3 - 2 * q)) * 2075);
+				} else {
+					var phase = time / 5000 * (Conductor.bpm / 24) * .55 + i % 2 * 16;
+					sprite.setPosition(data.x + Math.sin(phase) * 60,data.y + Math.cos(phase) * 60);
+					sprite.set_angle(Math.sin(phase) * 10);
+					var stretch = Math.sin((time / 5000 * (Conductor.bpm / 24) + i % 4) * 1.7) * .12;
+					sprite.scale.set(data.sx * (1 - stretch),data.sy * (1 + stretch));
+				}
+			}
+		}
+		if(this.dynZoom >= 0) {
+			this.host.targetZoom = this.dynZoom;
+			flixel_FlxG.camera.set_zoom(this.host.zoom);
+		}
+	}
+	,destroy: function() {
+		if(this.eyesore != null || this.invert != null) {
+			flixel_FlxG.camera.setFilters([]);
+		}
+		PlayState.SONG.speed = this.originalSpeed;
+	}
+	,__class__: GoldenRemaining
+};
 var GoldenScenePreviewState = function(TransIn,TransOut) {
 	this.wowStarted = false;
 	this.previewTime = -1;
@@ -28713,6 +31084,428 @@ GoldenScenePreviewState.prototype = $extend(PlayState.prototype,{
 	}
 	,__class__: GoldenScenePreviewState
 });
+var GoldenSecretSongs = function(owner,host) {
+	this.flashTimes = [-1e9,-1e9,-1e9,-1e9];
+	this.chords = new haxe_ds_IntMap();
+	this.shakeStart = -1;
+	this.closeup = false;
+	this.splitAmount = 0;
+	this.splitStart = 0;
+	this.beat = -1;
+	this.owner = owner;
+	this.host = host;
+	this.song = PlayState.SONG.song.toLowerCase();
+	this.dadX = owner.dad.x;
+	this.dadY = owner.dad.y;
+	switch(this.song) {
+	case "bedtime-bumps":
+		this.folk = owner.frustStage.sceneLayers.h["folk"];
+		this.glitch = new Character(0,0,"extra-bedtime-bumps--sleepy-sophie-glitch");
+		this.glitch.set_cameras([owner.camHUD]);
+		this.glitch.scrollFactor.set();
+		this.glitch.set_alpha(.000001);
+		owner.add(this.glitch);
+		this.black = new flixel_FlxSprite(-flixel_FlxG.width / 2,-flixel_FlxG.height / 2).makeGraphic(flixel_FlxG.width * 2,flixel_FlxG.height * 2,-16777216);
+		this.black.scrollFactor.set();
+		this.black.set_cameras([owner.camHUD]);
+		this.black.set_alpha(.6);
+		owner.add(this.black);
+		break;
+	case "dale":
+		var _g = 0;
+		var _g1 = PlayState.SONG.notes;
+		while(_g < _g1.length) {
+			var section = _g1[_g];
+			++_g;
+			var _g2 = 0;
+			var _g3 = section.sectionNotes;
+			while(_g2 < _g3.length) {
+				var note = _g3[_g2];
+				++_g2;
+				var lane = note[1] | 0;
+				var player = section.mustHitSection;
+				if(lane >= 4) {
+					player = !player;
+				}
+				if(!player) {
+					var key = Math.round(note[0]) | 0;
+					var mask = this.chords.h.hasOwnProperty(key) ? this.chords.h[key] : 0;
+					this.chords.h[key] = mask | 1 << lane % 4;
+				}
+			}
+		}
+		break;
+	case "ticking":
+		owner.dad.playSpecialAnim("entrance");
+		owner.dad.set_active(false);
+		owner.dad.set_visible(false);
+		this.closeCamera = new flixel_FlxCamera(0,0,flixel_FlxG.width,flixel_FlxG.height,.75);
+		this.closeCamera.bgColor = 0;
+		flixel_FlxG.cameras.add(this.closeCamera,false);
+		this.black = new flixel_FlxSprite().makeGraphic(flixel_FlxG.width,flixel_FlxG.height,-16777216);
+		this.black.scrollFactor.set();
+		this.black.set_cameras([owner.camHUD]);
+		owner.add(this.black);
+		this.split = new GoldenTickingSplitShader();
+		if(!GoldenQuality.superLow) {
+			owner.camHUD.setFilters([new openfl_filters_ShaderFilter(this.split)]);
+		}
+		this.mods = new GoldenFrustrationMods("golden/frustsongs/ticking/modchart","extra-ticking",PlayState.SONG.bpm,3.0);
+		GoldenHoldPath.frustration = this.mods;
+		break;
+	default:
+	}
+};
+$hxClasses["GoldenSecretSongs"] = GoldenSecretSongs;
+GoldenSecretSongs.__name__ = "GoldenSecretSongs";
+GoldenSecretSongs.supports = function(song) {
+	return ["ticking","recovered-project","dale","bedtime-bumps"].indexOf(song) >= 0;
+};
+GoldenSecretSongs.prototype = {
+	owner: null
+	,host: null
+	,song: null
+	,beat: null
+	,black: null
+	,glitch: null
+	,folk: null
+	,split: null
+	,splitStart: null
+	,splitAmount: null
+	,dadX: null
+	,dadY: null
+	,closeup: null
+	,closeCamera: null
+	,shakeStart: null
+	,chords: null
+	,flashTimes: null
+	,mods: null
+	,fade: function(sprite,to,seconds) {
+		this.owner.goldenTweens.cancelTweensOf(sprite);
+		this.owner.goldenTweens.tween(sprite,{ alpha : to},seconds,{ ease : flixel_tweens_FlxEase.sineInOut});
+	}
+	,songEvent: function(name,value) {
+		if(this.song != "ticking") {
+			return;
+		}
+		switch(name) {
+		case "come back":
+			this.fade(this.owner.camHUD,1,Conductor.crochet / 500);
+			this.owner.dad.canAutoDance = true;
+			this.owner.dad.canSing = true;
+			break;
+		case "dead":
+			this.fade(this.owner.camHUD,0,.1);
+			this.owner.camZooming = false;
+			this.owner.frustStage.set_active(false);
+			break;
+		case "gittysplit":
+			this.splitStart = Conductor.songPosition;
+			this.splitAmount = .05;
+			break;
+		case "gittyunsplit":
+			this.splitAmount = 0;
+			this.fade(this.owner.camHUD,0,Conductor.crochet / 500);
+			this.owner.dad.canAutoDance = false;
+			this.owner.dad.canSing = false;
+			this.owner.dad.playSpecialAnim("crashoutfirst");
+			break;
+		case "release him":
+			this.owner.dad.set_active(true);
+			this.owner.dad.set_visible(true);
+			break;
+		default:
+		}
+	}
+	,cue: function(b,at) {
+		var second = 60000 / PlayState.SONG.bpm / 1000;
+		switch(this.song) {
+		case "bedtime-bumps":
+			if(b != 159) {
+				this.folk.animation.play(b % 2 == 0 ? "danceRight" : "danceLeft",true);
+			}
+			switch(b) {
+			case 48:
+				this.host.zoomTo(at,.6,1);
+				flixel_FlxG.camera.flash(-1,1);
+				break;
+			case 64:
+				this.host.zoomEvery = 2;
+				flixel_FlxG.camera.flash(-1,1);
+				break;
+			case 96:
+				this.folk.set_y(1391);
+				this.host.zoomEvery = 1;
+				flixel_FlxG.camera.flash(-1,1);
+				break;
+			case 159:
+				this.folk.animation.play("vanish",true);
+				break;
+			case 160:
+				this.folk.set_y(11391);
+				this.owner.gf.set_visible(false);
+				this.host.zoomEvery = 4;
+				this.host.zoomTo(at,1.2,2);
+				this.fade(this.black,.6,2);
+				flixel_FlxG.camera.flash(-1,1);
+				break;
+			case 16:case 176:
+				this.host.zoomTo(at,1,2);
+				this.fade(this.black,0,2);
+				flixel_FlxG.camera.flash(-1,1);
+				break;
+			case 208:
+				this.glitch.set_alpha(1);
+				var _this = this.glitch;
+				var axes = flixel_util_FlxAxes.XY;
+				var tmp;
+				switch(axes._hx_index) {
+				case 0:case 2:
+					tmp = true;
+					break;
+				default:
+					tmp = false;
+				}
+				if(tmp) {
+					_this.set_x((flixel_FlxG.width - _this.get_width()) / 2);
+				}
+				var tmp;
+				switch(axes._hx_index) {
+				case 1:case 2:
+					tmp = true;
+					break;
+				default:
+					tmp = false;
+				}
+				if(tmp) {
+					_this.set_y((flixel_FlxG.height - _this.get_height()) / 2);
+				}
+				this.glitch.canAutoDance = true;
+				this.owner.gf.set_visible(false);
+				this.owner.boyfriend.set_visible(false);
+				this.owner.dad.set_visible(false);
+				this.owner.frustStage.back.set_visible(false);
+				this.black.set_alpha(0);
+				this.host.zoomTo(at,1.15,.5);
+				flixel_FlxG.camera.flash(-1,1);
+				break;
+			case 240:
+				this.closeup = false;
+				this.glitch.set_alpha(0);
+				this.owner.boyfriend.set_visible(true);
+				this.owner.dad.set_visible(true);
+				this.owner.frustStage.back.set_visible(true);
+				this.host.zoomTo(at,.6,1);
+				this.black.set_alpha(0);
+				this.host.zoomEvery = 2;
+				flixel_FlxG.camera.flash(-1,1);
+				break;
+			case 272:
+				this.host.zoomEvery = 4;
+				flixel_FlxG.camera.flash(-1,1);
+				break;
+			}
+			break;
+		case "recovered-project":
+			if(b == 256 || b == 480) {
+				this.host.changeCharacter(["DAD",b == 256 ? "RECOVERED_PROJECT_2" : "RECOVERED_PROJECT_3"]);
+				this.owner.dad.scrollFactor.set();
+				var this1 = this.host.points;
+				var value = this.host.focusPoint(this.owner.dad,"DAD");
+				this1.h["DAD"] = value;
+			}
+			if(b == 484 || b == 660) {
+				this.host.zoomTo(at,.6,.8,"quad");
+			}
+			if(b == 500 || b == 516 || b == 532 || b == 564 || b == 596 || b == 628) {
+				this.owner.dad.canAutoDance = false;
+			}
+			if(b == 508 || b == 524 || b == 548 || b == 580 || b == 612 || b == 644) {
+				this.owner.dad.canAutoDance = true;
+			}
+			break;
+		case "ticking":
+			if(b == 0) {
+				this.fade(this.black,0,second * 4);
+			}
+			if(b == 320) {
+				this.songEvent("dead","");
+			}
+			break;
+		default:
+		}
+	}
+	,singerFor: function(note) {
+		if(this.song == "bedtime-bumps" && Conductor.songPosition >= 208 * Conductor.crochet && Conductor.songPosition < 240 * Conductor.crochet) {
+			return this.glitch;
+		}
+		return this.owner.dad;
+	}
+	,noteHit: function(note,singer) {
+		if(this.song == "dale") {
+			var key = Math.round(note.isSustainNote && note.sustainRoot != null ? note.sustainRoot.strumTime : note.strumTime) | 0;
+			var mask = this.chords.h.hasOwnProperty(key) ? this.chords.h[key] : 1 << note.noteData;
+			var names = [];
+			if((mask & 1) != 0) {
+				var inlarr_0 = "LEFT";
+				var inlarr_1 = "DOWN";
+				var inlarr_2 = "UP";
+				var inlarr_3 = "RIGHT";
+				names.push(inlarr_0);
+			}
+			if((mask & 2) != 0) {
+				var inlarr_0 = "LEFT";
+				var inlarr_1 = "DOWN";
+				var inlarr_2 = "UP";
+				var inlarr_3 = "RIGHT";
+				names.push(inlarr_1);
+			}
+			if((mask & 4) != 0) {
+				var inlarr_0 = "LEFT";
+				var inlarr_1 = "DOWN";
+				var inlarr_2 = "UP";
+				var inlarr_3 = "RIGHT";
+				names.push(inlarr_2);
+			}
+			if((mask & 8) != 0) {
+				var inlarr_0 = "LEFT";
+				var inlarr_1 = "DOWN";
+				var inlarr_2 = "UP";
+				var inlarr_3 = "RIGHT";
+				names.push(inlarr_3);
+			}
+			var pose = "sing" + names.join("-");
+			if(singer.animation.exists(pose)) {
+				singer.playSing(pose,note.isSustainNote,PlayState.singingEnd(note));
+			}
+		}
+		if(this.song == "recovered-project" && !note.isSustainNote && Conductor.songPosition >= 256 * Conductor.crochet) {
+			this.flashTimes[note.noteData] = Conductor.songPosition;
+		}
+		if(this.song == "bedtime-bumps" && singer == this.glitch) {
+			this.glitch.set_alpha(1);
+		}
+	}
+	,update: function(time,elapsed) {
+		var next = Math.floor(time / (60000 / PlayState.SONG.bpm)) | 0;
+		while(this.beat < next) {
+			this.beat++;
+			if(this.beat >= 0) {
+				this.cue(this.beat,this.beat * 60000 / PlayState.SONG.bpm);
+			}
+		}
+		this.host.sample(time);
+		if(this.song == "ticking") {
+			if(this.mods != null) {
+				this.mods.update(this.owner,time);
+			}
+			this.split.offset.value[0] = this.splitAmount * Math.sin((time - this.splitStart) / 10000);
+			if(this.owner.dad.completedSpecial == "crashoutfirst") {
+				this.owner.dad.completedSpecial = null;
+				this.closeup = true;
+				this.owner.dad.set_cameras([this.closeCamera]);
+				this.owner.dad.setPosition(0,-40);
+				this.owner.dad.setReferenceScale(2);
+				this.owner.dad.playSpecialAnim("close up");
+			}
+			if(this.owner.dad.completedSpecial == "close up") {
+				this.owner.dad.completedSpecial = null;
+				this.closeup = false;
+				this.owner.dad.set_cameras(null);
+				this.owner.dad.setReferenceScale(2);
+				this.owner.dad.setPosition(this.dadX,this.dadY);
+				this.owner.dad.playAnim("idle",true);
+				this.shakeStart = time;
+			}
+			if(this.shakeStart >= 0) {
+				var q = (time - this.shakeStart) / (Conductor.crochet * .5);
+				this.owner.dad.set_x(this.dadX + ((time / 1000 * 60 | 0) % 2 == 0 ? -1 : 1) * 10000 * Math.pow(Math.max(0,1 - q),3));
+				if(q >= 1) {
+					this.owner.dad.set_x(this.dadX);
+					this.shakeStart = -1;
+				}
+			}
+			if(this.beat >= 320) {
+				var q = Math.max(0,1 - (time - 320 * Conductor.crochet) / (Conductor.crochet * 4));
+				this.owner.frustStage.update(elapsed * q * q * q);
+			}
+		}
+		if(this.song == "bedtime-bumps") {
+			if(this.beat >= 208 && this.beat < 240) {
+				this.owner.camFollow.setPosition(640,360);
+				this.glitch.set_alpha(Math.max(0,this.glitch.alpha - elapsed * .6));
+			}
+		}
+		if(this.song == "recovered-project") {
+			this.owner.frustStage.sceneLayers.h["q" + 0].set_alpha(Math.max(.00001,1 - (time - this.flashTimes[0]) / 250));
+			this.owner.frustStage.sceneLayers.h["q" + 1].set_alpha(Math.max(.00001,1 - (time - this.flashTimes[1]) / 250));
+			this.owner.frustStage.sceneLayers.h["q" + 2].set_alpha(Math.max(.00001,1 - (time - this.flashTimes[2]) / 250));
+			this.owner.frustStage.sceneLayers.h["q" + 3].set_alpha(Math.max(.00001,1 - (time - this.flashTimes[3]) / 250));
+			this.owner.camFollow.setPosition(640,360);
+		}
+		if(this.host.chartCamera == null) {
+			flixel_FlxG.camera.set_zoom(this.host.zoom);
+		}
+	}
+	,updateHud: function(time) {
+		if(this.song == "ticking") {
+			var length = flixel_FlxG.sound.music == null ? 0 : flixel_FlxG.sound.music._length;
+			var seconds = Math.max(0,length - 3250 - time) / 1000 | 0;
+			this.owner.applecoreClock.set_text((seconds / 60 | 0) + ":" + (seconds % 60 < 10 ? "0" : "") + seconds % 60);
+		}
+		if(this.song == "recovered-project") {
+			var sprite = js_Boot.__cast(this.owner.healthBar , flixel_FlxSprite);
+			sprite.set_visible(false);
+			var sprite = this.owner.healthBarBG;
+			sprite.set_visible(false);
+			var sprite = this.owner.iconP1;
+			sprite.set_visible(false);
+			var sprite = this.owner.iconP2;
+			sprite.set_visible(false);
+			var sprite = this.owner.applecoreClock;
+			sprite.set_visible(false);
+			var sprite = this.owner.applecoreScore;
+			sprite.set_visible(false);
+			var sprite = this.owner.applecoreMisses;
+			sprite.set_visible(false);
+			var sprite = this.owner.applecoreAccuracy;
+			sprite.set_visible(false);
+			if(this.owner.goldenHealthOverlay != null) {
+				this.owner.goldenHealthOverlay.set_visible(false);
+			}
+			if(!GoldenMobileControls.enabled) {
+				var _g = 0;
+				var _g1 = this.owner.strumLineNotes.members.length;
+				while(_g < _g1) {
+					var i = _g++;
+					var strum = this.owner.strumLineNotes.members[i];
+					if(strum == null) {
+						continue;
+					}
+					strum.set_visible(PlayState.opponentMode ? i < 4 : i >= 4);
+					if(PlayState.opponentMode && i < 4) {
+						strum.set_x(GoldenNoteGeometry.laneInset(flixel_FlxG.width,Note.swagWidth) + flixel_FlxG.width / 2 + i * Note.swagWidth - 330);
+					}
+					if(!PlayState.opponentMode && i >= 4) {
+						strum.set_x(GoldenNoteGeometry.laneInset(flixel_FlxG.width,Note.swagWidth) + flixel_FlxG.width / 2 + (i - 4) * Note.swagWidth - 330);
+					}
+				}
+			}
+		}
+	}
+	,destroy: function() {
+		if(this.mods != null && GoldenHoldPath.frustration == this.mods) {
+			GoldenHoldPath.frustration = null;
+		}
+		if(this.split != null) {
+			this.owner.camHUD.setFilters([]);
+		}
+		if(this.closeCamera != null) {
+			flixel_FlxG.cameras.remove(this.closeCamera,true);
+		}
+	}
+	,__class__: GoldenSecretSongs
+};
 var GoldenSongAlphabet = function(x,y,text,size) {
 	if(size == null) {
 		size = 64;
@@ -28721,8 +31514,7 @@ var GoldenSongAlphabet = function(x,y,text,size) {
 	flixel_group_FlxTypedSpriteGroup.call(this,x,y);
 	var config = JSON.parse(openfl_utils_Assets.getText(Paths.getPath("data/" + "golden/extras/Gapplebet" + ".json","TEXT","extras")));
 	var characters = config.list;
-	var potatoKey = "golden/extras/Gapplebet" + "_potato";
-	var atlas = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","extras"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","extras"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","extras"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","extras")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/extras/Gapplebet" + ".png","IMAGE","extras"),Paths.getPath("images/" + "golden/extras/Gapplebet" + ".xml","TEXT","extras"));
+	var atlas = Paths.getSparrowAtlas("golden/extras/Gapplebet","extras");
 	var factor = size / 77;
 	var _g = 0;
 	var _g1 = text.length;
@@ -28937,6 +31729,7 @@ var GoldenStage = function(owner) {
 	flixel_group_FlxTypedGroup.call(this);
 	this.owner = owner;
 	this.bg = this.layer("golden/applecore/stage/bg",0);
+	this.bg.tileWorld = true;
 	this.mg = this.layer("golden/applecore/stage/mg",0.2);
 	this.fg = this.layer("golden/applecore/stage/phones",0.4);
 	openfl_utils_Assets.loadLibrary("applecorestage").onComplete(function(_) {
@@ -28949,7 +31742,8 @@ $hxClasses["GoldenStage"] = GoldenStage;
 GoldenStage.__name__ = "GoldenStage";
 GoldenStage.__super__ = flixel_group_FlxTypedGroup;
 GoldenStage.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
-	nativeZoom: null
+	pizzas: null
+	,nativeZoom: null
 	,bg: null
 	,mg: null
 	,fg: null
@@ -28966,7 +31760,7 @@ GoldenStage.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 		var sprite = new GoldenWavySprite();
 		sprite.loadGraphic(Paths.getPath("images/" + path + ".png","IMAGE",null));
 		sprite.waveShader.iTime.value[0] = phase;
-		sprite.scrollFactor.set();
+		sprite.scrollFactor.set(1,1);
 		sprite.set_antialiasing(false);
 		this.add(sprite);
 		this.projectedLayers.push(sprite);
@@ -28974,21 +31768,20 @@ GoldenStage.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 	}
 	,loadOriginalAtlases: function() {
 		var clock = this.fg.waveShader.iTime.value[0];
-		var potatoKey = "golden/applecore/native-stage/bandu/fg" + "_potato";
-		this.fg.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","applecorestage"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","applecorestage"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","applecorestage"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","applecorestage")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/applecore/native-stage/bandu/fg" + ".png","IMAGE","applecorestage"),Paths.getPath("images/" + "golden/applecore/native-stage/bandu/fg" + ".xml","TEXT","applecorestage")));
+		this.fg.set_frames(Paths.getSparrowAtlas("golden/applecore/native-stage/bandu/fg","applecorestage"));
 		this.fg.animation.addByPrefix("break-static","frame",0,false);
 		this.fg.animation.addByPrefix("break","frame",12,false);
 		this.fg.animation.play(this.breakStarted ? "break" : "break-static",true);
 		this.fg.waveShader.iTime.value[0] = clock;
 		this.bambiBg = new GoldenWavySprite();
 		this.bambiBg.loadGraphic(Paths.getPath("images/" + "golden/applecore/native-stage/bambi/bg" + ".png","IMAGE","applecorestage"));
-		this.bambiBg.scrollFactor.set();
+		this.bambiBg.tileWorld = true;
+		this.bambiBg.scrollFactor.set(1,1);
 		this.bambiBg.set_alpha(this.breakStarted ? 1 : 0);
 		this.add(this.bambiBg);
 		this.projectedLayers.push(this.bambiBg);
 		this.banduCheck = new flixel_FlxSprite(-793.7,-1018.5);
-		var potatoKey = "golden/applecore/native-stage/banduCheck" + "_potato";
-		this.banduCheck.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","applecorestage"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","applecorestage"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","applecorestage"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","applecorestage")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/applecore/native-stage/banduCheck" + ".png","IMAGE","applecorestage"),Paths.getPath("images/" + "golden/applecore/native-stage/banduCheck" + ".xml","TEXT","applecorestage")));
+		this.banduCheck.set_frames(Paths.getSparrowAtlas("golden/applecore/native-stage/banduCheck","applecorestage"));
 		this.banduCheck.animation.addByPrefix("check","check",24,false);
 		this.banduCheck.animation.play("check");
 		this.banduCheck.scale.set(1.6,1.6);
@@ -28999,16 +31792,23 @@ GoldenStage.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 		this.add(this.banduCheck);
 		this.expungedBg = new GoldenWavySprite();
 		this.expungedBg.loadGraphic(Paths.getPath("images/" + "golden/applecore/native-stage/yeah" + ".png","IMAGE","applecorestage"));
-		this.expungedBg.scrollFactor.set();
+		this.expungedBg.tileWorld = true;
+		this.expungedBg.scrollFactor.set(1,1);
 		this.expungedBg.set_visible(this.partThree);
 		this.expungedBg.waveShader.uSpeed.value[0] = 3;
 		this.expungedBg.waveShader.uFrequency.value[0] = 0.6;
 		this.expungedBg.waveShader.uWaveAmplitude.value[0] = 0.05;
 		this.add(this.expungedBg);
 		this.projectedLayers.push(this.expungedBg);
+		this.pizzas = new GoldenPizza(this.owner,this);
 		this.ready = true;
 		if(this.partThree) {
 			this.startPartThree();
+		}
+	}
+	,pizzaCue: function(beat) {
+		if(this.pizzas != null) {
+			this.pizzas.cue(beat);
 		}
 	}
 	,playCheck: function() {
@@ -29049,6 +31849,9 @@ GoldenStage.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 	}
 	,update: function(elapsed) {
 		flixel_group_FlxTypedGroup.prototype.update.call(this,elapsed);
+		if(this.pizzas != null) {
+			this.pizzas.update(elapsed);
+		}
 		var projection = 1.1475;
 		var _g = 0;
 		var _g1 = this.projectedLayers;
@@ -29201,6 +32004,48 @@ GoldenSubtitles.load = function(text) {
 	}
 	return result;
 };
+var GoldenTickingShader = function() {
+	if(this.__glFragmentSource == null) {
+		this.__glFragmentSource = "varying float openfl_Alphav;\n\t\tvarying vec4 openfl_ColorMultiplierv;\n\t\tvarying vec4 openfl_ColorOffsetv;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform bool openfl_HasColorTransform;\n\t\tuniform vec2 openfl_TextureSize;\n\t\tuniform sampler2D bitmap;\n\n\t\tuniform bool hasTransform;\n\t\tuniform bool hasColorTransform;\n\n\t\tvec4 flixel_texture2D(sampler2D bitmap, vec2 coord)\n\t\t{\n\t\t\tvec4 color = texture2D(bitmap, coord);\n\t\t\tif (!hasTransform)\n\t\t\t{\n\t\t\t\treturn color;\n\t\t\t}\n\n\t\t\tif (color.a == 0.0)\n\t\t\t{\n\t\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\n\t\t\t}\n\n\t\t\tif (!hasColorTransform)\n\t\t\t{\n\t\t\t\treturn color * openfl_Alphav;\n\t\t\t}\n\n\t\t\tcolor = vec4(color.rgb / color.a, color.a);\n\n\t\t\tmat4 colorMultiplier = mat4(0);\n\t\t\tcolorMultiplier[0][0] = openfl_ColorMultiplierv.x;\n\t\t\tcolorMultiplier[1][1] = openfl_ColorMultiplierv.y;\n\t\t\tcolorMultiplier[2][2] = openfl_ColorMultiplierv.z;\n\t\t\tcolorMultiplier[3][3] = openfl_ColorMultiplierv.w;\n\n\t\t\tcolor = clamp(openfl_ColorOffsetv + (color * colorMultiplier), 0.0, 1.0);\n\n\t\t\tif (color.a > 0.0)\n\t\t\t{\n\t\t\t\treturn vec4(color.rgb * color.a * openfl_Alphav, color.a * openfl_Alphav);\n\t\t\t}\n\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\n\t\t}\n\t\n\n\nuniform float iTime;\n\nvec2 balls = vec2(5.0, 3.0);\nfloat ballDivisor = 1.2;\n\nvoid main()\n{\n    // Normalized pixel coordinates (from 0 to 1)\n    float time = iTime * -0.1;\n    vec2 uv = openfl_TextureCoordv.xy;\n    \n    vec2 preBallUv = uv;\n    preBallUv -= vec2(0.5, 0.5);\n    preBallUv.x -= pow(preBallUv.x * 0.8, 3.0);\n    preBallUv.y *= 1.0 - pow(preBallUv.x * 1.3, 2.0);\n    \n    preBallUv += vec2(0.5, 0.5);\n    \n    vec2 ballUv = vec2(mod(preBallUv.x * balls.x + time, 1.0), mod(preBallUv.y * balls.y, 1.0)) - vec2(0.5, 0.5);\n    ballUv.y += floor(mod(preBallUv.x * balls.x + time, 2.0)) * 0.5;\n    ballUv.y = mod(ballUv.y + 0.5, 1.0) - 0.5;\n    ballUv *= ballDivisor * 2.0;\n    \n    bool insideBall = length(ballUv) < 1.0;\n    \n    vec4 finalInside = flixel_texture2D(bitmap, uv + reflect(ballUv * -0.1, ballUv));\n    vec4 finalOutside = flixel_texture2D(bitmap, uv);\n    \n    gl_FragColor = mix(finalOutside, finalInside, float(insideBall));\n}";
+	}
+	if(this.__glVertexSource == null) {
+		this.__glVertexSource = "\n\t\tattribute float openfl_Alpha;\n\t\tattribute vec4 openfl_ColorMultiplier;\n\t\tattribute vec4 openfl_ColorOffset;\n\t\tattribute vec4 openfl_Position;\n\t\tattribute vec2 openfl_TextureCoord;\n\n\t\tvarying float openfl_Alphav;\n\t\tvarying vec4 openfl_ColorMultiplierv;\n\t\tvarying vec4 openfl_ColorOffsetv;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform mat4 openfl_Matrix;\n\t\tuniform bool openfl_HasColorTransform;\n\t\tuniform vec2 openfl_TextureSize;\n\n\t\t\n\t\tattribute float alpha;\n\t\tattribute vec4 colorMultiplier;\n\t\tattribute vec4 colorOffset;\n\t\tuniform bool hasColorTransform;\n\t\t\n\t\tvoid main(void)\n\t\t{\n\t\t\topenfl_Alphav = openfl_Alpha;\n\t\topenfl_TextureCoordv = openfl_TextureCoord;\n\n\t\tif (openfl_HasColorTransform) {\n\n\t\t\topenfl_ColorMultiplierv = openfl_ColorMultiplier;\n\t\t\topenfl_ColorOffsetv = openfl_ColorOffset / 255.0;\n\n\t\t}\n\n\t\tgl_Position = openfl_Matrix * openfl_Position;\n\n\t\t\t\n\t\t\topenfl_Alphav = openfl_Alpha * alpha;\n\t\t\t\n\t\t\tif (hasColorTransform)\n\t\t\t{\n\t\t\t\topenfl_ColorOffsetv = colorOffset / 255.0;\n\t\t\t\topenfl_ColorMultiplierv = colorMultiplier;\n\t\t\t}\n\t\t}";
+	}
+	flixel_graphics_tile_FlxGraphicsShader.call(this);
+	this.iTime.value = [0.0];
+	this.__isGenerated = true;
+	this.__initGL();
+};
+$hxClasses["GoldenTickingShader"] = GoldenTickingShader;
+GoldenTickingShader.__name__ = "GoldenTickingShader";
+GoldenTickingShader.__super__ = flixel_graphics_tile_FlxGraphicsShader;
+GoldenTickingShader.prototype = $extend(flixel_graphics_tile_FlxGraphicsShader.prototype,{
+	iTime: null
+	,__class__: GoldenTickingShader
+});
+var GoldenTickingSplitShader = function() {
+	if(this.__glFragmentSource == null) {
+		this.__glFragmentSource = "varying float openfl_Alphav;\n\t\tvarying vec4 openfl_ColorMultiplierv;\n\t\tvarying vec4 openfl_ColorOffsetv;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform bool openfl_HasColorTransform;\n\t\tuniform vec2 openfl_TextureSize;\n\t\tuniform sampler2D bitmap;\n\n\t\tuniform bool hasTransform;\n\t\tuniform bool hasColorTransform;\n\n\t\tvec4 flixel_texture2D(sampler2D bitmap, vec2 coord)\n\t\t{\n\t\t\tvec4 color = texture2D(bitmap, coord);\n\t\t\tif (!hasTransform)\n\t\t\t{\n\t\t\t\treturn color;\n\t\t\t}\n\n\t\t\tif (color.a == 0.0)\n\t\t\t{\n\t\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\n\t\t\t}\n\n\t\t\tif (!hasColorTransform)\n\t\t\t{\n\t\t\t\treturn color * openfl_Alphav;\n\t\t\t}\n\n\t\t\tcolor = vec4(color.rgb / color.a, color.a);\n\n\t\t\tmat4 colorMultiplier = mat4(0);\n\t\t\tcolorMultiplier[0][0] = openfl_ColorMultiplierv.x;\n\t\t\tcolorMultiplier[1][1] = openfl_ColorMultiplierv.y;\n\t\t\tcolorMultiplier[2][2] = openfl_ColorMultiplierv.z;\n\t\t\tcolorMultiplier[3][3] = openfl_ColorMultiplierv.w;\n\n\t\t\tcolor = clamp(openfl_ColorOffsetv + (color * colorMultiplier), 0.0, 1.0);\n\n\t\t\tif (color.a > 0.0)\n\t\t\t{\n\t\t\t\treturn vec4(color.rgb * color.a * openfl_Alphav, color.a * openfl_Alphav);\n\t\t\t}\n\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\n\t\t}\n\t\n\n\nuniform float start;\nuniform float end;\nuniform float offset;\n\nvoid main()\n{\n    vec2 uv = openfl_TextureCoordv.xy;\n    \n\tif (uv.y >= start && uv.y <= end)\n\t{\n\t\tuv.x += offset;\n\t\tif (uv.x > 1.0)\n\t\t\tuv.x -= ceil(uv.x - 1.0);\n\t\telse if (uv.x < 0.0)\n\t\t\tuv.x -= floor(uv.x);\n\t}\n\n    gl_FragColor = texture2D(bitmap, uv);\n}";
+	}
+	if(this.__glVertexSource == null) {
+		this.__glVertexSource = "\n\t\tattribute float openfl_Alpha;\n\t\tattribute vec4 openfl_ColorMultiplier;\n\t\tattribute vec4 openfl_ColorOffset;\n\t\tattribute vec4 openfl_Position;\n\t\tattribute vec2 openfl_TextureCoord;\n\n\t\tvarying float openfl_Alphav;\n\t\tvarying vec4 openfl_ColorMultiplierv;\n\t\tvarying vec4 openfl_ColorOffsetv;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform mat4 openfl_Matrix;\n\t\tuniform bool openfl_HasColorTransform;\n\t\tuniform vec2 openfl_TextureSize;\n\n\t\t\n\t\tattribute float alpha;\n\t\tattribute vec4 colorMultiplier;\n\t\tattribute vec4 colorOffset;\n\t\tuniform bool hasColorTransform;\n\t\t\n\t\tvoid main(void)\n\t\t{\n\t\t\topenfl_Alphav = openfl_Alpha;\n\t\topenfl_TextureCoordv = openfl_TextureCoord;\n\n\t\tif (openfl_HasColorTransform) {\n\n\t\t\topenfl_ColorMultiplierv = openfl_ColorMultiplier;\n\t\t\topenfl_ColorOffsetv = openfl_ColorOffset / 255.0;\n\n\t\t}\n\n\t\tgl_Position = openfl_Matrix * openfl_Position;\n\n\t\t\t\n\t\t\topenfl_Alphav = openfl_Alpha * alpha;\n\t\t\t\n\t\t\tif (hasColorTransform)\n\t\t\t{\n\t\t\t\topenfl_ColorOffsetv = colorOffset / 255.0;\n\t\t\t\topenfl_ColorMultiplierv = colorMultiplier;\n\t\t\t}\n\t\t}";
+	}
+	flixel_graphics_tile_FlxGraphicsShader.call(this);
+	this.start.value = [.32];
+	this.end.value = [.6];
+	this.offset.value = [0.0];
+	this.__isGenerated = true;
+	this.__initGL();
+};
+$hxClasses["GoldenTickingSplitShader"] = GoldenTickingSplitShader;
+GoldenTickingSplitShader.__name__ = "GoldenTickingSplitShader";
+GoldenTickingSplitShader.__super__ = flixel_graphics_tile_FlxGraphicsShader;
+GoldenTickingSplitShader.prototype = $extend(flixel_graphics_tile_FlxGraphicsShader.prototype,{
+	start: null
+	,end: null
+	,offset: null
+	,__class__: GoldenTickingSplitShader
+});
 var GoldenTouchLayout = function(owner) {
 	this.bambiVisible = null;
 	this.visibility = [];
@@ -29641,8 +32486,7 @@ var GoldenTunnelVision = function(owner) {
 	owner.camGame.bgColor = -16777216;
 	owner.healthBar.createFilledBar(-1176822,-13520687);
 	this.chair = new flixel_FlxSprite();
-	var potatoKey = "golden/tunnelvision/characters/chair" + "_potato";
-	this.chair.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","tunnelvision"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","tunnelvision"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","tunnelvision"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","tunnelvision")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/tunnelvision/characters/chair" + ".png","IMAGE","tunnelvision"),Paths.getPath("images/" + "golden/tunnelvision/characters/chair" + ".xml","TEXT","tunnelvision")));
+	this.chair.set_frames(Paths.getSparrowAtlas("golden/tunnelvision/characters/chair","tunnelvision"));
 	this.chair.animation.addByPrefix("idle","Wheelchair",24,true);
 	this.chair.animation.play("idle");
 	this.chair.scale.set(1.4,1.4);
@@ -29686,8 +32530,7 @@ var GoldenTunnelVision = function(owner) {
 		type = "TEXT";
 	}
 	if(openfl_utils_Assets.exists(Paths.getPath("images/golden/tunnelvision/explosion.xml",type,"tunnelvision"))) {
-		var potatoKey = "golden/tunnelvision/explosion" + "_potato";
-		this.explosion.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","tunnelvision"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","tunnelvision"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","tunnelvision"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","tunnelvision")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/tunnelvision/explosion" + ".png","IMAGE","tunnelvision"),Paths.getPath("images/" + "golden/tunnelvision/explosion" + ".xml","TEXT","tunnelvision")));
+		this.explosion.set_frames(Paths.getSparrowAtlas("golden/tunnelvision/explosion","tunnelvision"));
 		this.explosion.animation.addByPrefix("boom","explosion",24,false);
 	}
 	owner.add(this.explosion);
@@ -30146,8 +32989,7 @@ var GoldenTunnelVisionStage = function() {
 	this.backdrop.scrollFactor.set(.2,.2);
 	this.add(this.backdrop);
 	this.wire = new flixel_FlxSprite();
-	var potatoKey = "golden/tunnelvision/wire" + "_potato";
-	this.wire.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE","tunnelvision"),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT","tunnelvision"),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE","tunnelvision"),Paths.getPath("images/" + potatoKey + ".xml","TEXT","tunnelvision")) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/tunnelvision/wire" + ".png","IMAGE","tunnelvision"),Paths.getPath("images/" + "golden/tunnelvision/wire" + ".xml","TEXT","tunnelvision")));
+	this.wire.set_frames(Paths.getSparrowAtlas("golden/tunnelvision/wire","tunnelvision"));
 	this.wire.animation.addByPrefix("wire","wire",24,true);
 	this.wire.animation.play("wire");
 	this.wire.scale.set(2,2);
@@ -30450,6 +33292,7 @@ var GoldenVideo = function(camera,source,behind,looping) {
 		camera.flashSprite.addChild(this.picture);
 	}
 	var element = this.stream.__video;
+	element.playbackRate = GoldenPlayback.rate;
 	element.muted = true;
 	element.preload = "auto";
 	element.setAttribute("playsinline","");
@@ -30458,7 +33301,7 @@ var GoldenVideo = function(camera,source,behind,looping) {
 	element.load();
 	element.onerror = function(_) {
 		_gthis.error = source + " failed to load";
-		haxe_Log.trace(_gthis.error,{ fileName : "source/GoldenVideo.hx", lineNumber : 40, className : "GoldenVideo", methodName : "new"});
+		haxe_Log.trace(_gthis.error,{ fileName : "source/GoldenVideo.hx", lineNumber : 45, className : "GoldenVideo", methodName : "new"});
 	};
 };
 $hxClasses["GoldenVideo"] = GoldenVideo;
@@ -30474,6 +33317,12 @@ GoldenVideo.prototype = $extend(flixel_FlxBasic.prototype,{
 	,playing: null
 	,suspended: null
 	,startTime: null
+	,worldCamera: null
+	,worldBounds: null
+	,setWorldBounds: function(camera,x,y,width,height) {
+		this.worldCamera = camera;
+		this.worldBounds = new openfl_geom_Rectangle(x,y,width,height);
+	}
 	,error: null
 	,start: function(songTime) {
 		var _gthis = this;
@@ -30482,12 +33331,13 @@ GoldenVideo.prototype = $extend(flixel_FlxBasic.prototype,{
 		this.suspended = false;
 		this.picture.set_visible(true);
 		var element = this.stream.__video;
+		element.playbackRate = GoldenPlayback.rate;
 		if(element.readyState >= 1) {
 			element.currentTime = 0;
 		}
 		element.play().catch(function(reason) {
 			_gthis.error = Std.string(reason);
-			haxe_Log.trace(_gthis.error,{ fileName : "source/GoldenVideo.hx", lineNumber : 49, className : "GoldenVideo", methodName : "start"});
+			haxe_Log.trace(_gthis.error,{ fileName : "source/GoldenVideo.hx", lineNumber : 55, className : "GoldenVideo", methodName : "start"});
 			return null;
 		});
 	}
@@ -30495,7 +33345,12 @@ GoldenVideo.prototype = $extend(flixel_FlxBasic.prototype,{
 		if(!this.playing || this.suspended) {
 			return;
 		}
-		if(this.backgroundCamera != null) {
+		if(this.worldBounds != null) {
+			this.picture.set_width(this.worldBounds.width);
+			this.picture.set_height(this.worldBounds.height);
+			this.picture.set_x(this.worldBounds.x - this.worldCamera.scroll.x - this.worldCamera.width / 2);
+			this.picture.set_y(this.worldBounds.y - this.worldCamera.scroll.y - this.worldCamera.height / 2);
+		} else if(this.backgroundCamera != null) {
 			var zoom = Math.max(.01,this.backgroundCamera.zoom);
 			this.picture.set_width(this.backgroundCamera.width / zoom);
 			this.picture.set_height(this.backgroundCamera.height / zoom);
@@ -30504,6 +33359,7 @@ GoldenVideo.prototype = $extend(flixel_FlxBasic.prototype,{
 		}
 		var target = Math.max(0,(songTime - this.startTime) / 1000);
 		var element = this.stream.__video;
+		element.playbackRate = GoldenPlayback.rate;
 		var tmp;
 		if(this.looping) {
 			var f = element.duration;
@@ -30596,6 +33452,7 @@ var GoldenWavySprite = function(x,y) {
 	if(x == null) {
 		x = 0;
 	}
+	this.tileWorld = false;
 	flixel_FlxSprite.call(this,x,y);
 	this.waveShader = new GoldenWavyShader();
 	if(!GoldenQuality.superLow) {
@@ -30606,7 +33463,8 @@ $hxClasses["GoldenWavySprite"] = GoldenWavySprite;
 GoldenWavySprite.__name__ = "GoldenWavySprite";
 GoldenWavySprite.__super__ = flixel_FlxSprite;
 GoldenWavySprite.prototype = $extend(flixel_FlxSprite.prototype,{
-	waveShader: null
+	tileWorld: null
+	,waveShader: null
 	,draw: function() {
 		if(this.frame != null) {
 			var uv = this.frame.uv;
@@ -30619,7 +33477,36 @@ GoldenWavySprite.prototype = $extend(flixel_FlxSprite.prototype,{
 			size[0] = this.frame.sourceSize.x;
 			size[1] = this.frame.sourceSize.y;
 		}
-		flixel_FlxSprite.prototype.draw.call(this);
+		if(!this.tileWorld || this.get_width() <= 0 || this.get_height() <= 0) {
+			flixel_FlxSprite.prototype.draw.call(this);
+			return;
+		}
+		var startX = this.x;
+		var startY = this.y;
+		var cam = this.get_camera();
+		var left = cam.scroll.x + cam.width * .5 - cam.width / (2 * cam.zoom);
+		var top = cam.scroll.y + cam.height * .5 - cam.height / (2 * cam.zoom);
+		var right = left + cam.width / cam.zoom;
+		var bottom = top + cam.height / cam.zoom;
+		var firstX = Math.floor((left - startX) / this.get_width()) | 0;
+		var lastX = Math.ceil((right - startX) / this.get_width()) | 0;
+		var firstY = Math.floor((top - startY) / this.get_height()) | 0;
+		var lastY = Math.ceil((bottom - startY) / this.get_height()) | 0;
+		var _g = firstY;
+		var _g1 = lastY + 1;
+		while(_g < _g1) {
+			var row = _g++;
+			var _g2 = firstX;
+			var _g3 = lastX + 1;
+			while(_g2 < _g3) {
+				var col = _g2++;
+				this.set_x(startX + col * this.get_width());
+				this.set_y(startY + row * this.get_height());
+				flixel_FlxSprite.prototype.draw.call(this);
+			}
+		}
+		this.set_x(startX);
+		this.set_y(startY);
 	}
 	,update: function(elapsed) {
 		flixel_FlxSprite.prototype.update.call(this,elapsed);
@@ -30636,6 +33523,10 @@ var HealthIcon = function(char,isPlayer) {
 	if(char == null) {
 		char = "bf-golden";
 	}
+	this.losingState = false;
+	this.lastBeat = -1;
+	this.iconDance = false;
+	this.animatedIcon = false;
 	flixel_FlxSprite.call(this);
 	if(char == "bf") {
 		char = "bf-golden";
@@ -30645,7 +33536,29 @@ var HealthIcon = function(char,isPlayer) {
 	}
 	if(StringTools.startsWith(char,"extra-")) {
 		var config = GoldenExtraCharacter.config(char);
-		var path = Paths.getPath("images/" + config.icon + ".png","IMAGE",config.library);
+		var hasIcon = config.icon != null && typeof(config.icon) == "string" && config.icon.length > 0;
+		var path = hasIcon ? Paths.getPath("images/" + config.icon + ".png","IMAGE",config.library) : Paths.getPath("images/" + "golden/applecore/icons/face" + ".png","IMAGE",null);
+		if(hasIcon && config.iconAtlas == true) {
+			this.set_frames(Paths.getSparrowAtlas(config.icon,config.library));
+			this.animatedIcon = true;
+			this.iconName = char;
+			var data = config.iconConfig;
+			var defs = data.anims;
+			var _g = 0;
+			while(_g < defs.length) {
+				var def = defs[_g];
+				++_g;
+				this.animation.addByPrefix(def.name,def.prefix == null ? def.name : def.prefix,24,def.loops == true);
+			}
+			var neutral = this.animation.exists("neutral") ? "neutral" : defs[0].name;
+			this.animation.add(char,this.animation._animations.h[neutral].frames,24,false);
+			this.animation.play(char);
+			this.set_flipX(isPlayer);
+			this.iconDance = data.canDance == true;
+			this.set_antialiasing(false);
+			this.scrollFactor.set();
+			return;
+		}
 		var bitmap = openfl_utils_Assets.getBitmapData(path);
 		this.loadGraphic(path,true,bitmap.height,bitmap.height);
 		this.animation.add(char,[0,bitmap.width >= bitmap.height * 2 ? 1 : 0],0,false,isPlayer);
@@ -30707,8 +33620,32 @@ HealthIcon.__name__ = "HealthIcon";
 HealthIcon.__super__ = flixel_FlxSprite;
 HealthIcon.prototype = $extend(flixel_FlxSprite.prototype,{
 	sprTracker: null
+	,animatedIcon: null
+	,iconDance: null
+	,lastBeat: null
+	,losingState: null
+	,iconName: null
+	,setLosing: function(value) {
+		if(!this.animatedIcon) {
+			if(this.animation._curAnim != null) {
+				this.animation._curAnim.set_curFrame(value ? 1 : 0);
+			}
+			return;
+		}
+		if(value != this.losingState) {
+			this.losingState = value;
+			this.animation.play(value && this.animation.exists("losing") ? "losing" : this.iconName,true);
+		}
+	}
 	,update: function(elapsed) {
 		flixel_FlxSprite.prototype.update.call(this,elapsed);
+		if(this.animatedIcon && this.iconDance) {
+			var beat = Math.floor(Conductor.songPosition / Conductor.crochet) | 0;
+			if(beat != this.lastBeat) {
+				this.lastBeat = beat;
+				this.animation.play(this.iconName,true);
+			}
+		}
 		if(this.sprTracker != null) {
 			this.setPosition(this.sprTracker.x + this.sprTracker.get_width() + 10,this.sprTracker.y - 30);
 		}
@@ -31127,6 +34064,7 @@ LoadReplayState.prototype = $extend(MusicBeatState.prototype,{
 	,__class__: LoadReplayState
 });
 var LoadingState = function(target,stopMusic) {
+	this.failed = false;
 	this.lastFill = -1;
 	this.completedFor = 0;
 	this.finishing = false;
@@ -31233,6 +34171,18 @@ LoadingState.prototype = $extend(MusicBeatState.prototype,{
 	,progressFill: null
 	,progressText: null
 	,lastFill: null
+	,failure: null
+	,failed: null
+	,loadFailed: function(name,error) {
+		if(this.failed) {
+			return;
+		}
+		this.failed = true;
+		haxe_Log.trace("Could not load " + name + ": " + Std.string(error),{ fileName : "source/LoadingState.hx", lineNumber : 42, className : "LoadingState", methodName : "loadFailed"});
+		this.failure = new flixel_text_FlxText(80,535,1120,"Could not load " + name + ".\nEnter: try again    Esc: menu",24);
+		this.failure.setFormat("assets/fonts/" + "comic_normal.ttf",24,-21846,"center",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
+		this.add(this.failure);
+	}
 	,partProgress: function(id,loaded,total) {
 		if(total > 0) {
 			var this1 = this.loadParts;
@@ -31396,12 +34346,14 @@ LoadingState.prototype = $extend(MusicBeatState.prototype,{
 			}).onComplete(function(_) {
 				_gthis.loadParts.h[path] = 1;
 				callback();
+			}).onError(function(error) {
+				_gthis.loadFailed(PlayState.SONG.song + " audio",error);
 			});
 		}
 	}
 	,checkLibrary: function(library) {
 		var _gthis = this;
-		haxe_Log.trace(openfl_utils_Assets.hasLibrary(library),{ fileName : "source/LoadingState.hx", lineNumber : 124, className : "LoadingState", methodName : "checkLibrary"});
+		haxe_Log.trace(openfl_utils_Assets.hasLibrary(library),{ fileName : "source/LoadingState.hx", lineNumber : 134, className : "LoadingState", methodName : "checkLibrary"});
 		if(openfl_utils_Assets.getLibrary(library) == null) {
 			if(!Object.prototype.hasOwnProperty.call(lime_utils_Assets.libraryPaths.h,library)) {
 				throw haxe_Exception.thrown("Missing library: " + library);
@@ -31413,6 +34365,8 @@ LoadingState.prototype = $extend(MusicBeatState.prototype,{
 			}).onComplete(function(_) {
 				_gthis.loadParts.h[library] = 1;
 				callback();
+			}).onError(function(error) {
+				_gthis.loadFailed(PlayState.SONG.song + " assets",error);
 			});
 		}
 	}
@@ -31420,6 +34374,22 @@ LoadingState.prototype = $extend(MusicBeatState.prototype,{
 		MusicBeatState.prototype.beatHit.call(this);
 	}
 	,update: function(elapsed) {
+		if(this.failed) {
+			MusicBeatState.prototype.update.call(this,elapsed);
+			if(PlayerSettings.player1.controls._back.check()) {
+				GoldenPlayback.finish();
+				var nextState = GoldenFrustExtras.supports(PlayState.SONG.song) ? new GoldenExtrasMenu() : new MainMenuState();
+				if(flixel_FlxG.game._state.switchTo(nextState)) {
+					flixel_FlxG.game._requestedState = nextState;
+				}
+			} else if(PlayerSettings.player1.controls._accept.check()) {
+				var nextState = new LoadingState(this.target,this.stopMusic);
+				if(flixel_FlxG.game._state.switchTo(nextState)) {
+					flixel_FlxG.game._requestedState = nextState;
+				}
+			}
+			return;
+		}
 		this.shownProgress += (this.progressValue() - this.shownProgress) * (1 - Math.exp(-elapsed * 10));
 		if(this.ready && this.shownProgress > .998) {
 			this.shownProgress = 1;
@@ -31444,7 +34414,9 @@ LoadingState.prototype = $extend(MusicBeatState.prototype,{
 		MusicBeatState.prototype.update.call(this,elapsed);
 	}
 	,onLoad: function() {
-		this.ready = true;
+		if(!this.failed) {
+			this.ready = true;
+		}
 	}
 	,finishLoad: function() {
 		var _gthis = this;
@@ -31499,19 +34471,19 @@ MultiCallback.prototype = {
 				_gthis.numRemaining--;
 				if(_gthis.logId != null) {
 					if(_gthis.logId != null) {
-						haxe_Log.trace("" + _gthis.logId + ": " + ("fired " + id + ", " + _gthis.numRemaining + " remaining"),{ fileName : "source/LoadingState.hx", lineNumber : 353, className : "MultiCallback", methodName : "log"});
+						haxe_Log.trace("" + _gthis.logId + ": " + ("fired " + id + ", " + _gthis.numRemaining + " remaining"),{ fileName : "source/LoadingState.hx", lineNumber : 371, className : "MultiCallback", methodName : "log"});
 					}
 				}
 				if(_gthis.numRemaining == 0) {
 					if(_gthis.logId != null) {
 						if(_gthis.logId != null) {
-							haxe_Log.trace("" + _gthis.logId + ": " + "all callbacks fired",{ fileName : "source/LoadingState.hx", lineNumber : 353, className : "MultiCallback", methodName : "log"});
+							haxe_Log.trace("" + _gthis.logId + ": " + "all callbacks fired",{ fileName : "source/LoadingState.hx", lineNumber : 371, className : "MultiCallback", methodName : "log"});
 						}
 					}
 					_gthis.callback();
 				}
 			} else if(_gthis.logId != null) {
-				haxe_Log.trace("" + _gthis.logId + ": " + ("already fired " + id),{ fileName : "source/LoadingState.hx", lineNumber : 353, className : "MultiCallback", methodName : "log"});
+				haxe_Log.trace("" + _gthis.logId + ": " + ("already fired " + id),{ fileName : "source/LoadingState.hx", lineNumber : 371, className : "MultiCallback", methodName : "log"});
 			}
 		};
 		this.unfired.h[id] = func;
@@ -31519,7 +34491,7 @@ MultiCallback.prototype = {
 	}
 	,log: function(msg) {
 		if(this.logId != null) {
-			haxe_Log.trace("" + this.logId + ": " + msg,{ fileName : "source/LoadingState.hx", lineNumber : 353, className : "MultiCallback", methodName : "log"});
+			haxe_Log.trace("" + this.logId + ": " + msg,{ fileName : "source/LoadingState.hx", lineNumber : 371, className : "MultiCallback", methodName : "log"});
 		}
 	}
 	,getFired: function() {
@@ -31583,9 +34555,7 @@ MainMenuState.prototype = $extend(MusicBeatState.prototype,{
 		this.add(this.carousel);
 		var electric = new flixel_FlxSprite(278,89);
 		electric.ID = -1;
-		var library = null;
-		var potatoKey = "golden/menu/mainMenu/electric" + "_potato";
-		electric.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/menu/mainMenu/electric" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/menu/mainMenu/electric" + ".xml","TEXT",library)));
+		electric.set_frames(Paths.getSparrowAtlas("golden/menu/mainMenu/electric"));
 		electric.animation.addByPrefix("idle","idle",24,true);
 		electric.animation.play("idle");
 		electric.scale.set(0.664886,1);
@@ -31598,9 +34568,7 @@ MainMenuState.prototype = $extend(MusicBeatState.prototype,{
 		var bottom = new flixel_FlxSprite(-24,456).loadGraphic(Paths.getPath("images/" + "golden/menu/mainMenu/Bottom" + ".png","IMAGE",null));
 		bottom.set_antialiasing(!GoldenQuality.superLow);
 		this.add(bottom);
-		var library = null;
-		var potatoKey = "golden/menu/mainMenu/buttons" + "_potato";
-		var atlas = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/menu/mainMenu/buttons" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/menu/mainMenu/buttons" + ".xml","TEXT",library));
+		var atlas = Paths.getSparrowAtlas("golden/menu/mainMenu/buttons");
 		var _g = 0;
 		var _g1 = this.names;
 		while(_g < _g1.length) {
@@ -31784,6 +34752,84 @@ ManifestResources.init = function(config) {
 	lime_utils_Assets.libraryPaths.h["extra-lofthouse"] = v;
 	var v = ManifestResources.rootPath + "manifest/extra-kooky.json";
 	lime_utils_Assets.libraryPaths.h["extra-kooky"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-algebra.json";
+	lime_utils_Assets.libraryPaths.h["extra-algebra"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-alternate.json";
+	lime_utils_Assets.libraryPaths.h["extra-alternate"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-apprentice.json";
+	lime_utils_Assets.libraryPaths.h["extra-apprentice"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-bookworm.json";
+	lime_utils_Assets.libraryPaths.h["extra-bookworm"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-dave-x-bambi-shipping-cute.json";
+	lime_utils_Assets.libraryPaths.h["extra-dave-x-bambi-shipping-cute"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-deformation.json";
+	lime_utils_Assets.libraryPaths.h["extra-deformation"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-disability.json";
+	lime_utils_Assets.libraryPaths.h["extra-disability"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-disruption.json";
+	lime_utils_Assets.libraryPaths.h["extra-disruption"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-ferocious.json";
+	lime_utils_Assets.libraryPaths.h["extra-ferocious"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-origin.json";
+	lime_utils_Assets.libraryPaths.h["extra-origin"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-resumed.json";
+	lime_utils_Assets.libraryPaths.h["extra-resumed"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-sillier.json";
+	lime_utils_Assets.libraryPaths.h["extra-sillier"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-sunshine.json";
+	lime_utils_Assets.libraryPaths.h["extra-sunshine"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-theft.json";
+	lime_utils_Assets.libraryPaths.h["extra-theft"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-unhinged.json";
+	lime_utils_Assets.libraryPaths.h["extra-unhinged"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-wireframe.json";
+	lime_utils_Assets.libraryPaths.h["extra-wireframe"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-dynamics.json";
+	lime_utils_Assets.libraryPaths.h["extra-dynamics"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-fresh-and-toasted.json";
+	lime_utils_Assets.libraryPaths.h["extra-fresh-and-toasted"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-house.json";
+	lime_utils_Assets.libraryPaths.h["extra-house"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-nice.json";
+	lime_utils_Assets.libraryPaths.h["extra-nice"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-left-unchecked.json";
+	lime_utils_Assets.libraryPaths.h["extra-left-unchecked"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-thunderstorm.json";
+	lime_utils_Assets.libraryPaths.h["extra-thunderstorm"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-cell.json";
+	lime_utils_Assets.libraryPaths.h["extra-cell"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-collision.json";
+	lime_utils_Assets.libraryPaths.h["extra-collision"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-wheels.json";
+	lime_utils_Assets.libraryPaths.h["extra-wheels"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-poopers.json";
+	lime_utils_Assets.libraryPaths.h["extra-poopers"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-the-boopadoop-song.json";
+	lime_utils_Assets.libraryPaths.h["extra-the-boopadoop-song"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-og.json";
+	lime_utils_Assets.libraryPaths.h["extra-og"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-sick-tricks.json";
+	lime_utils_Assets.libraryPaths.h["extra-sick-tricks"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-galactic.json";
+	lime_utils_Assets.libraryPaths.h["extra-galactic"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-cuberoot.json";
+	lime_utils_Assets.libraryPaths.h["extra-cuberoot"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-too-shiny.json";
+	lime_utils_Assets.libraryPaths.h["extra-too-shiny"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-piehole.json";
+	lime_utils_Assets.libraryPaths.h["extra-piehole"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-ticking.json";
+	lime_utils_Assets.libraryPaths.h["extra-ticking"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-recovered-project.json";
+	lime_utils_Assets.libraryPaths.h["extra-recovered-project"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-dale.json";
+	lime_utils_Assets.libraryPaths.h["extra-dale"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-bedtime-bumps.json";
+	lime_utils_Assets.libraryPaths.h["extra-bedtime-bumps"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-mine.json";
+	lime_utils_Assets.libraryPaths.h["extra-mine"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-roupiniphobia.json";
+	lime_utils_Assets.libraryPaths.h["extra-roupiniphobia"] = v;
 	var v = ManifestResources.rootPath + "manifest/tunnelvision.json";
 	lime_utils_Assets.libraryPaths.h["tunnelvision"] = v;
 	var v = ManifestResources.rootPath + "manifest/inspicable.json";
@@ -31794,7 +34840,7 @@ ManifestResources.init = function(config) {
 	lime_utils_Assets.libraryPaths.h["orthogonal"] = v;
 	var v = ManifestResources.rootPath + "manifest/applecorestage.json";
 	lime_utils_Assets.libraryPaths.h["applecorestage"] = v;
-	var data = "{\"name\":null,\"assets\":\"aoy4:sizei1464369y4:typey5:MUSICy2:idy44:assets%2Fmusic%2Fgolden%2Fmenu%2Fcredits.mp3y9:pathGroupaR4hy7:preloadtgoR0i1417760R1R2R3y41:assets%2Fmusic%2Fgolden%2Fmenu%2Fplay.mp3R5aR7hR6tgoR0i566714R1R2R3y42:assets%2Fmusic%2Fgolden%2Fmenu%2Fpause.mp3R5aR8hR6tgoR0i1469737R1R2R3y41:assets%2Fmusic%2Fgolden%2Fmenu%2Fmain.mp3R5aR9hR6tgoR0i3713317R1R2R3y42:assets%2Fmusic%2Fgolden%2Fmenu%2Ftitle.mp3R5aR10hR6tgoR0i1473973R1R2R3y45:assets%2Fmusic%2Fgolden%2Fmenu%2Fsettings.mp3R5aR11hR6tgoR0i2309657R1R2R3y31:assets%2Fmusic%2FfreakyMenu.mp3R5aR12hR6tgoy4:pathy39:assets%2Fimages%2Fstorymenu%2Fweek3.pngR0i7148R1y5:IMAGER3R14R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek2.pngR0i6517R1R15R3R16R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek0.pngR0i7056R1R15R3R17R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek1.pngR0i6261R1R15R3R18R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek5.pngR0i6440R1R15R3R19R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek4.pngR0i6262R1R15R3R20R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek6.pngR0i6998R1R15R3R21R6tgoR13y28:assets%2Fimages%2FmenuBG.pngR0i620342R1R15R3R22R6tgoR13y26:assets%2Fimages%2Fnum4.pngR0i3989R1R15R3R23R6tgoR13y26:assets%2Fimages%2Fnum5.pngR0i4113R1R15R3R24R6tgoR13y26:assets%2Fimages%2Fnum7.pngR0i3692R1R15R3R25R6tgoR13y26:assets%2Fimages%2Fnum6.pngR0i4181R1R15R3R26R6tgoR13y26:assets%2Fimages%2Fnum2.pngR0i3990R1R15R3R27R6tgoR13y44:assets%2Fimages%2Fgolden%2Fui%2FuiBorder.pngR0i203R1R15R3R28R6tgoR13y52:assets%2Fimages%2Fgolden%2Fui%2FhealthBarOverlay.pngR0i331R1R15R3R29R6tgoR13y50:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2Fgo.pngR0i13831R1R15R3R30R6tgoR13y49:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2F2.pngR0i7823R1R15R3R31R6tgoR13y49:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2F3.pngR0i9226R1R15R3R32R6tgoR13y49:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2F1.pngR0i5893R1R15R3R33R6tgoR13y43:assets%2Fimages%2Fgolden%2Fui%2FtimeBar.pngR0i235R1R15R3R34R6tgoR13y45:assets%2Fimages%2Fgolden%2Fui%2FhealthBar.pngR0i290R1R15R3R35R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FBEVEL_NOTES.pngR0i9853R1R15R3R36R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FBEVEL_NOTES.xmlR0i1798R1y4:TEXTR3R37R6tgoR13y53:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets_3D.xmlR0i5205R1R38R3R39R6tgoR13y53:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets_3D.pngR0i666393R1R15R3R40R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2Fbevel_splash.xmlR0i2719R1R38R3R41R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2Fbevel_splash.pngR0i15211R1R15R3R42R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets.pngR0i561216R1R15R3R43R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets.xmlR0i7178R1R38R3R44R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2FnoteSplashes.xmlR0i1596R1R38R3R45R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2FnoteSplashes.pngR0i219186R1R15R3R46R6tgoR13y48:assets%2Fimages%2Fgolden%2Fnotes%2Fsplash_3d.pngR0i63270R1R15R3R47R6tgoR13y48:assets%2Fimages%2Fgolden%2Fnotes%2Fsplash_3d.xmlR0i4823R1R38R3R48R6tgoR13y52:assets%2Fimages%2Fgolden%2Fnotes%2Fawesome_notes.pngR0i83950R1R15R3R49R6tgoR13y52:assets%2Fimages%2Fgolden%2Fnotes%2Fawesome_notes.xmlR0i8003R1R38R3R50R6tgoR13y49:assets%2Fimages%2Fgolden%2Fnotes%2Fbevel_ends.xmlR0i670R1R38R3R51R6tgoR13y49:assets%2Fimages%2Fgolden%2Fnotes%2Fbevel_ends.pngR0i1481R1R15R3R52R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FbreadyNotes.pngR0i387393R1R15R3R53R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FbreadyNotes.xmlR0i7931R1R38R3R54R6tgoR13y61:assets%2Fimages%2Fgolden%2Fmenu%2Ftransition%2Ftransition.pngR0i28278R1R15R3R55R6tgoR13y72:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2FtitleFellows%2Fbandu.pngR0i432446R1R15R3R56R6tgoR13y72:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2FtitleFellows%2Fbandu.xmlR0i2899R1R38R3R57R6tgoR13y63:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2FdarkChecker.pngR0i149R1R15R3R58R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2Flogo.pngR0i82258R1R15R3R59R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2Fsopar_text.xmlR0i4934R1R38R3R60R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2Fsopar_text.pngR0i1449202R1R15R3R61R6tgoR13y75:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Forthogonal%2Ficon.pngR0i258865R1R15R3R62R6tgoR13y77:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Forthogonal%2Fheader.pngR0i45705R1R15R3R63R6tgoR13y73:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Forthogonal%2Fbg.pngR0i202995R1R15R3R64R6tgoR13y75:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2Ficon.pngR0i326259R1R15R3R65R6tgoR13y77:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2Fheader.pngR0i12093R1R15R3R66R6tgoR13y82:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2FsongPreview.pngR0i168958R1R15R3R67R6tgoR13y73:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2Fbg.pngR0i861461R1R15R3R68R6tgoR13y76:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2Ficon.pngR0i910457R1R15R3R69R6tgoR13y78:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2Fheader.pngR0i17253R1R15R3R70R6tgoR13y83:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2FsongPreview.pngR0i174673R1R15R3R71R6tgoR13y74:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2Fbg.pngR0i1170366R1R15R3R72R6tgoR13y93:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2FsongPreview_complete.pngR0i357300R1R15R3R73R6tgoR13y77:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2Ficon.pngR0i708048R1R15R3R74R6tgoR13y79:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2Fheader.pngR0i22174R1R15R3R75R6tgoR13y84:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2FsongPreview.pngR0i178512R1R15R3R76R6tgoR13y75:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2Fbg.pngR0i178626R1R15R3R77R6tgoR13y90:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2FsongPreview_complete.pngR0i261035R1R15R3R78R6tgoR13y74:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2Ficon.pngR0i38964R1R15R3R79R6tgoR13y76:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2Fheader.pngR0i11563R1R15R3R80R6tgoR13y81:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2FsongPreview.pngR0i87336R1R15R3R81R6tgoR13y72:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2Fbg.pngR0i565038R1R15R3R82R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fchalkboard.pngR0i46302R1R15R3R83R6tgoR13y59:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fcudroid.pngR0i463377R1R15R3R84R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fbiorange.pngR0i403587R1R15R3R85R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fvio.pngR0i213111R1R15R3R86R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FSmeekles.pngR0i670164R1R15R3R87R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fbubbscadex.pngR0i109865R1R15R3R88R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FCid.pngR0i47673R1R15R3R89R6tgoR13y64:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fexorcistgold.pngR0i502774R1R15R3R90R6tgoR13y63:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fbaldilord64.pngR0i480724R1R15R3R91R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fcleoarty.pngR0i241191R1R15R3R92R6tgoR13y59:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fzevisly.pngR0i239645R1R15R3R93R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fwick.pngR0i120994R1R15R3R94R6tgoR13y54:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FTy.pngR0i199739R1R15R3R95R6tgoR13y69:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FTallsAnimationTAF.pngR0i201648R1R15R3R96R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fdoo.pngR0i57073R1R15R3R97R6tgoR13y58:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FHarvey.pngR0i178777R1R15R3R98R6tgoR13y64:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fsamualcheese.pngR0i458670R1R15R3R99R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fseth.pngR0i127660R1R15R3R100R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2FcheckeredBG.pngR0i423R1R15R3R101R6tgoR13y57:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fgradient.pngR0i63026R1R15R3R102R6tgoR13y66:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FSettings.pngR0i16351R1R15R3R103R6tgoR13y63:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FLinks.pngR0i13691R1R15R3R104R6tgoR13y65:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FCredits.pngR0i26321R1R15R3R105R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FPlay.pngR0i19101R1R15R3R106R6tgoR13y69:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fblack_border_overlay.pngR0i111R1R15R3R107R6tgoR13y57:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Felectric.xmlR0i13228R1R38R3R108R6tgoR13y57:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Felectric.pngR0i79183R1R15R3R109R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2FBottom.pngR0i6280R1R15R3R110R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbuttons.xmlR0i3354R1R38R3R111R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbuttons.pngR0i27595R1R15R3R112R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2FToppom.pngR0i3261R1R15R3R113R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf_potato.pngR0i2750120R1R15R3R114R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf_potato.xmlR0i26042R1R38R3R115R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf_potato.xmlR0i11114R1R38R3R116R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf_potato.pngR0i1713304R1R15R3R117R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf.xmlR0i11114R1R38R3R118R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf.pngR0i3152226R1R15R3R119R6tgoR13y51:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead.pngR0i1263283R1R15R3R120R6tgoR13y51:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead.xmlR0i6158R1R38R3R121R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf.xmlR0i26042R1R38R3R122R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf.pngR0i6529446R1R15R3R123R6tgoR13y58:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead_potato.xmlR0i6158R1R38R3R124R6tgoR13y58:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead_potato.pngR0i598561R1R15R3R125R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2F3d-bf.pngR0i5508R1R15R3R126R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fbadai.pngR0i6570R1R15R3R127R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fgf.pngR0i5432R1R15R3R128R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Finspicable.pngR0i6797R1R15R3R129R6tgoR13y55:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fdave.pngR0i3271R1R15R3R130R6tgoR13y67:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fdave-frustration.pngR0i7963R1R15R3R131R6tgoR13y58:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fjunkers.pngR0i3905R1R15R3R132R6tgoR13y74:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Funfair-expunged-forward.pngR0i16340R1R15R3R133R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fbandu.pngR0i5862R1R15R3R134R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fdave-decimated.pngR0i15982R1R15R3R135R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fbf.pngR0i5815R1R15R3R136R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Fmg.pngR0i25187R1R15R3R137R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Ffries.pngR0i6266R1R15R3R138R6tgoR13y57:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Fphones.pngR0i158733R1R15R3R139R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Fbg.pngR0i322926R1R15R3R140R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst_potato.pngR0i1949693R1R15R3R141R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst_potato.xmlR0i48616R1R38R3R142R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst.pngR0i1356106R1R15R3R143R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst.xmlR0i48616R1R38R3R144R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy.pngR0i874647R1R15R3R145R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy.xmlR0i8049R1R38R3R146R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi.pngR0i1136169R1R15R3R147R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi.xmlR0i47561R1R38R3R148R6tgoR13y71:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap_potato.xmlR0i50350R1R38R3R149R6tgoR13y71:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap_potato.pngR0i1810011R1R15R3R150R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy_potato.pngR0i1021910R1R15R3R151R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy_potato.xmlR0i8049R1R38R3R152R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad.pngR0i274474R1R15R3R153R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad.xmlR0i25415R1R38R3R154R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_potato.pngR0i776449R1R15R3R155R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_potato.xmlR0i12422R1R38R3R156R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra_potato.xmlR0i19808R1R38R3R157R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra_potato.pngR0i2604569R1R15R3R158R6tgoR13y64:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap.xmlR0i50350R1R38R3R159R6tgoR13y64:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap.pngR0i1220343R1R15R3R160R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi_potato.xmlR0i47561R1R38R3R161R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi_potato.pngR0i2258904R1R15R3R162R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu.pngR0i366915R1R15R3R163R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu.xmlR0i12422R1R38R3R164R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra.xmlR0i19808R1R38R3R165R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad_potato.xmlR0i25415R1R38R3R166R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad_potato.pngR0i666177R1R15R3R167R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra.pngR0i5372875R1R15R3R168R6tgoR13y26:assets%2Fimages%2Fnum3.pngR0i4022R1R15R3R169R6tgoR13y26:assets%2Fimages%2Fnum1.pngR0i3390R1R15R3R170R6tgoR13y37:assets%2Fimages%2Fnewgrounds_logo.pngR0i57747R1R15R3R171R6tgoR13y26:assets%2Fimages%2Fnum0.pngR0i3738R1R15R3R172R6tgoR13y30:assets%2Fimages%2Falphabet.xmlR0i39069R1R38R3R173R6tgoR13y30:assets%2Fimages%2Falphabet.pngR0i139836R1R15R3R174R6tgoR13y26:assets%2Fimages%2Flogo.pngR0i86924R1R15R3R175R6tgoR13y35:assets%2Fimages%2FmenuBGMagenta.pngR0i553468R1R15R3R176R6tgoR13y32:assets%2Fimages%2FlogoBumpin.pngR0i592724R1R15R3R177R6tgoR13y32:assets%2Fimages%2FlogoBumpin.xmlR0i2177R1R38R3R178R6tgoR13y26:assets%2Fimages%2Fnum8.pngR0i3914R1R15R3R179R6tgoR13y26:assets%2Fimages%2Fnum9.pngR0i3687R1R15R3R180R6tgoR13y45:assets%2Fimages%2Fcampaign_menu_UI_assets.pngR0i27171R1R15R3R181R6tgoR13y45:assets%2Fimages%2Fcampaign_menu_UI_assets.xmlR0i1893R1R38R3R182R6tgoR13y32:assets%2Fimages%2FmenuBGBlue.pngR0i614586R1R15R3R183R6tgoR13y42:assets%2Fimages%2FFNF_main_menu_assets.pngR0i281298R1R15R3R184R6tgoR13y42:assets%2Fimages%2FFNF_main_menu_assets.xmlR0i4755R1R38R3R185R6tgoR13y32:assets%2Fimages%2FtitleEnter.xmlR0i4875R1R38R3R186R6tgoR13y31:assets%2Fimages%2FmenuDesat.pngR0i357911R1R15R3R187R6tgoR13y32:assets%2Fimages%2FtitleEnter.pngR0i1449202R1R15R3R188R6tgoR0i17762R1R2R3y32:assets%2Fsounds%2FcancelMenu.mp3R5aR189hR6tgoR0i22403R1R2R3y62:assets%2Fsounds%2Fgolden%2Fcountdown%2Fawesomeson%2Fintro2.mp3R5aR190hR6tgoR0i22403R1R2R3y62:assets%2Fsounds%2Fgolden%2Fcountdown%2Fawesomeson%2Fintro3.mp3R5aR191hR6tgoR0i22403R1R2R3y62:assets%2Fsounds%2Fgolden%2Fcountdown%2Fawesomeson%2Fintro1.mp3R5aR192hR6tgoR0i22403R1R2R3y63:assets%2Fsounds%2Fgolden%2Fcountdown%2Fawesomeson%2FintroGo.mp3R5aR193hR6tgoR0i12773R1R2R3y49:assets%2Fsounds%2Fgolden%2Fcountdown%2Fintro2.mp3R5aR194hR6tgoR0i8857R1R2R3y49:assets%2Fsounds%2Fgolden%2Fcountdown%2Fintro3.mp3R5aR195hR6tgoR0i12458R1R2R3y49:assets%2Fsounds%2Fgolden%2Fcountdown%2Fintro1.mp3R5aR196hR6tgoR0i11536R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fbandu%2Fintro2.mp3R5aR197hR6tgoR0i11954R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fbandu%2Fintro3.mp3R5aR198hR6tgoR0i13626R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fbandu%2Fintro1.mp3R5aR199hR6tgoR0i8611R1R2R3y58:assets%2Fsounds%2Fgolden%2Fcountdown%2Fbandu%2FintroGo.mp3R5aR200hR6tgoR0i8441R1R2R3y56:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2Fintro2.mp3R5aR201hR6tgoR0i7317R1R2R3y56:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2Fintro3.mp3R5aR202hR6tgoR0i6198R1R2R3y56:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2Fintro1.mp3R5aR203hR6tgoR0i7500R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2FintroGo.mp3R5aR204hR6tgoR0i7555R1R2R3y50:assets%2Fsounds%2Fgolden%2Fcountdown%2FintroGo.mp3R5aR205hR6tgoR0i91950R1R2R3y33:assets%2Fsounds%2FconfirmMenu.mp3R5aR206hR6tgoR0i17762R1R2R3y32:assets%2Fsounds%2FscrollMenu.mp3R5aR207hR6tgoR0i245600R1y4:FONTy9:classNamey38:__ASSET__assets_fonts_comic_normal_ttfR3y33:assets%2Ffonts%2Fcomic_normal.ttfR6tgoR0i229408R1R208R209y31:__ASSET__assets_fonts_comic_ttfR3y26:assets%2Ffonts%2Fcomic.ttfR6tgoR13y34:assets%2Fdata%2Fdata-goes-here.txtR0zR1R38R3R214R6tgoR13y44:assets%2Fdata%2Fstrawberry%2Fstrawberry.jsonR0i24616R1R38R3R215R6tgoR13y29:assets%2Fdata%2Fmain-view.xmlR0i123R1R38R3R216R6tgoR13y36:assets%2Fdata%2Fslices%2Fslices.jsonR0i37818R1R38R3R217R6tgoR13y30:assets%2Fdata%2Fnft%2Fnft.jsonR0i43569R1R38R3R218R6tgoR13y34:assets%2Fdata%2Fkooky%2Fkooky.jsonR0i80683R1R38R3R219R6tgoR13y30:assets%2Fdata%2Faug%2Faug.jsonR0i20014R1R38R3R220R6tgoR13y29:assets%2Fdata%2FintroText.txtR0i1260R1R38R3R221R6tgoR13y42:assets%2Fdata%2Flofthouse%2Flofthouse.jsonR0i50661R1R38R3R222R6tgoR13y33:assets%2Fdata%2FspecialThanks.txtR0i300R1R38R3R223R6tgoR13y44:assets%2Fdata%2Forthogonal%2Forthogonal.jsonR0i127054R1R38R3R224R6tgoR13y44:assets%2Fdata%2Fready-loud%2Fready-loud.jsonR0i34408R1R38R3R225R6tgoR13y45:assets%2Fdata%2Fgolden%2Fnotes%2Fawesome.jsonR0i431R1R38R3R226R6tgoR13y40:assets%2Fdata%2Fgolden%2Fnotes%2F3d.jsonR0i667R1R38R3R227R6tgoR13y43:assets%2Fdata%2Fgolden%2Fnotes%2Fbevel.jsonR0i178R1R38R3R228R6tgoR13y45:assets%2Fdata%2Fgolden%2Fnotes%2Fdefault.jsonR0i1028R1R38R3R229R6tgoR13y44:assets%2Fdata%2Fgolden%2Fnotes%2Fbready.jsonR0i374R1R38R3R230R6tgoR13y44:assets%2Fdata%2Fgolden%2Fmenu%2Fcredits.jsonR0i940R1R38R3R231R6tgoR13y50:assets%2Fdata%2Fgolden%2Fshaders%2FWavyShader.fragR0i1316R1R38R3R232R6tgoR13y52:assets%2Fdata%2Fgolden%2Fcharacters%2Fbf-bounds.jsonR0i22224R1R38R3R233R6tgoR13y57:assets%2Fdata%2Fgolden%2Fapplecore%2Fsecondary-bambi.jsonR0i46074R1R38R3R234R6tgoR13y50:assets%2Fdata%2Fgolden%2Fapplecore%2Fsubtitles.srtR0i1683R1R38R3R235R6tgoR13y78:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Funfair-expunged-forward.jsonR0i688R1R38R3R236R6tgoR13y66:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu-first.jsonR0i1784R1R38R3R237R6tgoR13y60:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu.jsonR0i819R1R38R3R238R6tgoR13y64:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu-sad.jsonR0i1363R1R38R3R239R6tgoR13y71:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fdisruption-bambi.jsonR0i1527R1R38R3R240R6tgoR13y44:assets%2Fdata%2Finspicable%2Finspicable.jsonR0i41973R1R38R3R241R6tgoR13y42:assets%2Fdata%2Fgift-card%2Fgift-card.jsonR0i49357R1R38R3R242R6tgoR13y36:assets%2Fdata%2FfreeplaySonglist.txtR0i10R1R38R3R243R6tgoR13y28:assets%2Fdata%2Fcontrols.txtR0i324R1R38R3R244R6tgoR13y46:assets%2Fdata%2Ffrustration%2Ffrustration.jsonR0i79278R1R38R3R245R6tgoR13y52:assets%2Fdata%2Fthe-big-dingle%2Fthe-big-dingle.jsonR0i24539R1R38R3R246R6tgoR13y40:assets%2Fdata%2Ftantalum%2Ftantalum.jsonR0i47979R1R38R3R247R6tgoR13y44:assets%2Fdata%2Fsugar-rush%2Fsugar-rush.jsonR0i32555R1R38R3R248R6tgoR13y40:assets%2Fdata%2Fdoughboy%2Fdoughboy.jsonR0i30739R1R38R3R249R6tgoR13y42:assets%2Fdata%2Fenforcers%2Fenforcers.jsonR0i20507R1R38R3R250R6tgoR13y48:assets%2Fdata%2Ftunnelvision%2Ftunnelvision.jsonR0i124949R1R38R3R251R6tgoR13y34:assets%2Fdata%2Fnutty%2Fnutty.jsonR0i35817R1R38R3R252R6tgoR13y33:assets%2Fdata%2FcharacterList.txtR0i89R1R38R3R253R6tgoR13y40:assets%2Fdata%2Fkeyboard%2Fkeyboard.jsonR0i37268R1R38R3R254R6tgoR13y42:assets%2Fdata%2Fapplecore%2Fapplecore.jsonR0i77355R1R38R3R255R6tgoR13y52:assets%2Fdata%2Fcooking-lesson%2Fcooking-lesson.jsonR0i54523R1R38R3R256R6tgoR13y41:assets%2Fvideos%2Fgolden%2FPizzaVideo.mp4R0i18210431R1y6:BINARYR3R257goR13y50:assets%2Fvideos%2Fgolden%2Ftunnelvision%2Fmask.mp4R0i5769684R1R258R3R259goR13y55:assets%2Fvideos%2Fgolden%2Ftunnelvision%2Fred_blobs.mp4R0i11119130R1R258R3R260goR13y48:mods%2FintroMod%2F_append%2Fdata%2FintroText.txtR0i20R1R38R3R261goR13y17:mods%2Freadme.txtR0i90R1R38R3R262goR13y18:mods%2FmodList.txtR0i8R1R38R3R263goR13y21:do%20NOT%20readme.txtR0i4326R1R38R3R264R6tgoR13y13:changelog.txtR0i7730R1R38R3R265R6tgoR0i75864R1R208R209y29:__ASSET__assets_fonts_vcr_ttfR3y24:assets%2Ffonts%2Fvcr.ttfR6tgoR13y34:assets%2Ffonts%2Ffonts-go-here.txtR0zR1R38R3R268R6tgoR0i14656R1R208R209y31:__ASSET__assets_fonts_pixel_otfR3y26:assets%2Ffonts%2Fpixel.otfR6tgoR0i39706R1R2R3y28:flixel%2Fsounds%2Fflixel.mp3R5aR271y28:flixel%2Fsounds%2Fflixel.ogghR6tgoR0i2114R1R2R3y26:flixel%2Fsounds%2Fbeep.mp3R5aR273y26:flixel%2Fsounds%2Fbeep.ogghR6tgoR0i5794R1y5:SOUNDR3R274R5aR273R274hgoR0i33629R1R275R3R272R5aR271R272hgoR0i15744R1R208R209y35:__ASSET__flixel_fonts_nokiafc22_ttfR3y30:flixel%2Ffonts%2Fnokiafc22.ttfR6tgoR0i29724R1R208R209y36:__ASSET__flixel_fonts_monsterrat_ttfR3y31:flixel%2Ffonts%2Fmonsterrat.ttfR6tgoR13y33:flixel%2Fimages%2Fui%2Fbutton.pngR0i519R1R15R3R280R6tgoR13y36:flixel%2Fimages%2Flogo%2Fdefault.pngR0i3280R1R15R3R281R6tgoR13y44:flixel%2Fflixel-ui%2Fimg%2Fdropdown_mark.pngR0i86R1R15R3R282R6tgoR13y40:flixel%2Fflixel-ui%2Fimg%2Fplus_mark.pngR0i83R1R15R3R283R6tgoR13y36:flixel%2Fflixel-ui%2Fimg%2Fradio.pngR0i108R1R15R3R284R6tgoR13y48:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_left.pngR0i222R1R15R3R285R6tgoR13y42:flixel%2Fflixel-ui%2Fimg%2Fbutton_thin.pngR0i118R1R15R3R286R6tgoR13y34:flixel%2Fflixel-ui%2Fimg%2Ftab.pngR0i106R1R15R3R287R6tgoR13y41:flixel%2Fflixel-ui%2Fimg%2Ffinger_big.pngR0i1337R1R15R3R288R6tgoR13y36:flixel%2Fflixel-ui%2Fimg%2Finvis.pngR0i72R1R15R3R289R6tgoR13y43:flixel%2Fflixel-ui%2Fimg%2Fchrome_inset.pngR0i102R1R15R3R290R6tgoR13y44:flixel%2Fflixel-ui%2Fimg%2Ftooltip_arrow.pngR0i176R1R15R3R291R6tgoR13y49:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_right.pngR0i238R1R15R3R292R6tgoR13y40:flixel%2Fflixel-ui%2Fimg%2Fradio_dot.pngR0i81R1R15R3R293R6tgoR13y37:flixel%2Fflixel-ui%2Fimg%2Fchrome.pngR0i135R1R15R3R294R6tgoR13y40:flixel%2Fflixel-ui%2Fimg%2Fcheck_box.pngR0i101R1R15R3R295R6tgoR13y44:flixel%2Fflixel-ui%2Fimg%2Fbutton_toggle.pngR0i254R1R15R3R296R6tgoR13y46:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_up.pngR0i227R1R15R3R297R6tgoR13y41:flixel%2Fflixel-ui%2Fimg%2Fminus_mark.pngR0i77R1R15R3R298R6tgoR13y42:flixel%2Fflixel-ui%2Fimg%2Fchrome_flat.pngR0i124R1R15R3R299R6tgoR13y37:flixel%2Fflixel-ui%2Fimg%2Fswatch.pngR0i94R1R15R3R300R6tgoR13y43:flixel%2Fflixel-ui%2Fimg%2Fchrome_light.pngR0i118R1R15R3R301R6tgoR13y38:flixel%2Fflixel-ui%2Fimg%2Fhilight.pngR0i74R1R15R3R302R6tgoR13y41:flixel%2Fflixel-ui%2Fimg%2Fcheck_mark.pngR0i97R1R15R3R303R6tgoR13y39:flixel%2Fflixel-ui%2Fimg%2Ftab_back.pngR0i111R1R15R3R304R6tgoR13y34:flixel%2Fflixel-ui%2Fimg%2Fbox.pngR0i75R1R15R3R305R6tgoR13y43:flixel%2Fflixel-ui%2Fimg%2Ffinger_small.pngR0i157R1R15R3R306R6tgoR13y37:flixel%2Fflixel-ui%2Fimg%2Fbutton.pngR0i211R1R15R3R307R6tgoR13y48:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_down.pngR0i216R1R15R3R308R6tgoR13y44:flixel%2Fflixel-ui%2Fxml%2Fdefault_popup.xmlR0i1848R1R38R3R309R6tgoR13y53:flixel%2Fflixel-ui%2Fxml%2Fdefault_loading_screen.xmlR0i1953R1R38R3R310R6tgoR13y39:flixel%2Fflixel-ui%2Fxml%2Fdefaults.xmlR0i1263R1R38R3R311R6tgoR13y20:manifest.webmanifestR0i239R1R38R3R312gh\",\"rootPath\":null,\"version\":2,\"libraryArgs\":[],\"libraryType\":null}";
+	var data = "{\"name\":null,\"assets\":\"aoy4:sizei1464369y4:typey5:MUSICy2:idy44:assets%2Fmusic%2Fgolden%2Fmenu%2Fcredits.mp3y9:pathGroupaR4hy7:preloadtgoR0i1417760R1R2R3y41:assets%2Fmusic%2Fgolden%2Fmenu%2Fplay.mp3R5aR7hR6tgoR0i566714R1R2R3y42:assets%2Fmusic%2Fgolden%2Fmenu%2Fpause.mp3R5aR8hR6tgoR0i1469737R1R2R3y41:assets%2Fmusic%2Fgolden%2Fmenu%2Fmain.mp3R5aR9hR6tgoR0i3713317R1R2R3y42:assets%2Fmusic%2Fgolden%2Fmenu%2Ftitle.mp3R5aR10hR6tgoR0i1473973R1R2R3y45:assets%2Fmusic%2Fgolden%2Fmenu%2Fsettings.mp3R5aR11hR6tgoR0i2309657R1R2R3y31:assets%2Fmusic%2FfreakyMenu.mp3R5aR12hR6tgoy4:pathy39:assets%2Fimages%2Fstorymenu%2Fweek3.pngR0i7148R1y5:IMAGER3R14R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek2.pngR0i6517R1R15R3R16R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek0.pngR0i7056R1R15R3R17R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek1.pngR0i6261R1R15R3R18R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek5.pngR0i6440R1R15R3R19R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek4.pngR0i6262R1R15R3R20R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek6.pngR0i6998R1R15R3R21R6tgoR13y28:assets%2Fimages%2FmenuBG.pngR0i620342R1R15R3R22R6tgoR13y26:assets%2Fimages%2Fnum4.pngR0i3989R1R15R3R23R6tgoR13y26:assets%2Fimages%2Fnum5.pngR0i4113R1R15R3R24R6tgoR13y26:assets%2Fimages%2Fnum7.pngR0i3692R1R15R3R25R6tgoR13y26:assets%2Fimages%2Fnum6.pngR0i4181R1R15R3R26R6tgoR13y26:assets%2Fimages%2Fnum2.pngR0i3990R1R15R3R27R6tgoR13y44:assets%2Fimages%2Fgolden%2Fui%2FuiBorder.pngR0i203R1R15R3R28R6tgoR13y52:assets%2Fimages%2Fgolden%2Fui%2FhealthBarOverlay.pngR0i331R1R15R3R29R6tgoR13y50:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2Fgo.pngR0i13831R1R15R3R30R6tgoR13y49:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2F2.pngR0i7823R1R15R3R31R6tgoR13y49:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2F3.pngR0i9226R1R15R3R32R6tgoR13y49:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2F1.pngR0i5893R1R15R3R33R6tgoR13y43:assets%2Fimages%2Fgolden%2Fui%2FtimeBar.pngR0i235R1R15R3R34R6tgoR13y45:assets%2Fimages%2Fgolden%2Fui%2FhealthBar.pngR0i290R1R15R3R35R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FBEVEL_NOTES.pngR0i9853R1R15R3R36R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FBEVEL_NOTES.xmlR0i1798R1y4:TEXTR3R37R6tgoR13y53:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets_3D.xmlR0i5205R1R38R3R39R6tgoR13y53:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets_3D.pngR0i666393R1R15R3R40R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2Fbevel_splash.xmlR0i2719R1R38R3R41R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2Fbevel_splash.pngR0i15211R1R15R3R42R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets.pngR0i561216R1R15R3R43R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets.xmlR0i7178R1R38R3R44R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2FnoteSplashes.xmlR0i1596R1R38R3R45R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2FnoteSplashes.pngR0i219186R1R15R3R46R6tgoR13y48:assets%2Fimages%2Fgolden%2Fnotes%2Fsplash_3d.pngR0i63270R1R15R3R47R6tgoR13y48:assets%2Fimages%2Fgolden%2Fnotes%2Fsplash_3d.xmlR0i4823R1R38R3R48R6tgoR13y52:assets%2Fimages%2Fgolden%2Fnotes%2Fawesome_notes.pngR0i83950R1R15R3R49R6tgoR13y52:assets%2Fimages%2Fgolden%2Fnotes%2Fawesome_notes.xmlR0i8003R1R38R3R50R6tgoR13y49:assets%2Fimages%2Fgolden%2Fnotes%2Fbevel_ends.xmlR0i670R1R38R3R51R6tgoR13y49:assets%2Fimages%2Fgolden%2Fnotes%2Fbevel_ends.pngR0i1481R1R15R3R52R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FbreadyNotes.pngR0i387393R1R15R3R53R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FbreadyNotes.xmlR0i7931R1R38R3R54R6tgoR13y61:assets%2Fimages%2Fgolden%2Fmenu%2Ftransition%2Ftransition.pngR0i28278R1R15R3R55R6tgoR13y72:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2FtitleFellows%2Fbandu.pngR0i432446R1R15R3R56R6tgoR13y72:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2FtitleFellows%2Fbandu.xmlR0i2899R1R38R3R57R6tgoR13y63:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2FdarkChecker.pngR0i149R1R15R3R58R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2Flogo.pngR0i82258R1R15R3R59R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2Fsopar_text.xmlR0i4934R1R38R3R60R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2Fsopar_text.pngR0i1449202R1R15R3R61R6tgoR13y75:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Forthogonal%2Ficon.pngR0i258865R1R15R3R62R6tgoR13y77:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Forthogonal%2Fheader.pngR0i45705R1R15R3R63R6tgoR13y73:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Forthogonal%2Fbg.pngR0i202995R1R15R3R64R6tgoR13y75:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2Ficon.pngR0i326259R1R15R3R65R6tgoR13y77:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2Fheader.pngR0i12093R1R15R3R66R6tgoR13y82:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2FsongPreview.pngR0i168958R1R15R3R67R6tgoR13y73:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2Fbg.pngR0i861461R1R15R3R68R6tgoR13y76:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2Ficon.pngR0i910457R1R15R3R69R6tgoR13y78:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2Fheader.pngR0i17253R1R15R3R70R6tgoR13y83:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2FsongPreview.pngR0i174673R1R15R3R71R6tgoR13y74:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2Fbg.pngR0i1170366R1R15R3R72R6tgoR13y93:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2FsongPreview_complete.pngR0i357300R1R15R3R73R6tgoR13y77:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2Ficon.pngR0i708048R1R15R3R74R6tgoR13y79:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2Fheader.pngR0i22174R1R15R3R75R6tgoR13y84:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2FsongPreview.pngR0i178512R1R15R3R76R6tgoR13y75:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2Fbg.pngR0i178626R1R15R3R77R6tgoR13y90:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2FsongPreview_complete.pngR0i261035R1R15R3R78R6tgoR13y74:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2Ficon.pngR0i38964R1R15R3R79R6tgoR13y76:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2Fheader.pngR0i11563R1R15R3R80R6tgoR13y81:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2FsongPreview.pngR0i87336R1R15R3R81R6tgoR13y72:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2Fbg.pngR0i565038R1R15R3R82R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fchalkboard.pngR0i46302R1R15R3R83R6tgoR13y59:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fcudroid.pngR0i463377R1R15R3R84R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fbiorange.pngR0i403587R1R15R3R85R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fvio.pngR0i213111R1R15R3R86R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FSmeekles.pngR0i670164R1R15R3R87R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fbubbscadex.pngR0i109865R1R15R3R88R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FCid.pngR0i47673R1R15R3R89R6tgoR13y64:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fexorcistgold.pngR0i502774R1R15R3R90R6tgoR13y63:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fbaldilord64.pngR0i480724R1R15R3R91R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fcleoarty.pngR0i241191R1R15R3R92R6tgoR13y59:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fzevisly.pngR0i239645R1R15R3R93R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fwick.pngR0i120994R1R15R3R94R6tgoR13y54:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FTy.pngR0i199739R1R15R3R95R6tgoR13y69:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FTallsAnimationTAF.pngR0i201648R1R15R3R96R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fdoo.pngR0i57073R1R15R3R97R6tgoR13y58:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FHarvey.pngR0i178777R1R15R3R98R6tgoR13y64:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fsamualcheese.pngR0i458670R1R15R3R99R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fseth.pngR0i127660R1R15R3R100R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2FcheckeredBG.pngR0i423R1R15R3R101R6tgoR13y57:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fgradient.pngR0i63026R1R15R3R102R6tgoR13y66:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FSettings.pngR0i16351R1R15R3R103R6tgoR13y63:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FLinks.pngR0i13691R1R15R3R104R6tgoR13y65:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FCredits.pngR0i26321R1R15R3R105R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FPlay.pngR0i19101R1R15R3R106R6tgoR13y69:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fblack_border_overlay.pngR0i111R1R15R3R107R6tgoR13y57:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Felectric.xmlR0i13228R1R38R3R108R6tgoR13y57:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Felectric.pngR0i79183R1R15R3R109R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2FBottom.pngR0i6280R1R15R3R110R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbuttons.xmlR0i3354R1R38R3R111R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbuttons.pngR0i27595R1R15R3R112R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2FToppom.pngR0i3261R1R15R3R113R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf_potato.pngR0i2750120R1R15R3R114R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf_potato.xmlR0i26042R1R38R3R115R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf_potato.xmlR0i11114R1R38R3R116R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf_potato.pngR0i1713304R1R15R3R117R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf.xmlR0i11114R1R38R3R118R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf.pngR0i3152226R1R15R3R119R6tgoR13y51:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead.pngR0i1263283R1R15R3R120R6tgoR13y51:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead.xmlR0i6158R1R38R3R121R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf.xmlR0i26042R1R38R3R122R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf.pngR0i6529446R1R15R3R123R6tgoR13y58:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead_potato.xmlR0i6158R1R38R3R124R6tgoR13y58:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead_potato.pngR0i598561R1R15R3R125R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2F3d-bf.pngR0i5508R1R15R3R126R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fbadai.pngR0i6570R1R15R3R127R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fgf.pngR0i5432R1R15R3R128R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Finspicable.pngR0i6797R1R15R3R129R6tgoR13y55:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fdave.pngR0i3271R1R15R3R130R6tgoR13y67:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fdave-frustration.pngR0i7963R1R15R3R131R6tgoR13y58:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fjunkers.pngR0i3905R1R15R3R132R6tgoR13y55:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fface.pngR0i2959R1R15R3R133R6tgoR13y74:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Funfair-expunged-forward.pngR0i16340R1R15R3R134R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fbandu.pngR0i5862R1R15R3R135R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fdave-decimated.pngR0i15982R1R15R3R136R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fbf.pngR0i5815R1R15R3R137R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Fmg.pngR0i25187R1R15R3R138R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Ffries.pngR0i6266R1R15R3R139R6tgoR13y57:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Fphones.pngR0i158733R1R15R3R140R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Fbg.pngR0i322926R1R15R3R141R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst_potato.pngR0i1949693R1R15R3R142R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst_potato.xmlR0i48616R1R38R3R143R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst.pngR0i1356106R1R15R3R144R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst.xmlR0i48616R1R38R3R145R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy.pngR0i874647R1R15R3R146R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy.xmlR0i8049R1R38R3R147R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi.pngR0i1136169R1R15R3R148R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi.xmlR0i47561R1R38R3R149R6tgoR13y71:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap_potato.xmlR0i50350R1R38R3R150R6tgoR13y71:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap_potato.pngR0i1810011R1R15R3R151R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy_potato.pngR0i1021910R1R15R3R152R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy_potato.xmlR0i8049R1R38R3R153R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad.pngR0i274474R1R15R3R154R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad.xmlR0i25415R1R38R3R155R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_potato.pngR0i776449R1R15R3R156R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_potato.xmlR0i12422R1R38R3R157R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra_potato.xmlR0i19808R1R38R3R158R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra_potato.pngR0i2604569R1R15R3R159R6tgoR13y64:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap.xmlR0i50350R1R38R3R160R6tgoR13y64:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap.pngR0i1220343R1R15R3R161R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi_potato.xmlR0i47561R1R38R3R162R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi_potato.pngR0i2258904R1R15R3R163R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu.pngR0i366915R1R15R3R164R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu.xmlR0i12422R1R38R3R165R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra.xmlR0i19808R1R38R3R166R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad_potato.xmlR0i25415R1R38R3R167R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad_potato.pngR0i666177R1R15R3R168R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra.pngR0i5372875R1R15R3R169R6tgoR13y26:assets%2Fimages%2Fnum3.pngR0i4022R1R15R3R170R6tgoR13y26:assets%2Fimages%2Fnum1.pngR0i3390R1R15R3R171R6tgoR13y37:assets%2Fimages%2Fnewgrounds_logo.pngR0i57747R1R15R3R172R6tgoR13y26:assets%2Fimages%2Fnum0.pngR0i3738R1R15R3R173R6tgoR13y30:assets%2Fimages%2Falphabet.xmlR0i39069R1R38R3R174R6tgoR13y30:assets%2Fimages%2Falphabet.pngR0i139836R1R15R3R175R6tgoR13y26:assets%2Fimages%2Flogo.pngR0i86924R1R15R3R176R6tgoR13y35:assets%2Fimages%2FmenuBGMagenta.pngR0i553468R1R15R3R177R6tgoR13y32:assets%2Fimages%2FlogoBumpin.pngR0i592724R1R15R3R178R6tgoR13y32:assets%2Fimages%2FlogoBumpin.xmlR0i2177R1R38R3R179R6tgoR13y26:assets%2Fimages%2Fnum8.pngR0i3914R1R15R3R180R6tgoR13y26:assets%2Fimages%2Fnum9.pngR0i3687R1R15R3R181R6tgoR13y45:assets%2Fimages%2Fcampaign_menu_UI_assets.pngR0i27171R1R15R3R182R6tgoR13y45:assets%2Fimages%2Fcampaign_menu_UI_assets.xmlR0i1893R1R38R3R183R6tgoR13y32:assets%2Fimages%2FmenuBGBlue.pngR0i614586R1R15R3R184R6tgoR13y42:assets%2Fimages%2FFNF_main_menu_assets.pngR0i281298R1R15R3R185R6tgoR13y42:assets%2Fimages%2FFNF_main_menu_assets.xmlR0i4755R1R38R3R186R6tgoR13y32:assets%2Fimages%2FtitleEnter.xmlR0i4875R1R38R3R187R6tgoR13y31:assets%2Fimages%2FmenuDesat.pngR0i357911R1R15R3R188R6tgoR13y32:assets%2Fimages%2FtitleEnter.pngR0i1449202R1R15R3R189R6tgoR0i17762R1R2R3y32:assets%2Fsounds%2FcancelMenu.mp3R5aR190hR6tgoR0i22403R1R2R3y62:assets%2Fsounds%2Fgolden%2Fcountdown%2Fawesomeson%2Fintro2.mp3R5aR191hR6tgoR0i22403R1R2R3y62:assets%2Fsounds%2Fgolden%2Fcountdown%2Fawesomeson%2Fintro3.mp3R5aR192hR6tgoR0i22403R1R2R3y62:assets%2Fsounds%2Fgolden%2Fcountdown%2Fawesomeson%2Fintro1.mp3R5aR193hR6tgoR0i22403R1R2R3y63:assets%2Fsounds%2Fgolden%2Fcountdown%2Fawesomeson%2FintroGo.mp3R5aR194hR6tgoR0i12773R1R2R3y49:assets%2Fsounds%2Fgolden%2Fcountdown%2Fintro2.mp3R5aR195hR6tgoR0i8857R1R2R3y49:assets%2Fsounds%2Fgolden%2Fcountdown%2Fintro3.mp3R5aR196hR6tgoR0i12458R1R2R3y49:assets%2Fsounds%2Fgolden%2Fcountdown%2Fintro1.mp3R5aR197hR6tgoR0i11536R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fbandu%2Fintro2.mp3R5aR198hR6tgoR0i11954R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fbandu%2Fintro3.mp3R5aR199hR6tgoR0i13626R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fbandu%2Fintro1.mp3R5aR200hR6tgoR0i8611R1R2R3y58:assets%2Fsounds%2Fgolden%2Fcountdown%2Fbandu%2FintroGo.mp3R5aR201hR6tgoR0i8441R1R2R3y56:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2Fintro2.mp3R5aR202hR6tgoR0i7317R1R2R3y56:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2Fintro3.mp3R5aR203hR6tgoR0i6198R1R2R3y56:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2Fintro1.mp3R5aR204hR6tgoR0i7500R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2FintroGo.mp3R5aR205hR6tgoR0i7555R1R2R3y50:assets%2Fsounds%2Fgolden%2Fcountdown%2FintroGo.mp3R5aR206hR6tgoR0i91950R1R2R3y33:assets%2Fsounds%2FconfirmMenu.mp3R5aR207hR6tgoR0i17762R1R2R3y32:assets%2Fsounds%2FscrollMenu.mp3R5aR208hR6tgoR0i245600R1y4:FONTy9:classNamey38:__ASSET__assets_fonts_comic_normal_ttfR3y33:assets%2Ffonts%2Fcomic_normal.ttfR6tgoR0i229408R1R209R210y31:__ASSET__assets_fonts_comic_ttfR3y26:assets%2Ffonts%2Fcomic.ttfR6tgoR13y52:assets%2Fdata%2Fleft-unchecked%2Fleft-unchecked.jsonR0i38561R1R38R3R215R6tgoR13y34:assets%2Fdata%2Fdata-goes-here.txtR0zR1R38R3R216R6tgoR13y40:assets%2Fdata%2Fgalactic%2Fgalactic.jsonR0i17308R1R38R3R217R6tgoR13y60:assets%2Fdata%2Fthe-boopadoop-song%2Fthe-boopadoop-song.jsonR0i2500R1R38R3R218R6tgoR13y44:assets%2Fdata%2Fstrawberry%2Fstrawberry.jsonR0i24616R1R38R3R219R6tgoR13y44:assets%2Fdata%2Fapprentice%2Fapprentice.jsonR0i50612R1R38R3R220R6tgoR13y40:assets%2Fdata%2Fdynamics%2Fdynamics.jsonR0i120012R1R38R3R221R6tgoR13y58:assets%2Fdata%2Frecovered-project%2Frecovered-project.jsonR0i46383R1R38R3R222R6tgoR13y29:assets%2Fdata%2Fmain-view.xmlR0i123R1R38R3R223R6tgoR13y46:assets%2Fdata%2Fsick-tricks%2Fsick-tricks.jsonR0i18622R1R38R3R224R6tgoR13y32:assets%2Fdata%2Fnice%2Fnice.jsonR0i252050R1R38R3R225R6tgoR13y46:assets%2Fdata%2Fdeformation%2Fdeformation.jsonR0i90256R1R38R3R226R6tgoR13y36:assets%2Fdata%2Fslices%2Fslices.jsonR0i37818R1R38R3R227R6tgoR13y42:assets%2Fdata%2Falternate%2Falternate.jsonR0i21837R1R38R3R228R6tgoR13y30:assets%2Fdata%2Fnft%2Fnft.jsonR0i43569R1R38R3R229R6tgoR13y34:assets%2Fdata%2Fkooky%2Fkooky.jsonR0i80683R1R38R3R230R6tgoR13y30:assets%2Fdata%2Faug%2Faug.jsonR0i20014R1R38R3R231R6tgoR13y29:assets%2Fdata%2FintroText.txtR0i1260R1R38R3R232R6tgoR13y42:assets%2Fdata%2Ftoo-shiny%2Ftoo-shiny.jsonR0i26702R1R38R3R233R6tgoR13y38:assets%2Fdata%2Fticking%2Fticking.jsonR0i38655R1R38R3R234R6tgoR13y42:assets%2Fdata%2Flofthouse%2Flofthouse.jsonR0i50661R1R38R3R235R6tgoR13y33:assets%2Fdata%2FspecialThanks.txtR0i300R1R38R3R236R6tgoR13y38:assets%2Fdata%2Fpiehole%2Fpiehole.jsonR0i81700R1R38R3R237R6tgoR13y44:assets%2Fdata%2Forthogonal%2Forthogonal.jsonR0i127054R1R38R3R238R6tgoR13y32:assets%2Fdata%2Fdale%2Fdale.jsonR0i43441R1R38R3R239R6tgoR13y44:assets%2Fdata%2Fready-loud%2Fready-loud.jsonR0i34408R1R38R3R240R6tgoR13y46:assets%2Fdata%2Fgolden%2Fremaining-extras.jsonR0i2046R1R38R3R241R6tgoR13y45:assets%2Fdata%2Fgolden%2Fnotes%2Fawesome.jsonR0i431R1R38R3R242R6tgoR13y40:assets%2Fdata%2Fgolden%2Fnotes%2F3d.jsonR0i667R1R38R3R243R6tgoR13y43:assets%2Fdata%2Fgolden%2Fnotes%2Fbevel.jsonR0i178R1R38R3R244R6tgoR13y45:assets%2Fdata%2Fgolden%2Fnotes%2Fdefault.jsonR0i1028R1R38R3R245R6tgoR13y44:assets%2Fdata%2Fgolden%2Fnotes%2Fbready.jsonR0i374R1R38R3R246R6tgoR13y44:assets%2Fdata%2Fgolden%2Fmenu%2Fcredits.jsonR0i940R1R38R3R247R6tgoR13y50:assets%2Fdata%2Fgolden%2Fshaders%2FWavyShader.fragR0i1316R1R38R3R248R6tgoR13y52:assets%2Fdata%2Fgolden%2Fcharacters%2Fbf-bounds.jsonR0i22224R1R38R3R249R6tgoR13y57:assets%2Fdata%2Fgolden%2Fapplecore%2Fsecondary-bambi.jsonR0i46074R1R38R3R250R6tgoR13y50:assets%2Fdata%2Fgolden%2Fapplecore%2Fsubtitles.srtR0i1683R1R38R3R251R6tgoR13y78:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Funfair-expunged-forward.jsonR0i688R1R38R3R252R6tgoR13y66:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu-first.jsonR0i1784R1R38R3R253R6tgoR13y60:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu.jsonR0i819R1R38R3R254R6tgoR13y64:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu-sad.jsonR0i1363R1R38R3R255R6tgoR13y71:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fdisruption-bambi.jsonR0i1527R1R38R3R256R6tgoR13y44:assets%2Fdata%2Finspicable%2Finspicable.jsonR0i41973R1R38R3R257R6tgoR13y58:assets%2Fdata%2Ffresh-and-toasted%2Ffresh-and-toasted.jsonR0i51291R1R38R3R258R6tgoR13y42:assets%2Fdata%2Fwireframe%2Fwireframe.jsonR0i43383R1R38R3R259R6tgoR13y40:assets%2Fdata%2Funhinged%2Funhinged.jsonR0i42823R1R38R3R260R6tgoR13y42:assets%2Fdata%2Fgift-card%2Fgift-card.jsonR0i49357R1R38R3R261R6tgoR13y36:assets%2Fdata%2Fwheels%2Fwheels.jsonR0i33645R1R38R3R262R6tgoR13y36:assets%2Fdata%2FfreeplaySonglist.txtR0i10R1R38R3R263R6tgoR13y32:assets%2Fdata%2Fcell%2Fcell.jsonR0i54396R1R38R3R264R6tgoR13y28:assets%2Fdata%2Fcontrols.txtR0i324R1R38R3R265R6tgoR13y46:assets%2Fdata%2Ffrustration%2Ffrustration.jsonR0i79278R1R38R3R266R6tgoR13y50:assets%2Fdata%2Froupiniphobia%2Froupiniphobia.jsonR0i919707R1R38R3R267R6tgoR13y42:assets%2Fdata%2Fferocious%2Fferocious.jsonR0i238742R1R38R3R268R6tgoR13y52:assets%2Fdata%2Fthe-big-dingle%2Fthe-big-dingle.jsonR0i24539R1R38R3R269R6tgoR13y40:assets%2Fdata%2Ftantalum%2Ftantalum.jsonR0i47979R1R38R3R270R6tgoR13y32:assets%2Fdata%2Fmine%2Fmine.jsonR0i38921R1R38R3R271R6tgoR13y44:assets%2Fdata%2Fdisability%2Fdisability.jsonR0i58977R1R38R3R272R6tgoR13y34:assets%2Fdata%2Fhouse%2Fhouse.jsonR0i36148R1R38R3R273R6tgoR13y44:assets%2Fdata%2Fsugar-rush%2Fsugar-rush.jsonR0i32555R1R38R3R274R6tgoR13y40:assets%2Fdata%2Fdoughboy%2Fdoughboy.jsonR0i30739R1R38R3R275R6tgoR13y42:assets%2Fdata%2Fenforcers%2Fenforcers.jsonR0i20507R1R38R3R276R6tgoR13y40:assets%2Fdata%2Fsunshine%2Fsunshine.jsonR0i411384R1R38R3R277R6tgoR13y76:assets%2Fdata%2Fdave-x-bambi-shipping-cute%2Fdave-x-bambi-shipping-cute.jsonR0i22659R1R38R3R278R6tgoR13y50:assets%2Fdata%2Fbedtime-bumps%2Fbedtime-bumps.jsonR0i16241R1R38R3R279R6tgoR13y36:assets%2Fdata%2Forigin%2Forigin.jsonR0i15725R1R38R3R280R6tgoR13y48:assets%2Fdata%2Ftunnelvision%2Ftunnelvision.jsonR0i124949R1R38R3R281R6tgoR13y28:assets%2Fdata%2Fog%2Fog.jsonR0i124971R1R38R3R282R6tgoR13y38:assets%2Fdata%2Fsillier%2Fsillier.jsonR0i27687R1R38R3R283R6tgoR13y34:assets%2Fdata%2Fnutty%2Fnutty.jsonR0i35817R1R38R3R284R6tgoR13y44:assets%2Fdata%2Fdisruption%2Fdisruption.jsonR0i63010R1R38R3R285R6tgoR13y34:assets%2Fdata%2Ftheft%2Ftheft.jsonR0i24147R1R38R3R286R6tgoR13y48:assets%2Fdata%2Fthunderstorm%2Fthunderstorm.jsonR0i47233R1R38R3R287R6tgoR13y33:assets%2Fdata%2FcharacterList.txtR0i89R1R38R3R288R6tgoR13y38:assets%2Fdata%2Fpoopers%2Fpoopers.jsonR0i70218R1R38R3R289R6tgoR13y40:assets%2Fdata%2Fkeyboard%2Fkeyboard.jsonR0i37268R1R38R3R290R6tgoR13y38:assets%2Fdata%2Falgebra%2Falgebra.jsonR0i175346R1R38R3R291R6tgoR13y38:assets%2Fdata%2Fresumed%2Fresumed.jsonR0i43258R1R38R3R292R6tgoR13y40:assets%2Fdata%2Fbookworm%2Fbookworm.jsonR0i33174R1R38R3R293R6tgoR13y42:assets%2Fdata%2Fcollision%2Fcollision.jsonR0i77352R1R38R3R294R6tgoR13y40:assets%2Fdata%2Fcuberoot%2Fcuberoot.jsonR0i42421R1R38R3R295R6tgoR13y42:assets%2Fdata%2Fapplecore%2Fapplecore.jsonR0i77355R1R38R3R296R6tgoR13y52:assets%2Fdata%2Fcooking-lesson%2Fcooking-lesson.jsonR0i54523R1R38R3R297R6tgoR13y41:assets%2Fvideos%2Fgolden%2FPizzaVideo.mp4R0i18210431R1y6:BINARYR3R298goR13y50:assets%2Fvideos%2Fgolden%2Ftunnelvision%2Fmask.mp4R0i5769684R1R299R3R300goR13y55:assets%2Fvideos%2Fgolden%2Ftunnelvision%2Fred_blobs.mp4R0i11119130R1R299R3R301goR13y48:mods%2FintroMod%2F_append%2Fdata%2FintroText.txtR0i20R1R38R3R302goR13y17:mods%2Freadme.txtR0i90R1R38R3R303goR13y18:mods%2FmodList.txtR0i8R1R38R3R304goR13y21:do%20NOT%20readme.txtR0i4326R1R38R3R305R6tgoR13y13:changelog.txtR0i7730R1R38R3R306R6tgoR0i75864R1R209R210y29:__ASSET__assets_fonts_vcr_ttfR3y24:assets%2Ffonts%2Fvcr.ttfR6tgoR13y34:assets%2Ffonts%2Ffonts-go-here.txtR0zR1R38R3R309R6tgoR0i14656R1R209R210y31:__ASSET__assets_fonts_pixel_otfR3y26:assets%2Ffonts%2Fpixel.otfR6tgoR0i39706R1R2R3y28:flixel%2Fsounds%2Fflixel.mp3R5aR312y28:flixel%2Fsounds%2Fflixel.ogghR6tgoR0i2114R1R2R3y26:flixel%2Fsounds%2Fbeep.mp3R5aR314y26:flixel%2Fsounds%2Fbeep.ogghR6tgoR0i5794R1y5:SOUNDR3R315R5aR314R315hgoR0i33629R1R316R3R313R5aR312R313hgoR0i15744R1R209R210y35:__ASSET__flixel_fonts_nokiafc22_ttfR3y30:flixel%2Ffonts%2Fnokiafc22.ttfR6tgoR0i29724R1R209R210y36:__ASSET__flixel_fonts_monsterrat_ttfR3y31:flixel%2Ffonts%2Fmonsterrat.ttfR6tgoR13y33:flixel%2Fimages%2Fui%2Fbutton.pngR0i519R1R15R3R321R6tgoR13y36:flixel%2Fimages%2Flogo%2Fdefault.pngR0i3280R1R15R3R322R6tgoR13y44:flixel%2Fflixel-ui%2Fimg%2Fdropdown_mark.pngR0i86R1R15R3R323R6tgoR13y40:flixel%2Fflixel-ui%2Fimg%2Fplus_mark.pngR0i83R1R15R3R324R6tgoR13y36:flixel%2Fflixel-ui%2Fimg%2Fradio.pngR0i108R1R15R3R325R6tgoR13y48:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_left.pngR0i222R1R15R3R326R6tgoR13y42:flixel%2Fflixel-ui%2Fimg%2Fbutton_thin.pngR0i118R1R15R3R327R6tgoR13y34:flixel%2Fflixel-ui%2Fimg%2Ftab.pngR0i106R1R15R3R328R6tgoR13y41:flixel%2Fflixel-ui%2Fimg%2Ffinger_big.pngR0i1337R1R15R3R329R6tgoR13y36:flixel%2Fflixel-ui%2Fimg%2Finvis.pngR0i72R1R15R3R330R6tgoR13y43:flixel%2Fflixel-ui%2Fimg%2Fchrome_inset.pngR0i102R1R15R3R331R6tgoR13y44:flixel%2Fflixel-ui%2Fimg%2Ftooltip_arrow.pngR0i176R1R15R3R332R6tgoR13y49:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_right.pngR0i238R1R15R3R333R6tgoR13y40:flixel%2Fflixel-ui%2Fimg%2Fradio_dot.pngR0i81R1R15R3R334R6tgoR13y37:flixel%2Fflixel-ui%2Fimg%2Fchrome.pngR0i135R1R15R3R335R6tgoR13y40:flixel%2Fflixel-ui%2Fimg%2Fcheck_box.pngR0i101R1R15R3R336R6tgoR13y44:flixel%2Fflixel-ui%2Fimg%2Fbutton_toggle.pngR0i254R1R15R3R337R6tgoR13y46:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_up.pngR0i227R1R15R3R338R6tgoR13y41:flixel%2Fflixel-ui%2Fimg%2Fminus_mark.pngR0i77R1R15R3R339R6tgoR13y42:flixel%2Fflixel-ui%2Fimg%2Fchrome_flat.pngR0i124R1R15R3R340R6tgoR13y37:flixel%2Fflixel-ui%2Fimg%2Fswatch.pngR0i94R1R15R3R341R6tgoR13y43:flixel%2Fflixel-ui%2Fimg%2Fchrome_light.pngR0i118R1R15R3R342R6tgoR13y38:flixel%2Fflixel-ui%2Fimg%2Fhilight.pngR0i74R1R15R3R343R6tgoR13y41:flixel%2Fflixel-ui%2Fimg%2Fcheck_mark.pngR0i97R1R15R3R344R6tgoR13y39:flixel%2Fflixel-ui%2Fimg%2Ftab_back.pngR0i111R1R15R3R345R6tgoR13y34:flixel%2Fflixel-ui%2Fimg%2Fbox.pngR0i75R1R15R3R346R6tgoR13y43:flixel%2Fflixel-ui%2Fimg%2Ffinger_small.pngR0i157R1R15R3R347R6tgoR13y37:flixel%2Fflixel-ui%2Fimg%2Fbutton.pngR0i211R1R15R3R348R6tgoR13y48:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_down.pngR0i216R1R15R3R349R6tgoR13y44:flixel%2Fflixel-ui%2Fxml%2Fdefault_popup.xmlR0i1848R1R38R3R350R6tgoR13y53:flixel%2Fflixel-ui%2Fxml%2Fdefault_loading_screen.xmlR0i1953R1R38R3R351R6tgoR13y39:flixel%2Fflixel-ui%2Fxml%2Fdefaults.xmlR0i1263R1R38R3R352R6tgoR13y20:manifest.webmanifestR0i239R1R38R3R353gh\",\"rootPath\":null,\"version\":2,\"libraryArgs\":[],\"libraryType\":null}";
 	var manifest = lime_utils_AssetManifest.parse(data,ManifestResources.rootPath);
 	var library = lime_utils_AssetLibrary.fromManifest(manifest);
 	lime_utils_Assets.registerLibrary("default",library);
@@ -32256,9 +35302,7 @@ var MenuCharacter = function(x,character) {
 	}
 	flixel_FlxSprite.call(this,x);
 	this.character = character;
-	var library = null;
-	var potatoKey = "campaign_menu_UI_characters" + "_potato";
-	var tex = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "campaign_menu_UI_characters" + ".png","IMAGE",library),Paths.getPath("images/" + "campaign_menu_UI_characters" + ".xml","TEXT",library));
+	var tex = Paths.getSparrowAtlas("campaign_menu_UI_characters");
 	this.set_frames(tex);
 	this.animation.addByPrefix("bf","BF idle dance white",24);
 	this.animation.addByPrefix("bfConfirm","BF HEY!!",24,false);
@@ -32477,7 +35521,7 @@ var Note = function(strumTime,noteData,prevNote,sustainNote,skin,stepDuration) {
 	this.sustainRoot = sustainNote ? prevNote.isSustainNote ? prevNote.sustainRoot : prevNote : this;
 	this.set_x(this.x + GoldenNoteGeometry.laneInset(flixel_FlxG.width,Note.swagWidth));
 	this.set_y(this.y - 2000);
-	this.strumTime = strumTime + Conductor.validOffset(flixel_FlxG.save.data.offset);
+	this.strumTime = strumTime + GoldenPlayback.offset();
 	this.sustainStart = sustainNote ? prevNote.strumTime : this.strumTime;
 	this.noteData = noteData;
 	this.set_frames(GoldenNoteSkin.frames(skin));
@@ -32793,7 +35837,7 @@ Note.prototype = $extend(flixel_FlxSprite.prototype,{
 });
 var OptionsMenu = function(TransIn,TransOut) {
 	this.lastTouch = false;
-	this.descriptions = ["Choose WASD or DFJK. Arrow keys work with either layout.","Allow empty presses without a miss penalty.","Move notes toward receptors at the bottom of the screen.","Show the accuracy percentage in the song HUD.","Adjust the note timing offset in milliseconds. Left / Right: 1 ms; Shift: 10 ms.","Potato sprites, rigid choppy hold notes, and reduced visual effects for a very low GPU load.","Touch buttons and a centered player note field. Turn off to restore the standard layout.","Browse saved replays."];
+	this.descriptions = ["Choose WASD or DFJK. Arrow keys work with either layout.","Allow empty presses without a miss penalty.","Move notes toward receptors at the bottom of the screen.","Show the accuracy percentage in the song HUD.","Adjust the note timing offset in milliseconds. Left / Right: 1 ms; Shift: 10 ms.","Change song speed and pitch. Left / Right: 0.05x. R: reset to 1.00x.","Potato sprites, rigid choppy hold notes, and reduced visual effects for a very low GPU load.","Touch buttons and a centered player note field. Turn off to restore the standard layout.","Browse saved replays."];
 	this.labels = [];
 	this.selected = 0;
 	this.inputDelay = 0.25;
@@ -32819,38 +35863,15 @@ OptionsMenu.prototype = $extend(MusicBeatState.prototype,{
 		var title = new flixel_text_FlxText(75,28,1130,"Settings",48);
 		title.setFormat("assets/fonts/" + "comic.ttf",48,-1,"left",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
 		this.add(title);
-		var text = new flixel_text_FlxText(90,135,1100,"",30);
-		text.setFormat("assets/fonts/" + "comic.ttf",30,-1,"left",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
-		this.labels.push(text);
-		this.add(text);
-		var text = new flixel_text_FlxText(90,195,1100,"",30);
-		text.setFormat("assets/fonts/" + "comic.ttf",30,-1,"left",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
-		this.labels.push(text);
-		this.add(text);
-		var text = new flixel_text_FlxText(90,255,1100,"",30);
-		text.setFormat("assets/fonts/" + "comic.ttf",30,-1,"left",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
-		this.labels.push(text);
-		this.add(text);
-		var text = new flixel_text_FlxText(90,315,1100,"",30);
-		text.setFormat("assets/fonts/" + "comic.ttf",30,-1,"left",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
-		this.labels.push(text);
-		this.add(text);
-		var text = new flixel_text_FlxText(90,375,1100,"",30);
-		text.setFormat("assets/fonts/" + "comic.ttf",30,-1,"left",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
-		this.labels.push(text);
-		this.add(text);
-		var text = new flixel_text_FlxText(90,435,1100,"",30);
-		text.setFormat("assets/fonts/" + "comic.ttf",30,-1,"left",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
-		this.labels.push(text);
-		this.add(text);
-		var text = new flixel_text_FlxText(90,495,1100,"",30);
-		text.setFormat("assets/fonts/" + "comic.ttf",30,-1,"left",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
-		this.labels.push(text);
-		this.add(text);
-		var text = new flixel_text_FlxText(90,555,1100,"",30);
-		text.setFormat("assets/fonts/" + "comic.ttf",30,-1,"left",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
-		this.labels.push(text);
-		this.add(text);
+		var _g = 0;
+		var _g1 = this.descriptions.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var text = new flixel_text_FlxText(90,130 + i * 54,1100,"",30);
+			text.setFormat("assets/fonts/" + "comic.ttf",30,-1,"left",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
+			this.labels.push(text);
+			this.add(text);
+		}
 		this.description = new flixel_text_FlxText(75,635,1130,"",18);
 		this.description.setFormat("assets/fonts/" + "comic_normal.ttf",18,-1,"left",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
 		this.add(this.description);
@@ -32859,7 +35880,7 @@ OptionsMenu.prototype = $extend(MusicBeatState.prototype,{
 	}
 	,refresh: function() {
 		this.lastTouch = GoldenMobileControls.enabled;
-		var values = ["Keys: " + (flixel_FlxG.save.data.dfjk ? "DFJK" : "WASD") + " + Arrow keys","Ghost tapping: " + (flixel_FlxG.save.data.newInput ? "On" : "Off"),"Scroll: " + (flixel_FlxG.save.data.downscroll ? "Downscroll" : "Upscroll"),"Accuracy: " + (flixel_FlxG.save.data.accuracyDisplay ? "On" : "Off"),"Offset: " + Conductor.validOffset(flixel_FlxG.save.data.offset) + " ms","Super low quality: " + (GoldenQuality.superLow ? "On" : "Off"),"Mobile controls: " + (GoldenMobileControls.enabled ? "On" : "Off"),"Load replays"];
+		var values = ["Keys: " + (flixel_FlxG.save.data.dfjk ? "DFJK" : "WASD") + " + Arrow keys","Ghost tapping: " + (flixel_FlxG.save.data.newInput ? "On" : "Off"),"Scroll: " + (flixel_FlxG.save.data.downscroll ? "Downscroll" : "Upscroll"),"Accuracy: " + (flixel_FlxG.save.data.accuracyDisplay ? "On" : "Off"),"Offset: " + Conductor.validOffset(flixel_FlxG.save.data.offset) + " ms","Playback rate: " + GoldenPlayback.label(GoldenPlayback.setting()),"Super low quality: " + (GoldenQuality.superLow ? "On" : "Off"),"Mobile controls: " + (GoldenMobileControls.enabled ? "On" : "Off"),"Load replays"];
 		var _g = 0;
 		var _g1 = this.labels.length;
 		while(_g < _g1) {
@@ -32892,12 +35913,15 @@ OptionsMenu.prototype = $extend(MusicBeatState.prototype,{
 			flixel_FlxG.save.data.offset = tmp + delta * tmp1;
 			break;
 		case 5:
-			GoldenQuality.toggle();
+			GoldenPlayback.setSetting(GoldenPlayback.setting() + delta * .05);
 			break;
 		case 6:
-			GoldenMobileControls.setEnabled(!GoldenMobileControls.enabled);
+			GoldenQuality.toggle();
 			break;
 		case 7:
+			GoldenMobileControls.setEnabled(!GoldenMobileControls.enabled);
+			break;
+		case 8:
 			return;
 		}
 		flixel_FlxG.save.flush();
@@ -32926,12 +35950,22 @@ OptionsMenu.prototype = $extend(MusicBeatState.prototype,{
 			this.refresh();
 			flixel_FlxG.sound.play(Paths.sound("scrollMenu"),0.4);
 		}
-		if(PlayerSettings.player1.controls._leftP.check()) {
+		var tmp;
+		if(this.selected == 5) {
+			var _this = flixel_FlxG.keys.justPressed;
+			tmp = _this.keyManager.checkStatusUnsafe(82,_this.status);
+		} else {
+			tmp = false;
+		}
+		if(tmp) {
+			GoldenPlayback.setSetting(1);
+			this.refresh();
+		} else if(PlayerSettings.player1.controls._leftP.check()) {
 			this.changeValue(-1);
 		} else if(PlayerSettings.player1.controls._rightP.check()) {
 			this.changeValue(1);
 		} else if(PlayerSettings.player1.controls._accept.check()) {
-			if(this.selected == 7) {
+			if(this.selected == 8) {
 				GoldenMenuTransition.go(function() {
 					return new LoadReplayState();
 				});
@@ -33019,6 +36053,9 @@ Paths.font = function(key) {
 	return "assets/fonts/" + key;
 };
 Paths.getSparrowAtlas = function(key,library) {
+	if(openfl_utils_Assets.exists(Paths.getPath("images/" + key + ".pages.json","TEXT",library),"TEXT")) {
+		return GoldenPagedAtlas.get(key,library);
+	}
 	var potatoKey = key + "_potato";
 	if(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT")) {
 		return flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library));
@@ -33046,7 +36083,7 @@ var PauseSubState = function(x,y) {
 	this.add(shade);
 	var extra = GoldenFrustExtras.supports(PlayState.SONG.song);
 	var id = PlayState.SONG.song.toLowerCase();
-	var background = id == "aug" ? "bg" : id == "doughboy" ? "breadworld" : id == "the-big-dingle" ? "sky" : id == "lofthouse" ? "loftbg" : id == "kooky" ? "yoMamaSoBrown/sdfsdfsdfv-min" : id == "gift-card" ? "pixel/main_junk" : id == "tantalum" ? "back" : id == "strawberry" ? "ocWeek/bom" : id == "nutty" ? "ocWeek/strawberries" : id == "keyboard" ? "ocWeek/keyboard" : id == "nft" ? "bg" : id == "sugar-rush" ? "pissing_too" : id == "cooking-lesson" ? "cooking_lesson" : id == "ready-loud" ? "onaf_full" : id == "enforcers" ? "first_bg_back" : "slices";
+	var background = GoldenRemaining.supports(id) ? GoldenRemaining.record(id).pause : id == "left-unchecked" ? "covers/hypno" : id == "thunderstorm" ? "thunda/sky" : id == "cell" ? "secret/secret_room" : id == "collision" ? "covers/mugen_basics" : id == "wheels" || id == "poopers" ? "wheels/swag" : id == "the-boopadoop-song" ? "BlackVoid" : id == "og" ? "ogStage/ogBackground" : id == "sick-tricks" ? "dave/sick_tricks" : id == "galactic" ? "secret/galaxy" : id == "cuberoot" ? "cuberoot" : id == "too-shiny" ? "diamondBg" : id == "piehole" ? "sky" : id == "ticking" ? "back" : id == "recovered-project" ? "q" : id == "dale" ? "dale_bg_new_maybe" : id == "bedtime-bumps" ? "grand_cake" : id == "mine" ? "wtf" : id == "roupiniphobia" ? "zoonuck" : id == "aug" ? "bg" : id == "doughboy" ? "breadworld" : id == "the-big-dingle" ? "sky" : id == "lofthouse" ? "loftbg" : id == "kooky" ? "yoMamaSoBrown/sdfsdfsdfv-min" : id == "gift-card" ? "pixel/main_junk" : id == "tantalum" ? "back" : id == "strawberry" ? "ocWeek/bom" : id == "nutty" ? "ocWeek/strawberries" : id == "keyboard" ? "ocWeek/keyboard" : id == "nft" ? "bg" : id == "sugar-rush" ? "pissing_too" : id == "cooking-lesson" ? "cooking_lesson" : id == "ready-loud" ? "onaf_full" : id == "enforcers" ? "first_bg_back" : "slices";
 	var cover = new flixel_FlxSprite(650,0).loadGraphic(extra ? Paths.getPath("images/" + ("golden/frustsongs/" + id + "/" + background) + ".png","IMAGE",GoldenFrustExtras.library(id)) : Paths.getPath("images/" + ("golden/menu/storyMode/songs/" + id + "/bg") + ".png","IMAGE",null));
 	cover.setGraphicSize(1280,720);
 	cover.updateHitbox();
@@ -33395,21 +36432,21 @@ Reflect.makeVarArgs = function(f) {
 var Replay = function(path) {
 	this.path = "";
 	this.path = path;
-	this.replay = { songName : "Tutorial", songDiff : 1, keyPresses : [], keyReleases : [], replayGameVer : Replay.version, timestamp : new Date()};
+	this.replay = { songName : "Tutorial", songDiff : 1, playbackRate : 1, keyPresses : [], keyReleases : [], replayGameVer : Replay.version, timestamp : new Date()};
 };
 $hxClasses["Replay"] = Replay;
 Replay.__name__ = "Replay";
 Replay.LoadReplay = function(path) {
 	var rep = new Replay(path);
 	rep.LoadFromJSON();
-	haxe_Log.trace("basic replay data:\nSong Name: " + rep.replay.songName + "\nSong Diff: " + rep.replay.songDiff + "\nKeys Length: " + rep.replay.keyPresses.length,{ fileName : "source/Replay.hx", lineNumber : 61, className : "Replay", methodName : "LoadReplay"});
+	haxe_Log.trace("basic replay data:\nSong Name: " + rep.replay.songName + "\nSong Diff: " + rep.replay.songDiff + "\nKeys Length: " + rep.replay.keyPresses.length,{ fileName : "source/Replay.hx", lineNumber : 63, className : "Replay", methodName : "LoadReplay"});
 	return rep;
 };
 Replay.prototype = {
 	path: null
 	,replay: null
 	,SaveReplay: function() {
-		var json = { "songName" : PlayState.SONG.song.toLowerCase(), "songDiff" : PlayState.storyDifficulty, "keyPresses" : this.replay.keyPresses, "keyReleases" : this.replay.keyReleases, "timestamp" : new Date(), "replayGameVer" : Replay.version};
+		var json = { "songName" : PlayState.SONG.song.toLowerCase(), "songDiff" : PlayState.storyDifficulty, "playbackRate" : GoldenPlayback.rate, "keyPresses" : this.replay.keyPresses, "keyReleases" : this.replay.keyReleases, "timestamp" : new Date(), "replayGameVer" : Replay.version};
 		var data = JSON.stringify(json);
 	}
 	,LoadFromJSON: function() {
@@ -33558,9 +36595,7 @@ StoryMenuState.prototype = $extend(MusicBeatState.prototype,{
 		if(tmp) {
 			rankText.set_y((flixel_FlxG.height - rankText.get_height()) / 2);
 		}
-		var library = null;
-		var potatoKey = "campaign_menu_UI_assets" + "_potato";
-		var ui_tex = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "campaign_menu_UI_assets" + ".png","IMAGE",library),Paths.getPath("images/" + "campaign_menu_UI_assets" + ".xml","TEXT",library));
+		var ui_tex = Paths.getSparrowAtlas("campaign_menu_UI_assets");
 		var yellowBG = new flixel_FlxSprite(0,56).makeGraphic(flixel_FlxG.width,400,-405679);
 		this.grpWeekText = new flixel_group_FlxTypedGroup();
 		this.add(this.grpWeekText);
@@ -34079,9 +37114,7 @@ TitleState.prototype = $extend(MusicBeatState.prototype,{
 		}
 		this.add(new GoldenMenuBackground(true));
 		this.fellow = new flixel_FlxSprite(-150,flixel_FlxG.height - 280);
-		var library = null;
-		var potatoKey = "golden/menu/titleScreen/titleFellows/bandu" + "_potato";
-		this.fellow.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/menu/titleScreen/titleFellows/bandu" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/menu/titleScreen/titleFellows/bandu" + ".xml","TEXT",library)));
+		this.fellow.set_frames(Paths.getSparrowAtlas("golden/menu/titleScreen/titleFellows/bandu"));
 		this.fellow.animation.addByPrefix("danceLeft","bandu-danceLeft",24,false);
 		this.fellow.animation.addByPrefix("danceRight","bandu-danceRight",24,false);
 		this.fellow.animation.play("danceLeft");
@@ -34093,9 +37126,7 @@ TitleState.prototype = $extend(MusicBeatState.prototype,{
 		flixel_tweens_FlxTween.tween(this.fellow,{ y : 0},1,{ ease : flixel_tweens_FlxEase.expoInOut});
 		flixel_tweens_FlxTween.tween(this.logo,{ x : 650, y : 25},1,{ ease : flixel_tweens_FlxEase.expoInOut});
 		this.prompt = new flixel_FlxSprite(0,flixel_FlxG.height * 0.8);
-		var library = null;
-		var potatoKey = "golden/menu/titleScreen/sopar_text" + "_potato";
-		this.prompt.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/menu/titleScreen/sopar_text" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/menu/titleScreen/sopar_text" + ".xml","TEXT",library)));
+		this.prompt.set_frames(Paths.getSparrowAtlas("golden/menu/titleScreen/sopar_text"));
 		this.prompt.animation.addByPrefix("idle","Press Enter to Begin",24,false);
 		this.prompt.animation.addByPrefix("pressed","ENTER PRESSED",24,false);
 		this.prompt.animation.play("idle");
@@ -122399,7 +125430,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 575286;
+	this.version = 635509;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
@@ -176441,9 +179472,9 @@ PlayState.timeCurrentlyR = 0;
 PlayState.opponentMode = false;
 GoldenExtrasMenu.categoryIndex = 0;
 GoldenExtrasMenu.songSelections = [0,0,0,0,0,0];
+openfl_display_Shader.__meta__ = { fields : { glProgram : { SuppressWarnings : ["checkstyle:Dynamic"]}}};
 GoldenFrustExtras.returnToExtras = false;
 GoldenFrustExtras.loadedLibrary = null;
-openfl_display_Shader.__meta__ = { fields : { glProgram : { SuppressWarnings : ["checkstyle:Dynamic"]}}};
 GoldenInspicable.FORK_SCALE = .6;
 GoldenInspicable.FORK_SPAWN_LEAD = 1000;
 GoldenMenuTransition.busy = false;
@@ -176466,7 +179497,14 @@ GoldenNoteSkin.assigned = new haxe_ds_ObjectMap();
 GoldenNoteSplash.paletteShaders = new haxe_ds_StringMap();
 GoldenOverworld.area = "House";
 GoldenOverworldTiles.cached = new haxe_ds_StringMap();
+GoldenPagedAtlas.cache = new haxe_ds_StringMap();
+GoldenPizza.PROJECTION = .425;
+GoldenPlayback.rate = 1;
+GoldenPlayback.channels = new haxe_ds_ObjectMap();
+GoldenPlayback.syncElapsed = 0;
 GoldenQuality.superLow = false;
+GoldenRemaining.ids = ["algebra","alternate","apprentice","bookworm","dave-x-bambi-shipping-cute","deformation","disability","disruption","ferocious","origin","resumed","sillier","sunshine","theft","unhinged","wireframe","dynamics","fresh-and-toasted","house","nice"];
+GoldenSecretSongs.TICKING_SCROLL_SPEED = 3.0;
 GoldenTunnelBackdrop.MIN_ZOOM = .57;
 GoldenTunnelVision.FLOAT_RATE = 75.6;
 GoldenTunnelVision.STEP = 81.5217391304347814;

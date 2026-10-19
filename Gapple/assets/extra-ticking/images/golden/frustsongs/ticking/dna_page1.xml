@@ -1,0 +1,2 @@
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="dna_page1.png"><SubTexture name="strand0010" x="1313" y="1" width="653" height="1080" frameX="-4" frameY="0" frameWidth="658" frameHeight="1080" /><SubTexture name="strand0011" x="1" y="1" width="654" height="1080" frameX="-3" frameY="0" frameWidth="658" frameHeight="1080" /><SubTexture name="strand0015" x="657" y="1" width="654" height="1080" frameX="-1" frameY="0" frameWidth="658" frameHeight="1080" /></TextureAtlas>
