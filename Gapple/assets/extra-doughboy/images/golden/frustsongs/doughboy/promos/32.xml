@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="ad submission.png">
+	<!-- Created with Adobe Animate version 22.0.5.191 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="adddddddd0000" x="0" y="0" width="1023" height="296" frameX="0" frameY="0"
+		frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0001" x="1032" y="0" width="1023" height="296" frameX="0" frameY="0"
+		frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0002" x="2064" y="0" width="1018" height="296" frameX="0" frameY="0"
+		frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0003" x="0" y="305" width="1018" height="296" frameX="0" frameY="0"
+		frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0004" x="1027" y="305" width="1015" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0005" x="2051" y="305" width="1015" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0006" x="1027" y="305" width="1015" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0007" x="2051" y="305" width="1015" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0008" x="1027" y="305" width="1015" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0009" x="2051" y="305" width="1015" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0010" x="3075" y="305" width="1015" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0011" x="0" y="610" width="1015" height="296" frameX="0" frameY="0"
+		frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0012" x="3075" y="305" width="1015" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0013" x="1024" y="610" width="1030" height="296" />
+	<SubTexture name="adddddddd0014" x="2063" y="610" width="1030" height="296" />
+	<SubTexture name="adddddddd0015" x="0" y="915" width="1023" height="296" frameX="0" frameY="0"
+		frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0016" x="1032" y="915" width="1023" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0017" x="2064" y="915" width="1018" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0018" x="0" y="1220" width="1018" height="296" frameX="0" frameY="0"
+		frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0019" x="0" y="610" width="1015" height="296" frameX="0" frameY="0"
+		frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0020" x="1027" y="305" width="1015" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0021" x="2051" y="305" width="1015" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0022" x="1027" y="305" width="1015" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0023" x="2051" y="305" width="1015" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0024" x="1027" y="305" width="1015" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0025" x="2051" y="305" width="1015" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0026" x="1027" y="305" width="1015" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0027" x="2051" y="305" width="1015" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0028" x="1027" y="1220" width="1030" height="296" />
+	<SubTexture name="adddddddd0029" x="2066" y="1220" width="1030" height="296" />
+	<SubTexture name="adddddddd0030" x="0" y="1525" width="1023" height="296" frameX="0" frameY="0"
+		frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0031" x="1032" y="1525" width="1023" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0032" x="2064" y="1525" width="1018" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0033" x="0" y="1830" width="1018" height="296" frameX="0" frameY="0"
+		frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0034" x="1027" y="1830" width="1015" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0035" x="2051" y="1830" width="1015" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0036" x="3075" y="1830" width="1015" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0037" x="0" y="2135" width="1015" height="296" frameX="0" frameY="0"
+		frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0038" x="1024" y="2135" width="1015" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0039" x="2048" y="2135" width="1015" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0040" x="3072" y="2135" width="1015" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0041" x="0" y="2440" width="1015" height="296" frameX="0" frameY="0"
+		frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0042" x="1024" y="2440" width="1015" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0043" x="2048" y="2440" width="1030" height="296" />
+	<SubTexture name="adddddddd0044" x="0" y="2745" width="1030" height="296" />
+	<SubTexture name="adddddddd0045" x="1039" y="2745" width="1023" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0046" x="2071" y="2745" width="1023" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0047" x="0" y="3050" width="1018" height="296" frameX="0" frameY="0"
+		frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0048" x="1027" y="3050" width="1018" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0049" x="0" y="2440" width="1015" height="296" frameX="0" frameY="0"
+		frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0050" x="2054" y="3050" width="1015" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0051" x="3078" y="3050" width="1015" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0052" x="0" y="3355" width="1015" height="296" frameX="0" frameY="0"
+		frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0053" x="1024" y="3355" width="1015" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0054" x="2054" y="3050" width="1015" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0055" x="3078" y="3050" width="1015" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0056" x="0" y="3355" width="1015" height="296" frameX="0" frameY="0"
+		frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0057" x="1024" y="3355" width="1015" height="296" frameX="0"
+		frameY="0" frameWidth="1030" frameHeight="296" />
+	<SubTexture name="adddddddd0058" x="2048" y="3355" width="1030" height="296" />
+	<SubTexture name="adddddddd0059" x="0" y="3660" width="1030" height="296" />
+</TextureAtlas>

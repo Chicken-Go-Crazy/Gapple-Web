@@ -8,6 +8,11 @@
 
 	<meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 	<meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Golden Apple">
+    <meta name="theme-color" content="#000000">
+    <link rel="manifest" href="./manifest.webmanifest">
 
 	
 	<link rel="shortcut icon" type="image/png" href="./favicon.png">
@@ -31,8 +36,10 @@
 
 	<style>
 		html,body { margin: 0; padding: 0; height: 100%; overflow: hidden; }
-        #game-shell { position:relative;width:100%;height:100%;background:black; }
-        #game-shell:fullscreen, #game-shell:-webkit-full-screen { width:100vw;height:100vh; }
+        #game-shell { position:relative;width:100%;height:var(--game-height,100%);background:black; }
+        #game-shell:fullscreen { width:100%;height:100%; }
+        #game-shell:-webkit-full-screen { width:100%;height:100%; }
+        #game-shell.large-view { position:fixed;left:0;top:0;width:100%;height:var(--game-height,100dvh);z-index:4; }
         #game-frame-overlay { position:fixed;inset:0;z-index:5;pointer-events:none; }
 		#start-screen { position:fixed; inset:0; background:#111; color:white; display:grid; place-content:center; text-align:center; font:20px system-ui; z-index:10; }
 		#start-screen button { font:inherit; padding:16px 28px; cursor:pointer; }
@@ -51,6 +58,26 @@
         #touch-actions { position:absolute;top:max(8px,env(safe-area-inset-top));right:max(10px,env(safe-area-inset-right));display:flex;gap:8px; }
         #touch-actions button { font-size:12px;min-width:44px;min-height:32px;padding:6px 9px;background:#171927cc; }
         #touch-controls #touch-dodge { position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:clamp(150px,30%,300px);height:clamp(76px,22%,150px);z-index:7;font-size:clamp(24px,5vh,42px);border:3px solid #fff;background:#331b37bb;box-shadow:0 0 22px #ffb64d88;text-shadow:0 2px 4px #000; }
+        #touch-controls button, #touch-tools button, #start-screen button {
+            position:relative;overflow:hidden;isolation:isolate;
+            background:#105d2de8;border-color:#76ed8f;color:#effff1;
+            box-shadow:inset 0 1px 0 #c4ffd63b,0 2px 5px #0005;
+        }
+        #touch-controls button::before, #touch-tools button::before, #start-screen button::before {
+            content:"";position:absolute;inset:0 -48px;z-index:-1;pointer-events:none;
+            background:repeating-linear-gradient(105deg,transparent 0 19px,#81ff9c4d 19px 29px,transparent 29px 48px);
+            animation:green-button-bars 2.4s linear infinite;
+        }
+        #touch-controls button.pressed, #touch-controls button:active,
+        #touch-tools button:active, #start-screen button:active {
+            background:#249c46;border-color:#caffcf;box-shadow:inset 0 0 14px #a0ffb866;
+        }
+        #touch-controls #touch-dodge { background:#116d30ed;border-color:#a5ffb4;box-shadow:0 0 22px #43ed6970; }
+        #touch-lanes canvas { position:relative;z-index:1; }
+        @keyframes green-button-bars { from { transform:translate3d(-24px,0,0); } to { transform:translate3d(24px,0,0); } }
+        @media (prefers-reduced-motion:reduce) {
+            #touch-controls button::before, #touch-tools button::before, #start-screen button::before { animation:none; }
+        }
         @media (orientation:portrait) { #touch-actions { top:46px; } #touch-tools button { font-size:10px; } }
 		@font-face {
 			font-family: 'Comic Sans MS';
@@ -153,42 +180,75 @@
         const landscapeHint = document.getElementById('landscape-hint');
         let wantsLandscape = false;
         let fullscreenBusy = false;
-        let fullscreenError = '';
+        let largeView = false;
+        let fullscreenHint = '';
         const fullscreenElement = () => document.fullscreenElement || document.webkitFullscreenElement;
+        const standalone = () => navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches;
+        const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        function syncViewport() {
+            // iOS changes the visible height when browser bars expand or collapse.
+            const viewport = window.visualViewport;
+            const height = Math.round(viewport ? viewport.height : window.innerHeight);
+            shell.style.setProperty('--game-height', height + 'px');
+        }
         function updateFullscreenControls() {
-            const active = !!fullscreenElement();
-            fullscreenButton.textContent = active ? 'EXIT FULLSCREEN' : 'FULLSCREEN';
+            const native = !!fullscreenElement();
+            const installed = standalone();
+            const active = native || largeView || installed;
+            fullscreenButton.textContent = native ? 'EXIT FULLSCREEN' : largeView ? 'EXIT LARGE VIEW' : installed ? 'LANDSCAPE' : 'FULLSCREEN';
             fullscreenButton.setAttribute('aria-pressed', String(active));
-            fullscreenButton.setAttribute('aria-label', active ? 'Exit fullscreen' : 'Enter fullscreen and landscape');
+            fullscreenButton.setAttribute('aria-label', native ? 'Exit fullscreen' : largeView ? 'Exit large view' : 'Enter fullscreen and landscape');
             const portrait = window.innerHeight > window.innerWidth;
-            landscapeHint.textContent = wantsLandscape && portrait
-                ? 'Rotate your phone sideways for landscape.' : fullscreenError;
+            const messages = [];
+            if (wantsLandscape && portrait) messages.push('Rotate your phone sideways.');
+            if (fullscreenHint) messages.push(fullscreenHint);
+            landscapeHint.textContent = messages.join(' ');
             landscapeHint.hidden = !landscapeHint.textContent;
+        }
+        function useLargeView() {
+            largeView = true;
+            shell.classList.add('large-view');
+            fullscreenHint = ios
+                ? 'For no browser bars: Share → Add to Home Screen, then open the new icon. If the option is missing, open this page in Safari.'
+                : 'This browser cannot hide its bars. The game fills the available space.';
+        }
+        async function lockLandscape() {
+            if (screen.orientation && screen.orientation.lock) {
+                try { await screen.orientation.lock('landscape'); } catch (_) {}
+            }
         }
         fullscreenButton.addEventListener('click', async () => {
             if (fullscreenBusy) return;
             fullscreenBusy = true;
-            fullscreenError = '';
+            fullscreenHint = '';
             try {
                 if (fullscreenElement()) {
                     wantsLandscape = false;
-                    if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
                     const exit = document.exitFullscreen || document.webkitExitFullscreen;
                     if (exit) await exit.call(document);
+                    if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
+                } else if (largeView) {
+                    wantsLandscape = false;
+                    largeView = false;
+                    shell.classList.remove('large-view');
+                    if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
                 } else {
                     wantsLandscape = true;
-                    const enter = shell.requestFullscreen || shell.webkitRequestFullscreen;
-                    if (enter) {
-                        try { await enter.call(shell); }
-                        catch (_) { fullscreenError = 'Fullscreen is unavailable in this browser.'; }
-                    } else fullscreenError = 'Fullscreen is unavailable in this browser.';
-                    if (screen.orientation && screen.orientation.lock) {
-                        try { await screen.orientation.lock('landscape'); } catch (_) {}
+                    if (!standalone()) {
+                        const enter = shell.requestFullscreen || shell.webkitRequestFullscreen;
+                        if (enter) {
+                            try {
+                                await enter.call(shell);
+                                if (!fullscreenElement()) useLargeView();
+                            } catch (_) { useLargeView(); }
+                        } else useLargeView();
                     }
+                    await lockLandscape();
                 }
-            } catch (_) { fullscreenError = 'Fullscreen is unavailable in this browser.'; }
+            } catch (_) { useLargeView(); }
             finally {
                 fullscreenBusy = false;
+                syncViewport();
                 updateFullscreenControls();
                 window.dispatchEvent(new Event('resize'));
                 const canvas = document.querySelector('#content canvas');
@@ -196,16 +256,23 @@
             }
         });
         function fullscreenChanged() {
-            if (!fullscreenElement()) {
+            if (!fullscreenElement() && !largeView && !standalone()) {
                 wantsLandscape = false;
                 if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
             }
+            syncViewport();
             updateFullscreenControls();
             window.dispatchEvent(new Event('resize'));
         }
         document.addEventListener('fullscreenchange', fullscreenChanged);
         document.addEventListener('webkitfullscreenchange', fullscreenChanged);
-        window.addEventListener('resize', updateFullscreenControls);
+        window.addEventListener('resize', () => { syncViewport(); updateFullscreenControls(); });
+        if (window.visualViewport) window.visualViewport.addEventListener('resize', () => {
+            syncViewport();
+            window.dispatchEvent(new Event('resize'));
+        });
+        syncViewport();
+        updateFullscreenControls();
 
 		let started = false;
         function startGame() {

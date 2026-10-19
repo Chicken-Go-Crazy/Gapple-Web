@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="21.png">
+	<!-- Created with Adobe Animate version 21.0.6.41649 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="animals0000" x="0" y="0" width="727" height="89" />
+	<SubTexture name="animals0001" x="732" y="0" width="727" height="89" />
+	<SubTexture name="animals0002" x="0" y="94" width="727" height="89" />
+	<SubTexture name="animals0003" x="732" y="94" width="727" height="89" />
+	<SubTexture name="animals0004" x="0" y="188" width="727" height="89" />
+	<SubTexture name="animals0005" x="732" y="188" width="727" height="89" />
+	<SubTexture name="animals0006" x="0" y="282" width="727" height="89" />
+	<SubTexture name="animals0007" x="732" y="282" width="727" height="89" />
+	<SubTexture name="animals0008" x="0" y="376" width="727" height="89" />
+	<SubTexture name="animals0009" x="732" y="376" width="727" height="89" />
+	<SubTexture name="animals0010" x="0" y="470" width="727" height="89" />
+	<SubTexture name="animals0011" x="732" y="470" width="727" height="89" />
+	<SubTexture name="animals0012" x="0" y="564" width="727" height="89" />
+	<SubTexture name="animals0013" x="732" y="564" width="727" height="89" />
+	<SubTexture name="animals0014" x="0" y="658" width="727" height="89" />
+	<SubTexture name="animals0015" x="732" y="658" width="727" height="89" />
+	<SubTexture name="animals0016" x="0" y="752" width="727" height="89" />
+	<SubTexture name="animals0017" x="732" y="752" width="727" height="89" />
+	<SubTexture name="animals0018" x="0" y="846" width="727" height="89" />
+	<SubTexture name="animals0019" x="732" y="846" width="727" height="89" />
+	<SubTexture name="animals0020" x="0" y="940" width="727" height="89" />
+	<SubTexture name="animals0021" x="732" y="940" width="727" height="89" />
+	<SubTexture name="animals0022" x="0" y="1034" width="727" height="89" />
+	<SubTexture name="animals0023" x="732" y="1034" width="727" height="89" />
+	<SubTexture name="animals0024" x="0" y="1128" width="727" height="89" />
+	<SubTexture name="animals0025" x="732" y="1128" width="727" height="89" />
+	<SubTexture name="animals0026" x="0" y="1222" width="727" height="89" />
+	<SubTexture name="animals0027" x="732" y="1222" width="727" height="89" />
+	<SubTexture name="animals0028" x="0" y="1316" width="727" height="89" />
+	<SubTexture name="animals0029" x="732" y="1316" width="727" height="89" />
+</TextureAtlas>

@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="bambom_nutty_action.png">
+	<!-- Created with Adobe Animate version 21.0.6.41649 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="nutty jump instance 10000" x="0" y="0" width="577" height="709"/>
+	<SubTexture name="nutty jump instance 10001" x="0" y="0" width="577" height="709"/>
+	<SubTexture name="nutty jump instance 10002" x="582" y="0" width="463" height="628" frameX="-78" frameY="-27" frameWidth="577" frameHeight="709"/>
+</TextureAtlas>

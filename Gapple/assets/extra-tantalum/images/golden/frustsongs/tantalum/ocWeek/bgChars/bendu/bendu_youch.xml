@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="bendu_youch.png">
+	<!-- Created with Adobe Animate version 21.0.6.41649 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="bendu youch0000" x="0" y="0" width="614" height="799"/>
+	<SubTexture name="bendu youch0001" x="619" y="0" width="614" height="799"/>
+	<SubTexture name="bendu youch0002" x="1238" y="0" width="614" height="799"/>
+	<SubTexture name="bendu youch0003" x="0" y="804" width="614" height="799"/>
+	<SubTexture name="bendu youch0004" x="619" y="804" width="614" height="799"/>
+</TextureAtlas>

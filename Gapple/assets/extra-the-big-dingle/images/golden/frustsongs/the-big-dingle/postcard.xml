@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="postcard.png">
+	<!-- Created with Adobe Animate version 19.0.0.326 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="postcard0000" x="0" y="0" width="538" height="404"/>
+	<SubTexture name="postcard0001" x="0" y="409" width="538" height="404"/>
+	<SubTexture name="postcard0002" x="0" y="818" width="538" height="404"/>
+	<SubTexture name="postcard0003" x="0" y="1227" width="538" height="404"/>
+</TextureAtlas>

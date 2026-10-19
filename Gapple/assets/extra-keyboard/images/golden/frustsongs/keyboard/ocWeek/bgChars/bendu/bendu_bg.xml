@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="bendu bg.png">
+	<!-- Created with Adobe Animate version 21.0.6.41649 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="bendu back idle0000" x="0" y="0" width="614" height="799"/>
+	<SubTexture name="bendu back idle0001" x="0" y="0" width="614" height="799"/>
+	<SubTexture name="bendu back idle0002" x="619" y="0" width="614" height="799"/>
+	<SubTexture name="bendu back idle0003" x="619" y="0" width="614" height="799"/>
+	<SubTexture name="bendu back idle0004" x="1238" y="0" width="614" height="799"/>
+	<SubTexture name="bendu back idle0005" x="1238" y="0" width="614" height="799"/>
+	<SubTexture name="bendu back idle0006" x="0" y="804" width="614" height="799"/>
+	<SubTexture name="bendu back idle0007" x="0" y="804" width="614" height="799"/>
+</TextureAtlas>

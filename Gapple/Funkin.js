@@ -7752,6 +7752,7 @@ var Character = function(x,y,character,isPlayer,frustrationSheets) {
 	this.allIdleEase = true;
 	this.canSing = true;
 	this.gfDanceStyle = false;
+	this.extraDanceIndex = 0;
 	this.canAutoDance = true;
 	this.debugMode = false;
 	flixel_FlxSprite.call(this,x,y);
@@ -8243,6 +8244,7 @@ Character.prototype = $extend(flixel_FlxSprite.prototype,{
 	animOffsets: null
 	,debugMode: null
 	,canAutoDance: null
+	,extraDanceIndex: null
 	,gfDanceStyle: null
 	,canSing: null
 	,extraConfig: null
@@ -8335,10 +8337,22 @@ Character.prototype = $extend(flixel_FlxSprite.prototype,{
 		}
 		if(this.gfDanceStyle) {
 			this.danced = !this.danced;
-			this.playAnim((this.danced ? "danceRight" : "danceLeft") + this.idleSuffix,true);
+			var danceName = (this.danced ? "danceRight" : "danceLeft") + this.idleSuffix;
+			this.playAnim(this.animation.exists(danceName) ? danceName : this.animation.exists("idle" + this.idleSuffix) ? "idle" + this.idleSuffix : this.danced ? "danceRight" : "danceLeft",true);
 			return;
 		}
 		if(this.extraConfig != null) {
+			if(this.extraConfig.danceList != null) {
+				var list = this.extraConfig.danceList;
+				if(list.length > 0) {
+					this.playAnim(list[this.extraDanceIndex % list.length],true);
+					this.extraDanceIndex++;
+				}
+				return;
+			}
+			if(this.animation._curAnim != null && this.animation._curAnim.looped && this.animation._curAnim.name == "idle") {
+				return;
+			}
 			this.playAnim(this.animation.exists("idle" + this.idleSuffix) ? "idle" + this.idleSuffix : "idle",true);
 			return;
 		}
@@ -16410,7 +16424,17 @@ var GameOverSubstate = function(x,y) {
 	this.isEnding = false;
 	this.deathMusicStarted = false;
 	this.stageSuffix = "";
-	var daBf = "bf-golden-dead";
+	var daBf;
+	switch(PlayState.SONG.song.toLowerCase()) {
+	case "lofthouse":
+		daBf = "extra-lofthouse--bf-loft-dies";
+		break;
+	case "the-big-dingle":
+		daBf = "extra-the-big-dingle--boing-death";
+		break;
+	default:
+		daBf = "bf-golden-dead";
+	}
 	MusicBeatSubstate.call(this);
 	Conductor.songPosition = 0;
 	this.bf = new Boyfriend(x,y,daBf);
@@ -16586,6 +16610,209 @@ GitarooPause.prototype = $extend(MusicBeatState.prototype,{
 		}
 	}
 	,__class__: GitarooPause
+});
+var GoldenAnimateScene = function(documentPath,sheetPath,library) {
+	this.rootMatrix = [1,0,0,1,0,0];
+	this.tint = new openfl_geom_ColorTransform();
+	this.drawMatrix = new flixel_math_FlxMatrix();
+	this.poseMatrix = new flixel_math_FlxMatrix();
+	this.sample = -1;
+	this.cached = new haxe_ds_IntMap();
+	this.sprites = new haxe_ds_StringMap();
+	this.durations = new haxe_ds_StringMap();
+	this.symbols = new haxe_ds_StringMap();
+	flixel_FlxSprite.call(this);
+	this.document = JSON.parse(openfl_utils_Assets.getText(documentPath));
+	GoldenAnimateScene.normalize(this.document);
+	var list = this.document.SD.S;
+	if(list != null) {
+		var _g = 0;
+		while(_g < list.length) {
+			var entry = list[_g];
+			++_g;
+			this.addSymbol(entry.SN,entry.TL);
+		}
+	}
+	this.addSymbol(this.document.AN.SN,this.document.AN.TL);
+	if(this.document.AN.STI != null) {
+		this.rootMatrix = this.document.AN.STI.SI.MX;
+	}
+	var _g = 0;
+	var potatoKey = sheetPath + "_potato";
+	var _g1 = (GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + sheetPath + ".png","IMAGE",library),Paths.getPath("images/" + sheetPath + ".xml","TEXT",library))).frames;
+	while(_g < _g1.length) {
+		var frame = _g1[_g];
+		++_g;
+		this.sprites.h[frame.name] = frame;
+	}
+	this.set_antialiasing(!GoldenQuality.superLow);
+};
+$hxClasses["GoldenAnimateScene"] = GoldenAnimateScene;
+GoldenAnimateScene.__name__ = "GoldenAnimateScene";
+GoldenAnimateScene.normalize = function(value) {
+	if(value == null) {
+		return;
+	}
+	if(((value) instanceof Array)) {
+		var list = value;
+		var _g = 0;
+		while(_g < list.length) {
+			var item = list[_g];
+			++_g;
+			GoldenAnimateScene.normalize(item);
+		}
+		return;
+	}
+	if(!Reflect.isObject(value) || typeof(value) == "string") {
+		return;
+	}
+	if(Object.prototype.hasOwnProperty.call(value,"M3D") && !Object.prototype.hasOwnProperty.call(value,"MX")) {
+		var m = value.M3D;
+		value["MX"] = [m[0],m[1],m[4],m[5],m[12],m[13]];
+	}
+	var _g = 0;
+	var _g1 = Reflect.fields(value);
+	while(_g < _g1.length) {
+		var key = _g1[_g];
+		++_g;
+		GoldenAnimateScene.normalize(Reflect.field(value,key));
+	}
+};
+GoldenAnimateScene.multiply = function(a,b) {
+	return [a[0] * b[0] + a[2] * b[1],a[1] * b[0] + a[3] * b[1],a[0] * b[2] + a[2] * b[3],a[1] * b[2] + a[3] * b[3],a[0] * b[4] + a[2] * b[5] + a[4],a[1] * b[4] + a[3] * b[5] + a[5]];
+};
+GoldenAnimateScene.__super__ = flixel_FlxSprite;
+GoldenAnimateScene.prototype = $extend(flixel_FlxSprite.prototype,{
+	document: null
+	,symbols: null
+	,durations: null
+	,sprites: null
+	,cached: null
+	,sample: null
+	,poseMatrix: null
+	,drawMatrix: null
+	,tint: null
+	,rootMatrix: null
+	,sampleFrame: function(value) {
+		this.sample = Math.max(0,Math.min(this.durations.h[this.document.AN.SN] - 1,value)) | 0;
+	}
+	,addSymbol: function(name,timeline) {
+		this.symbols.h[name] = timeline;
+		var duration = 1;
+		var layers = timeline.L;
+		var _g = 0;
+		while(_g < layers.length) {
+			var layer = layers[_g];
+			++_g;
+			var frames = layer.FR;
+			var _g1 = 0;
+			while(_g1 < frames.length) {
+				var frame = frames[_g1];
+				++_g1;
+				duration = Math.max(duration,frame.I + frame.DU) | 0;
+			}
+		}
+		this.durations.h[name] = duration;
+	}
+	,flatten: function(name,frame,matrix,opacity,output,depth) {
+		if(depth == null) {
+			depth = 0;
+		}
+		if(depth > 64) {
+			throw haxe_Exception.thrown("Animate scene has a cyclic symbol");
+		}
+		var timeline = this.symbols.h[name];
+		if(timeline == null) {
+			throw haxe_Exception.thrown("Missing Animate symbol: " + name);
+		}
+		var layers = timeline.L;
+		var _g = 0;
+		var _g1 = layers.length;
+		while(_g < _g1) {
+			var index = _g++;
+			var layer = layers[layers.length - 1 - index];
+			if(layer.LT == "Clp") {
+				continue;
+			}
+			var frames = layer.FR;
+			var _g2 = 0;
+			while(_g2 < frames.length) {
+				var active = frames[_g2];
+				++_g2;
+				if(frame < active.I || frame >= active.I + active.DU) {
+					continue;
+				}
+				var elements = active.E;
+				var _g3 = 0;
+				while(_g3 < elements.length) {
+					var element = elements[_g3];
+					++_g3;
+					if(element.ASI != null) {
+						var item = element.ASI;
+						output.push({ frame : this.sprites.h[item.N], matrix : GoldenAnimateScene.multiply(matrix,item.MX), opacity : opacity});
+					} else if(element.SI != null) {
+						var item1 = element.SI;
+						var first = item1.FF == null ? 0 : item1.FF;
+						var childFrame = (first + frame - (active.I | 0)) % this.durations.h[item1.SN];
+						var alpha = opacity * (item1.C == null ? 1 : item1.C.AM);
+						this.flatten(item1.SN,childFrame,GoldenAnimateScene.multiply(matrix,item1.MX),alpha,output,depth + 1);
+					} else {
+						throw haxe_Exception.thrown("Unsupported Animate element");
+					}
+				}
+				break;
+			}
+		}
+	}
+	,draw: function() {
+		if(this.sample < 0) {
+			return;
+		}
+		var targetCameras = this.get_cameras();
+		if(targetCameras == null || targetCameras.length == 0) {
+			targetCameras = [flixel_FlxG.camera];
+		}
+		var commands = this.cached.h[this.sample];
+		if(commands == null) {
+			commands = [];
+			this.flatten(this.document.AN.SN,this.sample,this.rootMatrix,1,commands);
+			this.cached.h[this.sample] = commands;
+		}
+		var _g = 0;
+		while(_g < targetCameras.length) {
+			var camera = targetCameras[_g];
+			++_g;
+			if(!camera.visible || !camera.exists) {
+				continue;
+			}
+			var _g1 = 0;
+			while(_g1 < commands.length) {
+				var command = commands[_g1];
+				++_g1;
+				var frame = command.frame;
+				if(frame == null) {
+					throw haxe_Exception.thrown("Missing Animate scene sprite");
+				}
+				var m = command.matrix;
+				frame.prepareMatrix(this.drawMatrix);
+				this.poseMatrix.setTo(m[0],m[1],m[2],m[3],m[4],m[5]);
+				this.drawMatrix.concat(this.poseMatrix);
+				this.drawMatrix.scale(this.scale.x,this.scale.y);
+				this.drawMatrix.translate(this.x - camera.scroll.x * this.scrollFactor.x,this.y - camera.scroll.y * this.scrollFactor.y);
+				this.tint.alphaMultiplier = command.opacity * this.alpha;
+				camera.drawPixels(frame,null,this.drawMatrix,this.tint,this.blend,true);
+			}
+		}
+	}
+	,destroy: function() {
+		this.cached.h = { };
+		this.sprites.h = Object.create(null);
+		this.symbols.h = Object.create(null);
+		this.durations.h = Object.create(null);
+		this.document = null;
+		flixel_FlxSprite.prototype.destroy.call(this);
+	}
+	,__class__: GoldenAnimateScene
 });
 var GoldenApplecore = function() { };
 $hxClasses["GoldenApplecore"] = GoldenApplecore;
@@ -17548,6 +17775,7 @@ GoldenChartCamera.prototype = {
 	,automatic: null
 	,clampStage: null
 	,onSongEvent: null
+	,onCharacterChange: null
 	,dispatched: null
 	,focuses: null
 	,duration: function(values,amount,unit) {
@@ -17585,6 +17813,11 @@ GoldenChartCamera.prototype = {
 					this.zoom += GoldenChartCamera.value(v,0);
 					var fh = this.owner.camHUD;
 					fh.set_zoom(fh.zoom + GoldenChartCamera.value(v,1));
+					break;
+				case "Change Character":
+					if(this.onCharacterChange != null) {
+						this.onCharacterChange(v);
+					}
 					break;
 				case "Move Camera":
 					var f = this.focuses.h[v[0].toUpperCase()];
@@ -17808,6 +18041,7 @@ var PlayState = function(TransIn,TransOut) {
 	this.trainMoving = false;
 	this.fastCarCanDrive = true;
 	this.replayHeld = [false,false,false,false];
+	this.controlledSingers = [null,null,null,null];
 	this.leftHold = false;
 	this.rightHold = false;
 	this.downHold = false;
@@ -17864,6 +18098,9 @@ PlayState.goldenSong = function() {
 		return true;
 	}
 };
+PlayState.controlsNote = function(note) {
+	return note.mustPress != PlayState.opponentMode;
+};
 PlayState.singingEnd = function(note) {
 	if(note.isSustainNote) {
 		return note.strumTime;
@@ -17886,6 +18123,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 	,orthogonal: null
 	,frustration: null
 	,frustExtras: null
+	,goldenHealthOverlay: null
 	,opponentVocals: null
 	,frustStage: null
 	,frustrationStage: null
@@ -17965,6 +18203,9 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 	,inCutscene: null
 	,create: function() {
 		var _gthis = this;
+		if(PlayState.loadRep) {
+			PlayState.opponentMode = false;
+		}
 		GoldenQuality.load();
 		GoldenHoldPath.frustration = null;
 		PlayState.theFunne = flixel_FlxG.save.data.newInput;
@@ -18320,6 +18561,12 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 		}
 		if(PlayState.goldenSong()) {
 			gfVersion = "gf-golden";
+		}
+		if(PlayState.curStage == "aug") {
+			gfVersion = "extra-aug--aug-gf";
+		}
+		if(PlayState.curStage == "lofthouse") {
+			gfVersion = "extra-lofthouse--bandu-xylophone";
 		}
 		if(PlayState.curStage == "sugar-rush") {
 			gfVersion = "extra-sugar-rush--gf-only";
@@ -18950,9 +19197,12 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 				} else {
 					oldNote = null;
 				}
-				var swagNote = new Note(daStrumTime,daNoteData,oldNote,false,GoldenFrustExtras.supports(PlayState.curStage) ? GoldenFrustExtras.skin(gottaHitNote) : PlayState.curStage == "tunnelvision" ? GoldenTunnelVision.skinFor(daStrumTime,gottaHitNote) : gottaHitNote || PlayState.curStage == "orthogonal" ? "default" : "3d");
+				var swagNote = new Note(daStrumTime,daNoteData,oldNote,false,GoldenFrustExtras.supports(PlayState.curStage) ? GoldenFrustExtras.skin(gottaHitNote,daStrumTime) : PlayState.curStage == "tunnelvision" ? GoldenTunnelVision.skinFor(daStrumTime,gottaHitNote) : gottaHitNote || PlayState.curStage == "orthogonal" ? "default" : "3d");
 				swagNote.sustainLength = songNotes[2];
-				swagNote.altAnimation = songNotes.length > 3 && songNotes[3] == 1;
+				swagNote.altAnimation = songNotes.length > 3 && songNotes[3] == 1 || !gottaHitNote && section.altAnim;
+				if(songNotes.length > 4 && songNotes[4] == "litt-le") {
+					swagNote.extraSinger = "litt-le";
+				}
 				swagNote.scrollFactor.set(0,0);
 				var susLength = swagNote.sustainLength;
 				this.unspawnNotes.push(swagNote);
@@ -18962,9 +19212,10 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 					var stepDuration = nextTime - sustainTime;
 					sustainTime = nextTime;
 					oldNote = this.unspawnNotes[this.unspawnNotes.length - 1 | 0];
-					var sustainNote = new Note(sustainTime,daNoteData,oldNote,true,GoldenFrustExtras.supports(PlayState.curStage) ? GoldenFrustExtras.skin(gottaHitNote) : PlayState.curStage == "tunnelvision" ? GoldenTunnelVision.skinFor(daStrumTime,gottaHitNote) : gottaHitNote || PlayState.curStage == "orthogonal" ? "default" : "3d",stepDuration);
+					var sustainNote = new Note(sustainTime,daNoteData,oldNote,true,GoldenFrustExtras.supports(PlayState.curStage) ? GoldenFrustExtras.skin(gottaHitNote,daStrumTime) : PlayState.curStage == "tunnelvision" ? GoldenTunnelVision.skinFor(daStrumTime,gottaHitNote) : gottaHitNote || PlayState.curStage == "orthogonal" ? "default" : "3d",stepDuration);
 					sustainNote.scrollFactor.set();
 					sustainNote.altAnimation = swagNote.altAnimation;
+					sustainNote.extraSinger = swagNote.extraSinger;
 					this.unspawnNotes.push(sustainNote);
 					sustainNote.mustPress = gottaHitNote;
 					if(sustainNote.mustPress) {
@@ -19300,35 +19551,36 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 					daNote.set_visible(true);
 					daNote.set_active(true);
 				}
-				if(!daNote.mustPress && daNote.wasGoodHit && !daNote.opponentProcessed) {
-					var opponentStrum = _gthis.strumLineNotes.members[daNote.noteData];
+				if(!PlayState.controlsNote(daNote) && daNote.wasGoodHit && !daNote.opponentProcessed) {
+					var opponentStrum = _gthis.strumLineNotes.members[daNote.noteData + (daNote.mustPress ? 4 : 0)];
 					if(opponentStrum != null) {
 						opponentStrum.animation.play("confirm",true);
 					}
 					if(PlayState.SONG.song != "Tutorial") {
 						_gthis.camZooming = true;
 					}
-					var altAnim = daNote.altAnimation || _gthis.frustration != null && _gthis.frustration.angry ? "-alt" : "";
+					var altAnim = daNote.altAnimation || _gthis.frustration != null && _gthis.frustration.angry || _gthis.frustExtras != null && _gthis.dad.idleSuffix == "-alt" ? "-alt" : "";
 					if(PlayState.SONG.notes[Math.floor(_gthis.curStep / 16)] != null) {
 						if(PlayState.SONG.notes[Math.floor(_gthis.curStep / 16)].altAnim) {
 							altAnim = "-alt";
 						}
 					}
+					var singer = daNote.mustPress ? _gthis.boyfriend : _gthis.frustExtras != null ? _gthis.frustExtras.singerFor(daNote) : _gthis.dad;
 					switch(Math.abs(daNote.noteData)) {
 					case 0:
-						_gthis.dad.playSing("singLEFT" + altAnim,daNote.isSustainNote,PlayState.singingEnd(daNote));
+						singer.playSing("singLEFT" + altAnim,daNote.isSustainNote,PlayState.singingEnd(daNote));
 						break;
 					case 1:
-						_gthis.dad.playSing("singDOWN" + altAnim,daNote.isSustainNote,PlayState.singingEnd(daNote));
+						singer.playSing("singDOWN" + altAnim,daNote.isSustainNote,PlayState.singingEnd(daNote));
 						break;
 					case 2:
-						_gthis.dad.playSing("singUP" + altAnim,daNote.isSustainNote,PlayState.singingEnd(daNote));
+						singer.playSing("singUP" + altAnim,daNote.isSustainNote,PlayState.singingEnd(daNote));
 						break;
 					case 3:
-						_gthis.dad.playSing("singRIGHT" + altAnim,daNote.isSustainNote,PlayState.singingEnd(daNote));
+						singer.playSing("singRIGHT" + altAnim,daNote.isSustainNote,PlayState.singingEnd(daNote));
 						break;
 					}
-					_gthis.dad.holdTimer = 0;
+					singer.holdTimer = 0;
 					if(PlayState.SONG.needsVoices && _gthis.opponentVocals == null) {
 						_gthis.vocals.set_volume(1);
 					}
@@ -19348,12 +19600,12 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 					return;
 				}
 				var judgementTime = daNote.isSustainNote ? daNote.sustainStart : daNote.strumTime;
-				if(daNote.mustPress && !daNote.wasGoodHit && GoldenInputJudge.isTooLate(judgementTime,Conductor.songPosition)) {
+				if(PlayState.controlsNote(daNote) && !daNote.wasGoodHit && GoldenInputJudge.isTooLate(judgementTime,Conductor.songPosition)) {
 					if(!daNote.isSustainNote || daNote.sustainRoot != null && daNote.sustainRoot.wasGoodHit && !daNote.sustainRoot.holdMissed) {
 						if(daNote.isSustainNote) {
 							daNote.sustainRoot.holdMissed = true;
 						}
-						_gthis.vocals.set_volume(0);
+						_gthis.controlledVocals(0);
 						_gthis.noteMiss(daNote.noteData);
 					}
 					daNote.kill();
@@ -19369,7 +19621,9 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 		}
 		this.endingSong = true;
 		if(!PlayState.loadRep) {
-			PlayState.rep.SaveReplay();
+			if(!PlayState.opponentMode) {
+				PlayState.rep.SaveReplay();
+			}
 		}
 		this.canPause = false;
 		flixel_FlxG.sound.music.set_volume(0);
@@ -19379,7 +19633,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 			_this.cleanup(_this.autoDestroy,true);
 		}
 		if(PlayState.SONG.validScore) {
-			Highscore.saveScore(PlayState.SONG.song,this.songScore,PlayState.storyDifficulty);
+			Highscore.saveScore(PlayState.SONG.song + (PlayState.opponentMode ? "-opponent" : ""),this.songScore,PlayState.storyDifficulty);
 		}
 		if(PlayState.isStoryMode) {
 			PlayState.campaignScore += this.songScore;
@@ -19400,7 +19654,9 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 							medal.sendUnlock();
 						}
 					}
-					Highscore.saveWeekScore(PlayState.storyWeek,PlayState.campaignScore,PlayState.storyDifficulty);
+					if(!PlayState.opponentMode) {
+						Highscore.saveWeekScore(PlayState.storyWeek,PlayState.campaignScore,PlayState.storyDifficulty);
+					}
 				}
 				flixel_FlxG.save.data.weekUnlocked = StoryMenuState.weekUnlocked;
 				flixel_FlxG.save.flush();
@@ -19412,8 +19668,8 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 				if(PlayState.storyDifficulty == 2) {
 					difficulty = "-hard";
 				}
-				haxe_Log.trace("LOADING NEXT SONG",{ fileName : "source/PlayState.hx", lineNumber : 1747, className : "PlayState", methodName : "endSong"});
-				haxe_Log.trace(PlayState.storyPlaylist[0].toLowerCase() + difficulty,{ fileName : "source/PlayState.hx", lineNumber : 1748, className : "PlayState", methodName : "endSong"});
+				haxe_Log.trace("LOADING NEXT SONG",{ fileName : "source/PlayState.hx", lineNumber : 1754, className : "PlayState", methodName : "endSong"});
+				haxe_Log.trace(PlayState.storyPlaylist[0].toLowerCase() + difficulty,{ fileName : "source/PlayState.hx", lineNumber : 1755, className : "PlayState", methodName : "endSong"});
 				if(PlayState.SONG.song.toLowerCase() == "eggnog") {
 					var blackShit = new flixel_FlxSprite(-flixel_FlxG.width * flixel_FlxG.camera.zoom,-flixel_FlxG.height * flixel_FlxG.camera.zoom).makeGraphic(flixel_FlxG.width * 3,flixel_FlxG.height * 3,-16777216);
 					blackShit.scrollFactor.set();
@@ -19662,12 +19918,42 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 	,downHold: null
 	,rightHold: null
 	,leftHold: null
+	,controlledStrum: function(lane) {
+		return this.strumLineNotes.members[lane + (PlayState.opponentMode ? 0 : 4)];
+	}
+	,controlledSinger: function(note) {
+		if(PlayState.opponentMode) {
+			if(this.frustExtras != null && note != null) {
+				return this.frustExtras.singerFor(note);
+			} else {
+				return this.dad;
+			}
+		} else {
+			return this.boyfriend;
+		}
+	}
+	,controlledVocals: function(value) {
+		if(PlayState.opponentMode && this.opponentVocals != null) {
+			this.opponentVocals.set_volume(value);
+		} else {
+			this.vocals.set_volume(value);
+		}
+	}
+	,controlledSingers: null
+	,releaseControlledLane: function(lane) {
+		var actor = this.controlledSingers[lane];
+		if(actor != null && actor.exists) {
+			actor.releaseSingHold(["singLEFT","singDOWN","singUP","singRIGHT"][lane]);
+		}
+		this.controlledSinger().releaseSingHold(["singLEFT","singDOWN","singUP","singRIGHT"][lane]);
+		this.controlledSingers[lane] = null;
+	}
 	,goldenInput: null
 	,touchLayout: null
 	,noteSplashes: null
 	,replayHeld: null
 	,keyShit: function() {
-		if(this.paused || this.startingSong || !this.generatedMusic || this.boyfriend.stunned) {
+		if(this.paused || this.startingSong || !this.generatedMusic || !PlayState.opponentMode && this.boyfriend.stunned) {
 			this.goldenInput.clear();
 			return;
 		}
@@ -19743,13 +20029,13 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 			} else {
 				PlayState.rep.replay.keyReleases.push({ time : event.time, key : laneNames[lane]});
 			}
-			var receptor = this.playerStrums.members[lane];
+			var receptor = this.controlledStrum(lane);
 			if(!event.down) {
-				this.boyfriend.releaseSingHold(["singLEFT","singDOWN","singUP","singRIGHT"][lane]);
+				this.releaseControlledLane(lane);
 				receptor.animation.play("static",true);
 				continue;
 			}
-			this.boyfriend.holdTimer = 0;
+			this.controlledSinger().holdTimer = 0;
 			var note = GoldenInputJudge.firstTap(this.notes.members,lane,event.time);
 			if(note != null) {
 				this.goodNoteHit(note,event.time);
@@ -19766,7 +20052,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 		while(_g1 < _g2.length) {
 			var note = _g2[_g1];
 			++_g1;
-			if(note != null && note.alive && note.mustPress && note.isSustainNote && !note.wasGoodHit && held[note.noteData] && note.sustainRoot != null && note.sustainRoot.wasGoodHit && note.sustainStart <= Conductor.songPosition && GoldenInputJudge.canHit(note.sustainStart,Conductor.songPosition)) {
+			if(note != null && note.alive && PlayState.controlsNote(note) && note.isSustainNote && !note.wasGoodHit && held[note.noteData] && note.sustainRoot != null && note.sustainRoot.wasGoodHit && note.sustainStart <= Conductor.songPosition && GoldenInputJudge.canHit(note.sustainStart,Conductor.songPosition)) {
 				_g.push(note);
 			}
 		}
@@ -19777,17 +20063,28 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 			++_g;
 			this.goodNoteHit(tail);
 		}
-		if(!this.boyfriend.allIdleEase && this.boyfriend.holdTimer > Conductor.stepCrochet * 4 * 0.001 && held.indexOf(true) == -1 && StringTools.startsWith(this.boyfriend.animation._curAnim.name,"sing") && !StringTools.endsWith(this.boyfriend.animation._curAnim.name,"miss")) {
-			this.boyfriend.playAnim("idle");
+		var singer = this.controlledSinger();
+		if(!singer.allIdleEase && singer.holdTimer > Conductor.stepCrochet * 4 * 0.001 && held.indexOf(true) == -1 && StringTools.startsWith(singer.animation._curAnim.name,"sing") && !StringTools.endsWith(singer.animation._curAnim.name,"miss")) {
+			singer.dance();
 		}
-		this.playerStrums.forEach(function(spr) {
+		if(PlayState.opponentMode && this.boyfriend.animation._curAnim != null && StringTools.startsWith(this.boyfriend.animation._curAnim.name,"sing") && this.boyfriend.holdTimer > Conductor.stepCrochet * 4 * .001) {
+			this.boyfriend.dance();
+		}
+		var _g = 0;
+		while(_g < 4) {
+			var lane = _g++;
+			var spr = this.controlledStrum(lane);
+			if(spr == null) {
+				continue;
+			}
 			if(spr.animation._curAnim.name == "confirm" && spr.animation._curAnim.finished) {
 				spr.animation.play(held[spr.ID] ? "pressed" : "static");
 			}
 			GoldenNoteSkin.alignStrum(spr);
-		});
+		}
 	}
 	,destroy: function() {
+		GoldenNoteSkin.clear();
 		if(this.opponentVocals != null) {
 			flixel_FlxG.sound.list.remove(this.opponentVocals,true);
 			this.opponentVocals.destroy();
@@ -19814,8 +20111,9 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 		if(direction == null) {
 			direction = 1;
 		}
-		this.boyfriend.releaseSingHold(["singLEFT","singDOWN","singUP","singRIGHT"][direction]);
-		if(!this.boyfriend.stunned) {
+		this.releaseControlledLane(direction);
+		var singer = this.controlledSinger();
+		if(PlayState.opponentMode || !this.boyfriend.stunned) {
 			this.health -= 0.04;
 			if(this.combo > 5 && Object.prototype.hasOwnProperty.call(this.gf.animOffsets.h,"sad")) {
 				this.gf.playAnim("sad");
@@ -19824,20 +20122,8 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 			PlayState.misses++;
 			this.songScore -= 10;
 			flixel_FlxG.sound.play(Paths.sound("missnote" + flixel_FlxG.random.int(1,3),null),flixel_FlxG.random.float(0.1,0.2));
-			switch(direction) {
-			case 0:
-				this.boyfriend.playAnim("singLEFTmiss",true);
-				break;
-			case 1:
-				this.boyfriend.playAnim("singDOWNmiss",true);
-				break;
-			case 2:
-				this.boyfriend.playAnim("singUPmiss",true);
-				break;
-			case 3:
-				this.boyfriend.playAnim("singRIGHTmiss",true);
-				break;
-			}
+			var pose = ["singLEFT","singDOWN","singUP","singRIGHT"][direction];
+			singer.playAnim(singer.animation.exists(pose + "miss") ? pose + "miss" : pose,true);
 			this.updateAccuracy();
 		}
 	}
@@ -19854,7 +20140,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 		if(!note.wasGoodHit) {
 			if(!note.isSustainNote) {
 				if(this.noteSplashes != null && GoldenNoteSplash.shouldSpawn(false,note.strumTime,inputTime == null ? Conductor.songPosition : inputTime)) {
-					this.noteSplashes.recycle(GoldenNoteSplash).start(this.playerStrums.members[note.noteData],note.noteData);
+					this.noteSplashes.recycle(GoldenNoteSplash).start(this.controlledStrum(note.noteData),note.noteData,GoldenNoteSkin.skinOf(this.controlledStrum(note.noteData)));
 				}
 				this.popUpScore(note.strumTime,inputTime);
 				this.combo += 1;
@@ -19866,27 +20152,26 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 			} else {
 				this.health += 0.004;
 			}
+			var singer = this.controlledSinger(note);
+			this.controlledSingers[note.noteData] = singer;
+			singer.holdTimer = 0;
 			switch(note.noteData) {
 			case 0:
-				this.boyfriend.playSing("singLEFT" + (note.altAnimation ? "-alt" : ""),note.isSustainNote,PlayState.singingEnd(note));
+				singer.playSing("singLEFT" + (note.altAnimation || PlayState.opponentMode && (singer.idleSuffix == "-alt" || this.frustration != null && this.frustration.angry) ? "-alt" : ""),note.isSustainNote,PlayState.singingEnd(note));
 				break;
 			case 1:
-				this.boyfriend.playSing("singDOWN" + (note.altAnimation ? "-alt" : ""),note.isSustainNote,PlayState.singingEnd(note));
+				singer.playSing("singDOWN" + (note.altAnimation || PlayState.opponentMode && (singer.idleSuffix == "-alt" || this.frustration != null && this.frustration.angry) ? "-alt" : ""),note.isSustainNote,PlayState.singingEnd(note));
 				break;
 			case 2:
-				this.boyfriend.playSing("singUP" + (note.altAnimation ? "-alt" : ""),note.isSustainNote,PlayState.singingEnd(note));
+				singer.playSing("singUP" + (note.altAnimation || PlayState.opponentMode && (singer.idleSuffix == "-alt" || this.frustration != null && this.frustration.angry) ? "-alt" : ""),note.isSustainNote,PlayState.singingEnd(note));
 				break;
 			case 3:
-				this.boyfriend.playSing("singRIGHT" + (note.altAnimation ? "-alt" : ""),note.isSustainNote,PlayState.singingEnd(note));
+				singer.playSing("singRIGHT" + (note.altAnimation || PlayState.opponentMode && (singer.idleSuffix == "-alt" || this.frustration != null && this.frustration.angry) ? "-alt" : ""),note.isSustainNote,PlayState.singingEnd(note));
 				break;
 			}
-			this.playerStrums.forEach(function(spr) {
-				if(Math.abs(note.noteData) == spr.ID) {
-					spr.animation.play("confirm",true);
-				}
-			});
+			this.controlledStrum(note.noteData).animation.play("confirm",true);
 			note.wasGoodHit = true;
-			this.vocals.set_volume(1);
+			this.controlledVocals(1);
 			if(!note.isSustainNote) {
 				note.kill();
 				this.notes.remove(note,true);
@@ -19987,7 +20272,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 			if(PlayState.SONG.notes[Math.floor(this.curStep / 16)].changeBPM) {
 				Conductor.changeBPM(PlayState.SONG.notes[Math.floor(this.curStep / 16)].bpm);
 			}
-			if((PlayState.SONG.notes[Math.floor(this.curStep / 16)].mustHitSection || this.frustExtras != null) && !(PlayState.curStage == "applecore" && StringTools.startsWith(this.dad.curCharacter,"bandu"))) {
+			if((!PlayState.opponentMode || this.dad.animation._curAnim == null || !StringTools.startsWith(this.dad.animation._curAnim.name,"sing")) && (PlayState.SONG.notes[Math.floor(this.curStep / 16)].mustHitSection || this.frustExtras != null) && !(PlayState.curStage == "applecore" && StringTools.startsWith(this.dad.curCharacter,"bandu"))) {
 				this.dad.dance();
 			}
 		}
@@ -20294,6 +20579,25 @@ GoldenExtraCharacter.apply = function(actor) {
 	}
 	actor.gfDanceStyle = data.gfDance == true;
 	actor.canSing = data.canSing != false;
+	if(data.patterns != null) {
+		var patterns = data.patterns;
+		var _g = 0;
+		while(_g < patterns.length) {
+			var pattern = patterns[_g];
+			++_g;
+			if(pattern.anims != null) {
+				var defs = pattern.anims;
+				var _g1 = 0;
+				while(_g1 < defs.length) {
+					var def = defs[_g1];
+					++_g1;
+					if(def.holdFrame != null) {
+						actor.holdFrame = def.holdFrame;
+					}
+				}
+			}
+		}
+	}
 	actor.set_antialiasing(data.antialiasing != false && !GoldenQuality.superLow);
 	actor.set_flipX(data.flipX == true);
 	if(data.allIdleEase != null) {
@@ -20319,7 +20623,11 @@ GoldenExtraCharacter.apply = function(actor) {
 		}
 	}
 	actor.referenceNativeScale = nativeScale;
-	actor.playAnim(actor.gfDanceStyle ? "danceLeft" : "idle");
+	var initial = actor.gfDanceStyle ? "danceLeft" : actor.animation.exists("idle") ? "idle" : tracks[0].name;
+	actor.playAnim(initial);
+	if(!actor.animation.exists("idle") && !actor.gfDanceStyle && data.danceList == null) {
+		actor.canAutoDance = false;
+	}
 	actor.setReferenceScale(nativeScale);
 	if(data.positionOffset != null) {
 		actor.set_x(actor.x + data.positionOffset[0]);
@@ -20624,6 +20932,11 @@ var GoldenFrustExtras = function(owner) {
 	GoldenFrustExtras.loadedLibrary = GoldenFrustExtras.library(this.song);
 	this.zoom = this.targetZoom = GoldenFrustExtras.initialZoom(this.song);
 	switch(this.song) {
+	case "aug":
+		owner.dad.setPosition(0,-145);
+		owner.boyfriend.setPosition(245,465);
+		owner.gf.setPosition(445,-680);
+		break;
 	case "cooking-lesson":
 		owner.dad.setPosition(10,-89);
 		owner.boyfriend.setPosition(951,615);
@@ -20631,10 +20944,53 @@ var GoldenFrustExtras = function(owner) {
 		owner.gf.setPosition(494,312);
 		owner.gf.scrollFactor.set(1,1);
 		break;
+	case "doughboy":
+		owner.gf.set_visible(false);
+		break;
 	case "enforcers":
 		owner.dad.setPosition(-200,200);
 		owner.boyfriend.setPosition(200,200);
 		owner.gf.set_visible(false);
+		break;
+	case "gift-card":
+		owner.dad.setPosition(-56,326);
+		owner.boyfriend.setPosition(871,382);
+		owner.gf.set_visible(false);
+		break;
+	case "keyboard":
+		owner.dad.setPosition(-300,50);
+		var fh = owner.boyfriend;
+		fh.set_x(fh.x + 200);
+		var fh = owner.gf;
+		fh.set_x(fh.x + 200);
+		break;
+	case "kooky":
+		owner.gf.set_visible(false);
+		owner.dad.setReferenceScale(.606060606);
+		owner.dad.setPosition(620,flixel_FlxG.save.data.downscroll ? 300 : -100);
+		owner.boyfriend.setPosition(275,flixel_FlxG.save.data.downscroll ? 135 : 475);
+		owner.dad.scrollFactor.set();
+		owner.boyfriend.scrollFactor.set();
+		break;
+	case "lofthouse":
+		owner.dad.setPosition(600,-45);
+		owner.boyfriend.setPosition(770,690);
+		owner.gf.setPosition(200,150);
+		break;
+	case "nft":
+		var fh = owner.dad;
+		fh.set_x(fh.x - 500);
+		var fh = owner.dad;
+		fh.set_y(fh.y - 400);
+		var fh = owner.gf;
+		fh.set_x(fh.x - 250);
+		break;
+	case "nutty":
+		owner.dad.setPosition(-75,140);
+		var fh = owner.boyfriend;
+		fh.set_x(fh.x + 200);
+		var fh = owner.gf;
+		fh.set_x(fh.x + 200);
 		break;
 	case "ready-loud":
 		owner.dad.setPosition(402,125);
@@ -20646,6 +21002,13 @@ var GoldenFrustExtras = function(owner) {
 		owner.gf.set_visible(false);
 		owner.boyfriend.setReferenceScale(1);
 		break;
+	case "strawberry":
+		owner.dad.setPosition(-125,165);
+		var fh = owner.boyfriend;
+		fh.set_x(fh.x + 200);
+		var fh = owner.gf;
+		fh.set_x(fh.x + 200);
+		break;
 	case "sugar-rush":
 		owner.dad.setPosition(-85,-40);
 		owner.boyfriend.setReferenceScale(1);
@@ -20653,7 +21016,24 @@ var GoldenFrustExtras = function(owner) {
 		owner.gf.setPosition(911,212);
 		owner.gf.scrollFactor.set(1,1);
 		break;
+	case "tantalum":
+		owner.dad.setPosition(150,-63);
+		var fh = owner.boyfriend;
+		fh.set_x(fh.x + 400);
+		var fh = owner.gf;
+		fh.set_x(fh.x + 400);
+		break;
+	case "the-big-dingle":
+		var fh = owner.dad;
+		fh.set_y(fh.y + 150);
+		var fh = owner.boyfriend;
+		fh.set_x(fh.x + 50);
+		var fh = owner.boyfriend;
+		fh.set_y(fh.y - 65);
+		owner.gf.set_visible(false);
+		break;
 	}
+	GoldenFrustExtras.alignBoyfriend(owner.boyfriend);
 	var pair_key = "DAD";
 	var pair_actor = owner.dad;
 	var this1 = this.points;
@@ -20669,6 +21049,9 @@ var GoldenFrustExtras = function(owner) {
 	var this1 = this.points;
 	var value = this.focusPoint(pair_actor,pair_key);
 	this1.h[pair_key] = value;
+	if(this.song == "aug") {
+		this.points.h["DAD"][1] -= 65;
+	}
 	var initial = this.points.h["DAD"];
 	owner.camFollow.setPosition(initial[0],initial[1]);
 	flixel_FlxG.camera.set_followLerp(1);
@@ -20708,23 +21091,37 @@ var GoldenFrustExtras = function(owner) {
 		bar.scrollFactor.set();
 		owner.add(bar);
 	}
-	if(this.song == "enforcers") {
+	if(this.song == "enforcers" || this.song == "gift-card" || this.song == "nft") {
 		this.chartCamera = new GoldenChartCamera(owner,JSON.parse(openfl_utils_Assets.getText(Paths.getPath("data/" + ("golden/frustsongs/" + this.song + "/events") + ".json","TEXT",GoldenFrustExtras.library(this.song)))),PlayState.SONG.bpm,this.zoom);
 		this.chartCamera.focuses = this.points;
-		this.chartCamera.automatic = false;
+		this.chartCamera.automatic = this.song != "enforcers";
 		this.chartCamera.clampStage = false;
-		var fh = owner.camFollow;
-		fh.set_x(fh.x - 100);
-		this.dim.set_alpha(1);
-		this.dim.set_cameras([owner.camHUD]);
+		this.chartCamera.onCharacterChange = $bind(this,this.changeCharacter);
+		if(this.song == "enforcers") {
+			var fh = owner.camFollow;
+			fh.set_x(fh.x - 100);
+			this.dim.set_alpha(1);
+			this.dim.set_cameras([owner.camHUD]);
+		}
 		this.chartCamera.onSongEvent = function(name,value) {
 			if(name == "gittyReveal") {
 				owner.goldenTweens.tween(owner.camHUD,{ alpha : 1},Conductor.crochet / 500,{ ease : flixel_tweens_FlxEase.quartInOut});
 			}
 		};
 	}
+	if(GoldenGlitchedLevels.supports(this.song)) {
+		this.glitched = new GoldenGlitchedLevels(owner,this);
+	}
 	if(this.song == "ready-loud") {
 		this.readyLoud = new GoldenReadyLoud(owner);
+	}
+	if(["tantalum","strawberry","nutty","keyboard"].indexOf(this.song) >= 0) {
+		this.ocSongs = new GoldenOCSongs(owner,this);
+	}
+	if(this.song == "nft") {
+		this.points.h["BF"][0] -= 250;
+		this.points.h["BF"][1] -= 100;
+		this.nft = new GoldenNFT(owner);
 	}
 };
 $hxClasses["GoldenFrustExtras"] = GoldenFrustExtras;
@@ -20739,7 +21136,11 @@ GoldenFrustExtras.releaseLibrary = function() {
 	GoldenFrustExtras.loadedLibrary = null;
 };
 GoldenFrustExtras.splitVocals = function(song) {
-	return song.toLowerCase() == "enforcers";
+	if(song.toLowerCase() != "enforcers") {
+		return song.toLowerCase() == "nft";
+	} else {
+		return true;
+	}
 };
 GoldenFrustExtras.opponentPath = function(song) {
 	return "songs:assets/songs/" + song.toLowerCase() + "/Opponent." + "mp3";
@@ -20748,18 +21149,31 @@ GoldenFrustExtras.library = function(song) {
 	return "extra-" + song.toLowerCase();
 };
 GoldenFrustExtras.supports = function(song) {
-	return ["sugar-rush","ready-loud","enforcers","cooking-lesson","slices"].indexOf(song.toLowerCase()) >= 0;
+	return ["sugar-rush","gift-card","ready-loud","tantalum","strawberry","nutty","keyboard","enforcers","nft","cooking-lesson","slices","aug","doughboy","the-big-dingle","lofthouse","kooky"].indexOf(song.toLowerCase()) >= 0;
 };
 GoldenFrustExtras.initialZoom = function(song) {
-	if(song == "sugar-rush") {
-		return .7;
-	} else if(song == "cooking-lesson") {
+	switch(song.toLowerCase()) {
+	case "aug":
+		return .725;
+	case "cooking-lesson":
 		return .69;
-	} else if(song == "enforcers") {
+	case "enforcers":
 		return 2.5;
-	} else if(song == "ready-loud") {
+	case "gift-card":
+		return .375;
+	case "kooky":
+		return 1;
+	case "lofthouse":case "the-big-dingle":
+		return .8;
+	case "nft":case "tantalum":
+		return .5;
+	case "nutty":case "strawberry":
+		return .6;
+	case "ready-loud":
 		return .785;
-	} else {
+	case "keyboard":case "sugar-rush":
+		return .7;
+	default:
 		return .85;
 	}
 };
@@ -20770,10 +21184,35 @@ GoldenFrustExtras.menu = function() {
 		return new FreeplayState();
 	}
 };
-GoldenFrustExtras.skin = function(player) {
+GoldenFrustExtras.skin = function(player,time) {
+	if(time == null) {
+		time = 0;
+	}
 	var song = PlayState.SONG.song.toLowerCase();
+	if(song == "the-big-dingle" || song == "kooky") {
+		return "bevel";
+	}
+	if(song == "doughboy") {
+		return "bready";
+	}
+	if(song == "lofthouse") {
+		return "default";
+	}
+	if(song == "aug") {
+		return "3d";
+	}
 	if(song == "slices") {
 		return "awesome";
+	}
+	if(song == "gift-card") {
+		if(player && time < 87272.727272729) {
+			return "3d";
+		} else {
+			return "default";
+		}
+	}
+	if(song == "nft" && player && time >= 124363.636363636) {
+		return "3d";
 	}
 	if(!player || song == "cooking-lesson" || song == "enforcers" || song == "ready-loud") {
 		return "3d";
@@ -20812,6 +21251,14 @@ GoldenFrustExtras.credits = function(song) {
 	}
 	return result.join("\n\n");
 };
+GoldenFrustExtras.alignBoyfriend = function(actor) {
+	if(actor.curCharacter != "bf-golden") {
+		return;
+	}
+	actor.goldenOriginY = 0;
+	actor.setReferenceScale(1);
+	actor.refreshAnimationOffset();
+};
 GoldenFrustExtras.color = function(rgb) {
 	if(rgb == null) {
 		return -1;
@@ -20841,9 +21288,98 @@ GoldenFrustExtras.prototype = {
 	,points: null
 	,chartCamera: null
 	,readyLoud: null
+	,ocSongs: null
+	,nft: null
+	,glitched: null
+	,changeCharacter: function(values) {
+		var side = values[0].toUpperCase();
+		var player = side == "BF";
+		var old = player ? this.owner.boyfriend : side == "GF" ? this.owner.gf : this.owner.dad;
+		var id = "extra-" + this.song + "--" + values[1];
+		var actor = player ? new Boyfriend(old.x,old.y,id) : new Character(old.x,old.y,id);
+		actor.set_cameras(old.get_cameras());
+		var _this = actor.scrollFactor;
+		var point = old.scrollFactor;
+		_this.set_x(point.x);
+		_this.set_y(point.y);
+		if(point._weak) {
+			point.put();
+		}
+		if(values.length > 4 && values[4] == "true") {
+			actor.setPosition(parseFloat(values[2]),parseFloat(values[3]));
+		} else {
+			actor.setPosition(old.x,old.y);
+		}
+		if(player) {
+			GoldenFrustExtras.alignBoyfriend(actor);
+		}
+		var index = this.owner.members.indexOf(old);
+		this.owner.remove(old,true);
+		this.owner.insert(index,actor);
+		if(player) {
+			this.owner.boyfriend = actor;
+		} else if(side == "GF") {
+			this.owner.gf = actor;
+		} else {
+			this.owner.dad = actor;
+		}
+		this.owner.goldenTweens.cancelTweensOf(old);
+		this.owner.goldenTweens.cancelTweensOf(old.scale);
+		old.destroy();
+		var this1 = this.points;
+		var value = this.focusPoint(actor,side);
+		this1.h[side] = value;
+		if(side != "GF") {
+			this.replaceIcon(player,actor.curCharacter);
+		}
+		this.owner.healthBar.createFilledBar(this.owner.dad.extraConfig == null ? -12784090 : GoldenFrustExtras.color(this.owner.dad.extraConfig.healthBarRGB),this.owner.boyfriend.extraConfig == null ? -13520687 : GoldenFrustExtras.color(this.owner.boyfriend.extraConfig.healthBarRGB));
+		this.refreshSkins();
+	}
+	,replaceIcon: function(player,id) {
+		var old = player ? this.owner.iconP1 : this.owner.iconP2;
+		var icon = new HealthIcon(id,player);
+		icon.set_cameras(old.get_cameras());
+		icon.setPosition(old.x,old.y);
+		flixel_tweens_FlxTween.cancelTweensOf(old);
+		this.owner.goldenTweens.cancelTweensOf(old);
+		this.owner.goldenTweens.cancelTweensOf(old.scale);
+		var index = this.owner.members.indexOf(old);
+		this.owner.remove(old,true);
+		this.owner.insert(index,icon);
+		old.destroy();
+		if(player) {
+			this.owner.iconP1 = icon;
+		} else {
+			this.owner.iconP2 = icon;
+		}
+	}
+	,singerFor: function(note) {
+		if(note.extraSinger == "litt-le" && this.ocSongs != null && this.ocSongs.little != null) {
+			return this.ocSongs.little;
+		} else {
+			return this.owner.dad;
+		}
+	}
+	,refreshSkins: function() {
+		var _g = 0;
+		var _g1 = this.owner.strumLineNotes.members.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var strum = this.owner.strumLineNotes.members[i];
+			if(strum == null) {
+				continue;
+			}
+			var player = this.owner.playerStrums.members.indexOf(strum) >= 0;
+			GoldenNoteSkin.setupStrum(strum,GoldenFrustExtras.skin(player,Conductor.songPosition),strum.ID);
+		}
+	}
 	,focusPoint: function(actor,key) {
 		var name = actor.animation.exists("danceLeft") ? "danceLeft" : "idle";
-		var frame = actor.frames.frames[actor.animation._animations.h[name].frames[0]];
+		var track = actor.animation._animations.h[name];
+		if(track == null) {
+			return [actor.x + 150,actor.y - 100];
+		}
+		var frame = actor.frames.frames[track.frames[0]];
 		var x = actor.x + (frame.offset.x + frame.frame.width / 2 - actor.goldenOriginX) * actor.scale.x;
 		var y = actor.y + (frame.offset.y + frame.frame.height / 2 - actor.goldenOriginY) * actor.scale.y;
 		if(key != "GF") {
@@ -21044,7 +21580,7 @@ GoldenFrustExtras.prototype = {
 			}
 		} else {
 			this.zoom += (this.targetZoom - this.zoom) * (1 - Math.exp(-elapsed * 3));
-			if(nextBeat > this.beat && time >= 0 && nextBeat % this.zoomEvery == 0) {
+			if(nextBeat > this.beat && time >= 0 && nextBeat % this.zoomEvery == 0 && this.owner.camZooming) {
 				this.zoom += .015;
 			}
 			this.beat = nextBeat;
@@ -21069,7 +21605,16 @@ GoldenFrustExtras.prototype = {
 		if(this.readyLoud != null) {
 			this.readyLoud.update(time);
 		}
-		this.owner.frustStage.sync(time);
+		if(this.ocSongs != null) {
+			this.ocSongs.update(time,elapsed);
+		}
+		if(this.nft != null) {
+			this.nft.update(time,elapsed);
+		}
+		if(this.glitched != null) {
+			this.glitched.update(time,elapsed);
+		}
+		this.owner.frustStage.sync(time,elapsed);
 		var text = "";
 		var _g = 0;
 		var _g1 = this.captions;
@@ -21080,6 +21625,9 @@ GoldenFrustExtras.prototype = {
 				text = cue.text;
 			}
 		}
+		if(this.song == "enforcers" && time >= 73000) {
+			text = "The chart was unfinished";
+		}
 		this.owner.applecoreSubtitles.set_text(text);
 		var seconds = Math.max(0,time) / 1000 | 0;
 		this.owner.applecoreClock.set_text((seconds / 60 | 0) + ":" + (seconds % 60 < 10 ? "0" : "") + seconds % 60);
@@ -21089,12 +21637,48 @@ GoldenFrustExtras.prototype = {
 		if(this.readyLoud != null) {
 			this.readyLoud.destroy();
 		}
+		if(this.nft != null) {
+			this.nft.destroy();
+		}
+		if(this.glitched != null) {
+			this.glitched.destroy();
+		}
 	}
 	,__class__: GoldenFrustExtras
 };
 var GoldenFrustStage = function(song) {
+	this.sceneLayers = new haxe_ds_StringMap();
+	this.ocActors = new haxe_ds_StringMap();
+	this.shaderTime = 0;
 	flixel_group_FlxTypedGroup.call(this);
 	switch(song) {
+	case "aug":
+		this.back = this.layer(song,"bg",0,0,1.35);
+		var _this = this.back;
+		var axes = flixel_util_FlxAxes.XY;
+		var tmp;
+		switch(axes._hx_index) {
+		case 0:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			_this.set_x((flixel_FlxG.width - _this.get_width()) / 2);
+		}
+		var tmp;
+		switch(axes._hx_index) {
+		case 1:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			_this.set_y((flixel_FlxG.height - _this.get_height()) / 2);
+		}
+		break;
 	case "cooking-lesson":
 		var back = this.layer(song,"cooking_lesson",-600,-200);
 		back.scrollFactor.set();
@@ -21106,9 +21690,83 @@ var GoldenFrustStage = function(song) {
 		this.sizedLayer(song,"zamb_lights",-757,-424,2611,1148);
 		this.sizedLayer(song,"zamb_floor",-987,76,3288,1507);
 		break;
+	case "doughboy":
+		this.back = this.layer(song,"breadworld",0,0,1.35);
+		var _this = this.back;
+		var axes = flixel_util_FlxAxes.XY;
+		var tmp;
+		switch(axes._hx_index) {
+		case 0:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			_this.set_x((flixel_FlxG.width - _this.get_width()) / 2);
+		}
+		var tmp;
+		switch(axes._hx_index) {
+		case 1:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			_this.set_y((flixel_FlxG.height - _this.get_height()) / 2);
+		}
+		break;
 	case "enforcers":
 		this.layer(song,"first_bg_back",-300,-100);
 		this.layer(song,"first_bg",-300,-100);
+		break;
+	case "gift-card":
+		var name = "bg_junk";
+		var sprite = this.layer(song,"pixel/" + name,-1710,-1251,4);
+		var parallax = name == "bg_junk" ? 0.5 : name == "upper_junk" ? 1.25 : 1;
+		sprite.scrollFactor.set(parallax,parallax);
+		var name = "main_junk";
+		var sprite = this.layer(song,"pixel/" + name,-1710,-1251,4);
+		var parallax = name == "bg_junk" ? 0.5 : name == "upper_junk" ? 1.25 : 1;
+		sprite.scrollFactor.set(parallax,parallax);
+		var name = "upper_junk";
+		var sprite = this.layer(song,"pixel/" + name,-1710,-1251,4);
+		var parallax = name == "bg_junk" ? 0.5 : name == "upper_junk" ? 1.25 : 1;
+		sprite.scrollFactor.set(parallax,parallax);
+		break;
+	case "keyboard":
+		this.back = this.layer(song,"ocWeek/keyboard",-600,-200);
+		this.scaleOnly(this.back,1.25);
+		this.glitchBack(this.back);
+		this.oc(song,"ringi",-500,70);
+		this.oc(song,"bambom-nutty",325,140,"bg",.9);
+		this.oc(song,"bendu",-100,120,"huh");
+		this.ocActors.h["bendu"].set_alpha(.0001);
+		break;
+	case "kooky":
+		this.back = this.layer(song,"yoMamaSoBrown/sdfsdfsdfv-min",229,flixel_FlxG.save.data.downscroll ? 48 : 298);
+		this.back.setGraphicSize(448,0);
+		this.back.updateHitbox();
+		this.back.scrollFactor.set();
+		break;
+	case "lofthouse":
+		this.back = this.layer(song,"loftbg",-600,-400,.9);
+		break;
+	case "nft":
+		this.back = this.layer(song,"bg",-1600,-900,3);
+		this.back.scrollFactor.set(.3,.3);
+		this.wavy(this.back,.5,.6,.2);
+		var chains = this.layer(song,"chains",-1400,-760,3);
+		chains.scrollFactor.set(.6,.6);
+		this.ground = this.layer(song,"ground",-1500,-880,3);
+		break;
+	case "nutty":
+		this.back = this.layer(song,"ocWeek/strawberries",-800,-400,1.5);
+		this.back.set_antialiasing(!GoldenQuality.superLow);
+		this.glitchBack(this.back);
+		this.oc(song,"bendu",-550,170,"watch");
+		this.oc(song,"ringi",-200,20,"wtf");
 		break;
 	case "ready-loud":
 		var name = "back_hallway";
@@ -21243,8 +21901,97 @@ var GoldenFrustStage = function(song) {
 			back.set_y((flixel_FlxG.height - back.get_height()) / 2);
 		}
 		break;
+	case "strawberry":
+		this.back = this.layer(song,"ocWeek/bom",-700,-400);
+		this.scaleOnly(this.back,1.2);
+		this.back.scrollFactor.set();
+		this.glitchBack(this.back,.05,2.5,1.25);
+		this.overlay = this.layer(song,"ocWeek/ysm",0,0,2);
+		var _this = this.overlay;
+		var axes = flixel_util_FlxAxes.XY;
+		var tmp;
+		switch(axes._hx_index) {
+		case 0:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			_this.set_x((flixel_FlxG.width - _this.get_width()) / 2);
+		}
+		var tmp;
+		switch(axes._hx_index) {
+		case 1:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			_this.set_y((flixel_FlxG.height - _this.get_height()) / 2);
+		}
+		var fh = this.overlay;
+		fh.set_x(fh.x + 300);
+		var fh = this.overlay;
+		fh.set_y(fh.y - 150);
+		this.oc(song,"ringi",200,0);
+		this.oc(song,"bendu",-450,20);
+		this.oc(song,"bambom",-50,165,"flung");
+		this.ocActors.h["bambom"].set_alpha(.0001);
+		break;
 	case "sugar-rush":
 		this.layer(song,"pissing_too",-1130,0,2.08725926);
+		break;
+	case "tantalum":
+		this.back = this.layer(song,"back",100,-85);
+		this.scaleOnly(this.back,2);
+		this.back.scrollFactor.set(.15,.15);
+		this.wavy(this.back,.01,4,1.75);
+		var front = new flixel_FlxSprite(this.back.x,this.back.y + 200);
+		var key = "golden/frustsongs/" + song + "/front";
+		var library = GoldenFrustExtras.library(song);
+		var potatoKey = key + "_potato";
+		front.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE",library),Paths.getPath("images/" + key + ".xml","TEXT",library)));
+		front.animation.addByPrefix("idle","front",24,true);
+		front.animation.play("idle");
+		this.scaleOnly(front,2.2);
+		front.scrollFactor.set(.45,.45);
+		this.add(front);
+		this.oc(song,"bambom",-600,190);
+		this.oc(song,"ringi",-50,120,"walk");
+		this.ocActors.h["ringi"].set_alpha(.000001);
+		this.oc(song,"bendu",-100,20);
+		break;
+	case "the-big-dingle":
+		this.back = this.layer(song,"sky",-100,0,2);
+		this.sceneLayers.h["sky"] = this.back;
+		this.back.scrollFactor.set(.1,.1);
+		var city = this.layer(song,"city",-10,-50,2);
+		this.sceneLayers.h["city"] = city;
+		city.scrollFactor.set(.3,.3);
+		var this1 = this.sceneLayers;
+		var value = this.layer(song,"behindTrain",-40,47.5,2);
+		this1.h["behindTrain"] = value;
+		var this1 = this.sceneLayers;
+		var value = this.layer(song,"street",-40,47.5,2);
+		this1.h["street"] = value;
+		var name = "sludd";
+		var sprite = this.layer(song,name,name == "sand" || name == "tree" ? -840 : 0,name == "sand" || name == "tree" ? 20 : 0,2);
+		sprite.set_visible(false);
+		this.sceneLayers.h[name] = sprite;
+		var name = "water";
+		var sprite = this.layer(song,name,name == "sand" || name == "tree" ? -840 : 0,name == "sand" || name == "tree" ? 20 : 0,2);
+		sprite.set_visible(false);
+		this.sceneLayers.h[name] = sprite;
+		var name = "sand";
+		var sprite = this.layer(song,name,name == "sand" || name == "tree" ? -840 : 0,name == "sand" || name == "tree" ? 20 : 0,2);
+		sprite.set_visible(false);
+		this.sceneLayers.h[name] = sprite;
+		var name = "tree";
+		var sprite = this.layer(song,name,name == "sand" || name == "tree" ? -840 : 0,name == "sand" || name == "tree" ? 20 : 0,2);
+		sprite.set_visible(false);
+		this.sceneLayers.h[name] = sprite;
 		break;
 	default:
 		throw haxe_Exception.thrown("Missing reconstructed extra stage: " + song);
@@ -21255,8 +22002,57 @@ GoldenFrustStage.__name__ = "GoldenFrustStage";
 GoldenFrustStage.__super__ = flixel_group_FlxTypedGroup;
 GoldenFrustStage.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 	glitch: null
+	,wave: null
+	,shaderTime: null
+	,back: null
+	,overlay: null
+	,ground: null
+	,ocActors: null
+	,oc: function(song,id,x,y,state,scale) {
+		if(scale == null) {
+			scale = 1;
+		}
+		if(state == null) {
+			state = "bg";
+		}
+		var actor = new GoldenOCActor(song,id,x,y,state);
+		if(scale != 1) {
+			this.scaleOnly(actor,scale);
+		}
+		actor.applyStateOffset();
+		this.ocActors.h[id] = actor;
+		this.add(actor);
+	}
+	,glitchBack: function(sprite,amplitude,frequency,speed) {
+		if(speed == null) {
+			speed = 2;
+		}
+		if(frequency == null) {
+			frequency = 5;
+		}
+		if(amplitude == null) {
+			amplitude = .1;
+		}
+		this.glitch = new GoldenGlitchShader();
+		this.glitch.uWaveAmplitude.value[0] = amplitude;
+		this.glitch.uFrequency.value[0] = frequency;
+		this.glitch.uSpeed.value[0] = speed;
+		if(!GoldenQuality.superLow) {
+			sprite.shader = this.glitch;
+		}
+	}
+	,wavy: function(sprite,amplitude,frequency,speed) {
+		this.wave = new GoldenWavyShader();
+		this.wave.uWaveAmplitude.value[0] = amplitude;
+		this.wave.uFrequency.value[0] = frequency;
+		this.wave.uSpeed.value[0] = speed;
+		if(!GoldenQuality.superLow) {
+			sprite.shader = this.wave;
+		}
+	}
 	,room: null
 	,light: null
+	,sceneLayers: null
 	,layer: function(song,name,x,y,scale) {
 		if(scale == null) {
 			scale = 1;
@@ -21267,6 +22063,7 @@ GoldenFrustStage.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 		sprite.origin.set();
 		sprite.offset.set();
 		sprite.set_antialiasing(false);
+		sprite.set_active(false);
 		this.add(sprite);
 		return sprite;
 	}
@@ -21278,9 +22075,18 @@ GoldenFrustStage.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 		sprite.offset.set();
 		return sprite;
 	}
-	,sync: function(time) {
+	,scaleOnly: function(sprite,value) {
+		sprite.scale.set(value,value);
+		sprite.origin.set(sprite.frameWidth / 2,sprite.frameHeight / 2);
+		sprite.offset.set();
+	}
+	,sync: function(time,elapsed) {
+		this.shaderTime += Math.max(0,elapsed);
 		if(this.glitch != null) {
-			this.glitch.uTime.value[0] = Math.max(0,time) / 1000;
+			this.glitch.uTime.value[0] = this.shaderTime;
+		}
+		if(this.wave != null) {
+			this.wave.iTime.value[0] = this.shaderTime;
 		}
 	}
 	,__class__: GoldenFrustStage
@@ -22755,6 +23561,380 @@ GoldenGlitchShader.prototype = $extend(flixel_graphics_tile_FlxGraphicsShader.pr
 	,uWaveAmplitude: null
 	,__class__: GoldenGlitchShader
 });
+var GoldenGlitchedLevels = function(owner,host) {
+	this.popupEnd = -1;
+	this.beat = -1;
+	this.owner = owner;
+	this.host = host;
+	this.song = PlayState.SONG.song.toLowerCase();
+	if(this.song == "the-big-dingle") {
+		this.crowd = this.animated("crowd",605,80,["danceLeft","danceRight"],24,.5,false);
+		owner.insert(owner.members.indexOf(owner.gf),this.crowd);
+		this.box = this.animated("dingleBox",0,0,["animOne","animTwo"],24,2,true);
+		var _this = this.box;
+		var axes = flixel_util_FlxAxes.XY;
+		var tmp;
+		switch(axes._hx_index) {
+		case 0:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			_this.set_x((flixel_FlxG.width - _this.get_width()) / 2);
+		}
+		var tmp;
+		switch(axes._hx_index) {
+		case 1:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			_this.set_y((flixel_FlxG.height - _this.get_height()) / 2);
+		}
+		this.box.set_visible(false);
+		this.postcard = this.animated("postcard",0,0,["postcard"],12,1,true);
+		this.postcard.setGraphicSize(0,720);
+		this.postcard.updateHitbox();
+		var _this = this.postcard;
+		var axes = flixel_util_FlxAxes.XY;
+		var tmp;
+		switch(axes._hx_index) {
+		case 0:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			_this.set_x((flixel_FlxG.width - _this.get_width()) / 2);
+		}
+		var tmp;
+		switch(axes._hx_index) {
+		case 1:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			_this.set_y((flixel_FlxG.height - _this.get_height()) / 2);
+		}
+		this.postcard.set_visible(false);
+	}
+	if(this.song == "lofthouse") {
+		var bottom = flixel_FlxG.save.data.downscroll != true;
+		this.hudImage("ui_lofthouse",1,bottom ? 667 : 7);
+		var item_name = "score";
+		var item_y = 499;
+		this.hudImage("ui_" + item_name,7,bottom ? item_y : item_y - 492);
+		var item_name = "misses";
+		var item_y = 556;
+		this.hudImage("ui_" + item_name,7,bottom ? item_y : item_y - 492);
+		var item_name = "accuracy";
+		var item_y = 612;
+		this.hudImage("ui_" + item_name,7,bottom ? item_y : item_y - 492);
+		var item_name = "timer";
+		var item_y = 668;
+		this.hudImage("ui_" + item_name,7,bottom ? item_y : item_y - 492);
+		this.score = this.label(112,bottom ? 506 : 14,125);
+		this.misses = this.label(125,bottom ? 563 : 71,110);
+		this.accuracy = this.label(156,bottom ? 620 : 128,85);
+		this.timer = this.label(123,bottom ? 676 : 184,110);
+		this.popup = new flixel_FlxSprite();
+		this.popup.set_cameras([owner.camHUD]);
+		this.popup.scrollFactor.set();
+		this.popup.set_visible(false);
+		owner.add(this.popup);
+	}
+	if(this.song == "kooky") {
+		var frame = this.hudImage("yoMamaSoBrown/unknown",0,0);
+		var axes = flixel_util_FlxAxes.XY;
+		var tmp;
+		switch(axes._hx_index) {
+		case 0:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			frame.set_x((flixel_FlxG.width - frame.get_width()) / 2);
+		}
+		var tmp;
+		switch(axes._hx_index) {
+		case 1:case 2:
+			tmp = true;
+			break;
+		default:
+			tmp = false;
+		}
+		if(tmp) {
+			frame.set_y((flixel_FlxG.height - frame.get_height()) / 2);
+		}
+		frame.set_flipY(flixel_FlxG.save.data.downscroll);
+		this.credits = this.animated("yoMamaSoBrown/cred",266.5,flixel_FlxG.save.data.downscroll ? 48 : 313,["slideshow"],24,1,true);
+		this.credits.animation.stop();
+		this.verticalHealth = new flixel_ui_FlxBar(939,flixel_FlxG.save.data.downscroll ? 69 : 336,flixel_ui_FlxBarFillDirection.BOTTOM_TO_TOP,34,322,owner,"goldenDisplayHealth",0,2);
+		this.verticalHealth.createFilledBar(-1,-16777216);
+		this.verticalHealth.set_numDivisions(322);
+		this.verticalHealth.set_cameras([owner.camHUD]);
+		this.verticalHealth.scrollFactor.set();
+		owner.add(this.verticalHealth);
+		this.score = this.label(720,flixel_FlxG.save.data.downscroll ? 50 : 297,180);
+		this.misses = this.label(920,flixel_FlxG.save.data.downscroll ? 420 : 20,180);
+		this.accuracy = this.label(695,flixel_FlxG.save.data.downscroll ? 550 : 135,300);
+	}
+};
+$hxClasses["GoldenGlitchedLevels"] = GoldenGlitchedLevels;
+GoldenGlitchedLevels.__name__ = "GoldenGlitchedLevels";
+GoldenGlitchedLevels.supports = function(song) {
+	return ["aug","doughboy","the-big-dingle","lofthouse","kooky"].indexOf(song) >= 0;
+};
+GoldenGlitchedLevels.prototype = {
+	owner: null
+	,host: null
+	,song: null
+	,beat: null
+	,crowd: null
+	,box: null
+	,postcard: null
+	,popup: null
+	,popupEnd: null
+	,credits: null
+	,score: null
+	,misses: null
+	,accuracy: null
+	,timer: null
+	,verticalHealth: null
+	,image: function(name) {
+		return Paths.getPath("images/" + ("golden/frustsongs/" + this.song + "/" + name) + ".png","IMAGE",GoldenFrustExtras.library(this.song));
+	}
+	,hudImage: function(name,x,y) {
+		var sprite = new flixel_FlxSprite(x,y).loadGraphic(this.image(name));
+		sprite.set_cameras([this.owner.camHUD]);
+		sprite.scrollFactor.set();
+		sprite.set_antialiasing(false);
+		this.owner.add(sprite);
+		return sprite;
+	}
+	,label: function(x,y,width) {
+		var text = new flixel_text_FlxText(x,y,width,"0",20);
+		text.setFormat("assets/fonts/" + "vcr.ttf",this.song == "kooky" ? 30 : 20,this.song == "kooky" ? -1 : -16777216,this.song == "kooky" ? "center" : "left");
+		text.set_cameras([this.owner.camHUD]);
+		text.scrollFactor.set();
+		this.owner.add(text);
+		return text;
+	}
+	,animated: function(name,x,y,tracks,fps,scale,hud) {
+		var sprite = new flixel_FlxSprite(x,y);
+		var key = "golden/frustsongs/" + this.song + "/" + name;
+		var library = GoldenFrustExtras.library(this.song);
+		var potatoKey = key + "_potato";
+		sprite.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE",library),Paths.getPath("images/" + key + ".xml","TEXT",library)));
+		var _g = 0;
+		while(_g < tracks.length) {
+			var track = tracks[_g];
+			++_g;
+			sprite.animation.addByPrefix(track,track,fps,false);
+		}
+		sprite.animation.play(tracks[0]);
+		sprite.scale.set(scale,scale);
+		sprite.updateHitbox();
+		sprite.set_antialiasing(false);
+		if(hud) {
+			sprite.set_cameras([this.owner.camHUD]);
+			sprite.scrollFactor.set();
+			this.owner.add(sprite);
+		}
+		return sprite;
+	}
+	,cue: function(b,at) {
+		var _gthis = this;
+		switch(this.song) {
+		case "aug":
+			switch(b) {
+			case 36:
+				this.host.zoomTo(at,.725,Conductor.crochet / 250);
+				break;
+			case 40:
+				this.owner.goldenTweens.tween(this.owner.gf,{ y : 320},1,{ ease : flixel_tweens_FlxEase.bounceOut});
+				break;
+			case 4:case 104:
+				this.host.zoomTo(at,1.1,2);
+				break;
+			case 168:
+				this.host.zoomTo(at,.725,1);
+				break;
+			case 136:case 232:
+				this.host.zoomTo(at,1.05,1);
+				break;
+			}
+			break;
+		case "kooky":
+			if(b == 2) {
+				this.credits.animation.play("slideshow",true);
+			}
+			if(b == 66 || b == 230) {
+				this.owner.dad.canAutoDance = false;
+				this.owner.dad.playAnim("junk",true);
+			}
+			if(b == 68 || b == 232) {
+				this.owner.dad.canAutoDance = true;
+				this.owner.dad.dance();
+			}
+			break;
+		case "lofthouse":
+			switch(b) {
+			case 380:
+				this.host.targetZoom = 1.1;
+				break;
+			case 384:
+				this.host.targetZoom = 1.05;
+				break;
+			case 392:case 424:
+				this.host.targetZoom = 1;
+				break;
+			case 400:case 432:
+				this.host.targetZoom = .9;
+				break;
+			case 64:case 448:
+				this.host.targetZoom = .9;
+				break;
+			case 60:case 128:case 216:case 248:case 255:case 408:case 440:case 511:
+				this.host.targetZoom = .8;
+				break;
+			}
+			if(b == 64 || b == 192 || b == 256 || b == 448) {
+				this.popup.loadGraphic(this.image("popup" + (b == 192 ? 2 : b == 256 ? 3 : 1)));
+				this.popup.scale.set(2,2);
+				this.popup.updateHitbox();
+				this.popup.setPosition(flixel_FlxG.width - this.popup.get_width(),flixel_FlxG.height);
+				this.popup.set_visible(true);
+				this.owner.goldenTweens.tween(this.popup,{ y : flixel_FlxG.height - this.popup.get_height()},.105);
+				this.popupEnd = at + 960000 / PlayState.SONG.bpm;
+			}
+			break;
+		case "the-big-dingle":
+			this.crowd.animation.play(b % 2 == 0 ? "danceLeft" : "danceRight",true);
+			switch(b) {
+			case 116:
+				this.box.set_visible(true);
+				this.box.animation.play("animOne",true);
+				break;
+			case 147:
+				this.box.set_visible(true);
+				this.box.animation.play("animTwo",true);
+				break;
+			case 276:
+				this.postcard.set_visible(true);
+				this.postcard.animation.play("postcard",true);
+				break;
+			case 280:
+				this.host.changeCharacter(["DAD","donk","375","295","true"]);
+				var fh = this.owner.boyfriend;
+				fh.set_x(fh.x + 655);
+				var this1 = this.host.points;
+				var value = this.host.focusPoint(this.owner.boyfriend,"BF");
+				this1.h["BF"] = value;
+				var name = "sky";
+				this.owner.frustStage.sceneLayers.h[name].set_visible(false);
+				var name = "city";
+				this.owner.frustStage.sceneLayers.h[name].set_visible(false);
+				var name = "behindTrain";
+				this.owner.frustStage.sceneLayers.h[name].set_visible(false);
+				var name = "street";
+				this.owner.frustStage.sceneLayers.h[name].set_visible(false);
+				var name = "sludd";
+				this.owner.frustStage.sceneLayers.h[name].set_visible(true);
+				var name = "water";
+				this.owner.frustStage.sceneLayers.h[name].set_visible(true);
+				var name = "sand";
+				this.owner.frustStage.sceneLayers.h[name].set_visible(true);
+				var name = "tree";
+				this.owner.frustStage.sceneLayers.h[name].set_visible(true);
+				this.owner.goldenTweens.tween(this.postcard,{ alpha : 0},1,{ onComplete : function(_) {
+					_gthis.postcard.set_visible(false);
+				}});
+				break;
+			}
+			break;
+		}
+	}
+	,update: function(time,elapsed) {
+		var next = Math.floor(time / (60000 / PlayState.SONG.bpm)) | 0;
+		while(this.beat < next) {
+			this.beat++;
+			if(this.beat >= 0) {
+				this.cue(this.beat,this.beat * 60000 / PlayState.SONG.bpm);
+			}
+		}
+		this.host.sample(time);
+		if(this.song == "kooky") {
+			if(!GoldenMobileControls.enabled) {
+				var _g = 0;
+				var _g1 = this.owner.playerStrums.members.length;
+				while(_g < _g1) {
+					var i = _g++;
+					var strum = this.owner.playerStrums.members[i];
+					if(strum != null) {
+						strum.set_x(285 + i * 87);
+					}
+				}
+			}
+			if(!PlayState.opponentMode) {
+				if(0 < this.owner.strumLineNotes.members.length) {
+					this.owner.strumLineNotes.members[0].set_visible(false);
+				}
+				if(1 < this.owner.strumLineNotes.members.length) {
+					this.owner.strumLineNotes.members[1].set_visible(false);
+				}
+				if(2 < this.owner.strumLineNotes.members.length) {
+					this.owner.strumLineNotes.members[2].set_visible(false);
+				}
+				if(3 < this.owner.strumLineNotes.members.length) {
+					this.owner.strumLineNotes.members[3].set_visible(false);
+				}
+			}
+			this.owner.healthBar.set_visible(false);
+			this.owner.healthBarBG.set_visible(false);
+			if(this.owner.goldenHealthOverlay != null) {
+				this.owner.goldenHealthOverlay.set_visible(false);
+			}
+			this.owner.iconP1.scale.set(.6,.6);
+			this.owner.iconP2.scale.set(.6,.6);
+			this.owner.iconP1.setPosition(845,flixel_FlxG.save.data.downscroll ? 10 : 277);
+			this.owner.iconP2.setPosition(920,flixel_FlxG.save.data.downscroll ? 285 : 552);
+			this.owner.camFollow.setPosition(640,360);
+			flixel_FlxG.camera.set_zoom(1);
+			this.owner.camHUD.set_zoom(1);
+		}
+		if(this.score != null) {
+			this.owner.applecoreScore.set_visible(false);
+			this.owner.applecoreMisses.set_visible(false);
+			this.owner.applecoreAccuracy.set_visible(false);
+			this.owner.applecoreClock.set_visible(false);
+			this.score.set_text((this.song == "kooky" ? "Score\n" : "") + (this.owner.goldenDisplayScore | 0));
+			this.misses.set_text((this.song == "kooky" ? "Misses\n" : "") + PlayState.misses);
+			this.accuracy.set_text((this.song == "kooky" ? "Accuracy\n" : "") + this.owner.truncateFloat(this.owner.accuracy,2) + "%");
+			if(this.timer != null) {
+				this.timer.set_text(this.owner.applecoreClock.text);
+			}
+		}
+		if(this.popup != null && this.popup.visible && time >= this.popupEnd) {
+			this.popup.set_visible(false);
+		}
+		if(this.box != null && this.box.visible && this.box.animation._curAnim.finished) {
+			this.box.set_visible(false);
+		}
+	}
+	,destroy: function() {
+	}
+	,__class__: GoldenGlitchedLevels
+};
 var GoldenHeadroomShader = function() {
 	if(this.__glFragmentSource == null) {
 		this.__glFragmentSource = "\n    varying float openfl_Alphav;\n\t\tvarying vec4 openfl_ColorMultiplierv;\n\t\tvarying vec4 openfl_ColorOffsetv;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform bool openfl_HasColorTransform;\n\t\tuniform vec2 openfl_TextureSize;\n\t\tuniform sampler2D bitmap;\n\n\t\tuniform bool hasTransform;\n\t\tuniform bool hasColorTransform;\n\n\t\tvec4 flixel_texture2D(sampler2D bitmap, vec2 coord)\n\t\t{\n\t\t\tvec4 color = texture2D(bitmap, coord);\n\t\t\tif (!hasTransform)\n\t\t\t{\n\t\t\t\treturn color;\n\t\t\t}\n\n\t\t\tif (color.a == 0.0)\n\t\t\t{\n\t\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\n\t\t\t}\n\n\t\t\tif (!hasColorTransform)\n\t\t\t{\n\t\t\t\treturn color * openfl_Alphav;\n\t\t\t}\n\n\t\t\tcolor = vec4(color.rgb / color.a, color.a);\n\n\t\t\tmat4 colorMultiplier = mat4(0);\n\t\t\tcolorMultiplier[0][0] = openfl_ColorMultiplierv.x;\n\t\t\tcolorMultiplier[1][1] = openfl_ColorMultiplierv.y;\n\t\t\tcolorMultiplier[2][2] = openfl_ColorMultiplierv.z;\n\t\t\tcolorMultiplier[3][3] = openfl_ColorMultiplierv.w;\n\n\t\t\tcolor = clamp(openfl_ColorOffsetv + (color * colorMultiplier), 0.0, 1.0);\n\n\t\t\tif (color.a > 0.0)\n\t\t\t{\n\t\t\t\treturn vec4(color.rgb * color.a * openfl_Alphav, color.a * openfl_Alphav);\n\t\t\t}\n\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\n\t\t}\n\t\n\n\n    float PI     = 3.141592653589793;\n    float halfpi = 1.570796326794897;\n\n    uniform float roll;\n    uniform float pitch;\n    uniform float fake_pitch;\n    uniform float zoom;\n    uniform float colorR;\n    uniform float colorG;\n    uniform float colorB;\n    uniform float colourMult;\n\n    vec2 localise_vector( in vec2 vec, in float theta )\n    {\n        return vec2(\n            (vec.x * cos(theta)) + (vec.y * sin(theta)), \n            (vec.x * sin(theta)) + (vec.y * cos(theta))\n        );\n    }\n\n    float lines( in vec2 uv, in float bruh )\n    {\n        float angle_uv = 0.0;\n        uv -= vec2(0.5, 0.5);\n        \n        float lines = 0.0;\n        lines = sin((uv.y - 0.01) * 160.0) + bruh;\n        lines = min(1.0, max(lines * 1.5, 0.0));\n        \n        return lines;\n    }\n\n    void main()\n    {\n        vec2 uv_unrotated = openfl_TextureCoordv;\n        uv_unrotated.x -= 0.5;\n        uv_unrotated.y -= 0.5;\n        uv_unrotated *= zoom;\n        vec2 uv = vec2(\n            (uv_unrotated.x * cos(roll)) - (uv_unrotated.y * sin(roll)),\n            (uv_unrotated.x * sin(roll)) + (uv_unrotated.y * cos(roll))\n        );\n        float localtheta = atan(0.5 * PI * uv.x);\n        float theta_offset = pitch;\n        float theta = localtheta + theta_offset;\n        theta = mod(theta, PI * 2.0);\n        \n        float r = sqrt((tan(theta) * tan(theta)) + 1.0);\n        r = min(r, sqrt((tan(theta + halfpi) * tan(theta + halfpi)) + 1.0));\n        \n        float x = r * cos(localtheta);\n        vec2 space_uv = vec2(0.0, 0.0);\n        \n        float persp_mult = 0.5;\n        float x_persp = persp_mult/x;\n        if (abs(uv.y + fake_pitch) < x_persp) {\n            float percentage = (uv.y + fake_pitch + x_persp) / (2.0 * x_persp);\n            space_uv.x = theta / (2.0 * PI);\n            space_uv.x = (fract((space_uv.x * 4.0) + 0.5));\n            space_uv.y = percentage * 0.995;\n        } else {\n            float floor_distance = tan(halfpi - atan(abs(uv.y + fake_pitch)));\n            vec2 floor_position_local = vec2(floor_distance * tan(localtheta), floor_distance);\n            vec2 floor_position_global = localise_vector(floor_position_local, theta_offset);\n            space_uv.y = ((floor_position_global * 0.15 / persp_mult) + 0.5).x;\n            space_uv.x = ((floor_position_global * 0.15 / persp_mult) + 0.5).y;\n        }\n        gl_FragColor.a = openfl_Alphav;\n        gl_FragColor.rgb = (lines(space_uv, -0.8) * vec3(colorR, colorG, colorB)) + (lines(space_uv, -0.965) * vec3(colorR * colourMult, colorG * colourMult, colorB * colourMult));\n    }\n    ";
@@ -23191,6 +24371,13 @@ GoldenHud.create = function(p) {
 	p.scoreTxt.set_visible(false);
 	p.goldenCombo = new GoldenCombo(p.camHUD,p.goldenTweens);
 	p.add(p.goldenCombo);
+	if(PlayState.opponentMode) {
+		var mode = new flixel_text_FlxText(flixel_FlxG.width - 280,48,260,"OPPONENT MODE",18);
+		mode.setFormat("assets/fonts/" + "vcr.ttf",18,-8323176,"right",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
+		mode.scrollFactor.set();
+		mode.set_cameras([p.camHUD]);
+		p.add(mode);
+	}
 	p.applecoreAccuracy = GoldenHud.label(p);
 	p.applecoreMisses = GoldenHud.label(p);
 	p.applecoreScore = GoldenHud.label(p);
@@ -23199,6 +24386,7 @@ GoldenHud.create = function(p) {
 	p.applecoreClock.setFormat("assets/fonts/" + "vcr.ttf",32,-1,"center",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
 	p.applecoreClock.set_borderSize(2);
 	var overlay = new flixel_FlxSprite(p.healthBarBG.x,p.healthBarBG.y).loadGraphic(Paths.getPath("images/" + "golden/ui/healthBarOverlay" + ".png","IMAGE",null));
+	p.goldenHealthOverlay = overlay;
 	overlay.scrollFactor.set();
 	overlay.set_cameras([p.camHUD]);
 	p.insert(p.members.indexOf(p.healthBar) + 1,overlay);
@@ -23240,8 +24428,9 @@ var GoldenInput = function(state) {
 	this.keys = new haxe_ds_IntMap();
 	this.held = [false,false,false,false];
 	this.state = state;
-	openfl_Lib.get_current().stage.addEventListener("keyDown",$bind(this,this.onDown));
-	openfl_Lib.get_current().stage.addEventListener("keyUp",$bind(this,this.onUp));
+	window.addEventListener("keydown",$bind(this,this.onBrowserDown),true);
+	window.addEventListener("keyup",$bind(this,this.onBrowserUp),true);
+	window.addEventListener("blur",$bind(this,this.onBrowserBlur));
 	openfl_Lib.get_current().stage.addEventListener("deactivate",$bind(this,this.onBlur));
 };
 $hxClasses["GoldenInput"] = GoldenInput;
@@ -23262,6 +24451,67 @@ GoldenInput.prototype = {
 	,keys: null
 	,events: null
 	,state: null
+	,browserCode: function(event) {
+		switch(event.code) {
+		case "ArrowDown":
+			return 40;
+		case "ArrowLeft":
+			return 37;
+		case "ArrowRight":
+			return 39;
+		case "ArrowUp":
+			return 38;
+		case "KeyA":
+			return 65;
+		case "KeyD":
+			return 68;
+		case "KeyF":
+			return 70;
+		case "KeyJ":
+			return 74;
+		case "KeyK":
+			return 75;
+		case "KeyS":
+			return 83;
+		case "KeyW":
+			return 87;
+		default:
+			switch(event.key) {
+			case "ArrowDown":case "Down":
+				return 40;
+			case "ArrowLeft":case "Left":
+				return 37;
+			case "ArrowRight":case "Right":
+				return 39;
+			case "ArrowUp":case "Up":
+				return 38;
+			default:
+				return event.keyCode;
+			}
+		}
+	}
+	,onBrowserDown: function(event) {
+		if(event.ctrlKey || event.metaKey || event.altKey || !this.playable()) {
+			return;
+		}
+		var code = this.browserCode(event);
+		var lane = this.laneFor(code);
+		if(lane < 0) {
+			return;
+		}
+		event.preventDefault();
+		this.pressKey(code,lane);
+	}
+	,onBrowserUp: function(event) {
+		var code = this.browserCode(event);
+		if(this.keys.h.hasOwnProperty(code)) {
+			event.preventDefault();
+		}
+		this.releaseKey(code);
+	}
+	,onBrowserBlur: function(event) {
+		this.clear();
+	}
 	,laneFor: function(code) {
 		switch(code) {
 		case 37:
@@ -23344,8 +24594,9 @@ GoldenInput.prototype = {
 		this.events = [];
 	}
 	,destroy: function() {
-		openfl_Lib.get_current().stage.removeEventListener("keyDown",$bind(this,this.onDown));
-		openfl_Lib.get_current().stage.removeEventListener("keyUp",$bind(this,this.onUp));
+		window.removeEventListener("keydown",$bind(this,this.onBrowserDown),true);
+		window.removeEventListener("keyup",$bind(this,this.onBrowserUp),true);
+		window.removeEventListener("blur",$bind(this,this.onBrowserBlur));
 		openfl_Lib.get_current().stage.removeEventListener("deactivate",$bind(this,this.onBlur));
 		this.clear();
 	}
@@ -23366,7 +24617,7 @@ GoldenInputJudge.firstTap = function(notes,lane,time) {
 	while(_g < notes.length) {
 		var note = notes[_g];
 		++_g;
-		if(note != null && note.alive && note.mustPress && !note.wasGoodHit && !note.isSustainNote && note.noteData == lane && GoldenInputJudge.canHit(note.strumTime,time) && (best == null || note.strumTime < best.strumTime)) {
+		if(note != null && note.alive && PlayState.controlsNote(note) && !note.wasGoodHit && !note.isSustainNote && note.noteData == lane && GoldenInputJudge.canHit(note.strumTime,time) && (best == null || note.strumTime < best.strumTime)) {
 			best = note;
 		}
 	}
@@ -24413,6 +25664,8 @@ GoldenMobileControls.install = function() {
 		GoldenMobileControls.loadSkin("default");
 		GoldenMobileControls.loadSkin("3d");
 		GoldenMobileControls.loadSkin("awesome");
+		GoldenMobileControls.loadSkin("bevel");
+		GoldenMobileControls.loadSkin("bready");
 	} catch( _g ) {
 		haxe_NativeStackTrace.lastError = _g;
 		var error = haxe_Exception.caught(_g).unwrap();
@@ -24514,7 +25767,7 @@ GoldenMobileControls.drawLanes = function() {
 		var scale = 160.0 / Math.max(base.fw,base.fh);
 		var ctx = canvas.getContext("2d",null);
 		ctx.clearRect(0,0,256,256);
-		ctx.imageSmoothingEnabled = GoldenMobileControls.skin != "3d";
+		ctx.imageSmoothingEnabled = GoldenMobileControls.skin != "3d" && GoldenMobileControls.skin != "bevel";
 		ctx.drawImage(image,pose.x,pose.y,pose.w,pose.h,(256 - pose.fw * scale) / 2 + pose.ox * scale,(256 - pose.fh * scale) / 2 + pose.oy * scale,pose.w * scale,pose.h * scale);
 	}
 };
@@ -24657,8 +25910,8 @@ GoldenMobileControls.refresh = function() {
 	var nextSkin = "default";
 	if(play) {
 		var state = flixel_FlxG.game._state;
-		if(state.playerStrums != null && state.playerStrums.members[0] != null) {
-			nextSkin = GoldenNoteSkin.skinOf(state.playerStrums.members[0]);
+		if(state.strumLineNotes != null && state.controlledStrum(0) != null) {
+			nextSkin = GoldenNoteSkin.skinOf(state.controlledStrum(0));
 		}
 	}
 	if(nextSkin != GoldenMobileControls.skin) {
@@ -24720,6 +25973,147 @@ GoldenMobileControls.syncGameFrame = function() {
 	overlay.style.setProperty("--touch-height",Math.max(34,Math.min(96,height * .18)) + "px");
 	GoldenMobileControls.frameSignature = signature;
 };
+var GoldenNFT = function(owner) {
+	this.clock = 0;
+	this.icons = [];
+	this.owner = owner;
+	this.dx = owner.dad.x;
+	this.dy = owner.dad.y;
+	this.nftCamera = this.makeCamera();
+	this.frontCamera = this.makeCamera();
+	this.tube = new GoldenTubeShader();
+	this.tube.speed.value[0] = 0;
+	if(!GoldenQuality.superLow) {
+		this.nftCamera.setFilters([new openfl_filters_ShaderFilter(this.tube)]);
+	}
+	var actor = owner.dad;
+	actor.set_cameras([this.frontCamera]);
+	var actor = owner.boyfriend;
+	actor.set_cameras([this.frontCamera]);
+	var actor = owner.gf;
+	actor.set_cameras([this.frontCamera]);
+	owner.frustStage.ground.set_cameras([this.frontCamera]);
+	var _g = 0;
+	while(_g < 14) {
+		var i = _g++;
+		var palette = [-10290957,-469662,-7249160,-1087176,-969162,-2661640,-10312712,-3804874];
+		var bitmap = new openfl_display_BitmapData(943,902,true,palette[flixel_FlxG.random.int(0,7)]);
+		var part_name = "body";
+		var part_count = 13;
+		var image = openfl_utils_Assets.getBitmapData(Paths.getPath("images/" + ("golden/frustsongs/nft/nft/" + part_name + flixel_FlxG.random.int(1,part_count)) + ".png","IMAGE","extra-nft"));
+		bitmap.copyPixels(image,image.rect,new openfl_geom_Point(),null,null,true);
+		var part_name1 = "hat";
+		var part_count1 = 9;
+		var image1 = openfl_utils_Assets.getBitmapData(Paths.getPath("images/" + ("golden/frustsongs/nft/nft/" + part_name1 + flixel_FlxG.random.int(1,part_count1)) + ".png","IMAGE","extra-nft"));
+		bitmap.copyPixels(image1,image1.rect,new openfl_geom_Point(),null,null,true);
+		var part_name2 = "head";
+		var part_count2 = 9;
+		var image2 = openfl_utils_Assets.getBitmapData(Paths.getPath("images/" + ("golden/frustsongs/nft/nft/" + part_name2 + flixel_FlxG.random.int(1,part_count2)) + ".png","IMAGE","extra-nft"));
+		bitmap.copyPixels(image2,image2.rect,new openfl_geom_Point(),null,null,true);
+		var part_name3 = "eyes";
+		var part_count3 = 6;
+		var image3 = openfl_utils_Assets.getBitmapData(Paths.getPath("images/" + ("golden/frustsongs/nft/nft/" + part_name3 + flixel_FlxG.random.int(1,part_count3)) + ".png","IMAGE","extra-nft"));
+		bitmap.copyPixels(image3,image3.rect,new openfl_geom_Point(),null,null,true);
+		var part_name4 = "mouth";
+		var part_count4 = 6;
+		var image4 = openfl_utils_Assets.getBitmapData(Paths.getPath("images/" + ("golden/frustsongs/nft/nft/" + part_name4 + flixel_FlxG.random.int(1,part_count4)) + ".png","IMAGE","extra-nft"));
+		bitmap.copyPixels(image4,image4.rect,new openfl_geom_Point(),null,null,true);
+		var mask = new openfl_display_BitmapData(943,902,true,0);
+		var shape = new openfl_display_Shape();
+		shape.get_graphics().beginFill(16777215);
+		shape.get_graphics().drawRoundRect(0,0,943,902,150,150);
+		shape.get_graphics().endFill();
+		mask.draw(shape);
+		bitmap.copyChannel(mask,mask.rect,new openfl_geom_Point(),8,8);
+		mask.dispose();
+		var icon = new flixel_FlxSprite(-700 + flixel_FlxG.random.float(-1280,1280),flixel_FlxG.random.float(-360,360)).loadGraphic(bitmap);
+		icon.set_cameras([this.nftCamera]);
+		icon.set_angle(flixel_FlxG.random.float(-90,90));
+		icon.angularVelocity = 10;
+		var scale = flixel_FlxG.random.float(.1,.2);
+		icon.scale.set(scale,scale);
+		icon.updateHitbox();
+		icon.velocity.set_x(flixel_FlxG.random.float(200,300));
+		icon.set_x(icon.x + icon.velocity.x * 50000);
+		icon.set_x(-1980 + (icon.x + 1980) % 3900);
+		this.icons.push(icon);
+		owner.insert(owner.members.indexOf(owner.gf),icon);
+	}
+};
+$hxClasses["GoldenNFT"] = GoldenNFT;
+GoldenNFT.__name__ = "GoldenNFT";
+GoldenNFT.prototype = {
+	owner: null
+	,nftCamera: null
+	,frontCamera: null
+	,icons: null
+	,tube: null
+	,clock: null
+	,dx: null
+	,dy: null
+	,makeCamera: function() {
+		var camera = new flixel_FlxCamera();
+		camera.bgColor = 0;
+		flixel_FlxG.cameras.add(camera,false);
+		HxOverrides.remove(flixel_FlxG.cameras.list,camera);
+		flixel_FlxG.cameras.list.splice(flixel_FlxG.cameras.list.indexOf(this.owner.camHUD),0,camera);
+		var _g = 0;
+		var _g1 = flixel_FlxG.cameras.list.length;
+		while(_g < _g1) {
+			var i = _g++;
+			flixel_FlxG.cameras.list[i].ID = i;
+		}
+		flixel_FlxG.game.setChildIndex(camera.flashSprite,flixel_FlxG.game.getChildIndex(this.owner.camHUD.flashSprite));
+		return camera;
+	}
+	,update: function(time,elapsed) {
+		this.clock += elapsed;
+		this.dx += .5 * Math.cos(this.clock) * elapsed * 126;
+		this.dy += .5 * Math.sin(this.clock) * elapsed * 126;
+		this.owner.dad.setPosition(Math.floor(this.dx * .5) * 2,Math.floor(this.dy * .5) * 2);
+		var camera = this.nftCamera;
+		var _this = camera.scroll;
+		var point = flixel_FlxG.camera.scroll;
+		_this.set_x(point.x);
+		_this.set_y(point.y);
+		if(point._weak) {
+			point.put();
+		}
+		camera.set_zoom(flixel_FlxG.camera.zoom);
+		var camera = this.frontCamera;
+		var _this = camera.scroll;
+		var point = flixel_FlxG.camera.scroll;
+		_this.set_x(point.x);
+		_this.set_y(point.y);
+		if(point._weak) {
+			point.put();
+		}
+		camera.set_zoom(flixel_FlxG.camera.zoom);
+		var _g = 0;
+		var _g1 = this.icons.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var icon = this.icons[i];
+			icon.set_y(icon.y + .3 * Math.sin(this.clock + i * 50) * elapsed * 126);
+			if(icon.x > 1920) {
+				icon.set_x(-1980 + (icon.x + 1980) % 3900);
+			}
+		}
+		this.tube.iTime.value[0] = this.clock;
+	}
+	,destroy: function() {
+		var camera = this.nftCamera;
+		if(camera != null && flixel_FlxG.cameras.list.indexOf(camera) >= 0) {
+			flixel_FlxG.cameras.remove(camera,true);
+		}
+		var camera = this.frontCamera;
+		if(camera != null && flixel_FlxG.cameras.list.indexOf(camera) >= 0) {
+			flixel_FlxG.cameras.remove(camera,true);
+		}
+		this.nftCamera = this.frontCamera = null;
+	}
+	,__class__: GoldenNFT
+};
 var GoldenNoteGeometry = function() { };
 $hxClasses["GoldenNoteGeometry"] = GoldenNoteGeometry;
 GoldenNoteGeometry.__name__ = "GoldenNoteGeometry";
@@ -24741,6 +26135,9 @@ GoldenNoteGeometry.spawnLead = function(screenHeight,speed) {
 var GoldenNoteSkin = function() { };
 $hxClasses["GoldenNoteSkin"] = GoldenNoteSkin;
 GoldenNoteSkin.__name__ = "GoldenNoteSkin";
+GoldenNoteSkin.clear = function() {
+	GoldenNoteSkin.assigned.h = { __keys__ : { }};
+};
 GoldenNoteSkin.skinOf = function(sprite) {
 	if(GoldenNoteSkin.assigned.h.__keys__[sprite.__id__] != null) {
 		return GoldenNoteSkin.assigned.h[sprite.__id__];
@@ -24749,7 +26146,41 @@ GoldenNoteSkin.skinOf = function(sprite) {
 	}
 };
 GoldenNoteSkin.atlas = function(skin) {
-	return "golden/notes/" + (skin == "awesome" ? "awesome_notes" : skin == "3d" ? "NOTE_assets_3D" : "NOTE_assets");
+	return "golden/notes/" + (skin == "bevel" ? "BEVEL_NOTES" : skin == "bready" ? "breadyNotes" : skin == "awesome" ? "awesome_notes" : skin == "3d" ? "NOTE_assets_3D" : "NOTE_assets");
+};
+GoldenNoteSkin.baseScale = function(skin) {
+	if(skin == "bevel") {
+		return 2.07894736842105265;
+	} else {
+		return .7;
+	}
+};
+GoldenNoteSkin.frames = function(skin) {
+	var key = GoldenNoteSkin.atlas(skin);
+	var library = null;
+	var potatoKey = key + "_potato";
+	var main = GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE",library),Paths.getPath("images/" + key + ".xml","TEXT",library));
+	if(skin != "bevel") {
+		return main;
+	}
+	var combined = new flixel_graphics_frames_FlxAtlasFrames(main.parent);
+	var _g = 0;
+	var _g1 = main.frames;
+	while(_g < _g1.length) {
+		var frame = _g1[_g];
+		++_g;
+		combined.pushFrame(frame.copyTo());
+	}
+	var _g = 0;
+	var library = null;
+	var potatoKey = "golden/notes/bevel_ends" + "_potato";
+	var _g1 = (GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + "golden/notes/bevel_ends" + ".png","IMAGE",library),Paths.getPath("images/" + "golden/notes/bevel_ends" + ".xml","TEXT",library))).frames;
+	while(_g < _g1.length) {
+		var frame = _g1[_g];
+		++_g;
+		combined.pushFrame(frame.copyTo());
+	}
+	return combined;
 };
 GoldenNoteSkin.setupStrum = function(sprite,skin,direction) {
 	GoldenNoteSkin.assigned.set(sprite,skin);
@@ -24763,9 +26194,9 @@ GoldenNoteSkin.setupStrum = function(sprite,skin,direction) {
 	sprite.animation.addByPrefix("pressed",key.toLowerCase() + " press",24,false);
 	sprite.animation.addByPrefix("confirm",key.toLowerCase() + " confirm",24,false);
 	sprite.animation.play("static");
-	sprite.scale.set(0.7,0.7);
+	sprite.scale.set(GoldenNoteSkin.baseScale(skin),GoldenNoteSkin.baseScale(skin));
 	sprite.updateHitbox();
-	sprite.set_antialiasing(skin != "3d");
+	sprite.set_antialiasing(skin != "3d" && skin != "bevel");
 	GoldenNoteSkin.alignStrum(sprite,skin,direction);
 };
 GoldenNoteSkin.alignStrum = function(sprite,skin,direction) {
@@ -24834,14 +26265,14 @@ GoldenNoteSplash.alignToReceptor = function(splash,receptor,authored) {
 GoldenNoteSplash.followTransform = function(splash,receptor,authored,skin) {
 	var idle = receptor.animation._animations.h["static"];
 	var base = receptor.frames.frames[idle.frames[0]].sourceSize;
-	var ratioX = receptor.scale.x / 0.7;
-	var ratioY = receptor.scale.y / 0.7;
-	var nominalScale = skin == "3d" ? 1.4 : 0.75;
+	var ratioX = receptor.scale.x / GoldenNoteSkin.baseScale(skin);
+	var ratioY = receptor.scale.y / GoldenNoteSkin.baseScale(skin);
+	var nominalScale = skin == "bevel" ? 2.1 : skin == "3d" ? 1.4 : 0.75;
 	splash.scale.set(nominalScale * ratioX,nominalScale * ratioY);
 	var cx = receptor.x + base.x * receptor.scale.x / 2;
 	var cy = receptor.y + base.y * receptor.scale.y / 2;
-	var dx = authored == null ? 0 : (authored.x + splash.frameWidth * nominalScale / 2 - base.x * 0.7 / 2) * ratioX;
-	var dy = authored == null ? 0 : (authored.y + splash.frameHeight * nominalScale / 2 - base.y * 0.7 / 2) * ratioY;
+	var dx = authored == null ? 0 : (authored.x + splash.frameWidth * nominalScale / 2 - base.x * GoldenNoteSkin.baseScale(skin) / 2) * ratioX;
+	var dy = authored == null ? 0 : (authored.y + splash.frameHeight * nominalScale / 2 - base.y * GoldenNoteSkin.baseScale(skin) / 2) * ratioY;
 	var radians = receptor.angle * Math.PI / 180;
 	var cos = Math.cos(radians);
 	var sin = Math.sin(radians);
@@ -24874,11 +26305,11 @@ GoldenNoteSplash.prototype = $extend(flixel_FlxSprite.prototype,{
 		this.receptor = receptor;
 		if(this.loadedSkin != skin) {
 			this.loadedSkin = skin;
-			var key = "golden/notes/" + (skin == "3d" ? "splash_3d" : "noteSplashes");
+			var key = "golden/notes/" + (skin == "bevel" ? "bevel_splash" : skin == "3d" ? "splash_3d" : "noteSplashes");
 			var library = null;
 			var potatoKey = key + "_potato";
 			this.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE",library),Paths.getPath("images/" + key + ".xml","TEXT",library)));
-			if(skin == "3d") {
+			if(skin == "3d" || skin == "bevel") {
 				var inlarr_0 = "purple";
 				var inlarr_1 = "blue";
 				var inlarr_2 = "green";
@@ -24905,10 +26336,10 @@ GoldenNoteSplash.prototype = $extend(flixel_FlxSprite.prototype,{
 			}
 			this.style = JSON.parse(openfl_utils_Assets.getText(Paths.getPath("data/" + ("golden/notes/" + skin) + ".json","TEXT",null)));
 		}
-		var variant = skin == "3d" ? "" : Std.string(flixel_FlxG.random.int(1,2));
-		this.animation.play(skin == "3d" ? "lane" + lane : variant,true);
+		var variant = skin == "3d" || skin == "bevel" ? "" : Std.string(flixel_FlxG.random.int(1,2));
+		this.animation.play(skin == "3d" || skin == "bevel" ? "lane" + lane : variant,true);
 		this.animation._curAnim.set_frameRate(24 * flixel_FlxG.random.float(0.8,1.2));
-		this.scale.set(skin == "3d" ? receptor.scale.x * 2 : 0.75 * receptor.scale.x / 0.7,skin == "3d" ? receptor.scale.y * 2 : 0.75 * receptor.scale.y / 0.7);
+		this.scale.set(skin == "bevel" ? receptor.scale.x : skin == "3d" ? receptor.scale.x * 2 : 0.75 * receptor.scale.x / GoldenNoteSkin.baseScale(skin),skin == "bevel" ? receptor.scale.y : skin == "3d" ? receptor.scale.y * 2 : 0.75 * receptor.scale.y / GoldenNoteSkin.baseScale(skin));
 		this.updateHitbox();
 		this.origin.set(0,0);
 		this.offset.set(0,0);
@@ -24918,10 +26349,10 @@ GoldenNoteSplash.prototype = $extend(flixel_FlxSprite.prototype,{
 		this.set_alpha(0.5);
 		this.scrollFactor.set(0,0);
 		this.set_pixelPerfectRender(false);
-		this.set_antialiasing(!GoldenQuality.superLow && skin != "3d");
+		this.set_antialiasing(!GoldenQuality.superLow && skin != "3d" && skin != "bevel");
 		this.set_cameras(receptor.get_cameras());
 		this.set_clipRect(null);
-		if(skin == "3d") {
+		if(skin == "3d" || skin == "bevel") {
 			this.shader = null;
 		} else if(!GoldenQuality.superLow) {
 			var red = GoldenNoteSplash.paletteColor(this.style.rgbSplashes.red,lane);
@@ -24969,6 +26400,448 @@ GoldenNoteSplash.prototype = $extend(flixel_FlxSprite.prototype,{
 	}
 	,__class__: GoldenNoteSplash
 });
+var GoldenOCActor = function(song,id,x,y,state) {
+	if(state == null) {
+		state = "bg";
+	}
+	flixel_FlxSprite.call(this,x,y);
+	this.song = song;
+	this.id = id;
+	this.setState(state);
+};
+$hxClasses["GoldenOCActor"] = GoldenOCActor;
+GoldenOCActor.__name__ = "GoldenOCActor";
+GoldenOCActor.__super__ = flixel_FlxSprite;
+GoldenOCActor.prototype = $extend(flixel_FlxSprite.prototype,{
+	song: null
+	,id: null
+	,state: null
+	,setState: function(value) {
+		this.state = value;
+		var folder = this.id == "bambom-nutty" ? "bambom" : this.id;
+		var file = this.id == "bambom-nutty" ? value == "bg" ? "bambom_nutty" : "bambom_nutty_action" : this.id + "_" + (value == "bg" ? this.id == "bambom" ? "idle" : "bg" : value);
+		var path = "golden/frustsongs/" + this.song + "/ocWeek/bgChars/" + folder + "/" + file;
+		var library = GoldenFrustExtras.library(this.song);
+		var type = "TEXT";
+		if(type == null) {
+			type = "TEXT";
+		}
+		if(openfl_utils_Assets.exists(Paths.getPath("images/" + path + ".xml",type,library))) {
+			var potatoKey = path + "_potato";
+			this.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + path + ".png","IMAGE",library),Paths.getPath("images/" + path + ".xml","TEXT",library)));
+			var prefix = this.id == "bambom-nutty" ? value == "bg" ? "nutty back idle" : "nutty jump instance 1" : this.id + " " + (value == "bg" ? "back idle" : value);
+			this.animation.addByPrefix("idle",prefix,24,false);
+			this.animation.play("idle",true);
+		} else {
+			this.loadGraphic(Paths.getPath("images/" + path + ".png","IMAGE",library));
+		}
+		this.set_antialiasing(false);
+		this.origin.set();
+		this.applyStateOffset();
+	}
+	,applyStateOffset: function() {
+		this.offset.set(0,this.state == "flung" ? this.id == "bambom" ? -100 : this.id == "bendu" ? -75 : 0 : 0);
+	}
+	,dance: function() {
+		if(this.state == "bg" && this.animation.exists("idle")) {
+			this.animation.play("idle",true);
+		}
+	}
+	,__class__: GoldenOCActor
+});
+var GoldenOCSongs = function(owner,host) {
+	this.napStart = -1;
+	this.sleeping = false;
+	this.elapsedTime = 0;
+	this.locked = false;
+	this.step = -1;
+	this.beat = -1;
+	this.owner = owner;
+	this.host = host;
+	this.song = PlayState.SONG.song.toLowerCase();
+	this.dadFocus = host.points.h["DAD"];
+	if(this.song == "strawberry" || this.song == "keyboard") {
+		host.dim.makeGraphic(1,1,-16777216);
+		host.dim.setGraphicSize(7112,4000);
+		host.dim.updateHitbox();
+		host.dim.setPosition((flixel_FlxG.width - 7112) / 2,(flixel_FlxG.height - 4000) / 2);
+		host.dim.origin.set();
+		host.dim.offset.set();
+		host.dim.scrollFactor.set();
+	}
+	if(this.song == "strawberry") {
+		owner.remove(host.dim,true);
+		owner.frustStage.insert(owner.frustStage.members.indexOf(owner.frustStage.overlay) + 1,host.dim);
+	}
+	if(this.song == "nutty") {
+		var path = "golden/frustsongs/nutty/ocWeek/bgChars/ringi/ringi_nation/";
+		var type = "TEXT";
+		if(type == null) {
+			type = "TEXT";
+		}
+		this.nap = new GoldenAnimateScene(Paths.getPath("images/" + path + "Animation.json",type,"extra-nutty"),path + "spritemap1","extra-nutty");
+		this.nap.setPosition(-175,20);
+		this.nap.scale.set(.7,.7);
+		this.nap.set_alpha(.001);
+		this.nap.sampleFrame(0);
+		owner.frustStage.add(this.nap);
+	}
+	if(this.song == "keyboard") {
+		this.little = new Character(owner.gf.x + 500,owner.gf.y,"extra-keyboard--litt-le");
+		this.little.set_alpha(.00001);
+		owner.insert(owner.members.indexOf(owner.dad),this.little);
+		this.top = new flixel_FlxSprite(0,-50).makeGraphic(flixel_FlxG.width,90,-16777216);
+		this.bottom = new flixel_FlxSprite(0,645).makeGraphic(flixel_FlxG.width,90,-16777216);
+		var bar = this.top;
+		bar.set_cameras([owner.camHUD]);
+		bar.scrollFactor.set();
+		owner.add(bar);
+		var bar = this.bottom;
+		bar.set_cameras([owner.camHUD]);
+		bar.scrollFactor.set();
+		owner.add(bar);
+	}
+};
+$hxClasses["GoldenOCSongs"] = GoldenOCSongs;
+GoldenOCSongs.__name__ = "GoldenOCSongs";
+GoldenOCSongs.prototype = {
+	owner: null
+	,host: null
+	,song: null
+	,beat: null
+	,step: null
+	,top: null
+	,bottom: null
+	,little: null
+	,locked: null
+	,pan: null
+	,elapsedTime: null
+	,sleeping: null
+	,nap: null
+	,napStart: null
+	,dadFocus: null
+	,tween: function(object,values,duration) {
+		this.owner.goldenTweens.tween(object,values,Math.max(.001,duration),{ ease : flixel_tweens_FlxEase.sineInOut});
+	}
+	,zoom: function(value,duration) {
+		if(duration == null) {
+			duration = 0;
+		}
+		if(duration == 0) {
+			this.host.targetZoom = value;
+			this.host.baseZoomTrack = null;
+		} else {
+			this.host.zoomTo(Conductor.songPosition,value,duration);
+		}
+		this.owner.defaultCamZoom = value;
+	}
+	,actor: function(id) {
+		return this.owner.frustStage.ocActors.h[id];
+	}
+	,alt: function(on) {
+		this.owner.dad.idleSuffix = on ? "-alt" : "";
+	}
+	,bars: function(out) {
+		this.tween(this.top,{ y : out ? -550 : -50},2);
+		this.tween(this.bottom,{ y : out ? 1145 : 645},2);
+	}
+	,camera: function(x,y,duration) {
+		this.locked = true;
+		this.pan = { start : Conductor.songPosition, x : this.owner.camFollow.x, y : this.owner.camFollow.y, tx : x, ty : y, duration : duration * 1000};
+	}
+	,cueBeat: function(b) {
+		var h = this.owner.frustStage.ocActors.h;
+		var npc_h = h;
+		var npc_keys = Object.keys(h);
+		var npc_length = npc_keys.length;
+		var npc_current = 0;
+		while(npc_current < npc_length) {
+			var npc = npc_h[npc_keys[npc_current++]];
+			if(npc.visible) {
+				npc.dance();
+			}
+		}
+		switch(this.song) {
+		case "nutty":
+			switch(b) {
+			case 192:
+				this.zoom(this.host.targetZoom - .1,2);
+				break;
+			case 96:case 256:
+				this.zoom(this.host.targetZoom + .1,.5);
+				break;
+			case 226:case 230:case 260:
+				var fh = flixel_FlxG.camera;
+				fh.set_zoom(fh.zoom + .5);
+				this.alt(true);
+				break;
+			case 228:case 231:case 270:
+				this.alt(false);
+				break;
+			case 160:case 320:
+				this.zoom(this.host.targetZoom + .15,.5);
+				break;
+			case 176:case 336:
+				this.zoom(this.host.targetZoom - .15,.5);
+				break;
+			case 352:
+				var backdrop = this.owner.frustStage.back;
+				backdrop.scale.set(1,1);
+				backdrop.updateHitbox();
+				var axes = flixel_util_FlxAxes.XY;
+				var tmp;
+				switch(axes._hx_index) {
+				case 0:case 2:
+					tmp = true;
+					break;
+				default:
+					tmp = false;
+				}
+				if(tmp) {
+					backdrop.set_x((flixel_FlxG.width - backdrop.get_width()) / 2);
+				}
+				var tmp;
+				switch(axes._hx_index) {
+				case 1:case 2:
+					tmp = true;
+					break;
+				default:
+					tmp = false;
+				}
+				if(tmp) {
+					backdrop.set_y((flixel_FlxG.height - backdrop.get_height()) / 2);
+				}
+				backdrop.scrollFactor.set();
+				this.zoom(this.host.targetZoom - .1,2);
+				var h = this.owner.frustStage.ocActors.h;
+				var npc_h = h;
+				var npc_keys = Object.keys(h);
+				var npc_length = npc_keys.length;
+				var npc_current = 0;
+				while(npc_current < npc_length) {
+					var npc = npc_h[npc_keys[npc_current++]];
+					this.tween(npc,{ alpha : 0},Conductor.crochet / 1000 * 24);
+				}
+				break;
+			case 372:
+				this.camera(this.owner.camFollow.x,this.actor("ringi").y + 400,2);
+				break;
+			case 377:
+				this.actor("ringi").set_visible(false);
+				this.nap.set_alpha(1);
+				this.napStart = Conductor.songPosition;
+				break;
+			case 416:
+				this.locked = false;
+				this.pan = null;
+				break;
+			case 480:
+				var a = this.owner.boyfriend;
+				this.tween(a,{ alpha : 0},Conductor.crochet / 250);
+				var a = this.owner.gf;
+				this.tween(a,{ alpha : 0},Conductor.crochet / 250);
+				var h = this.owner.frustStage.ocActors.h;
+				var npc_h = h;
+				var npc_keys = Object.keys(h);
+				var npc_length = npc_keys.length;
+				var npc_current = 0;
+				while(npc_current < npc_length) {
+					var npc = npc_h[npc_keys[npc_current++]];
+					this.tween(npc,{ alpha : 0},Conductor.crochet / 250);
+				}
+				break;
+			}
+			break;
+		case "strawberry":
+			switch(b) {
+			case 16:
+				this.owner.frustStage.overlay.set_alpha(.0001);
+				this.host.dim.set_alpha(.92);
+				this.tween(this.host.dim,{ alpha : 0},Conductor.crochet / 250);
+				this.zoom(.5);
+				break;
+			case 278:
+				this.zoom(.6);
+				this.camera(639.5,359.5,Conductor.crochet / 500);
+				this.tween(this.owner.frustStage.overlay,{ alpha : 1},1);
+				this.owner.dad.set_visible(this.owner.boyfriend.set_visible(this.owner.gf.set_visible(false)));
+				var h = this.owner.frustStage.ocActors.h;
+				var npc_h = h;
+				var npc_keys = Object.keys(h);
+				var npc_length = npc_keys.length;
+				var npc_current = 0;
+				while(npc_current < npc_length) {
+					var npc = npc_h[npc_keys[npc_current++]];
+					npc.set_visible(false);
+				}
+				break;
+			}
+			break;
+		case "tantalum":
+			switch(b) {
+			case 222:
+				this.zoom(this.host.targetZoom + .25);
+				this.owner.dad.canAutoDance = false;
+				this.owner.dad.canSing = false;
+				this.owner.dad.playAnim("catOut",true);
+				this.alt(true);
+				this.icon("ringi-toio");
+				break;
+			case 224:
+				flixel_FlxG.camera.flash(-1,1);
+				this.zoom(this.host.targetZoom - .25);
+				this.owner.dad.canAutoDance = true;
+				this.owner.dad.canSing = true;
+				break;
+			case 352:
+				flixel_FlxG.camera.flash(-1,1);
+				this.owner.dad.canAutoDance = false;
+				this.owner.dad.canSing = false;
+				this.owner.dad.playAnim("catIn",true);
+				this.host.replaceIcon(false,this.owner.dad.curCharacter);
+				break;
+			case 354:
+				this.alt(false);
+				this.owner.dad.canAutoDance = true;
+				this.owner.dad.canSing = true;
+				this.owner.dad.dance();
+				break;
+			}
+			break;
+		}
+	}
+	,icon: function(name) {
+		var old = this.owner.iconP2;
+		old.loadGraphic(Paths.getPath("images/" + ("golden/frustsongs/" + this.song + "/icons/" + name) + ".png","IMAGE",GoldenFrustExtras.library(this.song)),true,150,150);
+		old.animation.add("scene",[0,1],0,false);
+		old.animation.play("scene");
+	}
+	,cueStep: function(s) {
+		if(this.song != "keyboard") {
+			return;
+		}
+		switch(s) {
+		case 1:
+			this.host.dim.set_alpha(0);
+			this.tween(this.host.dim,{ alpha : .35},Conductor.stepCrochet / 500);
+			break;
+		case 16:
+			this.bars(true);
+			this.tween(this.host.dim,{ alpha : 0},Conductor.stepCrochet / 500);
+			this.zoom(.7,2);
+			break;
+		case 12:case 524:
+			this.zoom(1);
+			break;
+		case 14:case 526:
+			this.zoom(1.1);
+			break;
+		case 528:
+			flixel_FlxG.camera.flash(-1,2);
+			this.zoom(.7,1);
+			break;
+		case 48:case 80:case 112:case 144:case 300:case 560:case 592:case 624:case 656:
+			this.host.zoomTo(Conductor.songPosition,1.1,.1825,"quad",true);
+			break;
+		case 784:
+			this.zoom(.75);
+			break;
+		case 1032:
+			this.zoom(1.1,.75);
+			break;
+		case 1040:
+			this.zoom(.7);
+			this.tween(this.host.dim,{ alpha : .35},Conductor.stepCrochet / 500);
+			this.bars(false);
+			break;
+		case 1292:
+			var fh = this.little;
+			fh.set_y(fh.y + 1300);
+			this.little.set_alpha(1);
+			this.camera(this.owner.camFollow.x - 100,this.owner.camFollow.y + 100,1);
+			this.tween(this.little,{ x : this.owner.gf.x - 400, y : this.owner.gf.y + 300},1);
+			break;
+		case 1296:
+			this.bars(true);
+			this.zoom(.5,1);
+			this.tween(this.host.dim,{ alpha : 0},1);
+			this.locked = false;
+			this.pan = null;
+			this.host.replaceIcon(false,this.little.curCharacter);
+			var this1 = this.host.points;
+			var value = this.host.focusPoint(this.little,"DAD");
+			this1.h["DAD"] = value;
+			break;
+		case 1546:
+			this.tween(this.host.dim,{ alpha : 0},Conductor.stepCrochet / 500);
+			this.little.canAutoDance = false;
+			this.little.canSing = false;
+			this.little.playAnim("exit",true);
+			this.host.replaceIcon(false,this.owner.dad.curCharacter);
+			this.host.points.h["DAD"] = this.dadFocus;
+			break;
+		case 1552:
+			this.little.set_visible(false);
+			break;
+		case 10:case 522:case 1804:
+			this.zoom(.9);
+			break;
+		case 1808:
+			this.zoom(.7);
+			flixel_FlxG.camera.flash(-1,2);
+			break;
+		}
+	}
+	,update: function(time,elapsed) {
+		var crochet = 60000 / PlayState.SONG.bpm;
+		var b = Math.floor(time / crochet) | 0;
+		var s = Math.floor(time / (crochet / 4)) | 0;
+		while(this.beat < b) {
+			this.beat++;
+			if(this.beat >= 0) {
+				this.cueBeat(this.beat);
+				if(this.little != null && this.little.visible && this.little.canAutoDance) {
+					this.little.dance();
+				}
+			}
+		}
+		while(this.step < s) {
+			this.step++;
+			if(this.step >= 0) {
+				this.cueStep(this.step);
+			}
+		}
+		this.host.sample(time);
+		flixel_FlxG.camera.set_zoom(this.host.zoom);
+		if(this.locked && this.pan != null) {
+			var t = -Math.cos(Math.PI * Math.max(0,Math.min(1,(time - this.pan.start) / this.pan.duration))) / 2 + .5;
+			this.owner.camFollow.setPosition(this.pan.x + (this.pan.tx - this.pan.x) * t,this.pan.y + (this.pan.ty - this.pan.y) * t);
+		}
+		if(this.song == "nutty" && !this.sleeping && time >= 352 * crochet + 1000) {
+			this.sleeping = true;
+			this.host.changeCharacter(["DAD","bambom-sleep","","","false","SWAP"]);
+			this.owner.dad.canSing = false;
+			this.owner.dad.canAutoDance = false;
+			this.owner.dad.playAnim("passOut",true);
+		}
+		if(this.sleeping && this.owner.dad.animation._curAnim.finished) {
+			this.owner.dad.playAnim("snore",true);
+		}
+		this.elapsedTime += elapsed;
+		if(this.song == "nutty") {
+			var fh = this.actor("bendu");
+			fh.set_y(fh.y + .4 * Math.cos(this.elapsedTime) * elapsed * 126);
+			var fh = this.actor("ringi");
+			fh.set_y(fh.y + .3 * Math.sin(this.elapsedTime) * elapsed * 126);
+			var fh = this.nap;
+			fh.set_y(fh.y + .3 * Math.sin(this.elapsedTime * 5) * elapsed * 126);
+			if(this.napStart >= 0) {
+				this.nap.sampleFrame((time - this.napStart) * 24 / 1000 | 0);
+			}
+		}
+	}
+	,__class__: GoldenOCSongs
+};
 var GoldenOrthogonal = function(owner) {
 	this.dispatched = 0;
 	this.releaseSection = -1;
@@ -26341,7 +28214,7 @@ GoldenPartThree.noteSpeed = function(p,note) {
 	}
 };
 GoldenPartThree.positionNote = function(p,note) {
-	note.set_visible(note.mustPress || !GoldenMobileControls.enabled);
+	note.set_visible(PlayState.controlsNote(note) || !GoldenMobileControls.enabled && PlayState.curStage != "kooky");
 	if(p.frustration != null) {
 		p.frustration.mods.position(note,p);
 		return;
@@ -27237,7 +29110,7 @@ GoldenStrumArrow.prototype = $extend(flixel_FlxSprite.prototype,{
 	}
 	,update: function(elapsed) {
 		flixel_FlxSprite.prototype.update.call(this,elapsed);
-		if(this.autoReset && this.animation._curAnim != null && this.animation._curAnim.name == "confirm" && this.animation._curAnim.finished) {
+		if(this.autoReset != PlayState.opponentMode && this.animation._curAnim != null && this.animation._curAnim.name == "confirm" && this.animation._curAnim.finished) {
 			this.animation.play("static");
 		}
 		GoldenNoteSkin.alignStrum(this,this.skin);
@@ -27368,13 +29241,16 @@ GoldenTouchLayout.prototype = {
 		while(_g < _g1) {
 			var i = _g++;
 			var strum = this.owner.strumLineNotes.members[i];
-			var offset = i >= 4 && !GoldenPartThree.active(this.owner) && PlayState.curStage != "ready-loud" ? -flixel_FlxG.width / 4 : 0;
+			var controlled = i < 4 == PlayState.opponentMode;
+			var offset = controlled && !GoldenPartThree.active(this.owner) && PlayState.curStage != "ready-loud" ? (PlayState.opponentMode ? 1 : -1) * flixel_FlxG.width / 4 : 0;
 			this.offsets.push(offset);
 			this.visibility.push(strum == null ? false : strum.visible);
 			if(strum != null) {
 				strum.set_x(strum.x + offset);
-				if(i < 4) {
+				if(!controlled) {
 					strum.set_visible(false);
+				} else {
+					strum.set_visible(true);
 				}
 			}
 		}
@@ -29876,6 +31752,18 @@ ManifestResources.init = function(config) {
 	lime_utils_Assets.libraryPaths.h["overworld"] = v;
 	var v = ManifestResources.rootPath + "manifest/extras.json";
 	lime_utils_Assets.libraryPaths.h["extras"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-gift-card.json";
+	lime_utils_Assets.libraryPaths.h["extra-gift-card"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-tantalum.json";
+	lime_utils_Assets.libraryPaths.h["extra-tantalum"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-strawberry.json";
+	lime_utils_Assets.libraryPaths.h["extra-strawberry"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-nutty.json";
+	lime_utils_Assets.libraryPaths.h["extra-nutty"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-keyboard.json";
+	lime_utils_Assets.libraryPaths.h["extra-keyboard"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-nft.json";
+	lime_utils_Assets.libraryPaths.h["extra-nft"] = v;
 	var v = ManifestResources.rootPath + "manifest/extra-sugar-rush.json";
 	lime_utils_Assets.libraryPaths.h["extra-sugar-rush"] = v;
 	var v = ManifestResources.rootPath + "manifest/extra-ready-loud.json";
@@ -29886,6 +31774,16 @@ ManifestResources.init = function(config) {
 	lime_utils_Assets.libraryPaths.h["extra-cooking-lesson"] = v;
 	var v = ManifestResources.rootPath + "manifest/extra-slices.json";
 	lime_utils_Assets.libraryPaths.h["extra-slices"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-aug.json";
+	lime_utils_Assets.libraryPaths.h["extra-aug"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-doughboy.json";
+	lime_utils_Assets.libraryPaths.h["extra-doughboy"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-the-big-dingle.json";
+	lime_utils_Assets.libraryPaths.h["extra-the-big-dingle"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-lofthouse.json";
+	lime_utils_Assets.libraryPaths.h["extra-lofthouse"] = v;
+	var v = ManifestResources.rootPath + "manifest/extra-kooky.json";
+	lime_utils_Assets.libraryPaths.h["extra-kooky"] = v;
 	var v = ManifestResources.rootPath + "manifest/tunnelvision.json";
 	lime_utils_Assets.libraryPaths.h["tunnelvision"] = v;
 	var v = ManifestResources.rootPath + "manifest/inspicable.json";
@@ -29896,7 +31794,7 @@ ManifestResources.init = function(config) {
 	lime_utils_Assets.libraryPaths.h["orthogonal"] = v;
 	var v = ManifestResources.rootPath + "manifest/applecorestage.json";
 	lime_utils_Assets.libraryPaths.h["applecorestage"] = v;
-	var data = "{\"name\":null,\"assets\":\"aoy4:sizei1464369y4:typey5:MUSICy2:idy44:assets%2Fmusic%2Fgolden%2Fmenu%2Fcredits.mp3y9:pathGroupaR4hy7:preloadtgoR0i1417760R1R2R3y41:assets%2Fmusic%2Fgolden%2Fmenu%2Fplay.mp3R5aR7hR6tgoR0i566714R1R2R3y42:assets%2Fmusic%2Fgolden%2Fmenu%2Fpause.mp3R5aR8hR6tgoR0i1469737R1R2R3y41:assets%2Fmusic%2Fgolden%2Fmenu%2Fmain.mp3R5aR9hR6tgoR0i3713317R1R2R3y42:assets%2Fmusic%2Fgolden%2Fmenu%2Ftitle.mp3R5aR10hR6tgoR0i1473973R1R2R3y45:assets%2Fmusic%2Fgolden%2Fmenu%2Fsettings.mp3R5aR11hR6tgoR0i2309657R1R2R3y31:assets%2Fmusic%2FfreakyMenu.mp3R5aR12hR6tgoy4:pathy39:assets%2Fimages%2Fstorymenu%2Fweek3.pngR0i7148R1y5:IMAGER3R14R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek2.pngR0i6517R1R15R3R16R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek0.pngR0i7056R1R15R3R17R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek1.pngR0i6261R1R15R3R18R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek5.pngR0i6440R1R15R3R19R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek4.pngR0i6262R1R15R3R20R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek6.pngR0i6998R1R15R3R21R6tgoR13y28:assets%2Fimages%2FmenuBG.pngR0i620342R1R15R3R22R6tgoR13y26:assets%2Fimages%2Fnum4.pngR0i3989R1R15R3R23R6tgoR13y26:assets%2Fimages%2Fnum5.pngR0i4113R1R15R3R24R6tgoR13y26:assets%2Fimages%2Fnum7.pngR0i3692R1R15R3R25R6tgoR13y26:assets%2Fimages%2Fnum6.pngR0i4181R1R15R3R26R6tgoR13y26:assets%2Fimages%2Fnum2.pngR0i3990R1R15R3R27R6tgoR13y44:assets%2Fimages%2Fgolden%2Fui%2FuiBorder.pngR0i203R1R15R3R28R6tgoR13y52:assets%2Fimages%2Fgolden%2Fui%2FhealthBarOverlay.pngR0i331R1R15R3R29R6tgoR13y50:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2Fgo.pngR0i13831R1R15R3R30R6tgoR13y49:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2F2.pngR0i7823R1R15R3R31R6tgoR13y49:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2F3.pngR0i9226R1R15R3R32R6tgoR13y49:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2F1.pngR0i5893R1R15R3R33R6tgoR13y43:assets%2Fimages%2Fgolden%2Fui%2FtimeBar.pngR0i235R1R15R3R34R6tgoR13y45:assets%2Fimages%2Fgolden%2Fui%2FhealthBar.pngR0i290R1R15R3R35R6tgoR13y53:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets_3D.xmlR0i5205R1y4:TEXTR3R36R6tgoR13y53:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets_3D.pngR0i666393R1R15R3R38R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets.pngR0i561216R1R15R3R39R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets.xmlR0i7178R1R37R3R40R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2FnoteSplashes.xmlR0i1596R1R37R3R41R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2FnoteSplashes.pngR0i219186R1R15R3R42R6tgoR13y48:assets%2Fimages%2Fgolden%2Fnotes%2Fsplash_3d.pngR0i63270R1R15R3R43R6tgoR13y48:assets%2Fimages%2Fgolden%2Fnotes%2Fsplash_3d.xmlR0i4823R1R37R3R44R6tgoR13y52:assets%2Fimages%2Fgolden%2Fnotes%2Fawesome_notes.pngR0i83950R1R15R3R45R6tgoR13y52:assets%2Fimages%2Fgolden%2Fnotes%2Fawesome_notes.xmlR0i8003R1R37R3R46R6tgoR13y61:assets%2Fimages%2Fgolden%2Fmenu%2Ftransition%2Ftransition.pngR0i28278R1R15R3R47R6tgoR13y72:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2FtitleFellows%2Fbandu.pngR0i432446R1R15R3R48R6tgoR13y72:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2FtitleFellows%2Fbandu.xmlR0i2899R1R37R3R49R6tgoR13y63:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2FdarkChecker.pngR0i149R1R15R3R50R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2Flogo.pngR0i82258R1R15R3R51R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2Fsopar_text.xmlR0i4934R1R37R3R52R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2Fsopar_text.pngR0i1449202R1R15R3R53R6tgoR13y75:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Forthogonal%2Ficon.pngR0i258865R1R15R3R54R6tgoR13y77:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Forthogonal%2Fheader.pngR0i45705R1R15R3R55R6tgoR13y73:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Forthogonal%2Fbg.pngR0i202995R1R15R3R56R6tgoR13y75:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2Ficon.pngR0i326259R1R15R3R57R6tgoR13y77:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2Fheader.pngR0i12093R1R15R3R58R6tgoR13y82:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2FsongPreview.pngR0i168958R1R15R3R59R6tgoR13y73:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2Fbg.pngR0i861461R1R15R3R60R6tgoR13y76:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2Ficon.pngR0i910457R1R15R3R61R6tgoR13y78:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2Fheader.pngR0i17253R1R15R3R62R6tgoR13y83:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2FsongPreview.pngR0i174673R1R15R3R63R6tgoR13y74:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2Fbg.pngR0i1170366R1R15R3R64R6tgoR13y93:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2FsongPreview_complete.pngR0i357300R1R15R3R65R6tgoR13y77:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2Ficon.pngR0i708048R1R15R3R66R6tgoR13y79:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2Fheader.pngR0i22174R1R15R3R67R6tgoR13y84:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2FsongPreview.pngR0i178512R1R15R3R68R6tgoR13y75:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2Fbg.pngR0i178626R1R15R3R69R6tgoR13y90:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2FsongPreview_complete.pngR0i261035R1R15R3R70R6tgoR13y74:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2Ficon.pngR0i38964R1R15R3R71R6tgoR13y76:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2Fheader.pngR0i11563R1R15R3R72R6tgoR13y81:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2FsongPreview.pngR0i87336R1R15R3R73R6tgoR13y72:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2Fbg.pngR0i565038R1R15R3R74R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fchalkboard.pngR0i46302R1R15R3R75R6tgoR13y59:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fcudroid.pngR0i463377R1R15R3R76R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fbiorange.pngR0i403587R1R15R3R77R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fvio.pngR0i213111R1R15R3R78R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FSmeekles.pngR0i670164R1R15R3R79R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fbubbscadex.pngR0i109865R1R15R3R80R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FCid.pngR0i47673R1R15R3R81R6tgoR13y64:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fexorcistgold.pngR0i502774R1R15R3R82R6tgoR13y63:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fbaldilord64.pngR0i480724R1R15R3R83R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fcleoarty.pngR0i241191R1R15R3R84R6tgoR13y59:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fzevisly.pngR0i239645R1R15R3R85R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fwick.pngR0i120994R1R15R3R86R6tgoR13y54:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FTy.pngR0i199739R1R15R3R87R6tgoR13y69:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FTallsAnimationTAF.pngR0i201648R1R15R3R88R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fdoo.pngR0i57073R1R15R3R89R6tgoR13y58:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FHarvey.pngR0i178777R1R15R3R90R6tgoR13y64:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fsamualcheese.pngR0i458670R1R15R3R91R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fseth.pngR0i127660R1R15R3R92R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2FcheckeredBG.pngR0i423R1R15R3R93R6tgoR13y57:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fgradient.pngR0i63026R1R15R3R94R6tgoR13y66:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FSettings.pngR0i16351R1R15R3R95R6tgoR13y63:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FLinks.pngR0i13691R1R15R3R96R6tgoR13y65:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FCredits.pngR0i26321R1R15R3R97R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FPlay.pngR0i19101R1R15R3R98R6tgoR13y69:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fblack_border_overlay.pngR0i111R1R15R3R99R6tgoR13y57:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Felectric.xmlR0i13228R1R37R3R100R6tgoR13y57:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Felectric.pngR0i79183R1R15R3R101R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2FBottom.pngR0i6280R1R15R3R102R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbuttons.xmlR0i3354R1R37R3R103R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbuttons.pngR0i27595R1R15R3R104R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2FToppom.pngR0i3261R1R15R3R105R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf_potato.pngR0i2750120R1R15R3R106R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf_potato.xmlR0i26042R1R37R3R107R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf_potato.xmlR0i11114R1R37R3R108R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf_potato.pngR0i1713304R1R15R3R109R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf.xmlR0i11114R1R37R3R110R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf.pngR0i3152226R1R15R3R111R6tgoR13y51:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead.pngR0i1263283R1R15R3R112R6tgoR13y51:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead.xmlR0i6158R1R37R3R113R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf.xmlR0i26042R1R37R3R114R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf.pngR0i6529446R1R15R3R115R6tgoR13y58:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead_potato.xmlR0i6158R1R37R3R116R6tgoR13y58:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead_potato.pngR0i598561R1R15R3R117R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2F3d-bf.pngR0i5508R1R15R3R118R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fbadai.pngR0i6570R1R15R3R119R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fgf.pngR0i5432R1R15R3R120R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Finspicable.pngR0i6797R1R15R3R121R6tgoR13y55:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fdave.pngR0i3271R1R15R3R122R6tgoR13y67:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fdave-frustration.pngR0i7963R1R15R3R123R6tgoR13y58:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fjunkers.pngR0i3905R1R15R3R124R6tgoR13y74:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Funfair-expunged-forward.pngR0i16340R1R15R3R125R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fbandu.pngR0i5862R1R15R3R126R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fdave-decimated.pngR0i15982R1R15R3R127R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fbf.pngR0i5815R1R15R3R128R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Fmg.pngR0i25187R1R15R3R129R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Ffries.pngR0i6266R1R15R3R130R6tgoR13y57:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Fphones.pngR0i158733R1R15R3R131R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Fbg.pngR0i322926R1R15R3R132R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst_potato.pngR0i1949693R1R15R3R133R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst_potato.xmlR0i48616R1R37R3R134R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst.pngR0i1356106R1R15R3R135R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst.xmlR0i48616R1R37R3R136R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy.pngR0i874647R1R15R3R137R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy.xmlR0i8049R1R37R3R138R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi.pngR0i1136169R1R15R3R139R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi.xmlR0i47561R1R37R3R140R6tgoR13y71:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap_potato.xmlR0i50350R1R37R3R141R6tgoR13y71:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap_potato.pngR0i1810011R1R15R3R142R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy_potato.pngR0i1021910R1R15R3R143R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy_potato.xmlR0i8049R1R37R3R144R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad.pngR0i274474R1R15R3R145R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad.xmlR0i25415R1R37R3R146R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_potato.pngR0i776449R1R15R3R147R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_potato.xmlR0i12422R1R37R3R148R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra_potato.xmlR0i19808R1R37R3R149R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra_potato.pngR0i2604569R1R15R3R150R6tgoR13y64:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap.xmlR0i50350R1R37R3R151R6tgoR13y64:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap.pngR0i1220343R1R15R3R152R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi_potato.xmlR0i47561R1R37R3R153R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi_potato.pngR0i2258904R1R15R3R154R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu.pngR0i366915R1R15R3R155R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu.xmlR0i12422R1R37R3R156R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra.xmlR0i19808R1R37R3R157R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad_potato.xmlR0i25415R1R37R3R158R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad_potato.pngR0i666177R1R15R3R159R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra.pngR0i5372875R1R15R3R160R6tgoR13y26:assets%2Fimages%2Fnum3.pngR0i4022R1R15R3R161R6tgoR13y26:assets%2Fimages%2Fnum1.pngR0i3390R1R15R3R162R6tgoR13y37:assets%2Fimages%2Fnewgrounds_logo.pngR0i57747R1R15R3R163R6tgoR13y26:assets%2Fimages%2Fnum0.pngR0i3738R1R15R3R164R6tgoR13y30:assets%2Fimages%2Falphabet.xmlR0i39069R1R37R3R165R6tgoR13y30:assets%2Fimages%2Falphabet.pngR0i139836R1R15R3R166R6tgoR13y26:assets%2Fimages%2Flogo.pngR0i86924R1R15R3R167R6tgoR13y35:assets%2Fimages%2FmenuBGMagenta.pngR0i553468R1R15R3R168R6tgoR13y32:assets%2Fimages%2FlogoBumpin.pngR0i592724R1R15R3R169R6tgoR13y32:assets%2Fimages%2FlogoBumpin.xmlR0i2177R1R37R3R170R6tgoR13y26:assets%2Fimages%2Fnum8.pngR0i3914R1R15R3R171R6tgoR13y26:assets%2Fimages%2Fnum9.pngR0i3687R1R15R3R172R6tgoR13y45:assets%2Fimages%2Fcampaign_menu_UI_assets.pngR0i27171R1R15R3R173R6tgoR13y45:assets%2Fimages%2Fcampaign_menu_UI_assets.xmlR0i1893R1R37R3R174R6tgoR13y32:assets%2Fimages%2FmenuBGBlue.pngR0i614586R1R15R3R175R6tgoR13y42:assets%2Fimages%2FFNF_main_menu_assets.pngR0i281298R1R15R3R176R6tgoR13y42:assets%2Fimages%2FFNF_main_menu_assets.xmlR0i4755R1R37R3R177R6tgoR13y32:assets%2Fimages%2FtitleEnter.xmlR0i4875R1R37R3R178R6tgoR13y31:assets%2Fimages%2FmenuDesat.pngR0i357911R1R15R3R179R6tgoR13y32:assets%2Fimages%2FtitleEnter.pngR0i1449202R1R15R3R180R6tgoR0i17762R1R2R3y32:assets%2Fsounds%2FcancelMenu.mp3R5aR181hR6tgoR0i22403R1R2R3y62:assets%2Fsounds%2Fgolden%2Fcountdown%2Fawesomeson%2Fintro2.mp3R5aR182hR6tgoR0i22403R1R2R3y62:assets%2Fsounds%2Fgolden%2Fcountdown%2Fawesomeson%2Fintro3.mp3R5aR183hR6tgoR0i22403R1R2R3y62:assets%2Fsounds%2Fgolden%2Fcountdown%2Fawesomeson%2Fintro1.mp3R5aR184hR6tgoR0i22403R1R2R3y63:assets%2Fsounds%2Fgolden%2Fcountdown%2Fawesomeson%2FintroGo.mp3R5aR185hR6tgoR0i12773R1R2R3y49:assets%2Fsounds%2Fgolden%2Fcountdown%2Fintro2.mp3R5aR186hR6tgoR0i8857R1R2R3y49:assets%2Fsounds%2Fgolden%2Fcountdown%2Fintro3.mp3R5aR187hR6tgoR0i12458R1R2R3y49:assets%2Fsounds%2Fgolden%2Fcountdown%2Fintro1.mp3R5aR188hR6tgoR0i11536R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fbandu%2Fintro2.mp3R5aR189hR6tgoR0i11954R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fbandu%2Fintro3.mp3R5aR190hR6tgoR0i13626R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fbandu%2Fintro1.mp3R5aR191hR6tgoR0i8611R1R2R3y58:assets%2Fsounds%2Fgolden%2Fcountdown%2Fbandu%2FintroGo.mp3R5aR192hR6tgoR0i8441R1R2R3y56:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2Fintro2.mp3R5aR193hR6tgoR0i7317R1R2R3y56:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2Fintro3.mp3R5aR194hR6tgoR0i6198R1R2R3y56:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2Fintro1.mp3R5aR195hR6tgoR0i7500R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2FintroGo.mp3R5aR196hR6tgoR0i7555R1R2R3y50:assets%2Fsounds%2Fgolden%2Fcountdown%2FintroGo.mp3R5aR197hR6tgoR0i91950R1R2R3y33:assets%2Fsounds%2FconfirmMenu.mp3R5aR198hR6tgoR0i17762R1R2R3y32:assets%2Fsounds%2FscrollMenu.mp3R5aR199hR6tgoR0i245600R1y4:FONTy9:classNamey38:__ASSET__assets_fonts_comic_normal_ttfR3y33:assets%2Ffonts%2Fcomic_normal.ttfR6tgoR0i229408R1R200R201y31:__ASSET__assets_fonts_comic_ttfR3y26:assets%2Ffonts%2Fcomic.ttfR6tgoR13y34:assets%2Fdata%2Fdata-goes-here.txtR0zR1R37R3R206R6tgoR13y29:assets%2Fdata%2Fmain-view.xmlR0i123R1R37R3R207R6tgoR13y36:assets%2Fdata%2Fslices%2Fslices.jsonR0i37818R1R37R3R208R6tgoR13y29:assets%2Fdata%2FintroText.txtR0i1260R1R37R3R209R6tgoR13y33:assets%2Fdata%2FspecialThanks.txtR0i300R1R37R3R210R6tgoR13y44:assets%2Fdata%2Forthogonal%2Forthogonal.jsonR0i127054R1R37R3R211R6tgoR13y44:assets%2Fdata%2Fready-loud%2Fready-loud.jsonR0i34408R1R37R3R212R6tgoR13y45:assets%2Fdata%2Fgolden%2Fnotes%2Fawesome.jsonR0i431R1R37R3R213R6tgoR13y40:assets%2Fdata%2Fgolden%2Fnotes%2F3d.jsonR0i667R1R37R3R214R6tgoR13y45:assets%2Fdata%2Fgolden%2Fnotes%2Fdefault.jsonR0i1028R1R37R3R215R6tgoR13y44:assets%2Fdata%2Fgolden%2Fmenu%2Fcredits.jsonR0i940R1R37R3R216R6tgoR13y50:assets%2Fdata%2Fgolden%2Fshaders%2FWavyShader.fragR0i1316R1R37R3R217R6tgoR13y52:assets%2Fdata%2Fgolden%2Fcharacters%2Fbf-bounds.jsonR0i22224R1R37R3R218R6tgoR13y57:assets%2Fdata%2Fgolden%2Fapplecore%2Fsecondary-bambi.jsonR0i46074R1R37R3R219R6tgoR13y50:assets%2Fdata%2Fgolden%2Fapplecore%2Fsubtitles.srtR0i1683R1R37R3R220R6tgoR13y78:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Funfair-expunged-forward.jsonR0i688R1R37R3R221R6tgoR13y66:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu-first.jsonR0i1784R1R37R3R222R6tgoR13y60:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu.jsonR0i819R1R37R3R223R6tgoR13y64:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu-sad.jsonR0i1363R1R37R3R224R6tgoR13y71:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fdisruption-bambi.jsonR0i1527R1R37R3R225R6tgoR13y44:assets%2Fdata%2Finspicable%2Finspicable.jsonR0i41973R1R37R3R226R6tgoR13y42:assets%2Fdata%2Fgift-card%2Fgift-card.jsonR0i49357R1R37R3R227R6tgoR13y36:assets%2Fdata%2FfreeplaySonglist.txtR0i10R1R37R3R228R6tgoR13y28:assets%2Fdata%2Fcontrols.txtR0i324R1R37R3R229R6tgoR13y46:assets%2Fdata%2Ffrustration%2Ffrustration.jsonR0i79278R1R37R3R230R6tgoR13y44:assets%2Fdata%2Fsugar-rush%2Fsugar-rush.jsonR0i32555R1R37R3R231R6tgoR13y42:assets%2Fdata%2Fenforcers%2Fenforcers.jsonR0i20507R1R37R3R232R6tgoR13y48:assets%2Fdata%2Ftunnelvision%2Ftunnelvision.jsonR0i124949R1R37R3R233R6tgoR13y33:assets%2Fdata%2FcharacterList.txtR0i89R1R37R3R234R6tgoR13y42:assets%2Fdata%2Fapplecore%2Fapplecore.jsonR0i77355R1R37R3R235R6tgoR13y52:assets%2Fdata%2Fcooking-lesson%2Fcooking-lesson.jsonR0i54523R1R37R3R236R6tgoR13y41:assets%2Fvideos%2Fgolden%2FPizzaVideo.mp4R0i18210431R1y6:BINARYR3R237goR13y50:assets%2Fvideos%2Fgolden%2Ftunnelvision%2Fmask.mp4R0i5769684R1R238R3R239goR13y55:assets%2Fvideos%2Fgolden%2Ftunnelvision%2Fred_blobs.mp4R0i11119130R1R238R3R240goR13y48:mods%2FintroMod%2F_append%2Fdata%2FintroText.txtR0i20R1R37R3R241goR13y17:mods%2Freadme.txtR0i90R1R37R3R242goR13y18:mods%2FmodList.txtR0i8R1R37R3R243goR13y21:do%20NOT%20readme.txtR0i4326R1R37R3R244R6tgoR13y13:changelog.txtR0i7730R1R37R3R245R6tgoR0i75864R1R200R201y29:__ASSET__assets_fonts_vcr_ttfR3y24:assets%2Ffonts%2Fvcr.ttfR6tgoR13y34:assets%2Ffonts%2Ffonts-go-here.txtR0zR1R37R3R248R6tgoR0i14656R1R200R201y31:__ASSET__assets_fonts_pixel_otfR3y26:assets%2Ffonts%2Fpixel.otfR6tgoR0i39706R1R2R3y28:flixel%2Fsounds%2Fflixel.mp3R5aR251y28:flixel%2Fsounds%2Fflixel.ogghR6tgoR0i2114R1R2R3y26:flixel%2Fsounds%2Fbeep.mp3R5aR253y26:flixel%2Fsounds%2Fbeep.ogghR6tgoR0i5794R1y5:SOUNDR3R254R5aR253R254hgoR0i33629R1R255R3R252R5aR251R252hgoR0i15744R1R200R201y35:__ASSET__flixel_fonts_nokiafc22_ttfR3y30:flixel%2Ffonts%2Fnokiafc22.ttfR6tgoR0i29724R1R200R201y36:__ASSET__flixel_fonts_monsterrat_ttfR3y31:flixel%2Ffonts%2Fmonsterrat.ttfR6tgoR13y33:flixel%2Fimages%2Fui%2Fbutton.pngR0i519R1R15R3R260R6tgoR13y36:flixel%2Fimages%2Flogo%2Fdefault.pngR0i3280R1R15R3R261R6tgoR13y44:flixel%2Fflixel-ui%2Fimg%2Fdropdown_mark.pngR0i86R1R15R3R262R6tgoR13y40:flixel%2Fflixel-ui%2Fimg%2Fplus_mark.pngR0i83R1R15R3R263R6tgoR13y36:flixel%2Fflixel-ui%2Fimg%2Fradio.pngR0i108R1R15R3R264R6tgoR13y48:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_left.pngR0i222R1R15R3R265R6tgoR13y42:flixel%2Fflixel-ui%2Fimg%2Fbutton_thin.pngR0i118R1R15R3R266R6tgoR13y34:flixel%2Fflixel-ui%2Fimg%2Ftab.pngR0i106R1R15R3R267R6tgoR13y41:flixel%2Fflixel-ui%2Fimg%2Ffinger_big.pngR0i1337R1R15R3R268R6tgoR13y36:flixel%2Fflixel-ui%2Fimg%2Finvis.pngR0i72R1R15R3R269R6tgoR13y43:flixel%2Fflixel-ui%2Fimg%2Fchrome_inset.pngR0i102R1R15R3R270R6tgoR13y44:flixel%2Fflixel-ui%2Fimg%2Ftooltip_arrow.pngR0i176R1R15R3R271R6tgoR13y49:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_right.pngR0i238R1R15R3R272R6tgoR13y40:flixel%2Fflixel-ui%2Fimg%2Fradio_dot.pngR0i81R1R15R3R273R6tgoR13y37:flixel%2Fflixel-ui%2Fimg%2Fchrome.pngR0i135R1R15R3R274R6tgoR13y40:flixel%2Fflixel-ui%2Fimg%2Fcheck_box.pngR0i101R1R15R3R275R6tgoR13y44:flixel%2Fflixel-ui%2Fimg%2Fbutton_toggle.pngR0i254R1R15R3R276R6tgoR13y46:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_up.pngR0i227R1R15R3R277R6tgoR13y41:flixel%2Fflixel-ui%2Fimg%2Fminus_mark.pngR0i77R1R15R3R278R6tgoR13y42:flixel%2Fflixel-ui%2Fimg%2Fchrome_flat.pngR0i124R1R15R3R279R6tgoR13y37:flixel%2Fflixel-ui%2Fimg%2Fswatch.pngR0i94R1R15R3R280R6tgoR13y43:flixel%2Fflixel-ui%2Fimg%2Fchrome_light.pngR0i118R1R15R3R281R6tgoR13y38:flixel%2Fflixel-ui%2Fimg%2Fhilight.pngR0i74R1R15R3R282R6tgoR13y41:flixel%2Fflixel-ui%2Fimg%2Fcheck_mark.pngR0i97R1R15R3R283R6tgoR13y39:flixel%2Fflixel-ui%2Fimg%2Ftab_back.pngR0i111R1R15R3R284R6tgoR13y34:flixel%2Fflixel-ui%2Fimg%2Fbox.pngR0i75R1R15R3R285R6tgoR13y43:flixel%2Fflixel-ui%2Fimg%2Ffinger_small.pngR0i157R1R15R3R286R6tgoR13y37:flixel%2Fflixel-ui%2Fimg%2Fbutton.pngR0i211R1R15R3R287R6tgoR13y48:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_down.pngR0i216R1R15R3R288R6tgoR13y44:flixel%2Fflixel-ui%2Fxml%2Fdefault_popup.xmlR0i1848R1R37R3R289R6tgoR13y53:flixel%2Fflixel-ui%2Fxml%2Fdefault_loading_screen.xmlR0i1953R1R37R3R290R6tgoR13y39:flixel%2Fflixel-ui%2Fxml%2Fdefaults.xmlR0i1263R1R37R3R291R6tgh\",\"rootPath\":null,\"version\":2,\"libraryArgs\":[],\"libraryType\":null}";
+	var data = "{\"name\":null,\"assets\":\"aoy4:sizei1464369y4:typey5:MUSICy2:idy44:assets%2Fmusic%2Fgolden%2Fmenu%2Fcredits.mp3y9:pathGroupaR4hy7:preloadtgoR0i1417760R1R2R3y41:assets%2Fmusic%2Fgolden%2Fmenu%2Fplay.mp3R5aR7hR6tgoR0i566714R1R2R3y42:assets%2Fmusic%2Fgolden%2Fmenu%2Fpause.mp3R5aR8hR6tgoR0i1469737R1R2R3y41:assets%2Fmusic%2Fgolden%2Fmenu%2Fmain.mp3R5aR9hR6tgoR0i3713317R1R2R3y42:assets%2Fmusic%2Fgolden%2Fmenu%2Ftitle.mp3R5aR10hR6tgoR0i1473973R1R2R3y45:assets%2Fmusic%2Fgolden%2Fmenu%2Fsettings.mp3R5aR11hR6tgoR0i2309657R1R2R3y31:assets%2Fmusic%2FfreakyMenu.mp3R5aR12hR6tgoy4:pathy39:assets%2Fimages%2Fstorymenu%2Fweek3.pngR0i7148R1y5:IMAGER3R14R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek2.pngR0i6517R1R15R3R16R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek0.pngR0i7056R1R15R3R17R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek1.pngR0i6261R1R15R3R18R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek5.pngR0i6440R1R15R3R19R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek4.pngR0i6262R1R15R3R20R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek6.pngR0i6998R1R15R3R21R6tgoR13y28:assets%2Fimages%2FmenuBG.pngR0i620342R1R15R3R22R6tgoR13y26:assets%2Fimages%2Fnum4.pngR0i3989R1R15R3R23R6tgoR13y26:assets%2Fimages%2Fnum5.pngR0i4113R1R15R3R24R6tgoR13y26:assets%2Fimages%2Fnum7.pngR0i3692R1R15R3R25R6tgoR13y26:assets%2Fimages%2Fnum6.pngR0i4181R1R15R3R26R6tgoR13y26:assets%2Fimages%2Fnum2.pngR0i3990R1R15R3R27R6tgoR13y44:assets%2Fimages%2Fgolden%2Fui%2FuiBorder.pngR0i203R1R15R3R28R6tgoR13y52:assets%2Fimages%2Fgolden%2Fui%2FhealthBarOverlay.pngR0i331R1R15R3R29R6tgoR13y50:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2Fgo.pngR0i13831R1R15R3R30R6tgoR13y49:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2F2.pngR0i7823R1R15R3R31R6tgoR13y49:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2F3.pngR0i9226R1R15R3R32R6tgoR13y49:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2F1.pngR0i5893R1R15R3R33R6tgoR13y43:assets%2Fimages%2Fgolden%2Fui%2FtimeBar.pngR0i235R1R15R3R34R6tgoR13y45:assets%2Fimages%2Fgolden%2Fui%2FhealthBar.pngR0i290R1R15R3R35R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FBEVEL_NOTES.pngR0i9853R1R15R3R36R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FBEVEL_NOTES.xmlR0i1798R1y4:TEXTR3R37R6tgoR13y53:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets_3D.xmlR0i5205R1R38R3R39R6tgoR13y53:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets_3D.pngR0i666393R1R15R3R40R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2Fbevel_splash.xmlR0i2719R1R38R3R41R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2Fbevel_splash.pngR0i15211R1R15R3R42R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets.pngR0i561216R1R15R3R43R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets.xmlR0i7178R1R38R3R44R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2FnoteSplashes.xmlR0i1596R1R38R3R45R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2FnoteSplashes.pngR0i219186R1R15R3R46R6tgoR13y48:assets%2Fimages%2Fgolden%2Fnotes%2Fsplash_3d.pngR0i63270R1R15R3R47R6tgoR13y48:assets%2Fimages%2Fgolden%2Fnotes%2Fsplash_3d.xmlR0i4823R1R38R3R48R6tgoR13y52:assets%2Fimages%2Fgolden%2Fnotes%2Fawesome_notes.pngR0i83950R1R15R3R49R6tgoR13y52:assets%2Fimages%2Fgolden%2Fnotes%2Fawesome_notes.xmlR0i8003R1R38R3R50R6tgoR13y49:assets%2Fimages%2Fgolden%2Fnotes%2Fbevel_ends.xmlR0i670R1R38R3R51R6tgoR13y49:assets%2Fimages%2Fgolden%2Fnotes%2Fbevel_ends.pngR0i1481R1R15R3R52R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FbreadyNotes.pngR0i387393R1R15R3R53R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FbreadyNotes.xmlR0i7931R1R38R3R54R6tgoR13y61:assets%2Fimages%2Fgolden%2Fmenu%2Ftransition%2Ftransition.pngR0i28278R1R15R3R55R6tgoR13y72:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2FtitleFellows%2Fbandu.pngR0i432446R1R15R3R56R6tgoR13y72:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2FtitleFellows%2Fbandu.xmlR0i2899R1R38R3R57R6tgoR13y63:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2FdarkChecker.pngR0i149R1R15R3R58R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2Flogo.pngR0i82258R1R15R3R59R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2Fsopar_text.xmlR0i4934R1R38R3R60R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2Fsopar_text.pngR0i1449202R1R15R3R61R6tgoR13y75:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Forthogonal%2Ficon.pngR0i258865R1R15R3R62R6tgoR13y77:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Forthogonal%2Fheader.pngR0i45705R1R15R3R63R6tgoR13y73:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Forthogonal%2Fbg.pngR0i202995R1R15R3R64R6tgoR13y75:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2Ficon.pngR0i326259R1R15R3R65R6tgoR13y77:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2Fheader.pngR0i12093R1R15R3R66R6tgoR13y82:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2FsongPreview.pngR0i168958R1R15R3R67R6tgoR13y73:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2Fbg.pngR0i861461R1R15R3R68R6tgoR13y76:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2Ficon.pngR0i910457R1R15R3R69R6tgoR13y78:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2Fheader.pngR0i17253R1R15R3R70R6tgoR13y83:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2FsongPreview.pngR0i174673R1R15R3R71R6tgoR13y74:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2Fbg.pngR0i1170366R1R15R3R72R6tgoR13y93:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2FsongPreview_complete.pngR0i357300R1R15R3R73R6tgoR13y77:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2Ficon.pngR0i708048R1R15R3R74R6tgoR13y79:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2Fheader.pngR0i22174R1R15R3R75R6tgoR13y84:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2FsongPreview.pngR0i178512R1R15R3R76R6tgoR13y75:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2Fbg.pngR0i178626R1R15R3R77R6tgoR13y90:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2FsongPreview_complete.pngR0i261035R1R15R3R78R6tgoR13y74:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2Ficon.pngR0i38964R1R15R3R79R6tgoR13y76:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2Fheader.pngR0i11563R1R15R3R80R6tgoR13y81:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2FsongPreview.pngR0i87336R1R15R3R81R6tgoR13y72:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2Fbg.pngR0i565038R1R15R3R82R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fchalkboard.pngR0i46302R1R15R3R83R6tgoR13y59:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fcudroid.pngR0i463377R1R15R3R84R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fbiorange.pngR0i403587R1R15R3R85R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fvio.pngR0i213111R1R15R3R86R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FSmeekles.pngR0i670164R1R15R3R87R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fbubbscadex.pngR0i109865R1R15R3R88R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FCid.pngR0i47673R1R15R3R89R6tgoR13y64:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fexorcistgold.pngR0i502774R1R15R3R90R6tgoR13y63:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fbaldilord64.pngR0i480724R1R15R3R91R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fcleoarty.pngR0i241191R1R15R3R92R6tgoR13y59:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fzevisly.pngR0i239645R1R15R3R93R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fwick.pngR0i120994R1R15R3R94R6tgoR13y54:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FTy.pngR0i199739R1R15R3R95R6tgoR13y69:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FTallsAnimationTAF.pngR0i201648R1R15R3R96R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fdoo.pngR0i57073R1R15R3R97R6tgoR13y58:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FHarvey.pngR0i178777R1R15R3R98R6tgoR13y64:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fsamualcheese.pngR0i458670R1R15R3R99R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fseth.pngR0i127660R1R15R3R100R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2FcheckeredBG.pngR0i423R1R15R3R101R6tgoR13y57:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fgradient.pngR0i63026R1R15R3R102R6tgoR13y66:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FSettings.pngR0i16351R1R15R3R103R6tgoR13y63:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FLinks.pngR0i13691R1R15R3R104R6tgoR13y65:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FCredits.pngR0i26321R1R15R3R105R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FPlay.pngR0i19101R1R15R3R106R6tgoR13y69:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fblack_border_overlay.pngR0i111R1R15R3R107R6tgoR13y57:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Felectric.xmlR0i13228R1R38R3R108R6tgoR13y57:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Felectric.pngR0i79183R1R15R3R109R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2FBottom.pngR0i6280R1R15R3R110R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbuttons.xmlR0i3354R1R38R3R111R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbuttons.pngR0i27595R1R15R3R112R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2FToppom.pngR0i3261R1R15R3R113R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf_potato.pngR0i2750120R1R15R3R114R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf_potato.xmlR0i26042R1R38R3R115R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf_potato.xmlR0i11114R1R38R3R116R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf_potato.pngR0i1713304R1R15R3R117R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf.xmlR0i11114R1R38R3R118R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf.pngR0i3152226R1R15R3R119R6tgoR13y51:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead.pngR0i1263283R1R15R3R120R6tgoR13y51:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead.xmlR0i6158R1R38R3R121R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf.xmlR0i26042R1R38R3R122R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf.pngR0i6529446R1R15R3R123R6tgoR13y58:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead_potato.xmlR0i6158R1R38R3R124R6tgoR13y58:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead_potato.pngR0i598561R1R15R3R125R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2F3d-bf.pngR0i5508R1R15R3R126R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fbadai.pngR0i6570R1R15R3R127R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fgf.pngR0i5432R1R15R3R128R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Finspicable.pngR0i6797R1R15R3R129R6tgoR13y55:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fdave.pngR0i3271R1R15R3R130R6tgoR13y67:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fdave-frustration.pngR0i7963R1R15R3R131R6tgoR13y58:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fjunkers.pngR0i3905R1R15R3R132R6tgoR13y74:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Funfair-expunged-forward.pngR0i16340R1R15R3R133R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fbandu.pngR0i5862R1R15R3R134R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fdave-decimated.pngR0i15982R1R15R3R135R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fbf.pngR0i5815R1R15R3R136R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Fmg.pngR0i25187R1R15R3R137R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Ffries.pngR0i6266R1R15R3R138R6tgoR13y57:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Fphones.pngR0i158733R1R15R3R139R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Fbg.pngR0i322926R1R15R3R140R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst_potato.pngR0i1949693R1R15R3R141R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst_potato.xmlR0i48616R1R38R3R142R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst.pngR0i1356106R1R15R3R143R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst.xmlR0i48616R1R38R3R144R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy.pngR0i874647R1R15R3R145R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy.xmlR0i8049R1R38R3R146R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi.pngR0i1136169R1R15R3R147R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi.xmlR0i47561R1R38R3R148R6tgoR13y71:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap_potato.xmlR0i50350R1R38R3R149R6tgoR13y71:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap_potato.pngR0i1810011R1R15R3R150R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy_potato.pngR0i1021910R1R15R3R151R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy_potato.xmlR0i8049R1R38R3R152R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad.pngR0i274474R1R15R3R153R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad.xmlR0i25415R1R38R3R154R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_potato.pngR0i776449R1R15R3R155R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_potato.xmlR0i12422R1R38R3R156R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra_potato.xmlR0i19808R1R38R3R157R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra_potato.pngR0i2604569R1R15R3R158R6tgoR13y64:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap.xmlR0i50350R1R38R3R159R6tgoR13y64:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap.pngR0i1220343R1R15R3R160R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi_potato.xmlR0i47561R1R38R3R161R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi_potato.pngR0i2258904R1R15R3R162R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu.pngR0i366915R1R15R3R163R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu.xmlR0i12422R1R38R3R164R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra.xmlR0i19808R1R38R3R165R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad_potato.xmlR0i25415R1R38R3R166R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad_potato.pngR0i666177R1R15R3R167R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra.pngR0i5372875R1R15R3R168R6tgoR13y26:assets%2Fimages%2Fnum3.pngR0i4022R1R15R3R169R6tgoR13y26:assets%2Fimages%2Fnum1.pngR0i3390R1R15R3R170R6tgoR13y37:assets%2Fimages%2Fnewgrounds_logo.pngR0i57747R1R15R3R171R6tgoR13y26:assets%2Fimages%2Fnum0.pngR0i3738R1R15R3R172R6tgoR13y30:assets%2Fimages%2Falphabet.xmlR0i39069R1R38R3R173R6tgoR13y30:assets%2Fimages%2Falphabet.pngR0i139836R1R15R3R174R6tgoR13y26:assets%2Fimages%2Flogo.pngR0i86924R1R15R3R175R6tgoR13y35:assets%2Fimages%2FmenuBGMagenta.pngR0i553468R1R15R3R176R6tgoR13y32:assets%2Fimages%2FlogoBumpin.pngR0i592724R1R15R3R177R6tgoR13y32:assets%2Fimages%2FlogoBumpin.xmlR0i2177R1R38R3R178R6tgoR13y26:assets%2Fimages%2Fnum8.pngR0i3914R1R15R3R179R6tgoR13y26:assets%2Fimages%2Fnum9.pngR0i3687R1R15R3R180R6tgoR13y45:assets%2Fimages%2Fcampaign_menu_UI_assets.pngR0i27171R1R15R3R181R6tgoR13y45:assets%2Fimages%2Fcampaign_menu_UI_assets.xmlR0i1893R1R38R3R182R6tgoR13y32:assets%2Fimages%2FmenuBGBlue.pngR0i614586R1R15R3R183R6tgoR13y42:assets%2Fimages%2FFNF_main_menu_assets.pngR0i281298R1R15R3R184R6tgoR13y42:assets%2Fimages%2FFNF_main_menu_assets.xmlR0i4755R1R38R3R185R6tgoR13y32:assets%2Fimages%2FtitleEnter.xmlR0i4875R1R38R3R186R6tgoR13y31:assets%2Fimages%2FmenuDesat.pngR0i357911R1R15R3R187R6tgoR13y32:assets%2Fimages%2FtitleEnter.pngR0i1449202R1R15R3R188R6tgoR0i17762R1R2R3y32:assets%2Fsounds%2FcancelMenu.mp3R5aR189hR6tgoR0i22403R1R2R3y62:assets%2Fsounds%2Fgolden%2Fcountdown%2Fawesomeson%2Fintro2.mp3R5aR190hR6tgoR0i22403R1R2R3y62:assets%2Fsounds%2Fgolden%2Fcountdown%2Fawesomeson%2Fintro3.mp3R5aR191hR6tgoR0i22403R1R2R3y62:assets%2Fsounds%2Fgolden%2Fcountdown%2Fawesomeson%2Fintro1.mp3R5aR192hR6tgoR0i22403R1R2R3y63:assets%2Fsounds%2Fgolden%2Fcountdown%2Fawesomeson%2FintroGo.mp3R5aR193hR6tgoR0i12773R1R2R3y49:assets%2Fsounds%2Fgolden%2Fcountdown%2Fintro2.mp3R5aR194hR6tgoR0i8857R1R2R3y49:assets%2Fsounds%2Fgolden%2Fcountdown%2Fintro3.mp3R5aR195hR6tgoR0i12458R1R2R3y49:assets%2Fsounds%2Fgolden%2Fcountdown%2Fintro1.mp3R5aR196hR6tgoR0i11536R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fbandu%2Fintro2.mp3R5aR197hR6tgoR0i11954R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fbandu%2Fintro3.mp3R5aR198hR6tgoR0i13626R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fbandu%2Fintro1.mp3R5aR199hR6tgoR0i8611R1R2R3y58:assets%2Fsounds%2Fgolden%2Fcountdown%2Fbandu%2FintroGo.mp3R5aR200hR6tgoR0i8441R1R2R3y56:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2Fintro2.mp3R5aR201hR6tgoR0i7317R1R2R3y56:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2Fintro3.mp3R5aR202hR6tgoR0i6198R1R2R3y56:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2Fintro1.mp3R5aR203hR6tgoR0i7500R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2FintroGo.mp3R5aR204hR6tgoR0i7555R1R2R3y50:assets%2Fsounds%2Fgolden%2Fcountdown%2FintroGo.mp3R5aR205hR6tgoR0i91950R1R2R3y33:assets%2Fsounds%2FconfirmMenu.mp3R5aR206hR6tgoR0i17762R1R2R3y32:assets%2Fsounds%2FscrollMenu.mp3R5aR207hR6tgoR0i245600R1y4:FONTy9:classNamey38:__ASSET__assets_fonts_comic_normal_ttfR3y33:assets%2Ffonts%2Fcomic_normal.ttfR6tgoR0i229408R1R208R209y31:__ASSET__assets_fonts_comic_ttfR3y26:assets%2Ffonts%2Fcomic.ttfR6tgoR13y34:assets%2Fdata%2Fdata-goes-here.txtR0zR1R38R3R214R6tgoR13y44:assets%2Fdata%2Fstrawberry%2Fstrawberry.jsonR0i24616R1R38R3R215R6tgoR13y29:assets%2Fdata%2Fmain-view.xmlR0i123R1R38R3R216R6tgoR13y36:assets%2Fdata%2Fslices%2Fslices.jsonR0i37818R1R38R3R217R6tgoR13y30:assets%2Fdata%2Fnft%2Fnft.jsonR0i43569R1R38R3R218R6tgoR13y34:assets%2Fdata%2Fkooky%2Fkooky.jsonR0i80683R1R38R3R219R6tgoR13y30:assets%2Fdata%2Faug%2Faug.jsonR0i20014R1R38R3R220R6tgoR13y29:assets%2Fdata%2FintroText.txtR0i1260R1R38R3R221R6tgoR13y42:assets%2Fdata%2Flofthouse%2Flofthouse.jsonR0i50661R1R38R3R222R6tgoR13y33:assets%2Fdata%2FspecialThanks.txtR0i300R1R38R3R223R6tgoR13y44:assets%2Fdata%2Forthogonal%2Forthogonal.jsonR0i127054R1R38R3R224R6tgoR13y44:assets%2Fdata%2Fready-loud%2Fready-loud.jsonR0i34408R1R38R3R225R6tgoR13y45:assets%2Fdata%2Fgolden%2Fnotes%2Fawesome.jsonR0i431R1R38R3R226R6tgoR13y40:assets%2Fdata%2Fgolden%2Fnotes%2F3d.jsonR0i667R1R38R3R227R6tgoR13y43:assets%2Fdata%2Fgolden%2Fnotes%2Fbevel.jsonR0i178R1R38R3R228R6tgoR13y45:assets%2Fdata%2Fgolden%2Fnotes%2Fdefault.jsonR0i1028R1R38R3R229R6tgoR13y44:assets%2Fdata%2Fgolden%2Fnotes%2Fbready.jsonR0i374R1R38R3R230R6tgoR13y44:assets%2Fdata%2Fgolden%2Fmenu%2Fcredits.jsonR0i940R1R38R3R231R6tgoR13y50:assets%2Fdata%2Fgolden%2Fshaders%2FWavyShader.fragR0i1316R1R38R3R232R6tgoR13y52:assets%2Fdata%2Fgolden%2Fcharacters%2Fbf-bounds.jsonR0i22224R1R38R3R233R6tgoR13y57:assets%2Fdata%2Fgolden%2Fapplecore%2Fsecondary-bambi.jsonR0i46074R1R38R3R234R6tgoR13y50:assets%2Fdata%2Fgolden%2Fapplecore%2Fsubtitles.srtR0i1683R1R38R3R235R6tgoR13y78:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Funfair-expunged-forward.jsonR0i688R1R38R3R236R6tgoR13y66:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu-first.jsonR0i1784R1R38R3R237R6tgoR13y60:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu.jsonR0i819R1R38R3R238R6tgoR13y64:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu-sad.jsonR0i1363R1R38R3R239R6tgoR13y71:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fdisruption-bambi.jsonR0i1527R1R38R3R240R6tgoR13y44:assets%2Fdata%2Finspicable%2Finspicable.jsonR0i41973R1R38R3R241R6tgoR13y42:assets%2Fdata%2Fgift-card%2Fgift-card.jsonR0i49357R1R38R3R242R6tgoR13y36:assets%2Fdata%2FfreeplaySonglist.txtR0i10R1R38R3R243R6tgoR13y28:assets%2Fdata%2Fcontrols.txtR0i324R1R38R3R244R6tgoR13y46:assets%2Fdata%2Ffrustration%2Ffrustration.jsonR0i79278R1R38R3R245R6tgoR13y52:assets%2Fdata%2Fthe-big-dingle%2Fthe-big-dingle.jsonR0i24539R1R38R3R246R6tgoR13y40:assets%2Fdata%2Ftantalum%2Ftantalum.jsonR0i47979R1R38R3R247R6tgoR13y44:assets%2Fdata%2Fsugar-rush%2Fsugar-rush.jsonR0i32555R1R38R3R248R6tgoR13y40:assets%2Fdata%2Fdoughboy%2Fdoughboy.jsonR0i30739R1R38R3R249R6tgoR13y42:assets%2Fdata%2Fenforcers%2Fenforcers.jsonR0i20507R1R38R3R250R6tgoR13y48:assets%2Fdata%2Ftunnelvision%2Ftunnelvision.jsonR0i124949R1R38R3R251R6tgoR13y34:assets%2Fdata%2Fnutty%2Fnutty.jsonR0i35817R1R38R3R252R6tgoR13y33:assets%2Fdata%2FcharacterList.txtR0i89R1R38R3R253R6tgoR13y40:assets%2Fdata%2Fkeyboard%2Fkeyboard.jsonR0i37268R1R38R3R254R6tgoR13y42:assets%2Fdata%2Fapplecore%2Fapplecore.jsonR0i77355R1R38R3R255R6tgoR13y52:assets%2Fdata%2Fcooking-lesson%2Fcooking-lesson.jsonR0i54523R1R38R3R256R6tgoR13y41:assets%2Fvideos%2Fgolden%2FPizzaVideo.mp4R0i18210431R1y6:BINARYR3R257goR13y50:assets%2Fvideos%2Fgolden%2Ftunnelvision%2Fmask.mp4R0i5769684R1R258R3R259goR13y55:assets%2Fvideos%2Fgolden%2Ftunnelvision%2Fred_blobs.mp4R0i11119130R1R258R3R260goR13y48:mods%2FintroMod%2F_append%2Fdata%2FintroText.txtR0i20R1R38R3R261goR13y17:mods%2Freadme.txtR0i90R1R38R3R262goR13y18:mods%2FmodList.txtR0i8R1R38R3R263goR13y21:do%20NOT%20readme.txtR0i4326R1R38R3R264R6tgoR13y13:changelog.txtR0i7730R1R38R3R265R6tgoR0i75864R1R208R209y29:__ASSET__assets_fonts_vcr_ttfR3y24:assets%2Ffonts%2Fvcr.ttfR6tgoR13y34:assets%2Ffonts%2Ffonts-go-here.txtR0zR1R38R3R268R6tgoR0i14656R1R208R209y31:__ASSET__assets_fonts_pixel_otfR3y26:assets%2Ffonts%2Fpixel.otfR6tgoR0i39706R1R2R3y28:flixel%2Fsounds%2Fflixel.mp3R5aR271y28:flixel%2Fsounds%2Fflixel.ogghR6tgoR0i2114R1R2R3y26:flixel%2Fsounds%2Fbeep.mp3R5aR273y26:flixel%2Fsounds%2Fbeep.ogghR6tgoR0i5794R1y5:SOUNDR3R274R5aR273R274hgoR0i33629R1R275R3R272R5aR271R272hgoR0i15744R1R208R209y35:__ASSET__flixel_fonts_nokiafc22_ttfR3y30:flixel%2Ffonts%2Fnokiafc22.ttfR6tgoR0i29724R1R208R209y36:__ASSET__flixel_fonts_monsterrat_ttfR3y31:flixel%2Ffonts%2Fmonsterrat.ttfR6tgoR13y33:flixel%2Fimages%2Fui%2Fbutton.pngR0i519R1R15R3R280R6tgoR13y36:flixel%2Fimages%2Flogo%2Fdefault.pngR0i3280R1R15R3R281R6tgoR13y44:flixel%2Fflixel-ui%2Fimg%2Fdropdown_mark.pngR0i86R1R15R3R282R6tgoR13y40:flixel%2Fflixel-ui%2Fimg%2Fplus_mark.pngR0i83R1R15R3R283R6tgoR13y36:flixel%2Fflixel-ui%2Fimg%2Fradio.pngR0i108R1R15R3R284R6tgoR13y48:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_left.pngR0i222R1R15R3R285R6tgoR13y42:flixel%2Fflixel-ui%2Fimg%2Fbutton_thin.pngR0i118R1R15R3R286R6tgoR13y34:flixel%2Fflixel-ui%2Fimg%2Ftab.pngR0i106R1R15R3R287R6tgoR13y41:flixel%2Fflixel-ui%2Fimg%2Ffinger_big.pngR0i1337R1R15R3R288R6tgoR13y36:flixel%2Fflixel-ui%2Fimg%2Finvis.pngR0i72R1R15R3R289R6tgoR13y43:flixel%2Fflixel-ui%2Fimg%2Fchrome_inset.pngR0i102R1R15R3R290R6tgoR13y44:flixel%2Fflixel-ui%2Fimg%2Ftooltip_arrow.pngR0i176R1R15R3R291R6tgoR13y49:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_right.pngR0i238R1R15R3R292R6tgoR13y40:flixel%2Fflixel-ui%2Fimg%2Fradio_dot.pngR0i81R1R15R3R293R6tgoR13y37:flixel%2Fflixel-ui%2Fimg%2Fchrome.pngR0i135R1R15R3R294R6tgoR13y40:flixel%2Fflixel-ui%2Fimg%2Fcheck_box.pngR0i101R1R15R3R295R6tgoR13y44:flixel%2Fflixel-ui%2Fimg%2Fbutton_toggle.pngR0i254R1R15R3R296R6tgoR13y46:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_up.pngR0i227R1R15R3R297R6tgoR13y41:flixel%2Fflixel-ui%2Fimg%2Fminus_mark.pngR0i77R1R15R3R298R6tgoR13y42:flixel%2Fflixel-ui%2Fimg%2Fchrome_flat.pngR0i124R1R15R3R299R6tgoR13y37:flixel%2Fflixel-ui%2Fimg%2Fswatch.pngR0i94R1R15R3R300R6tgoR13y43:flixel%2Fflixel-ui%2Fimg%2Fchrome_light.pngR0i118R1R15R3R301R6tgoR13y38:flixel%2Fflixel-ui%2Fimg%2Fhilight.pngR0i74R1R15R3R302R6tgoR13y41:flixel%2Fflixel-ui%2Fimg%2Fcheck_mark.pngR0i97R1R15R3R303R6tgoR13y39:flixel%2Fflixel-ui%2Fimg%2Ftab_back.pngR0i111R1R15R3R304R6tgoR13y34:flixel%2Fflixel-ui%2Fimg%2Fbox.pngR0i75R1R15R3R305R6tgoR13y43:flixel%2Fflixel-ui%2Fimg%2Ffinger_small.pngR0i157R1R15R3R306R6tgoR13y37:flixel%2Fflixel-ui%2Fimg%2Fbutton.pngR0i211R1R15R3R307R6tgoR13y48:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_down.pngR0i216R1R15R3R308R6tgoR13y44:flixel%2Fflixel-ui%2Fxml%2Fdefault_popup.xmlR0i1848R1R38R3R309R6tgoR13y53:flixel%2Fflixel-ui%2Fxml%2Fdefault_loading_screen.xmlR0i1953R1R38R3R310R6tgoR13y39:flixel%2Fflixel-ui%2Fxml%2Fdefaults.xmlR0i1263R1R38R3R311R6tgoR13y20:manifest.webmanifestR0i239R1R38R3R312gh\",\"rootPath\":null,\"version\":2,\"libraryArgs\":[],\"libraryType\":null}";
 	var manifest = lime_utils_AssetManifest.parse(data,ManifestResources.rootPath);
 	var library = lime_utils_AssetLibrary.fromManifest(manifest);
 	lime_utils_Assets.registerLibrary("default",library);
@@ -30565,6 +32463,7 @@ var Note = function(strumTime,noteData,prevNote,sustainNote,skin,stepDuration) {
 	this.wasGoodHit = false;
 	this.tooLate = false;
 	this.canBeHit = false;
+	this.extraSinger = "";
 	this.altAnimation = false;
 	this.noteData = 0;
 	this.mustPress = false;
@@ -30581,10 +32480,7 @@ var Note = function(strumTime,noteData,prevNote,sustainNote,skin,stepDuration) {
 	this.strumTime = strumTime + Conductor.validOffset(flixel_FlxG.save.data.offset);
 	this.sustainStart = sustainNote ? prevNote.strumTime : this.strumTime;
 	this.noteData = noteData;
-	var key = GoldenNoteSkin.atlas(skin);
-	var library = null;
-	var potatoKey = key + "_potato";
-	this.set_frames(GoldenQuality.superLow && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT") ? flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library)) : flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE",library),Paths.getPath("images/" + key + ".xml","TEXT",library)));
+	this.set_frames(GoldenNoteSkin.frames(skin));
 	this.animation.addByPrefix("greenScroll","green0");
 	this.animation.addByPrefix("redScroll","red0");
 	this.animation.addByPrefix("blueScroll","blue0");
@@ -30597,9 +32493,9 @@ var Note = function(strumTime,noteData,prevNote,sustainNote,skin,stepDuration) {
 	this.animation.addByPrefix("greenhold","green hold piece");
 	this.animation.addByPrefix("redhold","red hold piece");
 	this.animation.addByPrefix("bluehold","blue hold piece");
-	this.setGraphicSize(this.get_width() * 0.7 | 0);
+	this.scale.set(GoldenNoteSkin.baseScale(skin),GoldenNoteSkin.baseScale(skin));
 	this.updateHitbox();
-	this.set_antialiasing(skin != "3d" && !GoldenQuality.superLow);
+	this.set_antialiasing(skin != "3d" && skin != "bevel" && !GoldenQuality.superLow);
 	switch(noteData) {
 	case 0:
 		this.set_x(this.x + Note.swagWidth * 0);
@@ -30677,6 +32573,7 @@ Note.prototype = $extend(flixel_FlxSprite.prototype,{
 	,mustPress: null
 	,noteData: null
 	,altAnimation: null
+	,extraSinger: null
 	,canBeHit: null
 	,tooLate: null
 	,wasGoodHit: null
@@ -30826,7 +32723,7 @@ Note.prototype = $extend(flixel_FlxSprite.prototype,{
 		}
 	}
 	,draw: function() {
-		if(GoldenMobileControls.enabled && !this.mustPress) {
+		if(GoldenMobileControls.enabled && !PlayState.controlsNote(this)) {
 			return;
 		}
 		if(this.isSustainNote && !GoldenQuality.superLow) {
@@ -30871,7 +32768,7 @@ Note.prototype = $extend(flixel_FlxSprite.prototype,{
 	}
 	,update: function(elapsed) {
 		flixel_FlxSprite.prototype.update.call(this,elapsed);
-		if(this.mustPress) {
+		if(PlayState.controlsNote(this)) {
 			if(GoldenInputJudge.canHit(this.strumTime,Conductor.songPosition)) {
 				this.canBeHit = true;
 			} else {
@@ -31133,7 +33030,7 @@ Paths.getPackerAtlas = function(key,library) {
 };
 var PauseSubState = function(x,y) {
 	this.labels = [];
-	this.items = ["Resume","Restart Song","Exit to menu"];
+	this.items = ["Resume","Restart Song","Opponent Mode: OFF","Exit to menu"];
 	this.leaving = false;
 	this.selected = 0;
 	this.inputDelay = 0.25;
@@ -31149,7 +33046,7 @@ var PauseSubState = function(x,y) {
 	this.add(shade);
 	var extra = GoldenFrustExtras.supports(PlayState.SONG.song);
 	var id = PlayState.SONG.song.toLowerCase();
-	var background = id == "sugar-rush" ? "pissing_too" : id == "cooking-lesson" ? "cooking_lesson" : id == "ready-loud" ? "onaf_full" : id == "enforcers" ? "first_bg_back" : "slices";
+	var background = id == "aug" ? "bg" : id == "doughboy" ? "breadworld" : id == "the-big-dingle" ? "sky" : id == "lofthouse" ? "loftbg" : id == "kooky" ? "yoMamaSoBrown/sdfsdfsdfv-min" : id == "gift-card" ? "pixel/main_junk" : id == "tantalum" ? "back" : id == "strawberry" ? "ocWeek/bom" : id == "nutty" ? "ocWeek/strawberries" : id == "keyboard" ? "ocWeek/keyboard" : id == "nft" ? "bg" : id == "sugar-rush" ? "pissing_too" : id == "cooking-lesson" ? "cooking_lesson" : id == "ready-loud" ? "onaf_full" : id == "enforcers" ? "first_bg_back" : "slices";
 	var cover = new flixel_FlxSprite(650,0).loadGraphic(extra ? Paths.getPath("images/" + ("golden/frustsongs/" + id + "/" + background) + ".png","IMAGE",GoldenFrustExtras.library(id)) : Paths.getPath("images/" + ("golden/menu/storyMode/songs/" + id + "/bg") + ".png","IMAGE",null));
 	cover.setGraphicSize(1280,720);
 	cover.updateHitbox();
@@ -31191,7 +33088,7 @@ var PauseSubState = function(x,y) {
 		this.labels.push(text);
 		this.add(text);
 	}
-	var hint = new flixel_text_FlxText(55,650,560,"Up / Down: Select    Enter: Confirm",18);
+	var hint = new flixel_text_FlxText(55,650,560,"Up / Down: Select    Enter: Confirm\nChanging sides restarts the song.",18);
 	hint.setFormat("assets/fonts/" + "comic_normal.ttf",18);
 	hint.scrollFactor.set();
 	this.add(hint);
@@ -31262,6 +33159,7 @@ PauseSubState.prototype = $extend(MusicBeatSubstate.prototype,{
 		});
 	}
 	,refresh: function() {
+		this.items[2] = "Opponent Mode: " + (PlayState.opponentMode ? "ON" : "OFF");
 		var _g = 0;
 		var _g1 = this.labels.length;
 		while(_g < _g1) {
@@ -31301,6 +33199,16 @@ PauseSubState.prototype = $extend(MusicBeatSubstate.prototype,{
 				});
 				break;
 			case 2:
+				this.depart(function() {
+					PlayState.opponentMode = !PlayState.opponentMode;
+					PlayState.loadRep = false;
+					var nextState = Type.createInstance(js_Boot.getClass(flixel_FlxG.game._state),[]);
+					if(flixel_FlxG.game._state.switchTo(nextState)) {
+						flixel_FlxG.game._requestedState = nextState;
+					}
+				});
+				break;
+			case 3:
 				this.depart(function() {
 					PlayState.loadRep = false;
 					var nextState = GoldenFrustExtras.returnToExtras ? GoldenFrustExtras.menu() : new MainMenuState();
@@ -120491,7 +122399,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 49731;
+	this.version = 575286;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
@@ -174530,6 +176438,7 @@ PlayState.repPresses = 0;
 PlayState.repReleases = 0;
 PlayState.timeCurrently = 0;
 PlayState.timeCurrentlyR = 0;
+PlayState.opponentMode = false;
 GoldenExtrasMenu.categoryIndex = 0;
 GoldenExtrasMenu.songSelections = [0,0,0,0,0,0];
 GoldenFrustExtras.returnToExtras = false;

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="bambom_nutty.png">
+	<!-- Created with Adobe Animate version 21.0.6.41649 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="nutty back idle instance 10000" x="0" y="0" width="578" height="709"/>
+	<SubTexture name="nutty back idle instance 10001" x="0" y="0" width="578" height="709"/>
+	<SubTexture name="nutty back idle instance 10002" x="583" y="0" width="578" height="709"/>
+	<SubTexture name="nutty back idle instance 10003" x="583" y="0" width="578" height="709"/>
+	<SubTexture name="nutty back idle instance 10004" x="1166" y="0" width="578" height="709"/>
+	<SubTexture name="nutty back idle instance 10005" x="1166" y="0" width="578" height="709"/>
+	<SubTexture name="nutty back idle instance 10006" x="0" y="714" width="578" height="709"/>
+	<SubTexture name="nutty back idle instance 10007" x="0" y="714" width="578" height="709"/>
+</TextureAtlas>

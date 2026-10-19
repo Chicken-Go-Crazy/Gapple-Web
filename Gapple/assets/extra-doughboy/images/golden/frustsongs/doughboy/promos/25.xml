@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="25.png">
+	<!-- Created with Adobe Animate version 21.0.6.41649 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="silly0000" x="0" y="0" width="727" height="90" />
+	<SubTexture name="silly0001" x="732" y="0" width="727" height="90" />
+	<SubTexture name="silly0002" x="0" y="95" width="727" height="90" />
+	<SubTexture name="silly0003" x="732" y="95" width="727" height="90" />
+	<SubTexture name="silly0004" x="0" y="190" width="727" height="90" />
+	<SubTexture name="silly0005" x="732" y="190" width="727" height="90" />
+	<SubTexture name="silly0006" x="0" y="285" width="727" height="90" />
+	<SubTexture name="silly0007" x="732" y="285" width="727" height="90" />
+	<SubTexture name="silly0008" x="0" y="380" width="727" height="90" />
+	<SubTexture name="silly0009" x="732" y="380" width="727" height="90" />
+	<SubTexture name="silly0010" x="0" y="475" width="727" height="90" />
+	<SubTexture name="silly0011" x="732" y="475" width="727" height="90" />
+	<SubTexture name="silly0012" x="0" y="570" width="727" height="90" />
+	<SubTexture name="silly0013" x="732" y="570" width="727" height="90" />
+</TextureAtlas>
