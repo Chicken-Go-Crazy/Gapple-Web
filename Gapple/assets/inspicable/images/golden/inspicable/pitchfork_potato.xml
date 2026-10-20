@@ -1,13 +1,13 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<TextureAtlas imagePath="pitchfork.png">
-	<!-- Created with Adobe Animate version 24.0.8.70 -->
-	<!-- http://www.adobe.com/products/animate.html -->
-	<SubTexture name="confirm0000" x="4" y="4" width="298" height="381"/>
-	<SubTexture name="confirm0001" x="4" y="388" width="298" height="381"/>
-	<SubTexture name="confirm0002" x="305" y="4" width="292" height="373" frameX="-3" frameY="-4" frameWidth="298" frameHeight="381"/>
-	<SubTexture name="press0000" x="600" y="324" width="256" height="309" frameX="-3" frameY="-4" frameWidth="262" frameHeight="317"/>
-	<SubTexture name="press0001" x="600" y="324" width="256" height="309" frameX="-3" frameY="-4" frameWidth="262" frameHeight="317"/>
-	<SubTexture name="press0002" x="600" y="4" width="262" height="317"/>
-	<SubTexture name="scroll0000" x="548" y="636" width="240" height="317"/>
-	<SubTexture name="strum0000" x="305" y="380" width="240" height="317"/>
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="pitchfork_potato.png">
+	
+	
+	<SubTexture name="confirm0000" x="4" y="4" width="298" height="381" />
+	<SubTexture name="confirm0001" x="4" y="388" width="298" height="381" />
+	<SubTexture name="confirm0002" x="305" y="4" width="292" height="373" frameX="-3" frameY="-4" frameWidth="298" frameHeight="381" />
+	<SubTexture name="press0000" x="600" y="324" width="256" height="309" frameX="-3" frameY="-4" frameWidth="262" frameHeight="317" />
+	<SubTexture name="press0001" x="600" y="324" width="256" height="309" frameX="-3" frameY="-4" frameWidth="262" frameHeight="317" />
+	<SubTexture name="press0002" x="600" y="4" width="262" height="317" />
+	<SubTexture name="scroll0000" x="548" y="636" width="240" height="317" />
+	<SubTexture name="strum0000" x="305" y="380" width="240" height="317" />
 </TextureAtlas>

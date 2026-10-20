@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<TextureAtlas imagePath="bf.png">
+<TextureAtlas imagePath="bf_potato.png">
   <SubTexture name="idle0000" x="428" y="6235" width="410" height="413" frameX="-244" frameY="-106" frameWidth="1007" frameHeight="596" />
   <SubTexture name="idle0001" x="428" y="6235" width="410" height="413" frameX="-244" frameY="-106" frameWidth="1007" frameHeight="596" />
   <SubTexture name="idle0002" x="785" y="4947" width="417" height="429" frameX="-240" frameY="-92" frameWidth="1007" frameHeight="596" />

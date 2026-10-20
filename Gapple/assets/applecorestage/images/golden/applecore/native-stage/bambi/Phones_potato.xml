@@ -1,54 +1,51 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-Created with Funkin Packer v0.1.3 https://neeeoo.github.io/funkin-packer/
--->
-<TextureAtlas imagePath="Phones.png" width="7049" height="7733">
-	<SubTexture name="fuckyouphonesgalorebig.png0084" x="3840" y="3840" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0085" x="5383" y="0" width="833" height="1441" rotated="true" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0086" x="5383" y="1441" width="833" height="1441" rotated="true" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0087" x="5281" y="2882" width="833" height="1441" rotated="true" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0088" x="5281" y="4323" width="833" height="1441" rotated="true" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0089" x="0" y="6067" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0090" x="1441" y="6067" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0091" x="2882" y="6056" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0092" x="4323" y="5816" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0093" x="6216" y="0" width="833" height="1441" rotated="true" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0094" x="6216" y="1441" width="833" height="1441" rotated="true" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0095" x="6114" y="2882" width="833" height="1441" rotated="true" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0096" x="6114" y="4323" width="833" height="1441" rotated="true" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0097" x="0" y="6900" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0098" x="1441" y="6900" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0099" x="2882" y="6889" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0100" x="4323" y="6649" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0101" x="4323" y="6649" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0102" x="4323" y="6649" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0103" x="4323" y="6649" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0104" x="4323" y="6649" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0105" x="4323" y="6649" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0106" x="4323" y="6649" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0107" x="4323" y="6649" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0108" x="4323" y="6649" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0109" x="4323" y="6649" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0110" x="4323" y="6649" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0111" x="4323" y="6649" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0112" x="4323" y="6649" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0113" x="4323" y="6649" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0114" x="4323" y="6649" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0115" x="4323" y="6649" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0116" x="5764" y="5764" width="833" height="1441" rotated="true" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0117" x="3314" y="4920" width="1599" height="896" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0118" x="1695" y="5160" width="1619" height="896" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0119" x="0" y="5160" width="1695" height="907" frameX="-192" frameY="-173" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0120" x="4320" y="0" width="1063" height="1728" rotated="true" frameX="-192" frameY="-17" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0121" x="4080" y="1920" width="1080" height="1728" rotated="true" frameX="-192" frameY="-0" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0122" x="0" y="0" width="1080" height="1920" rotated="true" frameX="-0" frameY="-0" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0123" x="1080" y="0" width="1080" height="1920" rotated="true" frameX="-0" frameY="-0" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0124" x="0" y="1920" width="1920" height="1080" frameX="-0" frameY="-0" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0125" x="2160" y="0" width="1080" height="1920" rotated="true" frameX="-0" frameY="-0" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0126" x="0" y="3000" width="1920" height="1080" frameX="-0" frameY="-0" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0127" x="1920" y="1920" width="1080" height="1920" rotated="true" frameX="-0" frameY="-0" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0128" x="3240" y="0" width="1080" height="1920" rotated="true" frameX="-0" frameY="-0" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0129" x="3000" y="1920" width="1080" height="1920" rotated="true" frameX="-0" frameY="-0" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0130" x="0" y="4080" width="1920" height="1080" frameX="-0" frameY="-0" frameWidth="1920" frameHeight="1080"/>
-	<SubTexture name="fuckyouphonesgalorebig.png0131" x="1920" y="3840" width="1920" height="1080" frameX="-0" frameY="-0" frameWidth="1920" frameHeight="1080"/>
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="Phones_potato.png" width="7049" height="7733">
+	<SubTexture name="fuckyouphonesgalorebig.png0084" x="3840" y="3840" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0085" x="5383" y="0" width="833" height="1441" rotated="true" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0086" x="5383" y="1441" width="833" height="1441" rotated="true" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0087" x="5281" y="2882" width="833" height="1441" rotated="true" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0088" x="5281" y="4323" width="833" height="1441" rotated="true" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0089" x="0" y="6067" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0090" x="1441" y="6067" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0091" x="2882" y="6056" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0092" x="4323" y="5816" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0093" x="6216" y="0" width="833" height="1441" rotated="true" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0094" x="6216" y="1441" width="833" height="1441" rotated="true" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0095" x="6114" y="2882" width="833" height="1441" rotated="true" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0096" x="6114" y="4323" width="833" height="1441" rotated="true" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0097" x="0" y="6900" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0098" x="1441" y="6900" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0099" x="2882" y="6889" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0100" x="4323" y="6649" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0101" x="4323" y="6649" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0102" x="4323" y="6649" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0103" x="4323" y="6649" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0104" x="4323" y="6649" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0105" x="4323" y="6649" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0106" x="4323" y="6649" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0107" x="4323" y="6649" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0108" x="4323" y="6649" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0109" x="4323" y="6649" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0110" x="4323" y="6649" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0111" x="4323" y="6649" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0112" x="4323" y="6649" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0113" x="4323" y="6649" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0114" x="4323" y="6649" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0115" x="4323" y="6649" width="1441" height="833" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0116" x="5764" y="5764" width="833" height="1441" rotated="true" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0117" x="3314" y="4920" width="1599" height="896" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0118" x="1695" y="5160" width="1619" height="896" frameX="-192" frameY="-184" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0119" x="0" y="5160" width="1695" height="907" frameX="-192" frameY="-173" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0120" x="4320" y="0" width="1063" height="1728" rotated="true" frameX="-192" frameY="-17" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0121" x="4080" y="1920" width="1080" height="1728" rotated="true" frameX="-192" frameY="-0" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0122" x="0" y="0" width="1080" height="1920" rotated="true" frameX="-0" frameY="-0" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0123" x="1080" y="0" width="1080" height="1920" rotated="true" frameX="-0" frameY="-0" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0124" x="0" y="1920" width="1920" height="1080" frameX="-0" frameY="-0" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0125" x="2160" y="0" width="1080" height="1920" rotated="true" frameX="-0" frameY="-0" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0126" x="0" y="3000" width="1920" height="1080" frameX="-0" frameY="-0" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0127" x="1920" y="1920" width="1080" height="1920" rotated="true" frameX="-0" frameY="-0" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0128" x="3240" y="0" width="1080" height="1920" rotated="true" frameX="-0" frameY="-0" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0129" x="3000" y="1920" width="1080" height="1920" rotated="true" frameX="-0" frameY="-0" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0130" x="0" y="4080" width="1920" height="1080" frameX="-0" frameY="-0" frameWidth="1920" frameHeight="1080" />
+	<SubTexture name="fuckyouphonesgalorebig.png0131" x="1920" y="3840" width="1920" height="1080" frameX="-0" frameY="-0" frameWidth="1920" frameHeight="1080" />
 </TextureAtlas>

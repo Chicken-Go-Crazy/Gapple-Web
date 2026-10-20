@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="slices_bandu_potato.png">
+	
+	
+	<SubTexture name="DOWN0000" x="642" y="615" width="622" height="595" />
+	<SubTexture name="IDLE0000" x="10" y="10" width="622" height="595" />
+	<SubTexture name="LEFT0000" x="642" y="10" width="622" height="595" />
+	<SubTexture name="RIGHT0000" x="1274" y="10" width="622" height="595" />
+	<SubTexture name="UP0000" x="10" y="615" width="622" height="595" />
+</TextureAtlas>

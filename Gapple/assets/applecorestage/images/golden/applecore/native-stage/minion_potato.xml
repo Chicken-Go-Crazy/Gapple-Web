@@ -1,368 +1,365 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-Created with Funkin Packer v0.1.3 https://neeeoo.github.io/funkin-packer/
--->
-<TextureAtlas imagePath="minion.png" width="1335" height="1325">
-	<SubTexture name="drawing loop0001" x="233" y="1015" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0002" x="233" y="1015" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0003" x="233" y="1015" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0004" x="233" y="1015" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0005" x="349" y="1015" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0006" x="349" y="1015" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0007" x="465" y="1009" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0008" x="465" y="1009" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0009" x="581" y="1009" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0010" x="581" y="1009" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0011" x="581" y="1009" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0012" x="581" y="1009" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0013" x="465" y="1009" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0014" x="465" y="1009" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0015" x="349" y="1015" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0016" x="349" y="1015" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0017" x="465" y="1009" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0018" x="465" y="1009" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0019" x="233" y="1015" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0020" x="233" y="1015" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0021" x="581" y="1009" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0022" x="697" y="991" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0023" x="813" y="990" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0024" x="813" y="990" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0025" x="929" y="988" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0026" x="929" y="988" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0027" x="1105" y="1" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0028" x="1105" y="1" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0029" x="1105" y="155" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0030" x="1105" y="155" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0031" x="1105" y="155" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0032" x="1105" y="155" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0033" x="1105" y="155" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0034" x="1105" y="155" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0035" x="1105" y="155" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0036" x="1105" y="155" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0037" x="1105" y="1" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0038" x="1105" y="1" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0039" x="1105" y="1" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0040" x="1105" y="1" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0041" x="929" y="988" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0042" x="929" y="988" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0043" x="813" y="990" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0044" x="813" y="990" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0045" x="1105" y="309" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0046" x="1105" y="309" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0047" x="1032" y="830" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0048" x="1032" y="830" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0049" x="1032" y="830" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0050" x="1032" y="830" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0051" x="1097" y="463" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0052" x="1097" y="463" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0053" x="1097" y="617" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0054" x="1097" y="617" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0055" x="1097" y="463" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0056" x="1097" y="463" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0057" x="1032" y="830" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0058" x="1032" y="830" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0059" x="1105" y="309" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0060" x="1105" y="309" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0061" x="1032" y="830" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0062" x="1032" y="830" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0063" x="1032" y="830" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0064" x="1032" y="830" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0065" x="1097" y="617" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0066" x="1097" y="617" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0067" x="1045" y="984" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0068" x="1045" y="984" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0069" x="1105" y="309" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0070" x="1105" y="309" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0071" x="1105" y="309" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0072" x="1" y="1173" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0073" x="117" y="1173" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0074" x="117" y="1173" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0075" x="233" y="1169" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0076" x="233" y="1169" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0077" x="117" y="1173" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0078" x="117" y="1173" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0079" x="1" y="1016" width="113" height="154" frameX="-7" frameY="-11" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0080" x="1" y="1016" width="113" height="154" frameX="-7" frameY="-11" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0081" x="349" y="1169" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0082" x="349" y="1169" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0083" x="349" y="1169" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0084" x="349" y="1169" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0085" x="465" y="1163" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0086" x="465" y="1163" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0087" x="581" y="1163" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0088" x="581" y="1163" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0089" x="697" y="1145" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0090" x="697" y="1145" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0091" x="813" y="1144" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0092" x="813" y="1144" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0093" x="349" y="1169" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0094" x="349" y="1169" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0095" x="349" y="1169" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0096" x="349" y="1169" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0097" x="349" y="1169" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0098" x="349" y="1169" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0099" x="349" y="1169" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0100" x="349" y="1169" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0101" x="813" y="1144" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0102" x="813" y="1144" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0103" x="813" y="1144" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0104" x="813" y="1144" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0105" x="697" y="1145" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0106" x="697" y="1145" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0107" x="581" y="1163" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0108" x="581" y="1163" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0109" x="465" y="1163" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0110" x="929" y="1142" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0111" x="1045" y="1138" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0112" x="1045" y="1138" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0113" x="1045" y="1138" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0114" x="1045" y="1138" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0115" x="1221" y="1" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0116" x="1221" y="1" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0117" x="1221" y="155" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0118" x="1221" y="155" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0119" x="1221" y="1" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0120" x="1221" y="1" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0121" x="1045" y="1138" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="drawing loop0122" x="1045" y="1138" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0001" x="133" y="856" width="106" height="156" frameX="-18" frameY="-16" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0002" x="133" y="856" width="106" height="156" frameX="-18" frameY="-16" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0003" x="242" y="856" width="123" height="156" frameX="-11" frameY="-9" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0004" x="242" y="856" width="123" height="156" frameX="-11" frameY="-9" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0005" x="768" y="832" width="129" height="155" frameX="-8" frameY="-5" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0006" x="768" y="832" width="129" height="155" frameX="-8" frameY="-5" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0007" x="900" y="830" width="129" height="155" frameX="-8" frameY="-5" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0008" x="900" y="830" width="129" height="155" frameX="-8" frameY="-5" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0009" x="1" y="856" width="129" height="157" frameX="-6" frameY="-4" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0010" x="1" y="856" width="129" height="157" frameX="-6" frameY="-4" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0011" x="368" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0012" x="368" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0013" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0014" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0015" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0016" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0017" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0018" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0019" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0020" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0021" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0022" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0023" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0024" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0025" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0026" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0027" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0028" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0029" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0030" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0031" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0032" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0033" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0034" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0035" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0036" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0037" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0038" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0039" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0040" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0041" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0042" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0043" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0044" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0045" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0046" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0047" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0048" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0049" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0050" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0051" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0052" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0053" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0054" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0055" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0056" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0057" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0058" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0059" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0060" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0061" x="638" y="832" width="127" height="156" frameX="-4" frameY="-7" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0062" x="638" y="832" width="127" height="156" frameX="-4" frameY="-7" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0063" x="117" y="1016" width="113" height="154" frameX="-7" frameY="-12" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0064" x="117" y="1016" width="113" height="154" frameX="-7" frameY="-12" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0065" x="1221" y="309" width="113" height="151" frameX="-7" frameY="-14" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0066" x="1221" y="309" width="113" height="151" frameX="-7" frameY="-14" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0067" x="1213" y="463" width="113" height="151" frameX="-7" frameY="-14" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0068" x="1213" y="463" width="113" height="151" frameX="-7" frameY="-14" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0069" x="1213" y="617" width="113" height="151" frameX="-7" frameY="-14" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0070" x="1213" y="617" width="113" height="151" frameX="-7" frameY="-14" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0071" x="1148" y="771" width="113" height="151" frameX="-7" frameY="-14" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0072" x="1148" y="771" width="113" height="151" frameX="-7" frameY="-14" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0073" x="1161" y="925" width="113" height="151" frameX="-7" frameY="-14" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0074" x="1161" y="925" width="113" height="151" frameX="-7" frameY="-14" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0075" x="1221" y="309" width="113" height="151" frameX="-7" frameY="-14" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0076" x="1221" y="309" width="113" height="151" frameX="-7" frameY="-14" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0077" x="117" y="1016" width="113" height="154" frameX="-7" frameY="-12" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0078" x="117" y="1016" width="113" height="154" frameX="-7" frameY="-12" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0079" x="638" y="832" width="127" height="156" frameX="-4" frameY="-7" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0080" x="638" y="832" width="127" height="156" frameX="-4" frameY="-7" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0081" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0082" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0083" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0084" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0085" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0086" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0087" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0088" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0089" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0090" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0091" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0092" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0093" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0094" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0095" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0096" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0097" x="638" y="832" width="127" height="156" frameX="-4" frameY="-7" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0098" x="638" y="832" width="127" height="156" frameX="-4" frameY="-7" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0099" x="117" y="1016" width="113" height="154" frameX="-7" frameY="-12" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="minion0100" x="117" y="1016" width="113" height="154" frameX="-7" frameY="-12" frameWidth="152" frameHeight="180"/>
-	<SubTexture name="spying0001" x="840" y="421" width="254" height="406" frameX="-90" frameY="-68" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0002" x="840" y="421" width="254" height="406" frameX="-90" frameY="-68" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0003" x="580" y="425" width="256" height="404" frameX="-91" frameY="-55" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0004" x="580" y="425" width="256" height="404" frameX="-91" frameY="-55" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0005" x="840" y="1" width="262" height="417" frameX="-90" frameY="-35" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0006" x="840" y="1" width="262" height="417" frameX="-90" frameY="-35" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0007" x="1" y="1" width="269" height="426" frameX="-85" frameY="-30" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0008" x="1" y="1" width="269" height="426" frameX="-85" frameY="-30" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0009" x="1" y="1" width="269" height="426" frameX="-85" frameY="-30" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0010" x="1" y="1" width="269" height="426" frameX="-85" frameY="-30" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0011" x="1" y="1" width="269" height="426" frameX="-85" frameY="-30" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0012" x="1" y="1" width="269" height="426" frameX="-85" frameY="-30" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0013" x="1" y="1" width="269" height="426" frameX="-85" frameY="-30" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0014" x="1" y="1" width="269" height="426" frameX="-85" frameY="-30" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0015" x="1" y="1" width="269" height="426" frameX="-85" frameY="-30" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0016" x="1" y="1" width="269" height="426" frameX="-85" frameY="-30" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0017" x="1" y="1" width="269" height="426" frameX="-85" frameY="-30" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0018" x="1" y="1" width="269" height="426" frameX="-85" frameY="-30" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0019" x="1" y="1" width="269" height="426" frameX="-85" frameY="-30" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0020" x="1" y="1" width="269" height="426" frameX="-85" frameY="-30" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0021" x="273" y="1" width="268" height="423" frameX="-93" frameY="-30" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0022" x="273" y="1" width="268" height="423" frameX="-93" frameY="-30" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0023" x="304" y="427" width="273" height="420" frameX="-90" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0024" x="304" y="427" width="273" height="420" frameX="-90" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0025" x="1" y="430" width="300" height="423" frameX="-70" frameY="-27" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0026" x="1" y="430" width="300" height="423" frameX="-70" frameY="-27" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0027" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0028" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0029" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0030" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0031" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0032" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0033" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0034" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0035" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0036" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0037" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0038" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0039" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0040" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0041" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0042" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0043" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0044" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0045" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0046" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0047" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0048" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0049" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0050" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0051" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0052" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0053" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0054" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0055" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0056" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0057" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0058" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0059" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0060" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0061" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0062" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0063" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0064" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0065" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0066" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0067" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0068" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0069" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0070" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0071" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0072" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0073" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0074" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0075" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0076" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0077" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0078" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0079" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0080" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0081" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0082" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0083" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0084" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0085" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0086" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0087" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0088" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0089" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0090" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0091" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0092" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0093" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0094" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0095" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0096" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0097" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0098" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0099" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0100" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0101" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0102" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0103" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0104" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0105" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0106" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0107" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0108" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0109" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0110" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0111" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0112" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0113" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0114" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0115" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0116" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0117" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0118" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0119" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0120" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0121" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0122" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0123" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0124" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0125" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0126" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0127" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0128" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0129" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0130" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0131" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0132" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0133" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0134" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0135" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0136" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0137" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0138" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0139" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
-	<SubTexture name="spying0140" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501"/>
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="minion_potato.png" width="1335" height="1325">
+	<SubTexture name="drawing loop0001" x="233" y="1015" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0002" x="233" y="1015" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0003" x="233" y="1015" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0004" x="233" y="1015" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0005" x="349" y="1015" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0006" x="349" y="1015" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0007" x="465" y="1009" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0008" x="465" y="1009" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0009" x="581" y="1009" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0010" x="581" y="1009" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0011" x="581" y="1009" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0012" x="581" y="1009" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0013" x="465" y="1009" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0014" x="465" y="1009" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0015" x="349" y="1015" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0016" x="349" y="1015" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0017" x="465" y="1009" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0018" x="465" y="1009" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0019" x="233" y="1015" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0020" x="233" y="1015" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0021" x="581" y="1009" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0022" x="697" y="991" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0023" x="813" y="990" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0024" x="813" y="990" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0025" x="929" y="988" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0026" x="929" y="988" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0027" x="1105" y="1" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0028" x="1105" y="1" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0029" x="1105" y="155" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0030" x="1105" y="155" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0031" x="1105" y="155" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0032" x="1105" y="155" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0033" x="1105" y="155" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0034" x="1105" y="155" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0035" x="1105" y="155" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0036" x="1105" y="155" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0037" x="1105" y="1" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0038" x="1105" y="1" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0039" x="1105" y="1" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0040" x="1105" y="1" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0041" x="929" y="988" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0042" x="929" y="988" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0043" x="813" y="990" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0044" x="813" y="990" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0045" x="1105" y="309" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0046" x="1105" y="309" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0047" x="1032" y="830" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0048" x="1032" y="830" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0049" x="1032" y="830" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0050" x="1032" y="830" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0051" x="1097" y="463" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0052" x="1097" y="463" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0053" x="1097" y="617" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0054" x="1097" y="617" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0055" x="1097" y="463" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0056" x="1097" y="463" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0057" x="1032" y="830" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0058" x="1032" y="830" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0059" x="1105" y="309" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0060" x="1105" y="309" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0061" x="1032" y="830" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0062" x="1032" y="830" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0063" x="1032" y="830" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0064" x="1032" y="830" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0065" x="1097" y="617" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0066" x="1097" y="617" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0067" x="1045" y="984" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0068" x="1045" y="984" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0069" x="1105" y="309" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0070" x="1105" y="309" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0071" x="1105" y="309" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0072" x="1" y="1173" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0073" x="117" y="1173" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0074" x="117" y="1173" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0075" x="233" y="1169" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0076" x="233" y="1169" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0077" x="117" y="1173" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0078" x="117" y="1173" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0079" x="1" y="1016" width="113" height="154" frameX="-7" frameY="-11" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0080" x="1" y="1016" width="113" height="154" frameX="-7" frameY="-11" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0081" x="349" y="1169" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0082" x="349" y="1169" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0083" x="349" y="1169" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0084" x="349" y="1169" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0085" x="465" y="1163" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0086" x="465" y="1163" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0087" x="581" y="1163" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0088" x="581" y="1163" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0089" x="697" y="1145" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0090" x="697" y="1145" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0091" x="813" y="1144" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0092" x="813" y="1144" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0093" x="349" y="1169" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0094" x="349" y="1169" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0095" x="349" y="1169" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0096" x="349" y="1169" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0097" x="349" y="1169" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0098" x="349" y="1169" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0099" x="349" y="1169" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0100" x="349" y="1169" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0101" x="813" y="1144" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0102" x="813" y="1144" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0103" x="813" y="1144" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0104" x="813" y="1144" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0105" x="697" y="1145" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0106" x="697" y="1145" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0107" x="581" y="1163" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0108" x="581" y="1163" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0109" x="465" y="1163" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0110" x="929" y="1142" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0111" x="1045" y="1138" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0112" x="1045" y="1138" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0113" x="1045" y="1138" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0114" x="1045" y="1138" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0115" x="1221" y="1" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0116" x="1221" y="1" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0117" x="1221" y="155" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0118" x="1221" y="155" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0119" x="1221" y="1" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0120" x="1221" y="1" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0121" x="1045" y="1138" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="drawing loop0122" x="1045" y="1138" width="113" height="151" frameX="-7" frameY="-13" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0001" x="133" y="856" width="106" height="156" frameX="-18" frameY="-16" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0002" x="133" y="856" width="106" height="156" frameX="-18" frameY="-16" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0003" x="242" y="856" width="123" height="156" frameX="-11" frameY="-9" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0004" x="242" y="856" width="123" height="156" frameX="-11" frameY="-9" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0005" x="768" y="832" width="129" height="155" frameX="-8" frameY="-5" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0006" x="768" y="832" width="129" height="155" frameX="-8" frameY="-5" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0007" x="900" y="830" width="129" height="155" frameX="-8" frameY="-5" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0008" x="900" y="830" width="129" height="155" frameX="-8" frameY="-5" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0009" x="1" y="856" width="129" height="157" frameX="-6" frameY="-4" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0010" x="1" y="856" width="129" height="157" frameX="-6" frameY="-4" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0011" x="368" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0012" x="368" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0013" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0014" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0015" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0016" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0017" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0018" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0019" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0020" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0021" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0022" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0023" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0024" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0025" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0026" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0027" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0028" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0029" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0030" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0031" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0032" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0033" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0034" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0035" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0036" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0037" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0038" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0039" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0040" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0041" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0042" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0043" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0044" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0045" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0046" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0047" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0048" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0049" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0050" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0051" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0052" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0053" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0054" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0055" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0056" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0057" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0058" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0059" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0060" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0061" x="638" y="832" width="127" height="156" frameX="-4" frameY="-7" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0062" x="638" y="832" width="127" height="156" frameX="-4" frameY="-7" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0063" x="117" y="1016" width="113" height="154" frameX="-7" frameY="-12" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0064" x="117" y="1016" width="113" height="154" frameX="-7" frameY="-12" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0065" x="1221" y="309" width="113" height="151" frameX="-7" frameY="-14" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0066" x="1221" y="309" width="113" height="151" frameX="-7" frameY="-14" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0067" x="1213" y="463" width="113" height="151" frameX="-7" frameY="-14" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0068" x="1213" y="463" width="113" height="151" frameX="-7" frameY="-14" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0069" x="1213" y="617" width="113" height="151" frameX="-7" frameY="-14" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0070" x="1213" y="617" width="113" height="151" frameX="-7" frameY="-14" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0071" x="1148" y="771" width="113" height="151" frameX="-7" frameY="-14" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0072" x="1148" y="771" width="113" height="151" frameX="-7" frameY="-14" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0073" x="1161" y="925" width="113" height="151" frameX="-7" frameY="-14" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0074" x="1161" y="925" width="113" height="151" frameX="-7" frameY="-14" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0075" x="1221" y="309" width="113" height="151" frameX="-7" frameY="-14" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0076" x="1221" y="309" width="113" height="151" frameX="-7" frameY="-14" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0077" x="117" y="1016" width="113" height="154" frameX="-7" frameY="-12" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0078" x="117" y="1016" width="113" height="154" frameX="-7" frameY="-12" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0079" x="638" y="832" width="127" height="156" frameX="-4" frameY="-7" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0080" x="638" y="832" width="127" height="156" frameX="-4" frameY="-7" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0081" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0082" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0083" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0084" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0085" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0086" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0087" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0088" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0089" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0090" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0091" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0092" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0093" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0094" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0095" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0096" x="503" y="850" width="132" height="156" frameX="-4" frameY="-8" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0097" x="638" y="832" width="127" height="156" frameX="-4" frameY="-7" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0098" x="638" y="832" width="127" height="156" frameX="-4" frameY="-7" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0099" x="117" y="1016" width="113" height="154" frameX="-7" frameY="-12" frameWidth="152" frameHeight="180" />
+	<SubTexture name="minion0100" x="117" y="1016" width="113" height="154" frameX="-7" frameY="-12" frameWidth="152" frameHeight="180" />
+	<SubTexture name="spying0001" x="840" y="421" width="254" height="406" frameX="-90" frameY="-68" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0002" x="840" y="421" width="254" height="406" frameX="-90" frameY="-68" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0003" x="580" y="425" width="256" height="404" frameX="-91" frameY="-55" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0004" x="580" y="425" width="256" height="404" frameX="-91" frameY="-55" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0005" x="840" y="1" width="262" height="417" frameX="-90" frameY="-35" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0006" x="840" y="1" width="262" height="417" frameX="-90" frameY="-35" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0007" x="1" y="1" width="269" height="426" frameX="-85" frameY="-30" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0008" x="1" y="1" width="269" height="426" frameX="-85" frameY="-30" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0009" x="1" y="1" width="269" height="426" frameX="-85" frameY="-30" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0010" x="1" y="1" width="269" height="426" frameX="-85" frameY="-30" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0011" x="1" y="1" width="269" height="426" frameX="-85" frameY="-30" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0012" x="1" y="1" width="269" height="426" frameX="-85" frameY="-30" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0013" x="1" y="1" width="269" height="426" frameX="-85" frameY="-30" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0014" x="1" y="1" width="269" height="426" frameX="-85" frameY="-30" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0015" x="1" y="1" width="269" height="426" frameX="-85" frameY="-30" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0016" x="1" y="1" width="269" height="426" frameX="-85" frameY="-30" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0017" x="1" y="1" width="269" height="426" frameX="-85" frameY="-30" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0018" x="1" y="1" width="269" height="426" frameX="-85" frameY="-30" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0019" x="1" y="1" width="269" height="426" frameX="-85" frameY="-30" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0020" x="1" y="1" width="269" height="426" frameX="-85" frameY="-30" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0021" x="273" y="1" width="268" height="423" frameX="-93" frameY="-30" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0022" x="273" y="1" width="268" height="423" frameX="-93" frameY="-30" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0023" x="304" y="427" width="273" height="420" frameX="-90" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0024" x="304" y="427" width="273" height="420" frameX="-90" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0025" x="1" y="430" width="300" height="423" frameX="-70" frameY="-27" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0026" x="1" y="430" width="300" height="423" frameX="-70" frameY="-27" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0027" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0028" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0029" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0030" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0031" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0032" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0033" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0034" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0035" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0036" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0037" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0038" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0039" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0040" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0041" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0042" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0043" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0044" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0045" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0046" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0047" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0048" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0049" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0050" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0051" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0052" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0053" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0054" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0055" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0056" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0057" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0058" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0059" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0060" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0061" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0062" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0063" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0064" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0065" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0066" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0067" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0068" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0069" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0070" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0071" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0072" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0073" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0074" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0075" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0076" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0077" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0078" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0079" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0080" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0081" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0082" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0083" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0084" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0085" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0086" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0087" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0088" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0089" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0090" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0091" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0092" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0093" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0094" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0095" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0096" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0097" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0098" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0099" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0100" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0101" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0102" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0103" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0104" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0105" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0106" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0107" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0108" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0109" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0110" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0111" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0112" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0113" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0114" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0115" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0116" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0117" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0118" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0119" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0120" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0121" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0122" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0123" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0124" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0125" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0126" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0127" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0128" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0129" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0130" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0131" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0132" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0133" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0134" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0135" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0136" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0137" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0138" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0139" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
+	<SubTexture name="spying0140" x="544" y="1" width="293" height="421" frameX="-76" frameY="-28" frameWidth="407" frameHeight="501" />
 </TextureAtlas>

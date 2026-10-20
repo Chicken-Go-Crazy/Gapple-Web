@@ -1,82 +1,41 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-Created with Funkin Packer v0.1.3 https://neeeoo.github.io/funkin-packer/
--->
-<TextureAtlas imagePath="banduCheck.png" width="2483" height="2224">
-	<SubTexture name="check0001" x="2161" y="1144" width="312" height="303" frameX="-488"
-		frameY="-727" frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0002" x="2161" y="1144" width="312" height="303" frameX="-488"
-		frameY="-727" frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0003" x="2070" y="796" width="298" height="345" rotated="true"
-		frameX="-488" frameY="-729" frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0004" x="2070" y="796" width="298" height="345" rotated="true"
-		frameX="-488" frameY="-729" frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0005" x="2184" y="1" width="298" height="355" rotated="true"
-		frameX="-488" frameY="-729" frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0006" x="2184" y="1" width="298" height="355" rotated="true"
-		frameX="-488" frameY="-729" frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0007" x="1807" y="438" width="361" height="298" frameX="-488"
-		frameY="-729" frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0008" x="1807" y="438" width="361" height="298" frameX="-488"
-		frameY="-729" frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0009" x="2171" y="438" width="299" height="355" rotated="true"
-		frameX="-488" frameY="-730" frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0010" x="2171" y="438" width="299" height="355" rotated="true"
-		frameX="-488" frameY="-730" frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0011" x="1282" y="1664" width="422" height="404" rotated="true"
-		frameX="-396" frameY="-759" frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0012" x="1282" y="1664" width="422" height="404" rotated="true"
-		frameX="-396" frameY="-759" frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0013" x="1006" y="1174" width="382" height="487" rotated="true"
-		frameX="-441" frameY="-780" frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0014" x="1006" y="1174" width="382" height="487" rotated="true"
-		frameX="-441" frameY="-780" frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0015" x="1807" y="1" width="374" height="434" rotated="true"
-		frameX="-528" frameY="-745" frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0016" x="1807" y="1" width="374" height="434" rotated="true"
-		frameX="-528" frameY="-745" frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0017" x="1391" y="1174" width="382" height="437" rotated="true"
-		frameX="-546" frameY="-732" frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0018" x="1391" y="1174" width="382" height="437" rotated="true"
-		frameX="-546" frameY="-732" frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0019" x="1639" y="781" width="428" height="381" frameX="-542"
-		frameY="-725" frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0020" x="1639" y="781" width="428" height="381" frameX="-542"
-		frameY="-725" frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0021" x="1" y="1841" width="424" height="382" frameX="-540" frameY="-720"
-		frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0022" x="1" y="1841" width="424" height="382" frameX="-540" frameY="-720"
-		frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0023" x="428" y="1841" width="424" height="382" frameX="-540"
-		frameY="-720" frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0024" x="428" y="1841" width="424" height="382" frameX="-540"
-		frameY="-720" frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0025" x="855" y="1841" width="424" height="382" frameX="-540"
-		frameY="-720" frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0026" x="855" y="1841" width="424" height="382" frameX="-540"
-		frameY="-720" frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0027" x="1776" y="1595" width="382" height="424" rotated="true"
-		frameX="-540" frameY="-720" frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0028" x="1776" y="1595" width="382" height="424" rotated="true"
-		frameX="-540" frameY="-720" frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0029" x="1776" y="1165" width="378" height="427" rotated="true"
-		frameX="-542" frameY="-724" frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0030" x="1776" y="1165" width="378" height="427" rotated="true"
-		frameX="-542" frameY="-724" frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0031" x="1123" y="781" width="513" height="390" frameX="-520"
-		frameY="-726" frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0032" x="1123" y="781" width="513" height="390" frameX="-520"
-		frameY="-726" frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0033" x="1123" y="1" width="681" height="777" rotated="true"
-		frameX="-480" frameY="-563" frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0034" x="1123" y="1" width="681" height="777" rotated="true"
-		frameX="-480" frameY="-563" frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0035" x="1" y="966" width="1002" height="872" frameX="-380" frameY="-439"
-		frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0036" x="1" y="966" width="1002" height="872" frameX="-380" frameY="-439"
-		frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0037" x="1" y="1" width="1119" height="962" frameX="-322" frameY="-388"
-		frameWidth="1794" frameHeight="1907" />
-	<SubTexture name="check0038" x="1" y="1" width="1119" height="962" frameX="-322" frameY="-388"
-		frameWidth="1794" frameHeight="1907" />
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="banduCheck_potato.png" width="2483" height="2224">
+	<SubTexture name="check0001" x="2161" y="1144" width="312" height="303" frameX="-488" frameY="-727" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0002" x="2161" y="1144" width="312" height="303" frameX="-488" frameY="-727" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0003" x="2070" y="796" width="298" height="345" rotated="true" frameX="-488" frameY="-729" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0004" x="2070" y="796" width="298" height="345" rotated="true" frameX="-488" frameY="-729" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0005" x="2184" y="1" width="298" height="355" rotated="true" frameX="-488" frameY="-729" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0006" x="2184" y="1" width="298" height="355" rotated="true" frameX="-488" frameY="-729" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0007" x="1807" y="438" width="361" height="298" frameX="-488" frameY="-729" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0008" x="1807" y="438" width="361" height="298" frameX="-488" frameY="-729" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0009" x="2171" y="438" width="299" height="355" rotated="true" frameX="-488" frameY="-730" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0010" x="2171" y="438" width="299" height="355" rotated="true" frameX="-488" frameY="-730" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0011" x="1282" y="1664" width="422" height="404" rotated="true" frameX="-396" frameY="-759" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0012" x="1282" y="1664" width="422" height="404" rotated="true" frameX="-396" frameY="-759" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0013" x="1006" y="1174" width="382" height="487" rotated="true" frameX="-441" frameY="-780" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0014" x="1006" y="1174" width="382" height="487" rotated="true" frameX="-441" frameY="-780" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0015" x="1807" y="1" width="374" height="434" rotated="true" frameX="-528" frameY="-745" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0016" x="1807" y="1" width="374" height="434" rotated="true" frameX="-528" frameY="-745" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0017" x="1391" y="1174" width="382" height="437" rotated="true" frameX="-546" frameY="-732" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0018" x="1391" y="1174" width="382" height="437" rotated="true" frameX="-546" frameY="-732" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0019" x="1639" y="781" width="428" height="381" frameX="-542" frameY="-725" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0020" x="1639" y="781" width="428" height="381" frameX="-542" frameY="-725" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0021" x="1" y="1841" width="424" height="382" frameX="-540" frameY="-720" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0022" x="1" y="1841" width="424" height="382" frameX="-540" frameY="-720" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0023" x="428" y="1841" width="424" height="382" frameX="-540" frameY="-720" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0024" x="428" y="1841" width="424" height="382" frameX="-540" frameY="-720" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0025" x="855" y="1841" width="424" height="382" frameX="-540" frameY="-720" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0026" x="855" y="1841" width="424" height="382" frameX="-540" frameY="-720" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0027" x="1776" y="1595" width="382" height="424" rotated="true" frameX="-540" frameY="-720" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0028" x="1776" y="1595" width="382" height="424" rotated="true" frameX="-540" frameY="-720" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0029" x="1776" y="1165" width="378" height="427" rotated="true" frameX="-542" frameY="-724" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0030" x="1776" y="1165" width="378" height="427" rotated="true" frameX="-542" frameY="-724" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0031" x="1123" y="781" width="513" height="390" frameX="-520" frameY="-726" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0032" x="1123" y="781" width="513" height="390" frameX="-520" frameY="-726" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0033" x="1123" y="1" width="681" height="777" rotated="true" frameX="-480" frameY="-563" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0034" x="1123" y="1" width="681" height="777" rotated="true" frameX="-480" frameY="-563" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0035" x="1" y="966" width="1002" height="872" frameX="-380" frameY="-439" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0036" x="1" y="966" width="1002" height="872" frameX="-380" frameY="-439" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0037" x="1" y="1" width="1119" height="962" frameX="-322" frameY="-388" frameWidth="1794" frameHeight="1907" />
+	<SubTexture name="check0038" x="1" y="1" width="1119" height="962" frameX="-322" frameY="-388" frameWidth="1794" frameHeight="1907" />
 </TextureAtlas>

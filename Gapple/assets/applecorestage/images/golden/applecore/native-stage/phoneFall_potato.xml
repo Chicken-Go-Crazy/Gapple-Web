@@ -1,30 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-Created with Funkin Packer v0.1.3 https://neeeoo.github.io/funkin-packer/
--->
-<TextureAtlas imagePath="phoneFall.png" width="1889" height="1804">
-	<SubTexture name="phoneFall0001" x="925" y="1340" width="812" height="463" frameX="-644"
-		frameY="-447" frameWidth="1902" frameHeight="2002" />
-	<SubTexture name="phoneFall0002" x="925" y="1340" width="812" height="463" frameX="-644"
-		frameY="-447" frameWidth="1902" frameHeight="2002" />
-	<SubTexture name="phoneFall0003" x="1418" y="1" width="470" height="816" rotated="true"
-		frameX="-643" frameY="-445" frameWidth="1902" frameHeight="2002" />
-	<SubTexture name="phoneFall0004" x="1418" y="1" width="470" height="816" rotated="true"
-		frameX="-643" frameY="-445" frameWidth="1902" frameHeight="2002" />
-	<SubTexture name="phoneFall0005" x="925" y="829" width="837" height="508" frameX="-637"
-		frameY="-452" frameWidth="1902" frameHeight="2002" />
-	<SubTexture name="phoneFall0006" x="925" y="829" width="837" height="508" frameX="-637"
-		frameY="-452" frameWidth="1902" frameHeight="2002" />
-	<SubTexture name="phoneFall0007" x="1" y="893" width="921" height="716" frameX="-550"
-		frameY="-440" frameWidth="1902" frameHeight="2002" />
-	<SubTexture name="phoneFall0008" x="1" y="893" width="921" height="716" frameX="-550"
-		frameY="-440" frameWidth="1902" frameHeight="2002" />
-	<SubTexture name="phoneFall0009" x="1" y="1" width="893" height="889" frameX="-503"
-		frameY="-548" frameWidth="1902" frameHeight="2002" />
-	<SubTexture name="phoneFall0010" x="1" y="1" width="893" height="889" frameX="-503"
-		frameY="-548" frameWidth="1902" frameHeight="2002" />
-	<SubTexture name="phoneFall0011" x="897" y="1" width="518" height="825" frameX="-781"
-		frameY="-764" frameWidth="1902" frameHeight="2002" />
-	<SubTexture name="phoneFall0012" x="897" y="1" width="518" height="825" frameX="-781"
-		frameY="-764" frameWidth="1902" frameHeight="2002" />
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="phoneFall_potato.png" width="1889" height="1804">
+	<SubTexture name="phoneFall0001" x="925" y="1340" width="812" height="463" frameX="-644" frameY="-447" frameWidth="1902" frameHeight="2002" />
+	<SubTexture name="phoneFall0002" x="925" y="1340" width="812" height="463" frameX="-644" frameY="-447" frameWidth="1902" frameHeight="2002" />
+	<SubTexture name="phoneFall0003" x="1418" y="1" width="470" height="816" rotated="true" frameX="-643" frameY="-445" frameWidth="1902" frameHeight="2002" />
+	<SubTexture name="phoneFall0004" x="1418" y="1" width="470" height="816" rotated="true" frameX="-643" frameY="-445" frameWidth="1902" frameHeight="2002" />
+	<SubTexture name="phoneFall0005" x="925" y="829" width="837" height="508" frameX="-637" frameY="-452" frameWidth="1902" frameHeight="2002" />
+	<SubTexture name="phoneFall0006" x="925" y="829" width="837" height="508" frameX="-637" frameY="-452" frameWidth="1902" frameHeight="2002" />
+	<SubTexture name="phoneFall0007" x="1" y="893" width="921" height="716" frameX="-550" frameY="-440" frameWidth="1902" frameHeight="2002" />
+	<SubTexture name="phoneFall0008" x="1" y="893" width="921" height="716" frameX="-550" frameY="-440" frameWidth="1902" frameHeight="2002" />
+	<SubTexture name="phoneFall0009" x="1" y="1" width="893" height="889" frameX="-503" frameY="-548" frameWidth="1902" frameHeight="2002" />
+	<SubTexture name="phoneFall0010" x="1" y="1" width="893" height="889" frameX="-503" frameY="-548" frameWidth="1902" frameHeight="2002" />
+	<SubTexture name="phoneFall0011" x="897" y="1" width="518" height="825" frameX="-781" frameY="-764" frameWidth="1902" frameHeight="2002" />
+	<SubTexture name="phoneFall0012" x="897" y="1" width="518" height="825" frameX="-781" frameY="-764" frameWidth="1902" frameHeight="2002" />
 </TextureAtlas>

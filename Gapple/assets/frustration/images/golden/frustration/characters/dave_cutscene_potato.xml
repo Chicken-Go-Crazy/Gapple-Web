@@ -1,180 +1,180 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<TextureAtlas imagePath="cracker_float.png">
-	<!-- Created with Adobe Animate version 21.0.0.35450 -->
-	<!-- http://www.adobe.com/products/animate.html -->
-	<SubTexture name="NEW_chair0000" x="1178" y="2156" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0001" x="1178" y="2156" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0002" x="582" y="2548" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0003" x="582" y="2548" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0004" x="880" y="2548" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0005" x="880" y="2548" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0006" x="1905" y="1741" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0007" x="1905" y="1741" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0008" x="2700" y="839" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0009" x="2700" y="839" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0010" x="880" y="2548" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0011" x="880" y="2548" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0012" x="2842" y="0" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0013" x="2842" y="0" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0014" x="2842" y="401" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0015" x="2842" y="401" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0016" x="880" y="2548" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0017" x="880" y="2548" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0018" x="2748" y="1240" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0019" x="2748" y="1240" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0020" x="867" y="2156" width="311" height="392" frameX="-11" frameY="-123" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0021" x="867" y="2156" width="311" height="392" frameX="-11" frameY="-123" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0022" x="0" y="846" width="596" height="380" frameX="0" frameY="-139" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0023" x="0" y="846" width="596" height="380" frameX="0" frameY="-139" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0024" x="0" y="434" width="596" height="412" frameX="0" frameY="-139" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0025" x="0" y="434" width="596" height="412" frameX="0" frameY="-139" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0026" x="1192" y="429" width="596" height="425" frameX="0" frameY="-139" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0027" x="1192" y="429" width="596" height="425" frameX="0" frameY="-139" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0028" x="1192" y="0" width="596" height="429" frameX="0" frameY="-137" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0029" x="1192" y="0" width="596" height="429" frameX="0" frameY="-137" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0030" x="1192" y="0" width="596" height="429" frameX="0" frameY="-137" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0031" x="596" y="0" width="596" height="431" frameX="0" frameY="-136" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0032" x="596" y="0" width="596" height="431" frameX="0" frameY="-136" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0033" x="596" y="0" width="596" height="431" frameX="0" frameY="-136" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0034" x="0" y="0" width="596" height="434" frameX="0" frameY="-133" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0035" x="0" y="0" width="596" height="434" frameX="0" frameY="-133" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0036" x="596" y="431" width="518" height="434" frameX="-72" frameY="-133" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0037" x="1114" y="854" width="518" height="434" frameX="-72" frameY="-133" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0038" x="1114" y="854" width="518" height="434" frameX="-72" frameY="-133" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0039" x="0" y="1226" width="464" height="434" frameX="-131" frameY="-133" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0040" x="0" y="1226" width="464" height="434" frameX="-131" frameY="-133" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0041" x="464" y="1226" width="435" height="434" frameX="-159" frameY="-133" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0042" x="464" y="1226" width="435" height="434" frameX="-159" frameY="-133" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0043" x="1632" y="854" width="435" height="434" frameX="-159" frameY="-133" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0044" x="1632" y="854" width="435" height="434" frameX="-159" frameY="-133" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0045" x="1788" y="0" width="435" height="434" frameX="-159" frameY="-133" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0046" x="1788" y="0" width="435" height="434" frameX="-159" frameY="-133" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0047" x="2067" y="434" width="435" height="434" frameX="-159" frameY="-133" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0048" x="2067" y="434" width="435" height="434" frameX="-159" frameY="-133" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0049" x="899" y="1288" width="396" height="434" frameX="-191" frameY="-133" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0050" x="899" y="1288" width="396" height="434" frameX="-191" frameY="-133" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0051" x="867" y="1722" width="352" height="434" frameX="-239" frameY="-133" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0052" x="867" y="1722" width="352" height="434" frameX="-239" frameY="-133" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0053" x="2502" y="405" width="315" height="434" frameX="-271" frameY="-133" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0054" x="2502" y="405" width="315" height="434" frameX="-271" frameY="-133" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0055" x="1584" y="1288" width="315" height="472" frameX="-271" frameY="-96" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0056" x="2067" y="868" width="344" height="517" frameX="-256" frameY="-54" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0057" x="2067" y="868" width="344" height="517" frameX="-256" frameY="-54" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0058" x="1295" y="1288" width="289" height="547" frameX="-297" frameY="-26" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0059" x="1295" y="1288" width="289" height="547" frameX="-297" frameY="-26" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0060" x="289" y="1660" width="289" height="567" frameX="-297" frameY="-5" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0061" x="289" y="1660" width="289" height="567" frameX="-297" frameY="-5" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0062" x="0" y="1660" width="289" height="572" frameX="-297" frameY="0" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0063" x="0" y="1660" width="289" height="572" frameX="-297" frameY="0" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0064" x="578" y="1660" width="289" height="556" frameX="-297" frameY="-16" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0065" x="578" y="1660" width="289" height="556" frameX="-297" frameY="-16" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0066" x="2411" y="868" width="289" height="493" frameX="-297" frameY="-79" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0067" x="2411" y="868" width="289" height="493" frameX="-297" frameY="-79" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0068" x="0" y="2232" width="289" height="405" frameX="-297" frameY="-166" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0069" x="0" y="2232" width="289" height="405" frameX="-297" frameY="-166" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0070" x="2998" y="802" width="289" height="405" frameX="-297" frameY="-166" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0071" x="2998" y="802" width="289" height="405" frameX="-297" frameY="-166" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0072" x="3140" y="0" width="289" height="405" frameX="-297" frameY="-166" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0073" x="3140" y="0" width="289" height="405" frameX="-297" frameY="-166" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0074" x="2748" y="1641" width="289" height="405" frameX="-297" frameY="-166" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0075" x="2748" y="1641" width="289" height="405" frameX="-297" frameY="-166" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0076" x="2203" y="1766" width="289" height="405" frameX="-297" frameY="-166" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0077" x="2203" y="1766" width="289" height="405" frameX="-297" frameY="-166" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0078" x="2203" y="1766" width="289" height="405" frameX="-297" frameY="-166" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0079" x="1476" y="2165" width="289" height="405" frameX="-297" frameY="-166" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0080" x="1476" y="2165" width="289" height="405" frameX="-297" frameY="-166" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0081" x="1726" y="2592" width="281" height="405" frameX="-307" frameY="-166" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0082" x="1726" y="2592" width="281" height="405" frameX="-307" frameY="-166" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0083" x="3561" y="427" width="281" height="405" frameX="-328" frameY="-166" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0084" x="3561" y="427" width="281" height="405" frameX="-328" frameY="-166" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0085" x="1584" y="1760" width="321" height="405" frameX="-377" frameY="-166" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0086" x="1584" y="1760" width="321" height="405" frameX="-377" frameY="-166" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0087" x="2411" y="1361" width="337" height="405" frameX="-490" frameY="-166" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0088" x="2411" y="1361" width="337" height="405" frameX="-490" frameY="-166" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_chair0089" x="2502" y="0" width="340" height="405" frameX="-667" frameY="-166" frameWidth="1007" frameHeight="573"/>
-	<SubTexture name="NEW_fall0000" x="289" y="2227" width="293" height="408" frameX="-191" frameY="-50" frameWidth="484" frameHeight="458"/>
-	<SubTexture name="NEW_fall0001" x="289" y="2227" width="293" height="408" frameX="-191" frameY="-50" frameWidth="484" frameHeight="458"/>
-	<SubTexture name="NEW_fall0002" x="3585" y="1615" width="322" height="326" frameX="-144" frameY="-51" frameWidth="484" frameHeight="458"/>
-	<SubTexture name="NEW_fall0003" x="3632" y="1404" width="347" height="204" frameX="-84" frameY="-112" frameWidth="484" frameHeight="458"/>
-	<SubTexture name="NEW_fall0004" x="1899" y="1385" width="347" height="356" frameX="-49" frameY="-9" frameWidth="484" frameHeight="458"/>
-	<SubTexture name="NEW_fall0005" x="1899" y="1385" width="347" height="356" frameX="-49" frameY="-9" frameWidth="484" frameHeight="458"/>
-	<SubTexture name="NEW_fall0006" x="1219" y="1835" width="347" height="318" frameX="-29" frameY="-35" frameWidth="484" frameHeight="458"/>
-	<SubTexture name="NEW_fall0007" x="1219" y="1835" width="347" height="318" frameX="-29" frameY="-35" frameWidth="484" frameHeight="458"/>
-	<SubTexture name="NEW_fall0008" x="1219" y="1835" width="347" height="318" frameX="-29" frameY="-35" frameWidth="484" frameHeight="458"/>
-	<SubTexture name="NEW_fall0009" x="3632" y="1160" width="369" height="244" frameX="-18" frameY="-97" frameWidth="484" frameHeight="458"/>
-	<SubTexture name="NEW_fall0010" x="3632" y="1160" width="369" height="244" frameX="-18" frameY="-97" frameWidth="484" frameHeight="458"/>
-	<SubTexture name="NEW_fall0011" x="3594" y="832" width="323" height="328" frameX="-8" frameY="-38" frameWidth="484" frameHeight="458"/>
-	<SubTexture name="NEW_fall0012" x="3594" y="832" width="323" height="328" frameX="-8" frameY="-38" frameWidth="484" frameHeight="458"/>
-	<SubTexture name="NEW_fall0013" x="3314" y="2488" width="288" height="366" frameX="-16" frameY="-12" frameWidth="484" frameHeight="458"/>
-	<SubTexture name="NEW_fall0014" x="3314" y="2488" width="288" height="366" frameX="-16" frameY="-12" frameWidth="484" frameHeight="458"/>
-	<SubTexture name="NEW_fall0015" x="1788" y="434" width="278" height="360" frameX="-18" frameY="-3" frameWidth="484" frameHeight="458"/>
-	<SubTexture name="NEW_fall0016" x="1788" y="434" width="278" height="360" frameX="-18" frameY="-3" frameWidth="484" frameHeight="458"/>
-	<SubTexture name="NEW_fall0017" x="2007" y="2598" width="306" height="356" frameX="-3" frameY="0" frameWidth="484" frameHeight="458"/>
-	<SubTexture name="NEW_fall0018" x="2007" y="2598" width="306" height="356" frameX="-3" frameY="0" frameWidth="484" frameHeight="458"/>
-	<SubTexture name="NEW_fall0019" x="2007" y="2598" width="306" height="356" frameX="-3" frameY="0" frameWidth="484" frameHeight="458"/>
-	<SubTexture name="NEW_fall0020" x="596" y="865" width="312" height="356" frameX="0" frameY="0" frameWidth="484" frameHeight="458"/>
-	<SubTexture name="NEW_fall0021" x="596" y="865" width="312" height="356" frameX="0" frameY="0" frameWidth="484" frameHeight="458"/>
-	<SubTexture name="NEW_fall0022" x="596" y="865" width="312" height="356" frameX="0" frameY="0" frameWidth="484" frameHeight="458"/>
-	<SubTexture name="NEW_fall0023" x="0" y="2637" width="312" height="356" frameX="0" frameY="0" frameWidth="484" frameHeight="458"/>
-	<SubTexture name="NEW_fall0024" x="0" y="2637" width="312" height="356" frameX="0" frameY="0" frameWidth="484" frameHeight="458"/>
-	<SubTexture name="NEW_fall0025" x="0" y="2637" width="312" height="356" frameX="0" frameY="0" frameWidth="484" frameHeight="458"/>
-	<SubTexture name="NEW_fall0026" x="3320" y="1259" width="312" height="356" frameX="0" frameY="0" frameWidth="484" frameHeight="458"/>
-	<SubTexture name="NEW_fall0027" x="3320" y="1259" width="312" height="356" frameX="0" frameY="0" frameWidth="484" frameHeight="458"/>
-	<SubTexture name="NEW_huh0000" x="2223" y="0" width="274" height="427"/>
-	<SubTexture name="NEW_huh0001" x="2223" y="0" width="274" height="427"/>
-	<SubTexture name="NEW_huh0002" x="2223" y="0" width="274" height="427"/>
-	<SubTexture name="NEW_huh0003" x="1178" y="2557" width="274" height="427"/>
-	<SubTexture name="NEW_huh0004" x="1178" y="2557" width="274" height="427"/>
-	<SubTexture name="NEW_huh0005" x="1178" y="2557" width="274" height="427"/>
-	<SubTexture name="NEW_huh0006" x="1765" y="2165" width="274" height="427"/>
-	<SubTexture name="NEW_huh0007" x="1765" y="2165" width="274" height="427"/>
-	<SubTexture name="NEW_huh0008" x="1765" y="2165" width="274" height="427"/>
-	<SubTexture name="NEW_huh0009" x="1452" y="2570" width="274" height="427"/>
-	<SubTexture name="NEW_huh0010" x="1452" y="2570" width="274" height="427"/>
-	<SubTexture name="NEW_huh0011" x="1452" y="2570" width="274" height="427"/>
-	<SubTexture name="NEW_huh0012" x="1452" y="2570" width="274" height="427"/>
-	<SubTexture name="NEW_huh0013" x="1452" y="2570" width="274" height="427"/>
-	<SubTexture name="NEW_huh0014" x="1452" y="2570" width="274" height="427"/>
-	<SubTexture name="NEW_huh0015" x="3037" y="1641" width="274" height="427"/>
-	<SubTexture name="NEW_huh0016" x="3037" y="1641" width="274" height="427"/>
-	<SubTexture name="NEW_huh0017" x="3037" y="1641" width="274" height="427"/>
-	<SubTexture name="NEW_huh0018" x="2492" y="2046" width="274" height="427"/>
-	<SubTexture name="NEW_huh0019" x="2492" y="2046" width="274" height="427"/>
-	<SubTexture name="NEW_huh0020" x="2492" y="2046" width="274" height="427"/>
-	<SubTexture name="NEW_huh0021" x="2039" y="2171" width="274" height="427"/>
-	<SubTexture name="NEW_huh0022" x="2039" y="2171" width="274" height="427"/>
-	<SubTexture name="NEW_huh0023" x="2039" y="2171" width="274" height="427"/>
-	<SubTexture name="NEW_huh0024" x="1452" y="2570" width="274" height="427"/>
-	<SubTexture name="NEW_huh0025" x="1452" y="2570" width="274" height="427"/>
-	<SubTexture name="NEW_huh0026" x="1452" y="2570" width="274" height="427"/>
-	<SubTexture name="NEW_huh0027" x="1452" y="2570" width="274" height="427"/>
-	<SubTexture name="NEW_huh0028" x="1452" y="2570" width="274" height="427"/>
-	<SubTexture name="NEW_huh0029" x="1452" y="2570" width="274" height="427"/>
-	<SubTexture name="NEW_huh0030" x="3046" y="1207" width="274" height="427"/>
-	<SubTexture name="NEW_huh0031" x="3046" y="1207" width="274" height="427"/>
-	<SubTexture name="NEW_huh0032" x="3046" y="1207" width="274" height="427"/>
-	<SubTexture name="NEW_huh0033" x="3287" y="405" width="274" height="427"/>
-	<SubTexture name="NEW_huh0034" x="3287" y="405" width="274" height="427"/>
-	<SubTexture name="NEW_huh0035" x="3311" y="1634" width="274" height="427"/>
-	<SubTexture name="NEW_huh0036" x="3311" y="1634" width="274" height="427"/>
-	<SubTexture name="NEW_huh0037" x="3311" y="1634" width="274" height="427"/>
-	<SubTexture name="NEW_huh0038" x="3320" y="832" width="274" height="427"/>
-	<SubTexture name="NEW_huh0039" x="3320" y="832" width="274" height="427"/>
-	<SubTexture name="NEW_huh0040" x="3320" y="832" width="274" height="427"/>
-	<SubTexture name="NEW_huh0041" x="3561" y="0" width="274" height="427"/>
-	<SubTexture name="NEW_huh0042" x="3561" y="0" width="274" height="427"/>
-	<SubTexture name="NEW_huh0043" x="3561" y="0" width="274" height="427"/>
-	<SubTexture name="NEW_huh0044" x="3311" y="2061" width="274" height="427"/>
-	<SubTexture name="NEW_huh0045" x="3311" y="2061" width="274" height="427"/>
-	<SubTexture name="NEW_huh0046" x="2766" y="2068" width="274" height="427"/>
-	<SubTexture name="NEW_huh0047" x="2766" y="2068" width="274" height="427"/>
-	<SubTexture name="NEW_huh0048" x="2313" y="2473" width="274" height="427"/>
-	<SubTexture name="NEW_huh0049" x="2313" y="2473" width="274" height="427"/>
-	<SubTexture name="NEW_huh0050" x="3040" y="2488" width="274" height="427"/>
-	<SubTexture name="NEW_huh0051" x="3040" y="2488" width="274" height="427"/>
-	<SubTexture name="NEW_huh0052" x="3040" y="2488" width="274" height="427"/>
-	<SubTexture name="NEW_huh0053" x="2587" y="2495" width="274" height="427"/>
-	<SubTexture name="NEW_huh0054" x="2587" y="2495" width="274" height="427"/>
-	<SubTexture name="NEW_huh0055" x="2587" y="2495" width="274" height="427"/>
-	<SubTexture name="NEW_huh0056" x="2587" y="2495" width="274" height="427"/>
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="dave_cutscene_potato.png">
+	
+	
+	<SubTexture name="NEW_chair0000" x="1178" y="2156" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0001" x="1178" y="2156" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0002" x="582" y="2548" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0003" x="582" y="2548" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0004" x="880" y="2548" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0005" x="880" y="2548" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0006" x="1905" y="1741" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0007" x="1905" y="1741" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0008" x="2700" y="839" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0009" x="2700" y="839" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0010" x="880" y="2548" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0011" x="880" y="2548" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0012" x="2842" y="0" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0013" x="2842" y="0" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0014" x="2842" y="401" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0015" x="2842" y="401" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0016" x="880" y="2548" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0017" x="880" y="2548" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0018" x="2748" y="1240" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0019" x="2748" y="1240" width="298" height="401" frameX="-17" frameY="-118" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0020" x="867" y="2156" width="311" height="392" frameX="-11" frameY="-123" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0021" x="867" y="2156" width="311" height="392" frameX="-11" frameY="-123" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0022" x="0" y="846" width="596" height="380" frameX="0" frameY="-139" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0023" x="0" y="846" width="596" height="380" frameX="0" frameY="-139" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0024" x="0" y="434" width="596" height="412" frameX="0" frameY="-139" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0025" x="0" y="434" width="596" height="412" frameX="0" frameY="-139" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0026" x="1192" y="429" width="596" height="425" frameX="0" frameY="-139" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0027" x="1192" y="429" width="596" height="425" frameX="0" frameY="-139" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0028" x="1192" y="0" width="596" height="429" frameX="0" frameY="-137" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0029" x="1192" y="0" width="596" height="429" frameX="0" frameY="-137" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0030" x="1192" y="0" width="596" height="429" frameX="0" frameY="-137" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0031" x="596" y="0" width="596" height="431" frameX="0" frameY="-136" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0032" x="596" y="0" width="596" height="431" frameX="0" frameY="-136" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0033" x="596" y="0" width="596" height="431" frameX="0" frameY="-136" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0034" x="0" y="0" width="596" height="434" frameX="0" frameY="-133" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0035" x="0" y="0" width="596" height="434" frameX="0" frameY="-133" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0036" x="596" y="431" width="518" height="434" frameX="-72" frameY="-133" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0037" x="1114" y="854" width="518" height="434" frameX="-72" frameY="-133" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0038" x="1114" y="854" width="518" height="434" frameX="-72" frameY="-133" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0039" x="0" y="1226" width="464" height="434" frameX="-131" frameY="-133" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0040" x="0" y="1226" width="464" height="434" frameX="-131" frameY="-133" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0041" x="464" y="1226" width="435" height="434" frameX="-159" frameY="-133" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0042" x="464" y="1226" width="435" height="434" frameX="-159" frameY="-133" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0043" x="1632" y="854" width="435" height="434" frameX="-159" frameY="-133" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0044" x="1632" y="854" width="435" height="434" frameX="-159" frameY="-133" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0045" x="1788" y="0" width="435" height="434" frameX="-159" frameY="-133" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0046" x="1788" y="0" width="435" height="434" frameX="-159" frameY="-133" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0047" x="2067" y="434" width="435" height="434" frameX="-159" frameY="-133" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0048" x="2067" y="434" width="435" height="434" frameX="-159" frameY="-133" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0049" x="899" y="1288" width="396" height="434" frameX="-191" frameY="-133" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0050" x="899" y="1288" width="396" height="434" frameX="-191" frameY="-133" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0051" x="867" y="1722" width="352" height="434" frameX="-239" frameY="-133" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0052" x="867" y="1722" width="352" height="434" frameX="-239" frameY="-133" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0053" x="2502" y="405" width="315" height="434" frameX="-271" frameY="-133" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0054" x="2502" y="405" width="315" height="434" frameX="-271" frameY="-133" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0055" x="1584" y="1288" width="315" height="472" frameX="-271" frameY="-96" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0056" x="2067" y="868" width="344" height="517" frameX="-256" frameY="-54" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0057" x="2067" y="868" width="344" height="517" frameX="-256" frameY="-54" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0058" x="1295" y="1288" width="289" height="547" frameX="-297" frameY="-26" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0059" x="1295" y="1288" width="289" height="547" frameX="-297" frameY="-26" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0060" x="289" y="1660" width="289" height="567" frameX="-297" frameY="-5" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0061" x="289" y="1660" width="289" height="567" frameX="-297" frameY="-5" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0062" x="0" y="1660" width="289" height="572" frameX="-297" frameY="0" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0063" x="0" y="1660" width="289" height="572" frameX="-297" frameY="0" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0064" x="578" y="1660" width="289" height="556" frameX="-297" frameY="-16" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0065" x="578" y="1660" width="289" height="556" frameX="-297" frameY="-16" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0066" x="2411" y="868" width="289" height="493" frameX="-297" frameY="-79" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0067" x="2411" y="868" width="289" height="493" frameX="-297" frameY="-79" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0068" x="0" y="2232" width="289" height="405" frameX="-297" frameY="-166" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0069" x="0" y="2232" width="289" height="405" frameX="-297" frameY="-166" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0070" x="2998" y="802" width="289" height="405" frameX="-297" frameY="-166" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0071" x="2998" y="802" width="289" height="405" frameX="-297" frameY="-166" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0072" x="3140" y="0" width="289" height="405" frameX="-297" frameY="-166" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0073" x="3140" y="0" width="289" height="405" frameX="-297" frameY="-166" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0074" x="2748" y="1641" width="289" height="405" frameX="-297" frameY="-166" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0075" x="2748" y="1641" width="289" height="405" frameX="-297" frameY="-166" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0076" x="2203" y="1766" width="289" height="405" frameX="-297" frameY="-166" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0077" x="2203" y="1766" width="289" height="405" frameX="-297" frameY="-166" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0078" x="2203" y="1766" width="289" height="405" frameX="-297" frameY="-166" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0079" x="1476" y="2165" width="289" height="405" frameX="-297" frameY="-166" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0080" x="1476" y="2165" width="289" height="405" frameX="-297" frameY="-166" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0081" x="1726" y="2592" width="281" height="405" frameX="-307" frameY="-166" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0082" x="1726" y="2592" width="281" height="405" frameX="-307" frameY="-166" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0083" x="3561" y="427" width="281" height="405" frameX="-328" frameY="-166" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0084" x="3561" y="427" width="281" height="405" frameX="-328" frameY="-166" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0085" x="1584" y="1760" width="321" height="405" frameX="-377" frameY="-166" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0086" x="1584" y="1760" width="321" height="405" frameX="-377" frameY="-166" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0087" x="2411" y="1361" width="337" height="405" frameX="-490" frameY="-166" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0088" x="2411" y="1361" width="337" height="405" frameX="-490" frameY="-166" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_chair0089" x="2502" y="0" width="340" height="405" frameX="-667" frameY="-166" frameWidth="1007" frameHeight="573" />
+	<SubTexture name="NEW_fall0000" x="289" y="2227" width="293" height="408" frameX="-191" frameY="-50" frameWidth="484" frameHeight="458" />
+	<SubTexture name="NEW_fall0001" x="289" y="2227" width="293" height="408" frameX="-191" frameY="-50" frameWidth="484" frameHeight="458" />
+	<SubTexture name="NEW_fall0002" x="3585" y="1615" width="322" height="326" frameX="-144" frameY="-51" frameWidth="484" frameHeight="458" />
+	<SubTexture name="NEW_fall0003" x="3632" y="1404" width="347" height="204" frameX="-84" frameY="-112" frameWidth="484" frameHeight="458" />
+	<SubTexture name="NEW_fall0004" x="1899" y="1385" width="347" height="356" frameX="-49" frameY="-9" frameWidth="484" frameHeight="458" />
+	<SubTexture name="NEW_fall0005" x="1899" y="1385" width="347" height="356" frameX="-49" frameY="-9" frameWidth="484" frameHeight="458" />
+	<SubTexture name="NEW_fall0006" x="1219" y="1835" width="347" height="318" frameX="-29" frameY="-35" frameWidth="484" frameHeight="458" />
+	<SubTexture name="NEW_fall0007" x="1219" y="1835" width="347" height="318" frameX="-29" frameY="-35" frameWidth="484" frameHeight="458" />
+	<SubTexture name="NEW_fall0008" x="1219" y="1835" width="347" height="318" frameX="-29" frameY="-35" frameWidth="484" frameHeight="458" />
+	<SubTexture name="NEW_fall0009" x="3632" y="1160" width="369" height="244" frameX="-18" frameY="-97" frameWidth="484" frameHeight="458" />
+	<SubTexture name="NEW_fall0010" x="3632" y="1160" width="369" height="244" frameX="-18" frameY="-97" frameWidth="484" frameHeight="458" />
+	<SubTexture name="NEW_fall0011" x="3594" y="832" width="323" height="328" frameX="-8" frameY="-38" frameWidth="484" frameHeight="458" />
+	<SubTexture name="NEW_fall0012" x="3594" y="832" width="323" height="328" frameX="-8" frameY="-38" frameWidth="484" frameHeight="458" />
+	<SubTexture name="NEW_fall0013" x="3314" y="2488" width="288" height="366" frameX="-16" frameY="-12" frameWidth="484" frameHeight="458" />
+	<SubTexture name="NEW_fall0014" x="3314" y="2488" width="288" height="366" frameX="-16" frameY="-12" frameWidth="484" frameHeight="458" />
+	<SubTexture name="NEW_fall0015" x="1788" y="434" width="278" height="360" frameX="-18" frameY="-3" frameWidth="484" frameHeight="458" />
+	<SubTexture name="NEW_fall0016" x="1788" y="434" width="278" height="360" frameX="-18" frameY="-3" frameWidth="484" frameHeight="458" />
+	<SubTexture name="NEW_fall0017" x="2007" y="2598" width="306" height="356" frameX="-3" frameY="0" frameWidth="484" frameHeight="458" />
+	<SubTexture name="NEW_fall0018" x="2007" y="2598" width="306" height="356" frameX="-3" frameY="0" frameWidth="484" frameHeight="458" />
+	<SubTexture name="NEW_fall0019" x="2007" y="2598" width="306" height="356" frameX="-3" frameY="0" frameWidth="484" frameHeight="458" />
+	<SubTexture name="NEW_fall0020" x="596" y="865" width="312" height="356" frameX="0" frameY="0" frameWidth="484" frameHeight="458" />
+	<SubTexture name="NEW_fall0021" x="596" y="865" width="312" height="356" frameX="0" frameY="0" frameWidth="484" frameHeight="458" />
+	<SubTexture name="NEW_fall0022" x="596" y="865" width="312" height="356" frameX="0" frameY="0" frameWidth="484" frameHeight="458" />
+	<SubTexture name="NEW_fall0023" x="0" y="2637" width="312" height="356" frameX="0" frameY="0" frameWidth="484" frameHeight="458" />
+	<SubTexture name="NEW_fall0024" x="0" y="2637" width="312" height="356" frameX="0" frameY="0" frameWidth="484" frameHeight="458" />
+	<SubTexture name="NEW_fall0025" x="0" y="2637" width="312" height="356" frameX="0" frameY="0" frameWidth="484" frameHeight="458" />
+	<SubTexture name="NEW_fall0026" x="3320" y="1259" width="312" height="356" frameX="0" frameY="0" frameWidth="484" frameHeight="458" />
+	<SubTexture name="NEW_fall0027" x="3320" y="1259" width="312" height="356" frameX="0" frameY="0" frameWidth="484" frameHeight="458" />
+	<SubTexture name="NEW_huh0000" x="2223" y="0" width="274" height="427" />
+	<SubTexture name="NEW_huh0001" x="2223" y="0" width="274" height="427" />
+	<SubTexture name="NEW_huh0002" x="2223" y="0" width="274" height="427" />
+	<SubTexture name="NEW_huh0003" x="1178" y="2557" width="274" height="427" />
+	<SubTexture name="NEW_huh0004" x="1178" y="2557" width="274" height="427" />
+	<SubTexture name="NEW_huh0005" x="1178" y="2557" width="274" height="427" />
+	<SubTexture name="NEW_huh0006" x="1765" y="2165" width="274" height="427" />
+	<SubTexture name="NEW_huh0007" x="1765" y="2165" width="274" height="427" />
+	<SubTexture name="NEW_huh0008" x="1765" y="2165" width="274" height="427" />
+	<SubTexture name="NEW_huh0009" x="1452" y="2570" width="274" height="427" />
+	<SubTexture name="NEW_huh0010" x="1452" y="2570" width="274" height="427" />
+	<SubTexture name="NEW_huh0011" x="1452" y="2570" width="274" height="427" />
+	<SubTexture name="NEW_huh0012" x="1452" y="2570" width="274" height="427" />
+	<SubTexture name="NEW_huh0013" x="1452" y="2570" width="274" height="427" />
+	<SubTexture name="NEW_huh0014" x="1452" y="2570" width="274" height="427" />
+	<SubTexture name="NEW_huh0015" x="3037" y="1641" width="274" height="427" />
+	<SubTexture name="NEW_huh0016" x="3037" y="1641" width="274" height="427" />
+	<SubTexture name="NEW_huh0017" x="3037" y="1641" width="274" height="427" />
+	<SubTexture name="NEW_huh0018" x="2492" y="2046" width="274" height="427" />
+	<SubTexture name="NEW_huh0019" x="2492" y="2046" width="274" height="427" />
+	<SubTexture name="NEW_huh0020" x="2492" y="2046" width="274" height="427" />
+	<SubTexture name="NEW_huh0021" x="2039" y="2171" width="274" height="427" />
+	<SubTexture name="NEW_huh0022" x="2039" y="2171" width="274" height="427" />
+	<SubTexture name="NEW_huh0023" x="2039" y="2171" width="274" height="427" />
+	<SubTexture name="NEW_huh0024" x="1452" y="2570" width="274" height="427" />
+	<SubTexture name="NEW_huh0025" x="1452" y="2570" width="274" height="427" />
+	<SubTexture name="NEW_huh0026" x="1452" y="2570" width="274" height="427" />
+	<SubTexture name="NEW_huh0027" x="1452" y="2570" width="274" height="427" />
+	<SubTexture name="NEW_huh0028" x="1452" y="2570" width="274" height="427" />
+	<SubTexture name="NEW_huh0029" x="1452" y="2570" width="274" height="427" />
+	<SubTexture name="NEW_huh0030" x="3046" y="1207" width="274" height="427" />
+	<SubTexture name="NEW_huh0031" x="3046" y="1207" width="274" height="427" />
+	<SubTexture name="NEW_huh0032" x="3046" y="1207" width="274" height="427" />
+	<SubTexture name="NEW_huh0033" x="3287" y="405" width="274" height="427" />
+	<SubTexture name="NEW_huh0034" x="3287" y="405" width="274" height="427" />
+	<SubTexture name="NEW_huh0035" x="3311" y="1634" width="274" height="427" />
+	<SubTexture name="NEW_huh0036" x="3311" y="1634" width="274" height="427" />
+	<SubTexture name="NEW_huh0037" x="3311" y="1634" width="274" height="427" />
+	<SubTexture name="NEW_huh0038" x="3320" y="832" width="274" height="427" />
+	<SubTexture name="NEW_huh0039" x="3320" y="832" width="274" height="427" />
+	<SubTexture name="NEW_huh0040" x="3320" y="832" width="274" height="427" />
+	<SubTexture name="NEW_huh0041" x="3561" y="0" width="274" height="427" />
+	<SubTexture name="NEW_huh0042" x="3561" y="0" width="274" height="427" />
+	<SubTexture name="NEW_huh0043" x="3561" y="0" width="274" height="427" />
+	<SubTexture name="NEW_huh0044" x="3311" y="2061" width="274" height="427" />
+	<SubTexture name="NEW_huh0045" x="3311" y="2061" width="274" height="427" />
+	<SubTexture name="NEW_huh0046" x="2766" y="2068" width="274" height="427" />
+	<SubTexture name="NEW_huh0047" x="2766" y="2068" width="274" height="427" />
+	<SubTexture name="NEW_huh0048" x="2313" y="2473" width="274" height="427" />
+	<SubTexture name="NEW_huh0049" x="2313" y="2473" width="274" height="427" />
+	<SubTexture name="NEW_huh0050" x="3040" y="2488" width="274" height="427" />
+	<SubTexture name="NEW_huh0051" x="3040" y="2488" width="274" height="427" />
+	<SubTexture name="NEW_huh0052" x="3040" y="2488" width="274" height="427" />
+	<SubTexture name="NEW_huh0053" x="2587" y="2495" width="274" height="427" />
+	<SubTexture name="NEW_huh0054" x="2587" y="2495" width="274" height="427" />
+	<SubTexture name="NEW_huh0055" x="2587" y="2495" width="274" height="427" />
+	<SubTexture name="NEW_huh0056" x="2587" y="2495" width="274" height="427" />
 </TextureAtlas>
