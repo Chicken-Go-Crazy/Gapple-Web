@@ -7608,6 +7608,7 @@ Main.prototype = $extend(openfl_display_Sprite.prototype,{
 	,setupGame: function() {
 		flixel_FlxG.save.bind("funkin","ninjamuffin99");
 		GoldenQuality.load();
+		GoldenHaptics.load();
 		var stageWidth = openfl_Lib.get_current().stage.stageWidth;
 		var stageHeight = openfl_Lib.get_current().stage.stageHeight;
 		if(this.zoom == -1) {
@@ -7644,6 +7645,7 @@ Main.prototype = $extend(openfl_display_Sprite.prototype,{
 		}
 		this.addChild(new flixel_FlxGame(this.gameWidth,this.gameHeight,this.initialState,this.zoom,this.framerate,this.framerate,this.skipSplash,this.startFullscreen));
 		GoldenPotatoMode.install();
+		GoldenHaptics.install();
 		GoldenMobileControls.install();
 		GoldenMenuTouch.install();
 		this.addChild(new openfl_display_FPS(10,3,16777215));
@@ -17562,7 +17564,7 @@ GoldenCamera.prototype = {
 	}
 	,beat: function(beat) {
 		var crochet = Conductor.crochet;
-		if(beat > 0 && beat % this.zoomEvery == 0 && this.zoomIntensity > 0 && this.zoom + this.pulse < this.zoomIntensity * 1.35) {
+		if(!GoldenQuality.potatoMode && beat > 0 && beat % this.zoomEvery == 0 && this.zoomIntensity > 0 && this.zoom + this.pulse < this.zoomIntensity * 1.35) {
 			this.pulse += .015 * this.zoomIntensity;
 			var fh = this.owner.camHUD;
 			fh.set_zoom(fh.zoom + .03 * this.zoomIntensity);
@@ -17675,6 +17677,9 @@ GoldenCamera.prototype = {
 				var fh = this.owner.camFollow;
 				fh.set_y(fh.y + (y - this.owner.camFollow.y) * amount);
 			}
+		}
+		if(GoldenQuality.potatoMode) {
+			this.pulse = 0;
 		}
 		this.pulse *= Math.exp(-elapsed * 3);
 		var fh = this.owner.camHUD;
@@ -17828,9 +17833,11 @@ GoldenChartCamera.prototype = {
 				var v = event.values;
 				switch(event.type) {
 				case "Add Camera Zoom":
-					this.zoom += GoldenChartCamera.value(v,0);
-					var fh = this.owner.camHUD;
-					fh.set_zoom(fh.zoom + GoldenChartCamera.value(v,1));
+					if(!GoldenQuality.potatoMode) {
+						this.zoom += GoldenChartCamera.value(v,0);
+						var fh = this.owner.camHUD;
+						fh.set_zoom(fh.zoom + GoldenChartCamera.value(v,1));
+					}
 					break;
 				case "Change Character":
 					if(this.onCharacterChange != null) {
@@ -18063,7 +18070,22 @@ $hxClasses["GoldenDepthGroup"] = GoldenDepthGroup;
 GoldenDepthGroup.__name__ = "GoldenDepthGroup";
 GoldenDepthGroup.__super__ = flixel_group_FlxTypedGroup;
 GoldenDepthGroup.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
-	draw: function() {
+	update: function(elapsed) {
+		if(!GoldenQuality.potatoMode) {
+			flixel_group_FlxTypedGroup.prototype.update.call(this,elapsed);
+			return;
+		}
+		var _g = 0;
+		var _g1 = this.members;
+		while(_g < _g1.length) {
+			var sprite = _g1[_g];
+			++_g;
+			if(sprite != null && sprite.exists && sprite.active && (((sprite) instanceof Character) || ((sprite) instanceof GoldenOCActor))) {
+				sprite.update(elapsed);
+			}
+		}
+	}
+	,draw: function() {
 		var previous = flixel_FlxCamera._defaultCameras;
 		if(this.get_cameras() != null) {
 			flixel_FlxCamera._defaultCameras = this.get_cameras();
@@ -20005,6 +20027,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 	}
 	,controlledSingers: null
 	,releaseControlledLane: function(lane) {
+		GoldenHaptics.releaseLane(lane);
 		var actor = this.controlledSingers[lane];
 		if(actor != null && actor.exists) {
 			actor.releaseSingHold(["singLEFT","singDOWN","singUP","singRIGHT"][lane]);
@@ -20232,6 +20255,7 @@ PlayState.prototype = $extend(MusicBeatState.prototype,{
 	}
 	,goodNoteHit: function(note,inputTime) {
 		if(!note.wasGoodHit) {
+			GoldenHaptics.noteHit(note);
 			if(!note.isSustainNote) {
 				if(this.noteSplashes != null && GoldenNoteSplash.shouldSpawn(false,note.strumTime,inputTime == null ? Conductor.songPosition : inputTime)) {
 					this.noteSplashes.recycle(GoldenNoteSplash).start(this.controlledStrum(note.noteData),note.noteData,GoldenNoteSkin.skinOf(this.controlledStrum(note.noteData)));
@@ -20765,6 +20789,7 @@ GoldenExtrasMenu.prototype = $extend(MusicBeatState.prototype,{
 	,delay: null
 	,content: null
 	,preview: null
+	,textRGB: null
 	,previewLabel: null
 	,previewGeneration: null
 	,pendingAudio: null
@@ -20801,6 +20826,7 @@ GoldenExtrasMenu.prototype = $extend(MusicBeatState.prototype,{
 			var i = _g++;
 			GoldenExtrasMenu.songSelections[i] = Math.max(0,Math.min(GoldenExtrasMenu.songSelections[i],this.categories[i].songs.length - 1)) | 0;
 		}
+		this.textRGB = new GoldenMenuRGBShader();
 		this.add(new GoldenMenuBackground(false,-12570280));
 		this.render();
 		flixel_FlxG.sound.playMusic(Paths.getPath("music/" + "golden/menu/play" + "." + "mp3","MUSIC",null),.6);
@@ -20900,10 +20926,24 @@ GoldenExtrasMenu.prototype = $extend(MusicBeatState.prototype,{
 		this.panel(x + 4,y + 4,width - 8,height - 8,-15264993);
 		return edge;
 	}
+	,colorLetters: function(letters) {
+		if(this.textRGB != null) {
+			var _g = 0;
+			var _g1 = letters.group.members;
+			while(_g < _g1.length) {
+				var glyph = _g1[_g];
+				++_g;
+				if(glyph != null) {
+					glyph.shader = this.textRGB;
+				}
+			}
+		}
+	}
 	,button: function(x,y,width,text) {
 		var item = this.box(x,y,width,52,-3557155);
 		if(text == "PLAY" || text == "PREVIEW") {
 			var caption = new GoldenSongAlphabet(0,y + 12,text,24);
+			this.colorLetters(caption);
 			caption.set_x(x + (width - caption.textWidth) / 2);
 			this.content.add(caption);
 		} else {
@@ -20993,6 +21033,7 @@ GoldenExtrasMenu.prototype = $extend(MusicBeatState.prototype,{
 			var size = Math.min(38,615 / Math.max(1,title.length * .72));
 			var row = new GoldenSongAlphabet(121 + direction * 12,y + 9,title,size);
 			row.ID = i;
+			this.colorLetters(row);
 			row.set_alpha(i == index ? 1 : .55);
 			this.content.add(row);
 			if(direction != 0) {
@@ -21010,6 +21051,8 @@ GoldenExtrasMenu.prototype = $extend(MusicBeatState.prototype,{
 		}
 		var title = this.label(831,374,404,StringTools.replace(Std.string(song.title),"-"," "),29,-726098);
 		title.set_alignment("center");
+		title.set_color(-1);
+		title.set_borderColor(-16777216);
 		var bpm = song.bpm == null ? "" : Std.string(song.bpm) + " BPM";
 		var info = this.label(831,420,404,bpm,20,-3096612);
 		info.set_alignment("center");
@@ -22635,12 +22678,12 @@ GoldenFrustExtras.prototype = {
 		this.barTrack = { start : time, top : this.topBar.y, bottom : this.bottomBar.y, targetTop : this.topBar.y + delta, targetBottom : this.bottomBar.y - delta};
 	}
 	,sugarBeat: function(b,time) {
-		if(b % this.zoomEvery == 0 && this.zoom < this.zoomIntensity * 1.35 && this.owner.camZooming) {
+		if(!GoldenQuality.potatoMode && b % this.zoomEvery == 0 && this.zoom < this.zoomIntensity * 1.35 && this.owner.camZooming) {
 			this.zoom += this.zoomIntensity * .015;
 			var fh = this.owner.camHUD;
 			fh.set_zoom(fh.zoom + this.zoomIntensity * .03);
 		}
-		if(this.pulse) {
+		if(this.pulse && !GoldenQuality.potatoMode) {
 			this.zoomTo(time,this.pulseTarget,.3,"quad",true);
 		}
 		switch(b) {
@@ -22775,7 +22818,7 @@ GoldenFrustExtras.prototype = {
 			}
 		} else {
 			this.zoom += (this.targetZoom - this.zoom) * (1 - Math.exp(-elapsed * 3));
-			if(nextBeat > this.beat && time >= 0 && nextBeat % this.zoomEvery == 0 && this.owner.camZooming) {
+			if(!GoldenQuality.potatoMode && nextBeat > this.beat && time >= 0 && nextBeat % this.zoomEvery == 0 && this.owner.camZooming) {
 				this.zoom += .015 * this.zoomIntensity;
 			}
 			this.beat = nextBeat;
@@ -24956,6 +24999,139 @@ GoldenGlitchedLevels.prototype = {
 	}
 	,__class__: GoldenGlitchedLevels
 };
+var GoldenHaptics = function() { };
+$hxClasses["GoldenHaptics"] = GoldenHaptics;
+GoldenHaptics.__name__ = "GoldenHaptics";
+GoldenHaptics.supported = function() {
+	return Reflect.isFunction(Reflect.field($global.navigator,"vibrate"));
+};
+GoldenHaptics.load = function() {
+	GoldenHaptics.enabled = flixel_FlxG.save.data.haptics != false;
+	flixel_FlxG.save.data.haptics = GoldenHaptics.enabled;
+	if(!GoldenHaptics.enabled) {
+		GoldenHaptics.stop();
+	}
+};
+GoldenHaptics.toggle = function() {
+	GoldenHaptics.enabled = !GoldenHaptics.enabled;
+	flixel_FlxG.save.data.haptics = GoldenHaptics.enabled;
+	flixel_FlxG.save.flush();
+	if(!GoldenHaptics.enabled) {
+		GoldenHaptics.stop();
+	}
+};
+GoldenHaptics.install = function() {
+	if(GoldenHaptics.installed) {
+		return;
+	}
+	GoldenHaptics.installed = true;
+	flixel_FlxG.signals.postUpdate.add(GoldenHaptics.update);
+	flixel_FlxG.signals.postStateSwitch.add(GoldenHaptics.stop);
+	window.addEventListener("blur",function(_) {
+		GoldenHaptics.stop();
+	});
+	window.document.addEventListener("visibilitychange",function(_) {
+		if(window.document.hidden) {
+			GoldenHaptics.stop();
+		}
+	});
+};
+GoldenHaptics.vibrate = function(milliseconds) {
+	var fn = Reflect.field($global.navigator,"vibrate");
+	if(fn != null) {
+		try {
+			return fn.apply($global.navigator,[milliseconds]) == true;
+		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
+		}
+	}
+	return false;
+};
+GoldenHaptics.noteHit = function(note) {
+	if(!GoldenHaptics.enabled || !GoldenMobileControls.enabled || PlayState.loadRep || !GoldenHaptics.supported()) {
+		return;
+	}
+	var lane = note.noteData;
+	if(lane < 0 || lane > 3) {
+		return;
+	}
+	var root = note.isSustainNote ? note.sustainRoot : note;
+	if(root != null && root.sustainLength > 0 && !root.holdMissed) {
+		GoldenHaptics.holdEnds[lane] = Math.max(GoldenHaptics.holdEnds[lane],root.strumTime + root.sustainLength);
+	}
+	var now = new Date().getTime() / 1000;
+	if(!note.isSustainNote && now >= GoldenHaptics.motorUntil && GoldenHaptics.vibrate(12)) {
+		GoldenHaptics.motorUntil = now + .012;
+	}
+};
+GoldenHaptics.releaseLane = function(lane) {
+	if(lane >= 0 && lane < 4) {
+		GoldenHaptics.holdEnds[lane] = -1;
+	}
+	GoldenHaptics.update();
+};
+GoldenHaptics.update = function() {
+	if(!GoldenHaptics.enabled || !GoldenMobileControls.enabled || !((flixel_FlxG.game._state) instanceof PlayState)) {
+		GoldenHaptics.stop();
+		return;
+	}
+	var state = flixel_FlxG.game._state;
+	if(state.paused || state.subState != null || state.startingSong || state.inCutscene || PlayState.loadRep || state.goldenInput == null) {
+		GoldenHaptics.stop();
+		return;
+	}
+	var holding = false;
+	if(GoldenHaptics.holdEnds[0] >= 0 && (!state.goldenInput.held[0] || Conductor.songPosition >= GoldenHaptics.holdEnds[0])) {
+		GoldenHaptics.holdEnds[0] = -1;
+	}
+	if(GoldenHaptics.holdEnds[0] > Conductor.songPosition) {
+		holding = true;
+	}
+	if(GoldenHaptics.holdEnds[1] >= 0 && (!state.goldenInput.held[1] || Conductor.songPosition >= GoldenHaptics.holdEnds[1])) {
+		GoldenHaptics.holdEnds[1] = -1;
+	}
+	if(GoldenHaptics.holdEnds[1] > Conductor.songPosition) {
+		holding = true;
+	}
+	if(GoldenHaptics.holdEnds[2] >= 0 && (!state.goldenInput.held[2] || Conductor.songPosition >= GoldenHaptics.holdEnds[2])) {
+		GoldenHaptics.holdEnds[2] = -1;
+	}
+	if(GoldenHaptics.holdEnds[2] > Conductor.songPosition) {
+		holding = true;
+	}
+	if(GoldenHaptics.holdEnds[3] >= 0 && (!state.goldenInput.held[3] || Conductor.songPosition >= GoldenHaptics.holdEnds[3])) {
+		GoldenHaptics.holdEnds[3] = -1;
+	}
+	if(GoldenHaptics.holdEnds[3] > Conductor.songPosition) {
+		holding = true;
+	}
+	var now = new Date().getTime() / 1000;
+	if(holding) {
+		if(now >= GoldenHaptics.nextPulse) {
+			if(GoldenHaptics.vibrate(160)) {
+				GoldenHaptics.motorUntil = now + .160;
+			}
+			GoldenHaptics.nextPulse = now + .140;
+		}
+	} else if(GoldenHaptics.nextPulse > 0) {
+		if(now < GoldenHaptics.motorUntil) {
+			GoldenHaptics.vibrate(0);
+		}
+		GoldenHaptics.nextPulse = 0;
+		GoldenHaptics.motorUntil = 0;
+	}
+};
+GoldenHaptics.stop = function() {
+	if(new Date().getTime() / 1000 < GoldenHaptics.motorUntil) {
+		GoldenHaptics.vibrate(0);
+	}
+	GoldenHaptics.holdEnds[0] = -1;
+	GoldenHaptics.holdEnds[1] = -1;
+	GoldenHaptics.holdEnds[2] = -1;
+	GoldenHaptics.holdEnds[3] = -1;
+	GoldenHaptics.nextPulse = 0;
+	GoldenHaptics.motorUntil = 0;
+};
 var GoldenHeadroomShader = function() {
 	if(this.__glFragmentSource == null) {
 		this.__glFragmentSource = "\n    varying float openfl_Alphav;\n\t\tvarying vec4 openfl_ColorMultiplierv;\n\t\tvarying vec4 openfl_ColorOffsetv;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform bool openfl_HasColorTransform;\n\t\tuniform vec2 openfl_TextureSize;\n\t\tuniform sampler2D bitmap;\n\n\t\tuniform bool hasTransform;\n\t\tuniform bool hasColorTransform;\n\n\t\tvec4 flixel_texture2D(sampler2D bitmap, vec2 coord)\n\t\t{\n\t\t\tvec4 color = texture2D(bitmap, coord);\n\t\t\tif (!hasTransform)\n\t\t\t{\n\t\t\t\treturn color;\n\t\t\t}\n\n\t\t\tif (color.a == 0.0)\n\t\t\t{\n\t\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\n\t\t\t}\n\n\t\t\tif (!hasColorTransform)\n\t\t\t{\n\t\t\t\treturn color * openfl_Alphav;\n\t\t\t}\n\n\t\t\tcolor = vec4(color.rgb / color.a, color.a);\n\n\t\t\tmat4 colorMultiplier = mat4(0);\n\t\t\tcolorMultiplier[0][0] = openfl_ColorMultiplierv.x;\n\t\t\tcolorMultiplier[1][1] = openfl_ColorMultiplierv.y;\n\t\t\tcolorMultiplier[2][2] = openfl_ColorMultiplierv.z;\n\t\t\tcolorMultiplier[3][3] = openfl_ColorMultiplierv.w;\n\n\t\t\tcolor = clamp(openfl_ColorOffsetv + (color * colorMultiplier), 0.0, 1.0);\n\n\t\t\tif (color.a > 0.0)\n\t\t\t{\n\t\t\t\treturn vec4(color.rgb * color.a * openfl_Alphav, color.a * openfl_Alphav);\n\t\t\t}\n\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\n\t\t}\n\t\n\n\n    float PI     = 3.141592653589793;\n    float halfpi = 1.570796326794897;\n\n    uniform float roll;\n    uniform float pitch;\n    uniform float fake_pitch;\n    uniform float zoom;\n    uniform float colorR;\n    uniform float colorG;\n    uniform float colorB;\n    uniform float colourMult;\n\n    vec2 localise_vector( in vec2 vec, in float theta )\n    {\n        return vec2(\n            (vec.x * cos(theta)) + (vec.y * sin(theta)), \n            (vec.x * sin(theta)) + (vec.y * cos(theta))\n        );\n    }\n\n    float lines( in vec2 uv, in float bruh )\n    {\n        float angle_uv = 0.0;\n        uv -= vec2(0.5, 0.5);\n        \n        float lines = 0.0;\n        lines = sin((uv.y - 0.01) * 160.0) + bruh;\n        lines = min(1.0, max(lines * 1.5, 0.0));\n        \n        return lines;\n    }\n\n    void main()\n    {\n        vec2 uv_unrotated = openfl_TextureCoordv;\n        uv_unrotated.x -= 0.5;\n        uv_unrotated.y -= 0.5;\n        uv_unrotated *= zoom;\n        vec2 uv = vec2(\n            (uv_unrotated.x * cos(roll)) - (uv_unrotated.y * sin(roll)),\n            (uv_unrotated.x * sin(roll)) + (uv_unrotated.y * cos(roll))\n        );\n        float localtheta = atan(0.5 * PI * uv.x);\n        float theta_offset = pitch;\n        float theta = localtheta + theta_offset;\n        theta = mod(theta, PI * 2.0);\n        \n        float r = sqrt((tan(theta) * tan(theta)) + 1.0);\n        r = min(r, sqrt((tan(theta + halfpi) * tan(theta + halfpi)) + 1.0));\n        \n        float x = r * cos(localtheta);\n        vec2 space_uv = vec2(0.0, 0.0);\n        \n        float persp_mult = 0.5;\n        float x_persp = persp_mult/x;\n        if (abs(uv.y + fake_pitch) < x_persp) {\n            float percentage = (uv.y + fake_pitch + x_persp) / (2.0 * x_persp);\n            space_uv.x = theta / (2.0 * PI);\n            space_uv.x = (fract((space_uv.x * 4.0) + 0.5));\n            space_uv.y = percentage * 0.995;\n        } else {\n            float floor_distance = tan(halfpi - atan(abs(uv.y + fake_pitch)));\n            vec2 floor_position_local = vec2(floor_distance * tan(localtheta), floor_distance);\n            vec2 floor_position_global = localise_vector(floor_position_local, theta_offset);\n            space_uv.y = ((floor_position_global * 0.15 / persp_mult) + 0.5).x;\n            space_uv.x = ((floor_position_global * 0.15 / persp_mult) + 0.5).y;\n        }\n        gl_FragColor.a = openfl_Alphav;\n        gl_FragColor.rgb = (lines(space_uv, -0.8) * vec3(colorR, colorG, colorB)) + (lines(space_uv, -0.965) * vec3(colorR * colourMult, colorG * colourMult, colorB * colourMult));\n    }\n    ";
@@ -25592,6 +25768,9 @@ GoldenInput.prototype = {
 			}
 		}
 		this.held[lane] = stillHeld;
+		if(!stillHeld) {
+			GoldenHaptics.releaseLane(lane);
+		}
 		if(!stillHeld && this.playable()) {
 			this.events.push({ lane : lane, time : GoldenInput.audioTime(), down : false});
 		}
@@ -25608,6 +25787,12 @@ GoldenInput.prototype = {
 			this.releaseKey(source);
 		}
 	}
+	,touchTap: function(code) {
+		var lane = this.laneFor(code);
+		if(lane >= 0 && this.playable()) {
+			this.events.push({ lane : lane, time : GoldenInput.audioTime(), down : true});
+		}
+	}
 	,onBlur: function(event) {
 		this.clear();
 	}
@@ -25617,6 +25802,7 @@ GoldenInput.prototype = {
 		return result;
 	}
 	,clear: function() {
+		GoldenHaptics.stop();
 		this.keys.h = { };
 		this.held = [false,false,false,false];
 		this.events = [];
@@ -26206,6 +26392,17 @@ GoldenInspicableStage.prototype = $extend(GoldenDepthGroup.prototype,{
 	,backShader: null
 	,frontShader: null
 	,sync: function(time) {
+		if(GoldenQuality.potatoMode) {
+			var s = this.shade;
+			s.set_visible(false);
+			var s = this.headroom;
+			s.set_visible(false);
+			var s = this.sectionFlash;
+			s.set_visible(false);
+			var s = this.zoomBlackout;
+			s.set_visible(false);
+			return;
+		}
 		var seconds = Math.max(0,time) / 1000;
 		this.backShader.iTime.value[0] = seconds + 1;
 		this.frontShader.iTime.value[0] = seconds;
@@ -26500,6 +26697,23 @@ GoldenMenuBackground.__name__ = "GoldenMenuBackground";
 GoldenMenuBackground.__super__ = GoldenDepthGroup;
 GoldenMenuBackground.prototype = $extend(GoldenDepthGroup.prototype,{
 	__class__: GoldenMenuBackground
+});
+var GoldenMenuRGBShader = function() {
+	if(this.__glFragmentSource == null) {
+		this.__glFragmentSource = "\n        varying float openfl_Alphav;\n\t\tvarying vec4 openfl_ColorMultiplierv;\n\t\tvarying vec4 openfl_ColorOffsetv;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform bool openfl_HasColorTransform;\n\t\tuniform vec2 openfl_TextureSize;\n\t\tuniform sampler2D bitmap;\n\n\t\tuniform bool hasTransform;\n\t\tuniform bool hasColorTransform;\n\n\t\tvec4 flixel_texture2D(sampler2D bitmap, vec2 coord)\n\t\t{\n\t\t\tvec4 color = texture2D(bitmap, coord);\n\t\t\tif (!hasTransform)\n\t\t\t{\n\t\t\t\treturn color;\n\t\t\t}\n\n\t\t\tif (color.a == 0.0)\n\t\t\t{\n\t\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\n\t\t\t}\n\n\t\t\tif (!hasColorTransform)\n\t\t\t{\n\t\t\t\treturn color * openfl_Alphav;\n\t\t\t}\n\n\t\t\tcolor = vec4(color.rgb / color.a, color.a);\n\n\t\t\tmat4 colorMultiplier = mat4(0);\n\t\t\tcolorMultiplier[0][0] = openfl_ColorMultiplierv.x;\n\t\t\tcolorMultiplier[1][1] = openfl_ColorMultiplierv.y;\n\t\t\tcolorMultiplier[2][2] = openfl_ColorMultiplierv.z;\n\t\t\tcolorMultiplier[3][3] = openfl_ColorMultiplierv.w;\n\n\t\t\tcolor = clamp(openfl_ColorOffsetv + (color * colorMultiplier), 0.0, 1.0);\n\n\t\t\tif (color.a > 0.0)\n\t\t\t{\n\t\t\t\treturn vec4(color.rgb * color.a * openfl_Alphav, color.a * openfl_Alphav);\n\t\t\t}\n\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\n\t\t}\n\t\n\n        void main()\n        {\n            vec4 ink = flixel_texture2D(bitmap, openfl_TextureCoordv);\n            // Red face -> white; blue outline -> black. Preserve coverage and alpha.\n            float face = min(ink.r, ink.a);\n            gl_FragColor = vec4(vec3(face), ink.a);\n        }\n    ";
+	}
+	if(this.__glVertexSource == null) {
+		this.__glVertexSource = "\n\t\tattribute float openfl_Alpha;\n\t\tattribute vec4 openfl_ColorMultiplier;\n\t\tattribute vec4 openfl_ColorOffset;\n\t\tattribute vec4 openfl_Position;\n\t\tattribute vec2 openfl_TextureCoord;\n\n\t\tvarying float openfl_Alphav;\n\t\tvarying vec4 openfl_ColorMultiplierv;\n\t\tvarying vec4 openfl_ColorOffsetv;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform mat4 openfl_Matrix;\n\t\tuniform bool openfl_HasColorTransform;\n\t\tuniform vec2 openfl_TextureSize;\n\n\t\t\n\t\tattribute float alpha;\n\t\tattribute vec4 colorMultiplier;\n\t\tattribute vec4 colorOffset;\n\t\tuniform bool hasColorTransform;\n\t\t\n\t\tvoid main(void)\n\t\t{\n\t\t\topenfl_Alphav = openfl_Alpha;\n\t\topenfl_TextureCoordv = openfl_TextureCoord;\n\n\t\tif (openfl_HasColorTransform) {\n\n\t\t\topenfl_ColorMultiplierv = openfl_ColorMultiplier;\n\t\t\topenfl_ColorOffsetv = openfl_ColorOffset / 255.0;\n\n\t\t}\n\n\t\tgl_Position = openfl_Matrix * openfl_Position;\n\n\t\t\t\n\t\t\topenfl_Alphav = openfl_Alpha * alpha;\n\t\t\t\n\t\t\tif (hasColorTransform)\n\t\t\t{\n\t\t\t\topenfl_ColorOffsetv = colorOffset / 255.0;\n\t\t\t\topenfl_ColorMultiplierv = colorMultiplier;\n\t\t\t}\n\t\t}";
+	}
+	flixel_graphics_tile_FlxGraphicsShader.call(this);
+	this.__isGenerated = true;
+	this.__initGL();
+};
+$hxClasses["GoldenMenuRGBShader"] = GoldenMenuRGBShader;
+GoldenMenuRGBShader.__name__ = "GoldenMenuRGBShader";
+GoldenMenuRGBShader.__super__ = flixel_graphics_tile_FlxGraphicsShader;
+GoldenMenuRGBShader.prototype = $extend(flixel_graphics_tile_FlxGraphicsShader.prototype,{
+	__class__: GoldenMenuRGBShader
 });
 var GoldenMenuTouch = function() { };
 $hxClasses["GoldenMenuTouch"] = GoldenMenuTouch;
@@ -27583,10 +27797,15 @@ GoldenMobileControls.beginStrum = function(event) {
 	}
 	var code = GoldenMobileControls.strumCodeAt(event.clientX,event.clientY);
 	if(code < 0) {
-		return;
+		if(event.pointerType != "touch" || GoldenMobileControls.overlay == null) {
+			return;
+		}
+		var frame = GoldenMobileControls.overlay.getBoundingClientRect();
+		if(event.clientX < frame.left || event.clientX > frame.right || event.clientY < frame.top || event.clientY > frame.bottom) {
+			return;
+		}
 	}
 	event.preventDefault();
-	GoldenMobileControls.focusGame();
 	if(GoldenMobileControls.gameCanvas != null) {
 		try {
 			GoldenMobileControls.gameCanvas.setPointerCapture(event.pointerId);
@@ -27611,7 +27830,7 @@ GoldenMobileControls.applyEnabled = function() {
 };
 GoldenMobileControls.focusGame = function() {
 	var canvas = window.document.querySelector("#content canvas");
-	if(canvas != null) {
+	if(canvas != null && window.document.activeElement != canvas) {
 		canvas.setAttribute("tabindex","0");
 		canvas.focus();
 	}
@@ -27671,6 +27890,11 @@ GoldenMobileControls.press = function(code) {
 	GoldenMobileControls.counts.h[code] = count + 1;
 	if(count == 0) {
 		GoldenMobileControls.dispatch(code,true);
+	} else if(GoldenMobileControls.strumButtons && [37,40,38,39].indexOf(code) >= 0 && ((flixel_FlxG.game._state) instanceof PlayState)) {
+		var state = flixel_FlxG.game._state;
+		if(state.goldenInput != null) {
+			state.goldenInput.touchTap(code);
+		}
 	}
 	GoldenMobileControls.paint(code,true);
 };
@@ -27701,7 +27925,7 @@ GoldenMobileControls.move = function(event) {
 	event.preventDefault();
 	var code = -1;
 	if(GoldenMobileControls.strumButtons) {
-		code = GoldenMobileControls.strumCodeAt(event.clientX,event.clientY);
+		code = GoldenMobileControls.strumCodeAt(event.clientX,event.clientY,24);
 	} else {
 		var under = window.document.elementFromPoint(event.clientX,event.clientY);
 		var button = under == null ? null : under.closest("button[data-lane]");
@@ -27892,7 +28116,10 @@ GoldenMobileControls.syncStrumButtons = function() {
 		GoldenMobileControls.strumTargets.push({ x : x, y : y, width : width, height : height, code : [37,40,38,39][lane]});
 	}
 };
-GoldenMobileControls.strumCodeAt = function(x,y) {
+GoldenMobileControls.strumCodeAt = function(x,y,verticalSlop) {
+	if(verticalSlop == null) {
+		verticalSlop = 0;
+	}
 	var best = -1;
 	var distance = Infinity;
 	var frame = GoldenMobileControls.overlay.getBoundingClientRect();
@@ -27906,7 +28133,7 @@ GoldenMobileControls.strumCodeAt = function(x,y) {
 		++_g;
 		var dx = x - target.x;
 		var dy = y - target.y;
-		if(Math.abs(dx) > target.width * .5 || Math.abs(dy) > target.height * .5) {
+		if(Math.abs(dx) > target.width * .5 || Math.abs(dy) > target.height * .5 + verticalSlop) {
 			continue;
 		}
 		var d = dx * dx + dy * dy;
@@ -29063,7 +29290,7 @@ GoldenOrthoExtras.prototype = {
 			}
 			this.owner.frustStage.sceneLayers.h["gradient"].set_alpha(this.perlinScale * .6);
 		}
-		if(this.perlinScale > 0) {
+		if(this.perlinScale > 0 && !GoldenQuality.potatoMode) {
 			var value = this.noise.octave(this.clock * .2,this.clock * .4,.5) - .5;
 			this.shake = value * 100 * this.perlinScale;
 			var fh = this.owner.camFollow;
@@ -29094,7 +29321,7 @@ GoldenOrthoExtras.prototype = {
 			glow.set_alpha(Math.max(0,glow.alpha - elapsed * crochet / 1000));
 		}
 		this.skyGlow = Math.max(0,this.skyGlow - elapsed * (crochet / 4 / 100) * .05);
-		this.owner.frustStage.back.setColorTransform(1,1,1,1,this.skyGlow * 255 | 0,this.skyGlow * 255 | 0,this.skyGlow * 255 | 0);
+		this.owner.frustStage.back.setColorTransform(1,1,1,1,GoldenQuality.potatoMode ? 0 : this.skyGlow * 255 | 0,GoldenQuality.potatoMode ? 0 : this.skyGlow * 255 | 0,GoldenQuality.potatoMode ? 0 : this.skyGlow * 255 | 0);
 		this.sampleBorder(time);
 		if(this.perlinStart >= 0 && this.particles.length > 0) {
 			while(this.nextParticle <= time) {
@@ -29569,7 +29796,7 @@ GoldenOrthogonalPortal.prototype = $extend(flixel_FlxSprite.prototype,{
 		}
 	}
 	,sync: function(time) {
-		this.sample = GoldenOrthogonalPortal.frameAt(time);
+		this.sample = GoldenQuality.potatoMode ? 0 : GoldenOrthogonalPortal.frameAt(time);
 		this.set_visible(this.sample >= 0);
 	}
 	,draw: function() {
@@ -30794,6 +31021,9 @@ GoldenPizza.prototype = {
 	,doorPose: null
 	,cue: function(beat) {
 		var _gthis = this;
+		if(GoldenQuality.potatoMode) {
+			return;
+		}
 		this.owner.goldenTweens.cancelTweensOf(this.doorPose);
 		if(beat == 101) {
 			this.door.set_visible(true);
@@ -30814,6 +31044,17 @@ GoldenPizza.prototype = {
 		sprite.setPosition(640 + (x - 640) * .425,360 + (y - 360) * .425);
 	}
 	,update: function(elapsed) {
+		if(GoldenQuality.potatoMode) {
+			var _g = 0;
+			var _g1 = this.boxes;
+			while(_g < _g1.length) {
+				var box = _g1[_g];
+				++_g;
+				box.sprite.visible = false;
+			}
+			this.door.set_visible(false);
+			return;
+		}
 		var clock = Math.max(0,Conductor.songPosition) / 1000;
 		var finished = 0;
 		var _g = 0;
@@ -31083,7 +31324,111 @@ GoldenPotatoMode.install = function() {
 			GoldenPotatoMode.stripEffects(flixel_FlxG.game._state);
 		}
 	});
+	flixel_FlxG.signals.preDraw.add(GoldenPotatoMode.beforeDraw);
+	flixel_FlxG.signals.postDraw.add(GoldenPotatoMode.afterDraw);
 	GoldenPotatoMode.apply();
+};
+GoldenPotatoMode.beforeDraw = function() {
+	GoldenPotatoMode.cameraFlashes.length = 0;
+	if(!GoldenQuality.potatoMode) {
+		return;
+	}
+	var _g = 0;
+	var _g1 = flixel_FlxG.cameras.list;
+	while(_g < _g1.length) {
+		var camera = _g1[_g];
+		++_g;
+		GoldenPotatoMode.cameraFlashes.push({ camera : camera, alpha : camera._fxFlashAlpha});
+		camera._fxFlashAlpha = 0;
+		camera.updateFlashSpritePosition();
+		camera.set_angle(0);
+		camera.filtersEnabled = false;
+		if(camera._filters != null && camera._filters.length > 0) {
+			camera.setFilters([]);
+		}
+		camera.flashSprite.set_filters(null);
+	}
+	if(((flixel_FlxG.game._state) instanceof PlayState)) {
+		var state = flixel_FlxG.game._state;
+		if(state.camHUD != null) {
+			state.camHUD.set_zoom(1);
+		}
+		if(state.tunnelVision != null) {
+			var tunnel = state.tunnelVision;
+			if(tunnel.dim != null) {
+				tunnel.dim.set_visible(false);
+			}
+			if(tunnel.explosion != null) {
+				tunnel.explosion.set_visible(false);
+			}
+			if(tunnel.trail != null) {
+				tunnel.trail.set_visible(false);
+			}
+			if(tunnel.finalFade != null && tunnel.finalFade.color != -16777216) {
+				tunnel.finalFade.set_alpha(0);
+			}
+		}
+		if(state.frustExtras != null) {
+			var extras = state.frustExtras;
+			var sprite = extras.dim;
+			if(sprite != null) {
+				sprite.set_visible(false);
+			}
+			var sprite = extras.topBar;
+			if(sprite != null) {
+				sprite.set_visible(false);
+			}
+			var sprite = extras.bottomBar;
+			if(sprite != null) {
+				sprite.set_visible(false);
+			}
+			if(extras.orthoExtras != null) {
+				var _g = 0;
+				var _g1 = extras.orthoExtras.border;
+				while(_g < _g1.length) {
+					var sprite = _g1[_g];
+					++_g;
+					if(sprite != null) {
+						sprite.set_visible(false);
+					}
+				}
+			}
+		}
+		if(state.frustrationStage != null && state.frustrationStage.screen != null) {
+			state.frustrationStage.screen.set_visible(false);
+		}
+		if(state.frustStage != null) {
+			if(state.frustStage.overlay != null) {
+				state.frustStage.overlay.set_visible(false);
+			}
+			if(state.frustStage.light != null) {
+				state.frustStage.light.set_visible(false);
+			}
+			var h = state.frustStage.sceneLayers.h;
+			var name_h = h;
+			var name_keys = Object.keys(h);
+			var name_length = name_keys.length;
+			var name_current = 0;
+			while(name_current < name_length) {
+				var name = name_keys[name_current++];
+				if(name.indexOf("particle") >= 0 || name.indexOf("Glow") >= 0 || name == "gradient") {
+					state.frustStage.sceneLayers.h[name].set_visible(false);
+				}
+			}
+		}
+	}
+};
+GoldenPotatoMode.afterDraw = function() {
+	var _g = 0;
+	var _g1 = GoldenPotatoMode.cameraFlashes;
+	while(_g < _g1.length) {
+		var saved = _g1[_g];
+		++_g;
+		if(saved.camera != null) {
+			saved.camera._fxFlashAlpha = saved.alpha;
+		}
+	}
+	GoldenPotatoMode.cameraFlashes.length = 0;
 };
 GoldenPotatoMode.apply = function() {
 	if(GoldenPotatoMode.installed && flixel_FlxG.game != null) {
@@ -31100,7 +31445,7 @@ GoldenPotatoMode.stripEffects = function(object) {
 	if(((object) instanceof flixel_FlxSprite)) {
 		var sprite = object;
 		sprite.set_antialiasing(false);
-		if(sprite.graphic != null && sprite.graphic.assetsKey != null) {
+		if(sprite.graphic != null && sprite.graphic.assetsKey != null && !((sprite.shader) instanceof GoldenMenuRGBShader)) {
 			sprite.shader = null;
 		}
 	}
@@ -31200,6 +31545,7 @@ GoldenQuality.toggleDepthBackgrounds = function() {
 	}
 };
 GoldenQuality.apply = function() {
+	window.document.body.classList.toggle("potato-mode",GoldenQuality.potatoMode);
 	GoldenPotatoMode.apply();
 	if(openfl_Lib.get_current().stage != null) {
 		var tmp = GoldenQuality.potatoMode || GoldenQuality.savedSuperLow;
@@ -34927,6 +35273,18 @@ GoldenTunnelVisionStage.prototype = $extend(GoldenDepthGroup.prototype,{
 	,sync: function(time,step) {
 		var discoActive = step >= 1632;
 		this.disco.set_visible(this.discoSecond.set_visible(this.vignette.set_visible(discoActive)));
+		if(GoldenQuality.potatoMode) {
+			this.disco.set_color(this.discoSecond.set_color(-1));
+			this.vignette.set_visible(false);
+			if(this.wire.animation._curAnim != null) {
+				this.wire.animation._curAnim.set_curFrame(0);
+				var _this = this.wire.animation;
+				if(_this._curAnim != null) {
+					_this._curAnim.pause();
+				}
+			}
+			return;
+		}
 		if(discoActive) {
 			var phaseTime = Math.max(0,time - 133043.478260869568);
 			var offset = GoldenQuality.potatoMode || GoldenQuality.savedSuperLow ? 0 : -(phaseTime * 5) % 5652;
@@ -36755,7 +37113,7 @@ ManifestResources.init = function(config) {
 	lime_utils_Assets.libraryPaths.h["orthogonal"] = v;
 	var v = ManifestResources.rootPath + "manifest/applecorestage.json";
 	lime_utils_Assets.libraryPaths.h["applecorestage"] = v;
-	var data = "{\"name\":null,\"assets\":\"aoy4:sizei1464369y4:typey5:MUSICy2:idy44:assets%2Fmusic%2Fgolden%2Fmenu%2Fcredits.mp3y9:pathGroupaR4hy7:preloadtgoR0i1417760R1R2R3y41:assets%2Fmusic%2Fgolden%2Fmenu%2Fplay.mp3R5aR7hR6tgoR0i566714R1R2R3y42:assets%2Fmusic%2Fgolden%2Fmenu%2Fpause.mp3R5aR8hR6tgoR0i1469737R1R2R3y41:assets%2Fmusic%2Fgolden%2Fmenu%2Fmain.mp3R5aR9hR6tgoR0i3713317R1R2R3y42:assets%2Fmusic%2Fgolden%2Fmenu%2Ftitle.mp3R5aR10hR6tgoR0i1473973R1R2R3y45:assets%2Fmusic%2Fgolden%2Fmenu%2Fsettings.mp3R5aR11hR6tgoR0i2309657R1R2R3y31:assets%2Fmusic%2FfreakyMenu.mp3R5aR12hR6tgoy4:pathy39:assets%2Fimages%2Fstorymenu%2Fweek3.pngR0i7148R1y5:IMAGER3R14R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek2.pngR0i6517R1R15R3R16R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek0.pngR0i7056R1R15R3R17R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek1.pngR0i6261R1R15R3R18R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek5.pngR0i6440R1R15R3R19R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek4.pngR0i6262R1R15R3R20R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek6.pngR0i6998R1R15R3R21R6tgoR13y28:assets%2Fimages%2FmenuBG.pngR0i620342R1R15R3R22R6tgoR13y26:assets%2Fimages%2Fnum4.pngR0i3989R1R15R3R23R6tgoR13y26:assets%2Fimages%2Fnum5.pngR0i4113R1R15R3R24R6tgoR13y26:assets%2Fimages%2Fnum7.pngR0i3692R1R15R3R25R6tgoR13y26:assets%2Fimages%2Fnum6.pngR0i4181R1R15R3R26R6tgoR13y26:assets%2Fimages%2Fnum2.pngR0i3990R1R15R3R27R6tgoR13y44:assets%2Fimages%2Fgolden%2Fui%2FuiBorder.pngR0i203R1R15R3R28R6tgoR13y52:assets%2Fimages%2Fgolden%2Fui%2FhealthBarOverlay.pngR0i331R1R15R3R29R6tgoR13y50:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2Fgo.pngR0i13831R1R15R3R30R6tgoR13y49:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2F2.pngR0i7823R1R15R3R31R6tgoR13y49:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2F3.pngR0i9226R1R15R3R32R6tgoR13y49:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2F1.pngR0i5893R1R15R3R33R6tgoR13y43:assets%2Fimages%2Fgolden%2Fui%2FtimeBar.pngR0i235R1R15R3R34R6tgoR13y45:assets%2Fimages%2Fgolden%2Fui%2FhealthBar.pngR0i290R1R15R3R35R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FBEVEL_NOTES.pngR0i9853R1R15R3R36R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FBEVEL_NOTES.xmlR0i1798R1y4:TEXTR3R37R6tgoR13y53:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets_3D.xmlR0i5205R1R38R3R39R6tgoR13y53:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets_3D.pngR0i666393R1R15R3R40R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2Fbevel_splash.xmlR0i2719R1R38R3R41R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2Fbevel_splash.pngR0i15211R1R15R3R42R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets.pngR0i561216R1R15R3R43R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets.xmlR0i7178R1R38R3R44R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2FnoteSplashes.xmlR0i1596R1R38R3R45R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2FnoteSplashes.pngR0i219186R1R15R3R46R6tgoR13y48:assets%2Fimages%2Fgolden%2Fnotes%2Fsplash_3d.pngR0i63270R1R15R3R47R6tgoR13y48:assets%2Fimages%2Fgolden%2Fnotes%2Fsplash_3d.xmlR0i4823R1R38R3R48R6tgoR13y52:assets%2Fimages%2Fgolden%2Fnotes%2Fawesome_notes.pngR0i83950R1R15R3R49R6tgoR13y52:assets%2Fimages%2Fgolden%2Fnotes%2Fawesome_notes.xmlR0i8003R1R38R3R50R6tgoR13y49:assets%2Fimages%2Fgolden%2Fnotes%2Fbevel_ends.xmlR0i670R1R38R3R51R6tgoR13y49:assets%2Fimages%2Fgolden%2Fnotes%2Fbevel_ends.pngR0i1481R1R15R3R52R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FbreadyNotes.pngR0i387393R1R15R3R53R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FbreadyNotes.xmlR0i7931R1R38R3R54R6tgoR13y61:assets%2Fimages%2Fgolden%2Fmenu%2Ftransition%2Ftransition.pngR0i28278R1R15R3R55R6tgoR13y72:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2FtitleFellows%2Fbandu.pngR0i432446R1R15R3R56R6tgoR13y72:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2FtitleFellows%2Fbandu.xmlR0i2899R1R38R3R57R6tgoR13y63:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2FdarkChecker.pngR0i149R1R15R3R58R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2Flogo.pngR0i82258R1R15R3R59R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2Fsopar_text.xmlR0i4934R1R38R3R60R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2Fsopar_text.pngR0i1449202R1R15R3R61R6tgoR13y75:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Forthogonal%2Ficon.pngR0i258865R1R15R3R62R6tgoR13y77:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Forthogonal%2Fheader.pngR0i45705R1R15R3R63R6tgoR13y73:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Forthogonal%2Fbg.pngR0i202995R1R15R3R64R6tgoR13y75:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2Ficon.pngR0i326259R1R15R3R65R6tgoR13y77:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2Fheader.pngR0i12093R1R15R3R66R6tgoR13y82:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2FsongPreview.pngR0i168958R1R15R3R67R6tgoR13y73:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2Fbg.pngR0i861461R1R15R3R68R6tgoR13y76:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2Ficon.pngR0i910457R1R15R3R69R6tgoR13y78:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2Fheader.pngR0i17253R1R15R3R70R6tgoR13y83:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2FsongPreview.pngR0i174673R1R15R3R71R6tgoR13y74:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2Fbg.pngR0i1170366R1R15R3R72R6tgoR13y93:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2FsongPreview_complete.pngR0i357300R1R15R3R73R6tgoR13y77:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2Ficon.pngR0i708048R1R15R3R74R6tgoR13y79:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2Fheader.pngR0i22174R1R15R3R75R6tgoR13y84:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2FsongPreview.pngR0i178512R1R15R3R76R6tgoR13y75:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2Fbg.pngR0i178626R1R15R3R77R6tgoR13y90:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2FsongPreview_complete.pngR0i261035R1R15R3R78R6tgoR13y74:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2Ficon.pngR0i38964R1R15R3R79R6tgoR13y76:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2Fheader.pngR0i11563R1R15R3R80R6tgoR13y81:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2FsongPreview.pngR0i87336R1R15R3R81R6tgoR13y72:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2Fbg.pngR0i565038R1R15R3R82R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fchalkboard.pngR0i46302R1R15R3R83R6tgoR13y59:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fcudroid.pngR0i463377R1R15R3R84R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fbiorange.pngR0i403587R1R15R3R85R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fvio.pngR0i213111R1R15R3R86R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FSmeekles.pngR0i670164R1R15R3R87R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fbubbscadex.pngR0i109865R1R15R3R88R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FCid.pngR0i47673R1R15R3R89R6tgoR13y64:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fexorcistgold.pngR0i502774R1R15R3R90R6tgoR13y63:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fbaldilord64.pngR0i480724R1R15R3R91R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fcleoarty.pngR0i241191R1R15R3R92R6tgoR13y59:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fzevisly.pngR0i239645R1R15R3R93R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fwick.pngR0i120994R1R15R3R94R6tgoR13y54:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FTy.pngR0i199739R1R15R3R95R6tgoR13y69:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FTallsAnimationTAF.pngR0i201648R1R15R3R96R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fdoo.pngR0i57073R1R15R3R97R6tgoR13y58:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FHarvey.pngR0i178777R1R15R3R98R6tgoR13y64:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fsamualcheese.pngR0i458670R1R15R3R99R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fseth.pngR0i127660R1R15R3R100R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2FcheckeredBG.pngR0i423R1R15R3R101R6tgoR13y57:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fgradient.pngR0i63026R1R15R3R102R6tgoR13y66:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FSettings.pngR0i16351R1R15R3R103R6tgoR13y63:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FLinks.pngR0i13691R1R15R3R104R6tgoR13y65:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FCredits.pngR0i26321R1R15R3R105R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FPlay.pngR0i19101R1R15R3R106R6tgoR13y69:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fblack_border_overlay.pngR0i111R1R15R3R107R6tgoR13y57:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Felectric.xmlR0i13228R1R38R3R108R6tgoR13y57:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Felectric.pngR0i79183R1R15R3R109R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2FBottom.pngR0i6280R1R15R3R110R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbuttons.xmlR0i3354R1R38R3R111R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbuttons.pngR0i27595R1R15R3R112R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2FToppom.pngR0i3261R1R15R3R113R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf_potato.pngR0i3010172R1R15R3R114R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf_potato.xmlR0i26049R1R38R3R115R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf_potato.xmlR0i11121R1R38R3R116R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf_potato.pngR0i1684735R1R15R3R117R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf.xmlR0i11114R1R38R3R118R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf.pngR0i3152226R1R15R3R119R6tgoR13y51:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead.pngR0i1263283R1R15R3R120R6tgoR13y51:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead.xmlR0i6158R1R38R3R121R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf.xmlR0i26042R1R38R3R122R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf.pngR0i6529446R1R15R3R123R6tgoR13y58:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead_potato.xmlR0i6043R1R38R3R124R6tgoR13y58:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead_potato.pngR0i999974R1R15R3R125R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2F3d-bf.pngR0i5508R1R15R3R126R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fbadai.pngR0i6570R1R15R3R127R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fgf.pngR0i5432R1R15R3R128R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Finspicable.pngR0i6797R1R15R3R129R6tgoR13y55:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fdave.pngR0i3271R1R15R3R130R6tgoR13y67:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fdave-frustration.pngR0i7963R1R15R3R131R6tgoR13y58:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fjunkers.pngR0i3905R1R15R3R132R6tgoR13y55:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fface.pngR0i2959R1R15R3R133R6tgoR13y74:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Funfair-expunged-forward.pngR0i16340R1R15R3R134R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fbandu.pngR0i5862R1R15R3R135R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fdave-decimated.pngR0i15982R1R15R3R136R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fbf.pngR0i5815R1R15R3R137R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Fmg.pngR0i25187R1R15R3R138R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Ffries.pngR0i6266R1R15R3R139R6tgoR13y57:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Fphones.pngR0i158733R1R15R3R140R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Fbg.pngR0i322926R1R15R3R141R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst_potato.pngR0i2295396R1R15R3R142R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst_potato.xmlR0i48509R1R38R3R143R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst.pngR0i1356106R1R15R3R144R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst.xmlR0i48616R1R38R3R145R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy.pngR0i874647R1R15R3R146R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy.xmlR0i8049R1R38R3R147R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi.pngR0i1136169R1R15R3R148R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi.xmlR0i47561R1R38R3R149R6tgoR13y71:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap_potato.xmlR0i50269R1R38R3R150R6tgoR13y71:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap_potato.pngR0i2088279R1R15R3R151R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy_potato.pngR0i2392579R1R15R3R152R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy_potato.xmlR0i7942R1R38R3R153R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad.pngR0i274474R1R15R3R154R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad.xmlR0i25415R1R38R3R155R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_potato.pngR0i599235R1R15R3R156R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_potato.xmlR0i12341R1R38R3R157R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra_potato.xmlR0i19727R1R38R3R158R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra_potato.pngR0i1900147R1R15R3R159R6tgoR13y64:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap.xmlR0i50350R1R38R3R160R6tgoR13y64:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap.pngR0i1220343R1R15R3R161R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi_potato.xmlR0i47476R1R38R3R162R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi_potato.pngR0i1789590R1R15R3R163R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu.pngR0i366915R1R15R3R164R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu.xmlR0i12422R1R38R3R165R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra.xmlR0i19808R1R38R3R166R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad_potato.xmlR0i25334R1R38R3R167R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad_potato.pngR0i509016R1R15R3R168R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra.pngR0i5372875R1R15R3R169R6tgoR13y26:assets%2Fimages%2Fnum3.pngR0i4022R1R15R3R170R6tgoR13y26:assets%2Fimages%2Fnum1.pngR0i3390R1R15R3R171R6tgoR13y37:assets%2Fimages%2Fnewgrounds_logo.pngR0i57747R1R15R3R172R6tgoR13y26:assets%2Fimages%2Fnum0.pngR0i3738R1R15R3R173R6tgoR13y30:assets%2Fimages%2Falphabet.xmlR0i39069R1R38R3R174R6tgoR13y30:assets%2Fimages%2Falphabet.pngR0i139836R1R15R3R175R6tgoR13y26:assets%2Fimages%2Flogo.pngR0i86924R1R15R3R176R6tgoR13y35:assets%2Fimages%2FmenuBGMagenta.pngR0i553468R1R15R3R177R6tgoR13y32:assets%2Fimages%2FlogoBumpin.pngR0i592724R1R15R3R178R6tgoR13y32:assets%2Fimages%2FlogoBumpin.xmlR0i2177R1R38R3R179R6tgoR13y26:assets%2Fimages%2Fnum8.pngR0i3914R1R15R3R180R6tgoR13y26:assets%2Fimages%2Fnum9.pngR0i3687R1R15R3R181R6tgoR13y45:assets%2Fimages%2Fcampaign_menu_UI_assets.pngR0i27171R1R15R3R182R6tgoR13y45:assets%2Fimages%2Fcampaign_menu_UI_assets.xmlR0i1893R1R38R3R183R6tgoR13y32:assets%2Fimages%2FmenuBGBlue.pngR0i614586R1R15R3R184R6tgoR13y42:assets%2Fimages%2FFNF_main_menu_assets.pngR0i281298R1R15R3R185R6tgoR13y42:assets%2Fimages%2FFNF_main_menu_assets.xmlR0i4755R1R38R3R186R6tgoR13y32:assets%2Fimages%2FtitleEnter.xmlR0i4875R1R38R3R187R6tgoR13y31:assets%2Fimages%2FmenuDesat.pngR0i357911R1R15R3R188R6tgoR13y32:assets%2Fimages%2FtitleEnter.pngR0i1449202R1R15R3R189R6tgoR0i17762R1R2R3y32:assets%2Fsounds%2FcancelMenu.mp3R5aR190hR6tgoR0i22403R1R2R3y62:assets%2Fsounds%2Fgolden%2Fcountdown%2Fawesomeson%2Fintro2.mp3R5aR191hR6tgoR0i22403R1R2R3y62:assets%2Fsounds%2Fgolden%2Fcountdown%2Fawesomeson%2Fintro3.mp3R5aR192hR6tgoR0i22403R1R2R3y62:assets%2Fsounds%2Fgolden%2Fcountdown%2Fawesomeson%2Fintro1.mp3R5aR193hR6tgoR0i22403R1R2R3y63:assets%2Fsounds%2Fgolden%2Fcountdown%2Fawesomeson%2FintroGo.mp3R5aR194hR6tgoR0i12773R1R2R3y49:assets%2Fsounds%2Fgolden%2Fcountdown%2Fintro2.mp3R5aR195hR6tgoR0i8857R1R2R3y49:assets%2Fsounds%2Fgolden%2Fcountdown%2Fintro3.mp3R5aR196hR6tgoR0i12458R1R2R3y49:assets%2Fsounds%2Fgolden%2Fcountdown%2Fintro1.mp3R5aR197hR6tgoR0i11536R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fbandu%2Fintro2.mp3R5aR198hR6tgoR0i11954R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fbandu%2Fintro3.mp3R5aR199hR6tgoR0i13626R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fbandu%2Fintro1.mp3R5aR200hR6tgoR0i8611R1R2R3y58:assets%2Fsounds%2Fgolden%2Fcountdown%2Fbandu%2FintroGo.mp3R5aR201hR6tgoR0i8441R1R2R3y56:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2Fintro2.mp3R5aR202hR6tgoR0i7317R1R2R3y56:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2Fintro3.mp3R5aR203hR6tgoR0i6198R1R2R3y56:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2Fintro1.mp3R5aR204hR6tgoR0i7500R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2FintroGo.mp3R5aR205hR6tgoR0i7555R1R2R3y50:assets%2Fsounds%2Fgolden%2Fcountdown%2FintroGo.mp3R5aR206hR6tgoR0i91950R1R2R3y33:assets%2Fsounds%2FconfirmMenu.mp3R5aR207hR6tgoR0i17762R1R2R3y32:assets%2Fsounds%2FscrollMenu.mp3R5aR208hR6tgoR0i245600R1y4:FONTy9:classNamey38:__ASSET__assets_fonts_comic_normal_ttfR3y33:assets%2Ffonts%2Fcomic_normal.ttfR6tgoR0i229408R1R209R210y31:__ASSET__assets_fonts_comic_ttfR3y26:assets%2Ffonts%2Fcomic.ttfR6tgoR13y52:assets%2Fdata%2Fleft-unchecked%2Fleft-unchecked.jsonR0i38561R1R38R3R215R6tgoR13y34:assets%2Fdata%2Fdata-goes-here.txtR0zR1R38R3R216R6tgoR13y40:assets%2Fdata%2Fgalactic%2Fgalactic.jsonR0i17308R1R38R3R217R6tgoR13y60:assets%2Fdata%2Fthe-boopadoop-song%2Fthe-boopadoop-song.jsonR0i2500R1R38R3R218R6tgoR13y44:assets%2Fdata%2Fstrawberry%2Fstrawberry.jsonR0i24616R1R38R3R219R6tgoR13y44:assets%2Fdata%2Fapprentice%2Fapprentice.jsonR0i50612R1R38R3R220R6tgoR13y40:assets%2Fdata%2Fdynamics%2Fdynamics.jsonR0i120012R1R38R3R221R6tgoR13y58:assets%2Fdata%2Frecovered-project%2Frecovered-project.jsonR0i46383R1R38R3R222R6tgoR13y29:assets%2Fdata%2Fmain-view.xmlR0i123R1R38R3R223R6tgoR13y46:assets%2Fdata%2Fsick-tricks%2Fsick-tricks.jsonR0i18622R1R38R3R224R6tgoR13y32:assets%2Fdata%2Fnice%2Fnice.jsonR0i252050R1R38R3R225R6tgoR13y46:assets%2Fdata%2Fdeformation%2Fdeformation.jsonR0i90256R1R38R3R226R6tgoR13y36:assets%2Fdata%2Fslices%2Fslices.jsonR0i37818R1R38R3R227R6tgoR13y42:assets%2Fdata%2Falternate%2Falternate.jsonR0i21837R1R38R3R228R6tgoR13y30:assets%2Fdata%2Fnft%2Fnft.jsonR0i43569R1R38R3R229R6tgoR13y34:assets%2Fdata%2Fkooky%2Fkooky.jsonR0i80683R1R38R3R230R6tgoR13y30:assets%2Fdata%2Faug%2Faug.jsonR0i20014R1R38R3R231R6tgoR13y29:assets%2Fdata%2FintroText.txtR0i1260R1R38R3R232R6tgoR13y42:assets%2Fdata%2Ftoo-shiny%2Ftoo-shiny.jsonR0i26702R1R38R3R233R6tgoR13y38:assets%2Fdata%2Fticking%2Fticking.jsonR0i38640R1R38R3R234R6tgoR13y42:assets%2Fdata%2Flofthouse%2Flofthouse.jsonR0i50661R1R38R3R235R6tgoR13y33:assets%2Fdata%2FspecialThanks.txtR0i300R1R38R3R236R6tgoR13y38:assets%2Fdata%2Fpiehole%2Fpiehole.jsonR0i81700R1R38R3R237R6tgoR13y44:assets%2Fdata%2Forthogonal%2Forthogonal.jsonR0i127054R1R38R3R238R6tgoR13y32:assets%2Fdata%2Fdale%2Fdale.jsonR0i43441R1R38R3R239R6tgoR13y44:assets%2Fdata%2Fready-loud%2Fready-loud.jsonR0i34408R1R38R3R240R6tgoR13y46:assets%2Fdata%2Fgolden%2Fremaining-extras.jsonR0i2046R1R38R3R241R6tgoR13y45:assets%2Fdata%2Fgolden%2Fnotes%2Fawesome.jsonR0i431R1R38R3R242R6tgoR13y40:assets%2Fdata%2Fgolden%2Fnotes%2F3d.jsonR0i667R1R38R3R243R6tgoR13y43:assets%2Fdata%2Fgolden%2Fnotes%2Fbevel.jsonR0i178R1R38R3R244R6tgoR13y45:assets%2Fdata%2Fgolden%2Fnotes%2Fdefault.jsonR0i1028R1R38R3R245R6tgoR13y44:assets%2Fdata%2Fgolden%2Fnotes%2Fbready.jsonR0i374R1R38R3R246R6tgoR13y44:assets%2Fdata%2Fgolden%2Fmenu%2Fcredits.jsonR0i940R1R38R3R247R6tgoR13y50:assets%2Fdata%2Fgolden%2Fshaders%2FWavyShader.fragR0i1316R1R38R3R248R6tgoR13y52:assets%2Fdata%2Fgolden%2Fcharacters%2Fbf-bounds.jsonR0i22224R1R38R3R249R6tgoR13y57:assets%2Fdata%2Fgolden%2Fapplecore%2Fsecondary-bambi.jsonR0i46074R1R38R3R250R6tgoR13y50:assets%2Fdata%2Fgolden%2Fapplecore%2Fsubtitles.srtR0i1683R1R38R3R251R6tgoR13y78:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Funfair-expunged-forward.jsonR0i688R1R38R3R252R6tgoR13y66:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu-first.jsonR0i1784R1R38R3R253R6tgoR13y60:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu.jsonR0i819R1R38R3R254R6tgoR13y64:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu-sad.jsonR0i1363R1R38R3R255R6tgoR13y71:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fdisruption-bambi.jsonR0i1527R1R38R3R256R6tgoR13y44:assets%2Fdata%2Finspicable%2Finspicable.jsonR0i41973R1R38R3R257R6tgoR13y58:assets%2Fdata%2Ffresh-and-toasted%2Ffresh-and-toasted.jsonR0i51291R1R38R3R258R6tgoR13y42:assets%2Fdata%2Fwireframe%2Fwireframe.jsonR0i43383R1R38R3R259R6tgoR13y40:assets%2Fdata%2Funhinged%2Funhinged.jsonR0i42823R1R38R3R260R6tgoR13y42:assets%2Fdata%2Fgift-card%2Fgift-card.jsonR0i49357R1R38R3R261R6tgoR13y36:assets%2Fdata%2Fwheels%2Fwheels.jsonR0i33645R1R38R3R262R6tgoR13y36:assets%2Fdata%2FfreeplaySonglist.txtR0i10R1R38R3R263R6tgoR13y32:assets%2Fdata%2Fcell%2Fcell.jsonR0i54396R1R38R3R264R6tgoR13y28:assets%2Fdata%2Fcontrols.txtR0i324R1R38R3R265R6tgoR13y46:assets%2Fdata%2Ffrustration%2Ffrustration.jsonR0i79278R1R38R3R266R6tgoR13y50:assets%2Fdata%2Froupiniphobia%2Froupiniphobia.jsonR0i919707R1R38R3R267R6tgoR13y42:assets%2Fdata%2Fferocious%2Fferocious.jsonR0i238742R1R38R3R268R6tgoR13y52:assets%2Fdata%2Fthe-big-dingle%2Fthe-big-dingle.jsonR0i24539R1R38R3R269R6tgoR13y40:assets%2Fdata%2Ftantalum%2Ftantalum.jsonR0i47979R1R38R3R270R6tgoR13y32:assets%2Fdata%2Fmine%2Fmine.jsonR0i38921R1R38R3R271R6tgoR13y44:assets%2Fdata%2Fdisability%2Fdisability.jsonR0i58977R1R38R3R272R6tgoR13y34:assets%2Fdata%2Fhouse%2Fhouse.jsonR0i36148R1R38R3R273R6tgoR13y44:assets%2Fdata%2Fsugar-rush%2Fsugar-rush.jsonR0i32555R1R38R3R274R6tgoR13y40:assets%2Fdata%2Fdoughboy%2Fdoughboy.jsonR0i30739R1R38R3R275R6tgoR13y42:assets%2Fdata%2Fenforcers%2Fenforcers.jsonR0i20507R1R38R3R276R6tgoR13y40:assets%2Fdata%2Fsunshine%2Fsunshine.jsonR0i411384R1R38R3R277R6tgoR13y76:assets%2Fdata%2Fdave-x-bambi-shipping-cute%2Fdave-x-bambi-shipping-cute.jsonR0i22659R1R38R3R278R6tgoR13y50:assets%2Fdata%2Fbedtime-bumps%2Fbedtime-bumps.jsonR0i16241R1R38R3R279R6tgoR13y36:assets%2Fdata%2Forigin%2Forigin.jsonR0i15725R1R38R3R280R6tgoR13y48:assets%2Fdata%2Ftunnelvision%2Ftunnelvision.jsonR0i124949R1R38R3R281R6tgoR13y28:assets%2Fdata%2Fog%2Fog.jsonR0i124971R1R38R3R282R6tgoR13y38:assets%2Fdata%2Fsillier%2Fsillier.jsonR0i27687R1R38R3R283R6tgoR13y34:assets%2Fdata%2Fnutty%2Fnutty.jsonR0i35817R1R38R3R284R6tgoR13y44:assets%2Fdata%2Fdisruption%2Fdisruption.jsonR0i63010R1R38R3R285R6tgoR13y34:assets%2Fdata%2Ftheft%2Ftheft.jsonR0i24147R1R38R3R286R6tgoR13y48:assets%2Fdata%2Fthunderstorm%2Fthunderstorm.jsonR0i47233R1R38R3R287R6tgoR13y33:assets%2Fdata%2FcharacterList.txtR0i89R1R38R3R288R6tgoR13y38:assets%2Fdata%2Fpoopers%2Fpoopers.jsonR0i70218R1R38R3R289R6tgoR13y40:assets%2Fdata%2Fkeyboard%2Fkeyboard.jsonR0i37268R1R38R3R290R6tgoR13y38:assets%2Fdata%2Falgebra%2Falgebra.jsonR0i175346R1R38R3R291R6tgoR13y38:assets%2Fdata%2Fresumed%2Fresumed.jsonR0i43258R1R38R3R292R6tgoR13y40:assets%2Fdata%2Fbookworm%2Fbookworm.jsonR0i33174R1R38R3R293R6tgoR13y42:assets%2Fdata%2Fcollision%2Fcollision.jsonR0i77352R1R38R3R294R6tgoR13y40:assets%2Fdata%2Fcuberoot%2Fcuberoot.jsonR0i42421R1R38R3R295R6tgoR13y42:assets%2Fdata%2Fapplecore%2Fapplecore.jsonR0i77355R1R38R3R296R6tgoR13y52:assets%2Fdata%2Fcooking-lesson%2Fcooking-lesson.jsonR0i54523R1R38R3R297R6tgoR13y41:assets%2Fvideos%2Fgolden%2FPizzaVideo.mp4R0i18210431R1y6:BINARYR3R298goR13y50:assets%2Fvideos%2Fgolden%2Ftunnelvision%2Fmask.mp4R0i5769684R1R299R3R300goR13y55:assets%2Fvideos%2Fgolden%2Ftunnelvision%2Fred_blobs.mp4R0i11119130R1R299R3R301goR13y48:mods%2FintroMod%2F_append%2Fdata%2FintroText.txtR0i20R1R38R3R302goR13y17:mods%2Freadme.txtR0i90R1R38R3R303goR13y18:mods%2FmodList.txtR0i8R1R38R3R304goR13y21:do%20NOT%20readme.txtR0i4326R1R38R3R305R6tgoR13y13:changelog.txtR0i7730R1R38R3R306R6tgoR0i75864R1R209R210y29:__ASSET__assets_fonts_vcr_ttfR3y24:assets%2Ffonts%2Fvcr.ttfR6tgoR13y34:assets%2Ffonts%2Ffonts-go-here.txtR0zR1R38R3R309R6tgoR0i14656R1R209R210y31:__ASSET__assets_fonts_pixel_otfR3y26:assets%2Ffonts%2Fpixel.otfR6tgoR0i39706R1R2R3y28:flixel%2Fsounds%2Fflixel.mp3R5aR312y28:flixel%2Fsounds%2Fflixel.ogghR6tgoR0i2114R1R2R3y26:flixel%2Fsounds%2Fbeep.mp3R5aR314y26:flixel%2Fsounds%2Fbeep.ogghR6tgoR0i5794R1y5:SOUNDR3R315R5aR314R315hgoR0i33629R1R316R3R313R5aR312R313hgoR0i15744R1R209R210y35:__ASSET__flixel_fonts_nokiafc22_ttfR3y30:flixel%2Ffonts%2Fnokiafc22.ttfR6tgoR0i29724R1R209R210y36:__ASSET__flixel_fonts_monsterrat_ttfR3y31:flixel%2Ffonts%2Fmonsterrat.ttfR6tgoR13y33:flixel%2Fimages%2Fui%2Fbutton.pngR0i519R1R15R3R321R6tgoR13y36:flixel%2Fimages%2Flogo%2Fdefault.pngR0i3280R1R15R3R322R6tgoR13y44:flixel%2Fflixel-ui%2Fimg%2Fdropdown_mark.pngR0i86R1R15R3R323R6tgoR13y40:flixel%2Fflixel-ui%2Fimg%2Fplus_mark.pngR0i83R1R15R3R324R6tgoR13y36:flixel%2Fflixel-ui%2Fimg%2Fradio.pngR0i108R1R15R3R325R6tgoR13y48:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_left.pngR0i222R1R15R3R326R6tgoR13y42:flixel%2Fflixel-ui%2Fimg%2Fbutton_thin.pngR0i118R1R15R3R327R6tgoR13y34:flixel%2Fflixel-ui%2Fimg%2Ftab.pngR0i106R1R15R3R328R6tgoR13y41:flixel%2Fflixel-ui%2Fimg%2Ffinger_big.pngR0i1337R1R15R3R329R6tgoR13y36:flixel%2Fflixel-ui%2Fimg%2Finvis.pngR0i72R1R15R3R330R6tgoR13y43:flixel%2Fflixel-ui%2Fimg%2Fchrome_inset.pngR0i102R1R15R3R331R6tgoR13y44:flixel%2Fflixel-ui%2Fimg%2Ftooltip_arrow.pngR0i176R1R15R3R332R6tgoR13y49:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_right.pngR0i238R1R15R3R333R6tgoR13y40:flixel%2Fflixel-ui%2Fimg%2Fradio_dot.pngR0i81R1R15R3R334R6tgoR13y37:flixel%2Fflixel-ui%2Fimg%2Fchrome.pngR0i135R1R15R3R335R6tgoR13y40:flixel%2Fflixel-ui%2Fimg%2Fcheck_box.pngR0i101R1R15R3R336R6tgoR13y44:flixel%2Fflixel-ui%2Fimg%2Fbutton_toggle.pngR0i254R1R15R3R337R6tgoR13y46:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_up.pngR0i227R1R15R3R338R6tgoR13y41:flixel%2Fflixel-ui%2Fimg%2Fminus_mark.pngR0i77R1R15R3R339R6tgoR13y42:flixel%2Fflixel-ui%2Fimg%2Fchrome_flat.pngR0i124R1R15R3R340R6tgoR13y37:flixel%2Fflixel-ui%2Fimg%2Fswatch.pngR0i94R1R15R3R341R6tgoR13y43:flixel%2Fflixel-ui%2Fimg%2Fchrome_light.pngR0i118R1R15R3R342R6tgoR13y38:flixel%2Fflixel-ui%2Fimg%2Fhilight.pngR0i74R1R15R3R343R6tgoR13y41:flixel%2Fflixel-ui%2Fimg%2Fcheck_mark.pngR0i97R1R15R3R344R6tgoR13y39:flixel%2Fflixel-ui%2Fimg%2Ftab_back.pngR0i111R1R15R3R345R6tgoR13y34:flixel%2Fflixel-ui%2Fimg%2Fbox.pngR0i75R1R15R3R346R6tgoR13y43:flixel%2Fflixel-ui%2Fimg%2Ffinger_small.pngR0i157R1R15R3R347R6tgoR13y37:flixel%2Fflixel-ui%2Fimg%2Fbutton.pngR0i211R1R15R3R348R6tgoR13y48:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_down.pngR0i216R1R15R3R349R6tgoR13y44:flixel%2Fflixel-ui%2Fxml%2Fdefault_popup.xmlR0i1848R1R38R3R350R6tgoR13y53:flixel%2Fflixel-ui%2Fxml%2Fdefault_loading_screen.xmlR0i1953R1R38R3R351R6tgoR13y39:flixel%2Fflixel-ui%2Fxml%2Fdefaults.xmlR0i1263R1R38R3R352R6tgoR13y25:ui%2Fgolden-apple-tap.pngR0i38955R1R15R3R353goR13y25:ui%2Fstart-background.pngR0i1099420R1R15R3R354goR13y20:manifest.webmanifestR0i375R1R38R3R355gh\",\"rootPath\":null,\"version\":2,\"libraryArgs\":[],\"libraryType\":null}";
+	var data = "{\"name\":null,\"assets\":\"aoy4:sizei1464369y4:typey5:MUSICy2:idy44:assets%2Fmusic%2Fgolden%2Fmenu%2Fcredits.mp3y9:pathGroupaR4hy7:preloadtgoR0i1417760R1R2R3y41:assets%2Fmusic%2Fgolden%2Fmenu%2Fplay.mp3R5aR7hR6tgoR0i566714R1R2R3y42:assets%2Fmusic%2Fgolden%2Fmenu%2Fpause.mp3R5aR8hR6tgoR0i1469737R1R2R3y41:assets%2Fmusic%2Fgolden%2Fmenu%2Fmain.mp3R5aR9hR6tgoR0i3713317R1R2R3y42:assets%2Fmusic%2Fgolden%2Fmenu%2Ftitle.mp3R5aR10hR6tgoR0i1473973R1R2R3y45:assets%2Fmusic%2Fgolden%2Fmenu%2Fsettings.mp3R5aR11hR6tgoR0i2309657R1R2R3y31:assets%2Fmusic%2FfreakyMenu.mp3R5aR12hR6tgoy4:pathy39:assets%2Fimages%2Fstorymenu%2Fweek3.pngR0i7148R1y5:IMAGER3R14R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek2.pngR0i6517R1R15R3R16R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek0.pngR0i7056R1R15R3R17R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek1.pngR0i6261R1R15R3R18R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek5.pngR0i6440R1R15R3R19R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek4.pngR0i6262R1R15R3R20R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek6.pngR0i6998R1R15R3R21R6tgoR13y28:assets%2Fimages%2FmenuBG.pngR0i620342R1R15R3R22R6tgoR13y26:assets%2Fimages%2Fnum4.pngR0i3989R1R15R3R23R6tgoR13y26:assets%2Fimages%2Fnum5.pngR0i4113R1R15R3R24R6tgoR13y26:assets%2Fimages%2Fnum7.pngR0i3692R1R15R3R25R6tgoR13y26:assets%2Fimages%2Fnum6.pngR0i4181R1R15R3R26R6tgoR13y26:assets%2Fimages%2Fnum2.pngR0i3990R1R15R3R27R6tgoR13y44:assets%2Fimages%2Fgolden%2Fui%2FuiBorder.pngR0i203R1R15R3R28R6tgoR13y52:assets%2Fimages%2Fgolden%2Fui%2FhealthBarOverlay.pngR0i331R1R15R3R29R6tgoR13y50:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2Fgo.pngR0i13831R1R15R3R30R6tgoR13y49:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2F2.pngR0i7823R1R15R3R31R6tgoR13y49:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2F3.pngR0i9226R1R15R3R32R6tgoR13y49:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2F1.pngR0i5893R1R15R3R33R6tgoR13y43:assets%2Fimages%2Fgolden%2Fui%2FtimeBar.pngR0i235R1R15R3R34R6tgoR13y45:assets%2Fimages%2Fgolden%2Fui%2FhealthBar.pngR0i290R1R15R3R35R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FBEVEL_NOTES.pngR0i9853R1R15R3R36R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FBEVEL_NOTES.xmlR0i1798R1y4:TEXTR3R37R6tgoR13y53:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets_3D.xmlR0i5205R1R38R3R39R6tgoR13y53:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets_3D.pngR0i666393R1R15R3R40R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2Fbevel_splash.xmlR0i2719R1R38R3R41R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2Fbevel_splash.pngR0i15211R1R15R3R42R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets.pngR0i561216R1R15R3R43R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets.xmlR0i7178R1R38R3R44R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2FnoteSplashes.xmlR0i1596R1R38R3R45R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2FnoteSplashes.pngR0i219186R1R15R3R46R6tgoR13y48:assets%2Fimages%2Fgolden%2Fnotes%2Fsplash_3d.pngR0i63270R1R15R3R47R6tgoR13y48:assets%2Fimages%2Fgolden%2Fnotes%2Fsplash_3d.xmlR0i4823R1R38R3R48R6tgoR13y52:assets%2Fimages%2Fgolden%2Fnotes%2Fawesome_notes.pngR0i83950R1R15R3R49R6tgoR13y52:assets%2Fimages%2Fgolden%2Fnotes%2Fawesome_notes.xmlR0i8003R1R38R3R50R6tgoR13y49:assets%2Fimages%2Fgolden%2Fnotes%2Fbevel_ends.xmlR0i670R1R38R3R51R6tgoR13y49:assets%2Fimages%2Fgolden%2Fnotes%2Fbevel_ends.pngR0i1481R1R15R3R52R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FbreadyNotes.pngR0i387393R1R15R3R53R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FbreadyNotes.xmlR0i7931R1R38R3R54R6tgoR13y61:assets%2Fimages%2Fgolden%2Fmenu%2Ftransition%2Ftransition.pngR0i28278R1R15R3R55R6tgoR13y72:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2FtitleFellows%2Fbandu.pngR0i432446R1R15R3R56R6tgoR13y72:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2FtitleFellows%2Fbandu.xmlR0i2899R1R38R3R57R6tgoR13y63:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2FdarkChecker.pngR0i149R1R15R3R58R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2Flogo.pngR0i82258R1R15R3R59R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2Fsopar_text.xmlR0i4934R1R38R3R60R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2Fsopar_text.pngR0i1449202R1R15R3R61R6tgoR13y75:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Forthogonal%2Ficon.pngR0i258865R1R15R3R62R6tgoR13y77:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Forthogonal%2Fheader.pngR0i45705R1R15R3R63R6tgoR13y73:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Forthogonal%2Fbg.pngR0i202995R1R15R3R64R6tgoR13y75:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2Ficon.pngR0i326259R1R15R3R65R6tgoR13y77:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2Fheader.pngR0i12093R1R15R3R66R6tgoR13y82:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2FsongPreview.pngR0i168958R1R15R3R67R6tgoR13y73:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2Fbg.pngR0i861461R1R15R3R68R6tgoR13y76:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2Ficon.pngR0i910457R1R15R3R69R6tgoR13y78:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2Fheader.pngR0i17253R1R15R3R70R6tgoR13y83:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2FsongPreview.pngR0i174673R1R15R3R71R6tgoR13y74:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2Fbg.pngR0i1170366R1R15R3R72R6tgoR13y93:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2FsongPreview_complete.pngR0i357300R1R15R3R73R6tgoR13y77:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2Ficon.pngR0i708048R1R15R3R74R6tgoR13y79:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2Fheader.pngR0i22174R1R15R3R75R6tgoR13y84:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2FsongPreview.pngR0i178512R1R15R3R76R6tgoR13y75:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2Fbg.pngR0i178626R1R15R3R77R6tgoR13y90:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2FsongPreview_complete.pngR0i261035R1R15R3R78R6tgoR13y74:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2Ficon.pngR0i38964R1R15R3R79R6tgoR13y76:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2Fheader.pngR0i11563R1R15R3R80R6tgoR13y81:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2FsongPreview.pngR0i87336R1R15R3R81R6tgoR13y72:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2Fbg.pngR0i565038R1R15R3R82R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fchalkboard.pngR0i46302R1R15R3R83R6tgoR13y59:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fcudroid.pngR0i463377R1R15R3R84R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fbiorange.pngR0i403587R1R15R3R85R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fvio.pngR0i213111R1R15R3R86R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FSmeekles.pngR0i670164R1R15R3R87R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fbubbscadex.pngR0i109865R1R15R3R88R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FCid.pngR0i47673R1R15R3R89R6tgoR13y64:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fexorcistgold.pngR0i502774R1R15R3R90R6tgoR13y63:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fbaldilord64.pngR0i480724R1R15R3R91R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fcleoarty.pngR0i241191R1R15R3R92R6tgoR13y59:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fzevisly.pngR0i239645R1R15R3R93R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fwick.pngR0i120994R1R15R3R94R6tgoR13y54:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FTy.pngR0i199739R1R15R3R95R6tgoR13y69:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FTallsAnimationTAF.pngR0i201648R1R15R3R96R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fdoo.pngR0i57073R1R15R3R97R6tgoR13y58:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FHarvey.pngR0i178777R1R15R3R98R6tgoR13y64:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fsamualcheese.pngR0i458670R1R15R3R99R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fseth.pngR0i127660R1R15R3R100R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2FcheckeredBG.pngR0i423R1R15R3R101R6tgoR13y57:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fgradient.pngR0i63026R1R15R3R102R6tgoR13y66:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FSettings.pngR0i16351R1R15R3R103R6tgoR13y63:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FLinks.pngR0i13691R1R15R3R104R6tgoR13y65:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FCredits.pngR0i26321R1R15R3R105R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FPlay.pngR0i19101R1R15R3R106R6tgoR13y69:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fblack_border_overlay.pngR0i111R1R15R3R107R6tgoR13y57:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Felectric.xmlR0i13228R1R38R3R108R6tgoR13y57:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Felectric.pngR0i79183R1R15R3R109R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2FBottom.pngR0i6280R1R15R3R110R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbuttons.xmlR0i3354R1R38R3R111R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbuttons.pngR0i27595R1R15R3R112R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2FToppom.pngR0i3261R1R15R3R113R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf_potato.pngR0i3010172R1R15R3R114R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf_potato.xmlR0i26049R1R38R3R115R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf_potato.xmlR0i11121R1R38R3R116R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf_potato.pngR0i1684735R1R15R3R117R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf.xmlR0i11114R1R38R3R118R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf.pngR0i3152226R1R15R3R119R6tgoR13y51:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead.pngR0i1263283R1R15R3R120R6tgoR13y51:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead.xmlR0i6158R1R38R3R121R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf.xmlR0i26042R1R38R3R122R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf.pngR0i6529446R1R15R3R123R6tgoR13y58:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead_potato.xmlR0i6043R1R38R3R124R6tgoR13y58:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead_potato.pngR0i999974R1R15R3R125R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2F3d-bf.pngR0i5508R1R15R3R126R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fbadai.pngR0i6570R1R15R3R127R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fgf.pngR0i5432R1R15R3R128R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Finspicable.pngR0i6797R1R15R3R129R6tgoR13y55:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fdave.pngR0i3271R1R15R3R130R6tgoR13y67:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fdave-frustration.pngR0i7963R1R15R3R131R6tgoR13y58:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fjunkers.pngR0i3905R1R15R3R132R6tgoR13y55:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fface.pngR0i2959R1R15R3R133R6tgoR13y74:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Funfair-expunged-forward.pngR0i16340R1R15R3R134R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fbandu.pngR0i5862R1R15R3R135R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fdave-decimated.pngR0i15982R1R15R3R136R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fbf.pngR0i5815R1R15R3R137R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Fmg.pngR0i25187R1R15R3R138R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Ffries.pngR0i6266R1R15R3R139R6tgoR13y57:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Fphones.pngR0i158733R1R15R3R140R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Fbg.pngR0i322926R1R15R3R141R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst_potato.pngR0i2295396R1R15R3R142R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst_potato.xmlR0i48509R1R38R3R143R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst.pngR0i1356106R1R15R3R144R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst.xmlR0i48616R1R38R3R145R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy.pngR0i874647R1R15R3R146R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy.xmlR0i8049R1R38R3R147R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi.pngR0i1136169R1R15R3R148R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi.xmlR0i47561R1R38R3R149R6tgoR13y71:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap_potato.xmlR0i50269R1R38R3R150R6tgoR13y71:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap_potato.pngR0i2088279R1R15R3R151R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy_potato.pngR0i2392579R1R15R3R152R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy_potato.xmlR0i7942R1R38R3R153R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad.pngR0i274474R1R15R3R154R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad.xmlR0i25415R1R38R3R155R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_potato.pngR0i599235R1R15R3R156R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_potato.xmlR0i12341R1R38R3R157R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra_potato.xmlR0i19727R1R38R3R158R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra_potato.pngR0i1900147R1R15R3R159R6tgoR13y64:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap.xmlR0i50350R1R38R3R160R6tgoR13y64:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap.pngR0i1220343R1R15R3R161R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi_potato.xmlR0i47476R1R38R3R162R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi_potato.pngR0i1789590R1R15R3R163R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu.pngR0i366915R1R15R3R164R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu.xmlR0i12422R1R38R3R165R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra.xmlR0i19808R1R38R3R166R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad_potato.xmlR0i25334R1R38R3R167R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad_potato.pngR0i509016R1R15R3R168R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra.pngR0i5372875R1R15R3R169R6tgoR13y26:assets%2Fimages%2Fnum3.pngR0i4022R1R15R3R170R6tgoR13y26:assets%2Fimages%2Fnum1.pngR0i3390R1R15R3R171R6tgoR13y37:assets%2Fimages%2Fnewgrounds_logo.pngR0i57747R1R15R3R172R6tgoR13y26:assets%2Fimages%2Fnum0.pngR0i3738R1R15R3R173R6tgoR13y30:assets%2Fimages%2Falphabet.xmlR0i39069R1R38R3R174R6tgoR13y30:assets%2Fimages%2Falphabet.pngR0i139836R1R15R3R175R6tgoR13y26:assets%2Fimages%2Flogo.pngR0i86924R1R15R3R176R6tgoR13y35:assets%2Fimages%2FmenuBGMagenta.pngR0i553468R1R15R3R177R6tgoR13y32:assets%2Fimages%2FlogoBumpin.pngR0i592724R1R15R3R178R6tgoR13y32:assets%2Fimages%2FlogoBumpin.xmlR0i2177R1R38R3R179R6tgoR13y26:assets%2Fimages%2Fnum8.pngR0i3914R1R15R3R180R6tgoR13y26:assets%2Fimages%2Fnum9.pngR0i3687R1R15R3R181R6tgoR13y45:assets%2Fimages%2Fcampaign_menu_UI_assets.pngR0i27171R1R15R3R182R6tgoR13y45:assets%2Fimages%2Fcampaign_menu_UI_assets.xmlR0i1893R1R38R3R183R6tgoR13y32:assets%2Fimages%2FmenuBGBlue.pngR0i614586R1R15R3R184R6tgoR13y42:assets%2Fimages%2FFNF_main_menu_assets.pngR0i281298R1R15R3R185R6tgoR13y42:assets%2Fimages%2FFNF_main_menu_assets.xmlR0i4755R1R38R3R186R6tgoR13y32:assets%2Fimages%2FtitleEnter.xmlR0i4875R1R38R3R187R6tgoR13y31:assets%2Fimages%2FmenuDesat.pngR0i357911R1R15R3R188R6tgoR13y32:assets%2Fimages%2FtitleEnter.pngR0i1449202R1R15R3R189R6tgoR0i17762R1R2R3y32:assets%2Fsounds%2FcancelMenu.mp3R5aR190hR6tgoR0i22403R1R2R3y62:assets%2Fsounds%2Fgolden%2Fcountdown%2Fawesomeson%2Fintro2.mp3R5aR191hR6tgoR0i22403R1R2R3y62:assets%2Fsounds%2Fgolden%2Fcountdown%2Fawesomeson%2Fintro3.mp3R5aR192hR6tgoR0i22403R1R2R3y62:assets%2Fsounds%2Fgolden%2Fcountdown%2Fawesomeson%2Fintro1.mp3R5aR193hR6tgoR0i22403R1R2R3y63:assets%2Fsounds%2Fgolden%2Fcountdown%2Fawesomeson%2FintroGo.mp3R5aR194hR6tgoR0i12773R1R2R3y49:assets%2Fsounds%2Fgolden%2Fcountdown%2Fintro2.mp3R5aR195hR6tgoR0i8857R1R2R3y49:assets%2Fsounds%2Fgolden%2Fcountdown%2Fintro3.mp3R5aR196hR6tgoR0i12458R1R2R3y49:assets%2Fsounds%2Fgolden%2Fcountdown%2Fintro1.mp3R5aR197hR6tgoR0i11536R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fbandu%2Fintro2.mp3R5aR198hR6tgoR0i11954R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fbandu%2Fintro3.mp3R5aR199hR6tgoR0i13626R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fbandu%2Fintro1.mp3R5aR200hR6tgoR0i8611R1R2R3y58:assets%2Fsounds%2Fgolden%2Fcountdown%2Fbandu%2FintroGo.mp3R5aR201hR6tgoR0i8441R1R2R3y56:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2Fintro2.mp3R5aR202hR6tgoR0i7317R1R2R3y56:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2Fintro3.mp3R5aR203hR6tgoR0i6198R1R2R3y56:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2Fintro1.mp3R5aR204hR6tgoR0i7500R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2FintroGo.mp3R5aR205hR6tgoR0i7555R1R2R3y50:assets%2Fsounds%2Fgolden%2Fcountdown%2FintroGo.mp3R5aR206hR6tgoR0i91950R1R2R3y33:assets%2Fsounds%2FconfirmMenu.mp3R5aR207hR6tgoR0i17762R1R2R3y32:assets%2Fsounds%2FscrollMenu.mp3R5aR208hR6tgoR0i245600R1y4:FONTy9:classNamey38:__ASSET__assets_fonts_comic_normal_ttfR3y33:assets%2Ffonts%2Fcomic_normal.ttfR6tgoR0i229408R1R209R210y31:__ASSET__assets_fonts_comic_ttfR3y26:assets%2Ffonts%2Fcomic.ttfR6tgoR13y52:assets%2Fdata%2Fleft-unchecked%2Fleft-unchecked.jsonR0i38561R1R38R3R215R6tgoR13y34:assets%2Fdata%2Fdata-goes-here.txtR0zR1R38R3R216R6tgoR13y40:assets%2Fdata%2Fgalactic%2Fgalactic.jsonR0i17308R1R38R3R217R6tgoR13y60:assets%2Fdata%2Fthe-boopadoop-song%2Fthe-boopadoop-song.jsonR0i2500R1R38R3R218R6tgoR13y44:assets%2Fdata%2Fstrawberry%2Fstrawberry.jsonR0i24616R1R38R3R219R6tgoR13y44:assets%2Fdata%2Fapprentice%2Fapprentice.jsonR0i50612R1R38R3R220R6tgoR13y40:assets%2Fdata%2Fdynamics%2Fdynamics.jsonR0i120012R1R38R3R221R6tgoR13y58:assets%2Fdata%2Frecovered-project%2Frecovered-project.jsonR0i46383R1R38R3R222R6tgoR13y29:assets%2Fdata%2Fmain-view.xmlR0i123R1R38R3R223R6tgoR13y46:assets%2Fdata%2Fsick-tricks%2Fsick-tricks.jsonR0i18622R1R38R3R224R6tgoR13y32:assets%2Fdata%2Fnice%2Fnice.jsonR0i252050R1R38R3R225R6tgoR13y46:assets%2Fdata%2Fdeformation%2Fdeformation.jsonR0i90256R1R38R3R226R6tgoR13y36:assets%2Fdata%2Fslices%2Fslices.jsonR0i37818R1R38R3R227R6tgoR13y42:assets%2Fdata%2Falternate%2Falternate.jsonR0i21837R1R38R3R228R6tgoR13y30:assets%2Fdata%2Fnft%2Fnft.jsonR0i43569R1R38R3R229R6tgoR13y34:assets%2Fdata%2Fkooky%2Fkooky.jsonR0i80683R1R38R3R230R6tgoR13y30:assets%2Fdata%2Faug%2Faug.jsonR0i20014R1R38R3R231R6tgoR13y29:assets%2Fdata%2FintroText.txtR0i1260R1R38R3R232R6tgoR13y42:assets%2Fdata%2Ftoo-shiny%2Ftoo-shiny.jsonR0i26702R1R38R3R233R6tgoR13y38:assets%2Fdata%2Fticking%2Fticking.jsonR0i38640R1R38R3R234R6tgoR13y42:assets%2Fdata%2Flofthouse%2Flofthouse.jsonR0i50661R1R38R3R235R6tgoR13y33:assets%2Fdata%2FspecialThanks.txtR0i300R1R38R3R236R6tgoR13y38:assets%2Fdata%2Fpiehole%2Fpiehole.jsonR0i81700R1R38R3R237R6tgoR13y44:assets%2Fdata%2Forthogonal%2Forthogonal.jsonR0i127054R1R38R3R238R6tgoR13y32:assets%2Fdata%2Fdale%2Fdale.jsonR0i43441R1R38R3R239R6tgoR13y44:assets%2Fdata%2Fready-loud%2Fready-loud.jsonR0i34408R1R38R3R240R6tgoR13y46:assets%2Fdata%2Fgolden%2Fremaining-extras.jsonR0i2046R1R38R3R241R6tgoR13y45:assets%2Fdata%2Fgolden%2Fnotes%2Fawesome.jsonR0i431R1R38R3R242R6tgoR13y40:assets%2Fdata%2Fgolden%2Fnotes%2F3d.jsonR0i667R1R38R3R243R6tgoR13y43:assets%2Fdata%2Fgolden%2Fnotes%2Fbevel.jsonR0i178R1R38R3R244R6tgoR13y45:assets%2Fdata%2Fgolden%2Fnotes%2Fdefault.jsonR0i1028R1R38R3R245R6tgoR13y44:assets%2Fdata%2Fgolden%2Fnotes%2Fbready.jsonR0i374R1R38R3R246R6tgoR13y44:assets%2Fdata%2Fgolden%2Fmenu%2Fcredits.jsonR0i940R1R38R3R247R6tgoR13y50:assets%2Fdata%2Fgolden%2Fshaders%2FWavyShader.fragR0i1316R1R38R3R248R6tgoR13y52:assets%2Fdata%2Fgolden%2Fcharacters%2Fbf-bounds.jsonR0i22224R1R38R3R249R6tgoR13y57:assets%2Fdata%2Fgolden%2Fapplecore%2Fsecondary-bambi.jsonR0i46074R1R38R3R250R6tgoR13y50:assets%2Fdata%2Fgolden%2Fapplecore%2Fsubtitles.srtR0i1683R1R38R3R251R6tgoR13y78:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Funfair-expunged-forward.jsonR0i688R1R38R3R252R6tgoR13y66:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu-first.jsonR0i1784R1R38R3R253R6tgoR13y60:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu.jsonR0i819R1R38R3R254R6tgoR13y64:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu-sad.jsonR0i1363R1R38R3R255R6tgoR13y71:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fdisruption-bambi.jsonR0i1527R1R38R3R256R6tgoR13y44:assets%2Fdata%2Finspicable%2Finspicable.jsonR0i41973R1R38R3R257R6tgoR13y58:assets%2Fdata%2Ffresh-and-toasted%2Ffresh-and-toasted.jsonR0i51291R1R38R3R258R6tgoR13y42:assets%2Fdata%2Fwireframe%2Fwireframe.jsonR0i43383R1R38R3R259R6tgoR13y40:assets%2Fdata%2Funhinged%2Funhinged.jsonR0i42823R1R38R3R260R6tgoR13y42:assets%2Fdata%2Fgift-card%2Fgift-card.jsonR0i49357R1R38R3R261R6tgoR13y36:assets%2Fdata%2Fwheels%2Fwheels.jsonR0i33645R1R38R3R262R6tgoR13y36:assets%2Fdata%2FfreeplaySonglist.txtR0i10R1R38R3R263R6tgoR13y32:assets%2Fdata%2Fcell%2Fcell.jsonR0i54396R1R38R3R264R6tgoR13y28:assets%2Fdata%2Fcontrols.txtR0i324R1R38R3R265R6tgoR13y46:assets%2Fdata%2Ffrustration%2Ffrustration.jsonR0i79278R1R38R3R266R6tgoR13y50:assets%2Fdata%2Froupiniphobia%2Froupiniphobia.jsonR0i919707R1R38R3R267R6tgoR13y42:assets%2Fdata%2Fferocious%2Fferocious.jsonR0i238742R1R38R3R268R6tgoR13y52:assets%2Fdata%2Fthe-big-dingle%2Fthe-big-dingle.jsonR0i24539R1R38R3R269R6tgoR13y40:assets%2Fdata%2Ftantalum%2Ftantalum.jsonR0i47979R1R38R3R270R6tgoR13y32:assets%2Fdata%2Fmine%2Fmine.jsonR0i38921R1R38R3R271R6tgoR13y44:assets%2Fdata%2Fdisability%2Fdisability.jsonR0i58977R1R38R3R272R6tgoR13y34:assets%2Fdata%2Fhouse%2Fhouse.jsonR0i36148R1R38R3R273R6tgoR13y44:assets%2Fdata%2Fsugar-rush%2Fsugar-rush.jsonR0i32555R1R38R3R274R6tgoR13y40:assets%2Fdata%2Fdoughboy%2Fdoughboy.jsonR0i30739R1R38R3R275R6tgoR13y42:assets%2Fdata%2Fenforcers%2Fenforcers.jsonR0i20507R1R38R3R276R6tgoR13y40:assets%2Fdata%2Fsunshine%2Fsunshine.jsonR0i411384R1R38R3R277R6tgoR13y76:assets%2Fdata%2Fdave-x-bambi-shipping-cute%2Fdave-x-bambi-shipping-cute.jsonR0i22659R1R38R3R278R6tgoR13y50:assets%2Fdata%2Fbedtime-bumps%2Fbedtime-bumps.jsonR0i16241R1R38R3R279R6tgoR13y36:assets%2Fdata%2Forigin%2Forigin.jsonR0i15725R1R38R3R280R6tgoR13y48:assets%2Fdata%2Ftunnelvision%2Ftunnelvision.jsonR0i124949R1R38R3R281R6tgoR13y28:assets%2Fdata%2Fog%2Fog.jsonR0i124971R1R38R3R282R6tgoR13y38:assets%2Fdata%2Fsillier%2Fsillier.jsonR0i27687R1R38R3R283R6tgoR13y34:assets%2Fdata%2Fnutty%2Fnutty.jsonR0i35817R1R38R3R284R6tgoR13y44:assets%2Fdata%2Fdisruption%2Fdisruption.jsonR0i63010R1R38R3R285R6tgoR13y34:assets%2Fdata%2Ftheft%2Ftheft.jsonR0i24147R1R38R3R286R6tgoR13y48:assets%2Fdata%2Fthunderstorm%2Fthunderstorm.jsonR0i47233R1R38R3R287R6tgoR13y33:assets%2Fdata%2FcharacterList.txtR0i89R1R38R3R288R6tgoR13y38:assets%2Fdata%2Fpoopers%2Fpoopers.jsonR0i70218R1R38R3R289R6tgoR13y40:assets%2Fdata%2Fkeyboard%2Fkeyboard.jsonR0i37268R1R38R3R290R6tgoR13y38:assets%2Fdata%2Falgebra%2Falgebra.jsonR0i175346R1R38R3R291R6tgoR13y38:assets%2Fdata%2Fresumed%2Fresumed.jsonR0i43258R1R38R3R292R6tgoR13y40:assets%2Fdata%2Fbookworm%2Fbookworm.jsonR0i33174R1R38R3R293R6tgoR13y42:assets%2Fdata%2Fcollision%2Fcollision.jsonR0i77352R1R38R3R294R6tgoR13y40:assets%2Fdata%2Fcuberoot%2Fcuberoot.jsonR0i42421R1R38R3R295R6tgoR13y42:assets%2Fdata%2Fapplecore%2Fapplecore.jsonR0i77355R1R38R3R296R6tgoR13y52:assets%2Fdata%2Fcooking-lesson%2Fcooking-lesson.jsonR0i54523R1R38R3R297R6tgoR13y41:assets%2Fvideos%2Fgolden%2FPizzaVideo.mp4R0i18210431R1y6:BINARYR3R298goR13y50:assets%2Fvideos%2Fgolden%2Ftunnelvision%2Fmask.mp4R0i5769684R1R299R3R300goR13y55:assets%2Fvideos%2Fgolden%2Ftunnelvision%2Fred_blobs.mp4R0i11119130R1R299R3R301goR13y48:mods%2FintroMod%2F_append%2Fdata%2FintroText.txtR0i20R1R38R3R302goR13y17:mods%2Freadme.txtR0i90R1R38R3R303goR13y18:mods%2FmodList.txtR0i8R1R38R3R304goR13y21:do%20NOT%20readme.txtR0i4326R1R38R3R305R6tgoR13y13:changelog.txtR0i7730R1R38R3R306R6tgoR0i75864R1R209R210y29:__ASSET__assets_fonts_vcr_ttfR3y24:assets%2Ffonts%2Fvcr.ttfR6tgoR13y34:assets%2Ffonts%2Ffonts-go-here.txtR0zR1R38R3R309R6tgoR0i14656R1R209R210y31:__ASSET__assets_fonts_pixel_otfR3y26:assets%2Ffonts%2Fpixel.otfR6tgoR0i39706R1R2R3y28:flixel%2Fsounds%2Fflixel.mp3R5aR312y28:flixel%2Fsounds%2Fflixel.ogghR6tgoR0i2114R1R2R3y26:flixel%2Fsounds%2Fbeep.mp3R5aR314y26:flixel%2Fsounds%2Fbeep.ogghR6tgoR0i5794R1y5:SOUNDR3R315R5aR314R315hgoR0i33629R1R316R3R313R5aR312R313hgoR0i15744R1R209R210y35:__ASSET__flixel_fonts_nokiafc22_ttfR3y30:flixel%2Ffonts%2Fnokiafc22.ttfR6tgoR0i29724R1R209R210y36:__ASSET__flixel_fonts_monsterrat_ttfR3y31:flixel%2Ffonts%2Fmonsterrat.ttfR6tgoR13y33:flixel%2Fimages%2Fui%2Fbutton.pngR0i519R1R15R3R321R6tgoR13y36:flixel%2Fimages%2Flogo%2Fdefault.pngR0i3280R1R15R3R322R6tgoR13y44:flixel%2Fflixel-ui%2Fimg%2Fdropdown_mark.pngR0i86R1R15R3R323R6tgoR13y40:flixel%2Fflixel-ui%2Fimg%2Fplus_mark.pngR0i83R1R15R3R324R6tgoR13y36:flixel%2Fflixel-ui%2Fimg%2Fradio.pngR0i108R1R15R3R325R6tgoR13y48:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_left.pngR0i222R1R15R3R326R6tgoR13y42:flixel%2Fflixel-ui%2Fimg%2Fbutton_thin.pngR0i118R1R15R3R327R6tgoR13y34:flixel%2Fflixel-ui%2Fimg%2Ftab.pngR0i106R1R15R3R328R6tgoR13y41:flixel%2Fflixel-ui%2Fimg%2Ffinger_big.pngR0i1337R1R15R3R329R6tgoR13y36:flixel%2Fflixel-ui%2Fimg%2Finvis.pngR0i72R1R15R3R330R6tgoR13y43:flixel%2Fflixel-ui%2Fimg%2Fchrome_inset.pngR0i102R1R15R3R331R6tgoR13y44:flixel%2Fflixel-ui%2Fimg%2Ftooltip_arrow.pngR0i176R1R15R3R332R6tgoR13y49:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_right.pngR0i238R1R15R3R333R6tgoR13y40:flixel%2Fflixel-ui%2Fimg%2Fradio_dot.pngR0i81R1R15R3R334R6tgoR13y37:flixel%2Fflixel-ui%2Fimg%2Fchrome.pngR0i135R1R15R3R335R6tgoR13y40:flixel%2Fflixel-ui%2Fimg%2Fcheck_box.pngR0i101R1R15R3R336R6tgoR13y44:flixel%2Fflixel-ui%2Fimg%2Fbutton_toggle.pngR0i254R1R15R3R337R6tgoR13y46:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_up.pngR0i227R1R15R3R338R6tgoR13y41:flixel%2Fflixel-ui%2Fimg%2Fminus_mark.pngR0i77R1R15R3R339R6tgoR13y42:flixel%2Fflixel-ui%2Fimg%2Fchrome_flat.pngR0i124R1R15R3R340R6tgoR13y37:flixel%2Fflixel-ui%2Fimg%2Fswatch.pngR0i94R1R15R3R341R6tgoR13y43:flixel%2Fflixel-ui%2Fimg%2Fchrome_light.pngR0i118R1R15R3R342R6tgoR13y38:flixel%2Fflixel-ui%2Fimg%2Fhilight.pngR0i74R1R15R3R343R6tgoR13y41:flixel%2Fflixel-ui%2Fimg%2Fcheck_mark.pngR0i97R1R15R3R344R6tgoR13y39:flixel%2Fflixel-ui%2Fimg%2Ftab_back.pngR0i111R1R15R3R345R6tgoR13y34:flixel%2Fflixel-ui%2Fimg%2Fbox.pngR0i75R1R15R3R346R6tgoR13y43:flixel%2Fflixel-ui%2Fimg%2Ffinger_small.pngR0i157R1R15R3R347R6tgoR13y37:flixel%2Fflixel-ui%2Fimg%2Fbutton.pngR0i211R1R15R3R348R6tgoR13y48:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_down.pngR0i216R1R15R3R349R6tgoR13y44:flixel%2Fflixel-ui%2Fxml%2Fdefault_popup.xmlR0i1848R1R38R3R350R6tgoR13y53:flixel%2Fflixel-ui%2Fxml%2Fdefault_loading_screen.xmlR0i1953R1R38R3R351R6tgoR13y39:flixel%2Fflixel-ui%2Fxml%2Fdefaults.xmlR0i1263R1R38R3R352R6tgoR13y25:ui%2Fgolden-apple-tap.pngR0i38955R1R15R3R353goR13y21:ui%2Fpause-circle.pngR0i3711R1R15R3R354goR13y19:ui%2Fpause-bars.pngR0i2516R1R15R3R355goR13y25:ui%2Fstart-background.pngR0i1099420R1R15R3R356goR13y20:manifest.webmanifestR0i375R1R38R3R357gh\",\"rootPath\":null,\"version\":2,\"libraryArgs\":[],\"libraryType\":null}";
 	var manifest = lime_utils_AssetManifest.parse(data,ManifestResources.rootPath);
 	var library = lime_utils_AssetLibrary.fromManifest(manifest);
 	lime_utils_Assets.registerLibrary("default",library);
@@ -37759,7 +38117,7 @@ Note.prototype = $extend(flixel_FlxSprite.prototype,{
 });
 var OptionsMenu = function(TransIn,TransOut) {
 	this.lastTouch = false;
-	this.descriptions = ["Choose WASD or DFJK. Arrow keys work with either layout.","Allow empty presses without a miss penalty.","Move notes toward receptors at the bottom of the screen.","Show the accuracy percentage in the song HUD.","Adjust the note timing offset in milliseconds. Left / Right: 1 ms; Shift: 10 ms.","Change song speed and pitch. Left / Right: 0.05x. R: reset to 1.00x.","Choppy hold notes and fewer effects.","Give backgrounds depth. Wavy backgrounds become a room. Needs Super low quality off.","Touch the wide, fixed note row. Modcharts are off while this is on.","Potato sprites, fewer effects and simple holds. Reload a song after changing this.","Browse saved replays."];
+	this.descriptions = ["Choose WASD or DFJK. Arrow keys work with either layout.","Allow empty presses without a miss penalty.","Move notes toward receptors at the bottom of the screen.","Show the accuracy percentage in the song HUD.","Adjust the note timing offset in milliseconds. Left / Right: 1 ms; Shift: 10 ms.","Change song speed and pitch. Left / Right: 0.05x. R: reset to 1.00x.","Choppy hold notes and fewer effects.","Give backgrounds depth. Wavy backgrounds become a room. Needs Super low quality off.","Touch the wide, fixed note row. Modcharts are off while this is on.","Potato sprites, simple holds and visual effects off. Reload a song after changing this.","Short buzz for notes, longer buzz for holds. Needs vibration support.","Browse saved replays."];
 	this.labels = [];
 	this.selected = 0;
 	this.inputDelay = 0.25;
@@ -37789,7 +38147,7 @@ OptionsMenu.prototype = $extend(MusicBeatState.prototype,{
 		var _g1 = this.descriptions.length;
 		while(_g < _g1) {
 			var i = _g++;
-			var text = new flixel_text_FlxText(90,130 + i * 42,1100,"",30);
+			var text = new flixel_text_FlxText(90,130 + i * 39,1100,"",30);
 			text.setFormat("assets/fonts/" + "comic.ttf",30,-1,"left",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
 			this.labels.push(text);
 			this.add(text);
@@ -37802,12 +38160,23 @@ OptionsMenu.prototype = $extend(MusicBeatState.prototype,{
 	}
 	,refresh: function() {
 		this.lastTouch = GoldenMobileControls.enabled;
-		var values = ["Keys: " + (flixel_FlxG.save.data.dfjk ? "DFJK" : "WASD") + " + Arrow keys","Ghost tapping: " + (flixel_FlxG.save.data.newInput ? "On" : "Off"),"Scroll: " + (flixel_FlxG.save.data.downscroll ? "Downscroll" : "Upscroll"),"Accuracy: " + (flixel_FlxG.save.data.accuracyDisplay ? "On" : "Off"),"Offset: " + Conductor.validOffset(flixel_FlxG.save.data.offset) + " ms","Playback rate: " + GoldenPlayback.label(GoldenPlayback.setting()),"Super low quality: " + (GoldenQuality.potatoMode || GoldenQuality.savedSuperLow ? "On" : "Off"),"3D backgrounds: " + (GoldenQuality.depthBackgrounds ? "On" : "Off"),"Mobile controls: " + (GoldenMobileControls.enabled ? "On" : "Off"),"Potato mode: " + (GoldenQuality.potatoMode ? "On" : "Off"),"Load replays"];
+		var values = flixel_FlxG.save.data.dfjk ? "DFJK" : "WASD";
+		var values1 = flixel_FlxG.save.data.newInput ? "On" : "Off";
+		var values2 = flixel_FlxG.save.data.downscroll ? "Downscroll" : "Upscroll";
+		var values3 = flixel_FlxG.save.data.accuracyDisplay ? "On" : "Off";
+		var values4 = "Offset: " + Conductor.validOffset(flixel_FlxG.save.data.offset) + " ms";
+		var values5 = "Playback rate: " + GoldenPlayback.label(GoldenPlayback.setting());
+		var values6 = GoldenQuality.potatoMode || GoldenQuality.savedSuperLow;
+		var values7 = GoldenQuality.depthBackgrounds ? "On" : "Off";
+		var values8 = GoldenMobileControls.enabled ? "On" : "Off";
+		var values9 = GoldenQuality.potatoMode ? "On" : "Off";
+		var values10 = GoldenHaptics.supported() ? GoldenHaptics.enabled ? "On" : "Off" : "Unavailable";
+		var values11 = ["Keys: " + values + " + Arrow keys","Ghost tapping: " + values1,"Scroll: " + values2,"Accuracy: " + values3,values4,values5,"Super low quality: " + (values6 ? "On" : "Off"),"3D backgrounds: " + values7,"Mobile controls: " + values8,"Potato mode: " + values9,"Haptics: " + values10,"Load replays"];
 		var _g = 0;
 		var _g1 = this.labels.length;
 		while(_g < _g1) {
 			var i = _g++;
-			this.labels[i].set_text((i == this.selected ? ">  " : "    ") + values[i]);
+			this.labels[i].set_text((i == this.selected ? ">  " : "    ") + values11[i]);
 			this.labels[i].set_color(i == this.selected ? -154 : -1);
 			this.labels[i].set_alpha(i == this.selected ? 1 : 0.7);
 		}
@@ -37850,6 +38219,9 @@ OptionsMenu.prototype = $extend(MusicBeatState.prototype,{
 			GoldenQuality.togglePotatoMode();
 			break;
 		case 10:
+			GoldenHaptics.toggle();
+			break;
+		case 11:
 			return;
 		}
 		flixel_FlxG.save.flush();
@@ -37893,7 +38265,7 @@ OptionsMenu.prototype = $extend(MusicBeatState.prototype,{
 		} else if(PlayerSettings.player1.controls._rightP.check()) {
 			this.changeValue(1);
 		} else if(PlayerSettings.player1.controls._accept.check()) {
-			if(this.selected == 10) {
+			if(this.selected == 11) {
 				GoldenMenuTransition.go(function() {
 					return new LoadReplayState();
 				});
@@ -126558,7 +126930,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 170548;
+	this.version = 771698;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
@@ -180603,6 +180975,11 @@ GoldenExtrasMenu.songSelections = [0,0,0,0,0,0];
 openfl_display_Shader.__meta__ = { fields : { glProgram : { SuppressWarnings : ["checkstyle:Dynamic"]}}};
 GoldenFrustExtras.returnToExtras = false;
 GoldenFrustExtras.loadedLibrary = null;
+GoldenHaptics.enabled = true;
+GoldenHaptics.installed = false;
+GoldenHaptics.holdEnds = [-1.,-1.,-1.,-1.];
+GoldenHaptics.nextPulse = 0;
+GoldenHaptics.motorUntil = 0;
 GoldenInspicable.FORK_SCALE = .6;
 GoldenInspicable.FORK_SPAWN_LEAD = 1000;
 GoldenMenuTouch.worldX = 0;
@@ -180643,6 +181020,7 @@ GoldenPlayback.syncElapsed = 0;
 GoldenPotatoMode.installed = false;
 GoldenPotatoMode.nextSweep = 0;
 GoldenPotatoMode.lastMode = false;
+GoldenPotatoMode.cameraFlashes = [];
 GoldenQuality.potatoMode = false;
 GoldenQuality.savedSuperLow = false;
 GoldenQuality.depthBackgrounds = false;
