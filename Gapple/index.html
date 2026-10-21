@@ -91,7 +91,8 @@
         #world-joystick[hidden] { display:none; }
         #world-joystick { position:absolute;left:max(18px,env(safe-area-inset-left));bottom:max(18px,env(safe-area-inset-bottom));width:clamp(96px,22%,150px);aspect-ratio:1;border:2px solid #9cffafaa;border-radius:50%;background:#0b432b99;box-shadow:inset 0 0 20px #0006;pointer-events:auto;touch-action:none;user-select:none;-webkit-user-select:none; }
         #world-joystick-thumb { position:absolute;left:50%;top:50%;width:42%;height:42%;border-radius:50%;background:#45b969dd;border:2px solid #c4ffcf;transform:translate(-50%,-50%);pointer-events:none; }
-        #tap-feedback { position:fixed;inset:0;z-index:1000;pointer-events:none;overflow:hidden; }
+        #tap-feedback { position:fixed;inset:0;z-index:1000;pointer-events:none!important;overflow:hidden; }
+        #tap-feedback * { pointer-events:none!important; }
         .golden-apple-tap { position:absolute;left:0;top:0;width:32px;height:32px;object-fit:contain;image-rendering:pixelated;pointer-events:none;user-select:none;-webkit-user-select:none;transform-origin:center; }
         @keyframes green-button-bars { from { transform:translate3d(-24px,0,0); } to { transform:translate3d(24px,0,0); } }
         @media (prefers-reduced-motion:reduce) {
@@ -213,6 +214,7 @@
         const tapFeedback = document.createElement('div');
         tapFeedback.id = 'tap-feedback';
         tapFeedback.setAttribute('aria-hidden', 'true');
+        tapFeedback.setAttribute('inert', '');
         document.body.appendChild(tapFeedback);
         function placeTapFeedback() {
             const parent = fullscreenElement() || document.body;

@@ -20743,6 +20743,7 @@ var GoldenExtrasMenu = function(category) {
 	this.pendingAudio = false;
 	this.previewGeneration = 0;
 	this.delay = .25;
+	this.rowButtons = [];
 	this.categoryButtons = [];
 	MusicBeatState.call(this);
 	if(category >= 0) {
@@ -20755,6 +20756,12 @@ GoldenExtrasMenu.__super__ = MusicBeatState;
 GoldenExtrasMenu.prototype = $extend(MusicBeatState.prototype,{
 	categories: null
 	,categoryButtons: null
+	,rowButtons: null
+	,playButton: null
+	,previewButton: null
+	,backButton: null
+	,categoryPrevious: null
+	,categoryNext: null
 	,delay: null
 	,content: null
 	,preview: null
@@ -20788,6 +20795,13 @@ GoldenExtrasMenu.prototype = $extend(MusicBeatState.prototype,{
 		if(GoldenExtrasMenu.categoryIndex < 0 || GoldenExtrasMenu.categoryIndex >= this.categories.length) {
 			GoldenExtrasMenu.categoryIndex = 0;
 		}
+		var _g = 0;
+		var _g1 = this.categories.length;
+		while(_g < _g1) {
+			var i = _g++;
+			GoldenExtrasMenu.songSelections[i] = Math.max(0,Math.min(GoldenExtrasMenu.songSelections[i],this.categories[i].songs.length - 1)) | 0;
+		}
+		this.add(new GoldenMenuBackground(false,-15712985));
 		this.render();
 		flixel_FlxG.sound.playMusic(Paths.getPath("music/" + "golden/menu/play" + "." + "mp3","MUSIC",null),.6);
 	}
@@ -20851,6 +20865,43 @@ GoldenExtrasMenu.prototype = $extend(MusicBeatState.prototype,{
 			flixel_FlxG.sound.music.set_volume(.6);
 		}
 	}
+	,categoryName: function() {
+		if(this.categories[GoldenExtrasMenu.categoryIndex].title != null) {
+			return this.categories[GoldenExtrasMenu.categoryIndex].title;
+		}
+		switch(Std.string(this.categories[GoldenExtrasMenu.categoryIndex].id)) {
+		case "bus":
+			return "Roupiniphobia & Mine";
+		case "frust":
+			return "Will You Kill Out of Frustration";
+		case "games":
+			return "Glitched Levels";
+		case "ortho":
+			return "Ortho";
+		case "secret":
+			return "Secret Songs";
+		case "test":
+			return "Sound Test";
+		default:
+			return "Extras";
+		}
+	}
+	,panel: function(x,y,width,height,color,opacity) {
+		if(opacity == null) {
+			opacity = 1;
+		}
+		var item = new flixel_FlxSprite(x,y).makeGraphic(width,height,color);
+		item.set_alpha(opacity);
+		this.content.add(item);
+		return item;
+	}
+	,button: function(x,y,width,text) {
+		var item = this.panel(x,y,width,52,-14653383);
+		this.panel(x,y,width,3,-5903240);
+		var caption = this.label(x,y + 9,width,text,25);
+		caption.set_alignment("center");
+		return item;
+	}
 	,render: function(direction) {
 		if(direction == null) {
 			direction = 0;
@@ -20869,58 +20920,94 @@ GoldenExtrasMenu.prototype = $extend(MusicBeatState.prototype,{
 			this.content.destroy();
 		}
 		this.categoryButtons = [];
+		this.rowButtons = [];
 		this.content = new flixel_group_FlxTypedGroup();
 		this.add(this.content);
 		this.previewLabel = null;
-		this.content.add(new flixel_FlxSprite().makeGraphic(flixel_FlxG.width,flixel_FlxG.height,-16777216));
+		this.panel(0,0,1280,720,-16377326,.55);
+		this.backButton = this.button(28,20,122,"< Back");
+		var heading = this.label(165,23,950,"SECRETWAY  /  SONGS",30,-793207);
+		this.label(1100,28,160,GoldenExtrasMenu.categoryIndex + 1 + " / " + this.categories.length,22,-5256787);
+		this.panel(24,87,1232,122,-16245741,.88);
+		this.categoryPrevious = this.button(38,121,62,"<");
+		this.categoryNext = this.button(1180,121,62,">");
+		var _g = -2;
+		while(_g < 3) {
+			var distance = _g++;
+			var i = (GoldenExtrasMenu.categoryIndex + distance + this.categories.length) % this.categories.length;
+			var width = distance == 0 ? 180 : 132;
+			var poster = this.image(this.categories[i].id,640 + distance * 212 - width / 2,96,width);
+			if(poster.get_height() > 94) {
+				poster.setGraphicSize(0,94);
+				poster.updateHitbox();
+			}
+			poster.set_x(640 + distance * 212 - poster.get_width() / 2);
+			poster.set_y(145 - poster.get_height() / 2);
+			poster.ID = i;
+			this.categoryButtons.push(poster);
+			poster.set_alpha(distance == 0 ? 1 : .4);
+			if(distance == 0) {
+				this.panel(548,197,184,4,-1513861);
+			}
+		}
 		var list = this.songs();
 		var index = GoldenExtrasMenu.songSelections[GoldenExtrasMenu.categoryIndex];
 		var song = this.selected();
-		var _g = 0;
-		var _g1 = list.length;
+		this.panel(24,223,766,386,-16245741,.94);
+		this.label(43,231,660,this.categoryName(),22,-2106224);
+		var count = this.label(689,232,80,index + 1 + " / " + list.length,20,-3745346);
+		count.set_alignment("right");
+		var first = Math.max(0,Math.min(index - 2,list.length - 5)) | 0;
+		var _g = first;
+		var _g1 = Math.min(list.length,first + 5) | 0;
 		while(_g < _g1) {
 			var i = _g++;
-			var distance = i - index;
-			if(Math.abs(distance) > 3) {
-				continue;
-			}
-			var targetX = (distance + 5) * 15.0;
-			var targetY = distance * 124 + flixel_FlxG.height * .45;
-			var row = new GoldenSongAlphabet(targetX + direction * 15,targetY + direction * 124,StringTools.replace(Std.string(list[i].title),"-"," "),64);
-			row.ID = i;
-			var opacity = distance == 0 ? 1.0 : .32;
-			row.set_alpha(opacity);
-			this.content.add(row);
-			if(direction != 0) {
-				flixel_tweens_FlxTween.tween(row,{ x : targetX, y : targetY},.16,{ ease : flixel_tweens_FlxEase.quadOut});
+			var y = 274 + (i - first) * 64.0;
+			var rowBackground = this.panel(40,y,728,58,i == index ? -13734858 : -15455459,i == index ? 1 : .7);
+			rowBackground.ID = i;
+			this.rowButtons.push(rowBackground);
+			if(i == index) {
+				this.panel(40,y,5,58,-1119357);
 			}
 			if(list[i].icon != null) {
-				var icon = this.image(list[i].icon,Math.min(1130,targetX + row.textWidth + 24) + direction * 15,targetY + direction * 124,82);
-				icon.set_alpha(opacity);
-				if(direction != 0) {
-					flixel_tweens_FlxTween.tween(icon,{ x : Math.min(1130,targetX + row.textWidth + 24), y : targetY},.16,{ ease : flixel_tweens_FlxEase.quadOut});
-				}
+				var icon = this.image(list[i].icon,53,y + 3,52);
+				icon.set_alpha(i == index ? 1 : .65);
+			} else {
+				this.label(56,y + 11,50,"♪",28,-5256787);
+			}
+			var title = StringTools.replace(Std.string(list[i].title),"-"," ");
+			var size = Math.min(38,615 / Math.max(1,title.length * .72));
+			var row = new GoldenSongAlphabet(121 + direction * 12,y + 9,title,size);
+			row.ID = i;
+			row.set_alpha(i == index ? 1 : .55);
+			this.content.add(row);
+			if(direction != 0) {
+				flixel_tweens_FlxTween.tween(row,{ x : 121},.16,{ ease : flixel_tweens_FlxEase.quadOut});
 			}
 		}
-		this.content.add(new flixel_FlxSprite().makeGraphic(flixel_FlxG.width,180,-16777216));
-		var _g = 0;
-		var _g1 = this.categories.length;
-		while(_g < _g1) {
-			var i = _g++;
-			var spacing = Math.min(195,(flixel_FlxG.width - 100) / this.categories.length);
-			var width = Math.min(165,spacing - 25) | 0;
-			var x = (flixel_FlxG.width - this.categories.length * spacing) / 2 + i * spacing + (spacing - width) / 2;
-			var poster = this.image(this.categories[i].id,x,12,width);
-			poster.ID = i;
-			this.categoryButtons.push(poster);
-			poster.set_alpha(i == GoldenExtrasMenu.categoryIndex ? 1 : .3);
-			if(i == GoldenExtrasMenu.categoryIndex) {
-				this.content.add(new flixel_FlxSprite(x,169).makeGraphic(width,3,-1));
-			}
+		if(list.length > 5) {
+			this.panel(778,274,3,312,-14399438);
+			this.panel(777,274 + 280 * index / (list.length - 1),5,32,-2695293);
 		}
-		this.content.add(new flixel_FlxSprite(0,590).makeGraphic(flixel_FlxG.width,130,-16777216));
-		this.previewLabel = this.label(40,605,1200,song.preview ? this.hint() : "No audio available",20);
-		this.label(40,650,1200,GoldenMobileControls.enabled ? "Swipe up / down: Song     Swipe left / right: Category" : "Up / Down: song     Left / Right: category     Esc: overworld",18,-5592406);
+		this.panel(810,223,446,386,-16245741,.94);
+		if(song.icon != null) {
+			var portrait = this.image(song.icon,969,240,124);
+			portrait.set_x(1033 - portrait.get_width() / 2);
+		}
+		var title = this.label(831,374,404,StringTools.replace(Std.string(song.title),"-"," "),29,-726098);
+		title.set_alignment("center");
+		var bpm = song.bpm == null ? "" : Std.string(song.bpm) + " BPM";
+		var info = this.label(831,420,404,bpm,20,-5519699);
+		info.set_alignment("center");
+		var composers = song.credits == null ? null : Reflect.field(song.credits,"composer");
+		var credit = composers == null || composers.length == 0 ? "" : composers.join(", ");
+		var by = this.label(838,453,390,credit,18,-3548733);
+		by.set_alignment("center");
+		this.playButton = this.button(830,534,190,GoldenFrustExtras.supports(song.id) ? "PLAY" : "PREVIEW");
+		this.previewButton = this.button(1039,534,196,"PREVIEW");
+		this.previewButton.set_alpha(song.preview ? 1 : .35);
+		this.previewLabel = this.label(40,627,1200,song.preview ? this.hint() : "No audio available",20,-1251153);
+		this.label(40,676,1200,GoldenMobileControls.enabled ? "Swipe up / down: Song     Swipe left / right: Category" : "Up / Down: Song     Left / Right: Category     Esc: Overworld",18,-5256787);
 	}
 	,togglePreview: function() {
 		var _gthis = this;
@@ -20971,6 +21058,12 @@ GoldenExtrasMenu.prototype = $extend(MusicBeatState.prototype,{
 	,update: function(elapsed) {
 		MusicBeatState.prototype.update.call(this,elapsed);
 		this.delay -= elapsed;
+		if(this.preview != null && this.preview._channel != null && this.preview._time >= 30000) {
+			this.stopPreview();
+			if(this.previewLabel != null) {
+				this.previewLabel.set_text(this.hint());
+			}
+		}
 		if(this.leaving || this.delay > 0 || GoldenMenuTransition.busy) {
 			return;
 		}
@@ -26696,6 +26789,18 @@ GoldenMenuTouch.tap = function(state,x,y) {
 		}
 	} else if(((state) instanceof GoldenExtrasMenu)) {
 		var s = state;
+		if(GoldenMenuTouch.hit(s.backButton,x,y)) {
+			GoldenMobileControls.menuTap(27);
+			return;
+		}
+		if(GoldenMenuTouch.hit(s.categoryPrevious,x,y)) {
+			GoldenMobileControls.menuTap(37);
+			return;
+		}
+		if(GoldenMenuTouch.hit(s.categoryNext,x,y)) {
+			GoldenMobileControls.menuTap(39);
+			return;
+		}
 		var _g = 0;
 		var _g1 = s.categoryButtons;
 		while(_g < _g1.length) {
@@ -26708,31 +26813,28 @@ GoldenMenuTouch.tap = function(state,x,y) {
 				return;
 			}
 		}
-		if(GoldenMenuTouch.hit(s.previewLabel,x,y)) {
+		if(GoldenMenuTouch.hit(s.previewLabel,x,y) || GoldenMenuTouch.hit(s.previewButton,x,y)) {
 			GoldenMobileControls.menuTap(32);
 			return;
 		}
-		var p = GoldenMenuTouch.localPoint(flixel_FlxG.camera,x,y);
-		if(p.y < 180 || p.y > 590) {
+		if(GoldenMenuTouch.hit(s.playButton,x,y)) {
+			GoldenMobileControls.menuTap(13);
 			return;
 		}
 		var _g = 0;
-		var _g1 = s.content.members;
+		var _g1 = s.rowButtons;
 		while(_g < _g1.length) {
-			var item = _g1[_g];
+			var row = _g1[_g];
 			++_g;
-			if(((item) instanceof GoldenSongAlphabet)) {
-				var row = item;
-				if(p.x >= row.x && p.x <= flixel_FlxG.width - 25 && p.y >= row.y && p.y <= row.y + 110) {
-					if(GoldenExtrasMenu.songSelections[GoldenExtrasMenu.categoryIndex] == row.ID) {
-						GoldenMobileControls.menuTap(13);
-					} else {
-						s.stopPreview();
-						GoldenExtrasMenu.songSelections[GoldenExtrasMenu.categoryIndex] = row.ID;
-						s.render();
-					}
-					return;
+			if(GoldenMenuTouch.hit(row,x,y)) {
+				if(GoldenExtrasMenu.songSelections[GoldenExtrasMenu.categoryIndex] == row.ID) {
+					GoldenMobileControls.menuTap(13);
+				} else {
+					s.stopPreview();
+					GoldenExtrasMenu.songSelections[GoldenExtrasMenu.categoryIndex] = row.ID;
+					s.render();
 				}
+				return;
 			}
 		}
 	} else if(((state) instanceof GoldenCreditsState)) {
@@ -27431,6 +27533,11 @@ GoldenMobileControls.install = function() {
 			};
 		})());
 	}
+	window.document.addEventListener("pointerdown",GoldenMobileControls.beginStrum,true);
+	window.document.addEventListener("pointermove",GoldenMobileControls.move,true);
+	window.document.addEventListener("pointerup",GoldenMobileControls.end,true);
+	window.document.addEventListener("pointercancel",GoldenMobileControls.end,true);
+	window.document.addEventListener("lostpointercapture",GoldenMobileControls.end,true);
 	window.addEventListener("blur",function(_) {
 		GoldenMobileControls.clear();
 	});
@@ -27446,6 +27553,36 @@ GoldenMobileControls.install = function() {
 	flixel_FlxG.signals.postUpdate.add(GoldenMobileControls.refresh);
 	flixel_FlxG.signals.postDraw.add(GoldenMobileControls.syncStrumButtons);
 	GoldenMobileControls.refresh();
+};
+GoldenMobileControls.beginStrum = function(event) {
+	if(!GoldenMobileControls.enabled || !GoldenMobileControls.strumButtons || GoldenMobileControls.pointers.h.hasOwnProperty(event.pointerId) || !((flixel_FlxG.game._state) instanceof PlayState) || event.pointerType == "mouse" && event.button != 0) {
+		return;
+	}
+	var state = flixel_FlxG.game._state;
+	if(state.paused || state.subState != null || state.startingSong || state.inCutscene || !state.generatedMusic) {
+		return;
+	}
+	var target = event.target;
+	var actionButton = target == null ? null : target.closest("button");
+	if(actionButton != null && !actionButton.hasAttribute("data-lane")) {
+		return;
+	}
+	var code = GoldenMobileControls.strumCodeAt(event.clientX,event.clientY);
+	if(code < 0) {
+		return;
+	}
+	event.preventDefault();
+	GoldenMobileControls.focusGame();
+	if(GoldenMobileControls.gameCanvas != null) {
+		try {
+			GoldenMobileControls.gameCanvas.setPointerCapture(event.pointerId);
+		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
+		}
+	}
+	GoldenMobileControls.holdLanes.h[event.pointerId] = true;
+	GoldenMobileControls.pointers.h[event.pointerId] = code;
+	GoldenMobileControls.press(code);
 };
 GoldenMobileControls.applyEnabled = function() {
 	GoldenMobileControls.controls.hidden = !GoldenMobileControls.enabled;
@@ -27690,16 +27827,18 @@ GoldenMobileControls.syncStrumButtons = function() {
 		var lane = _g++;
 		var button = GoldenMobileControls.laneButtons[lane];
 		var receptor = state.controlledStrum(lane);
-		button.hidden = true;
 		if(state.paused || state.startingSong || state.inCutscene || !state.generatedMusic || receptor == null || !receptor.exists || !receptor.visible || receptor.alpha <= .01 || receptor.frame == null) {
+			button.hidden = true;
 			continue;
 		}
 		var camera = receptor.get_cameras().length > 0 ? receptor.get_cameras()[0] : state.camHUD;
 		if(camera == null || camera.canvas == null || !camera.visible || camera.alpha <= .01) {
+			button.hidden = true;
 			continue;
 		}
 		var idle = receptor.animation._animations.h["static"];
 		if(idle == null || idle.frames.length == 0) {
+			button.hidden = true;
 			continue;
 		}
 		var base = receptor.frames.frames[idle.frames[0]].sourceSize;
@@ -27722,9 +27861,11 @@ GoldenMobileControls.syncStrumButtons = function() {
 		var width = Math.max(44,2 * (Math.abs(horizontal.x - center.x) + Math.abs(vertical.x - center.x)) * sx);
 		var height = Math.max(44,2 * (Math.abs(horizontal.y - center.y) + Math.abs(vertical.y - center.y)) * sy);
 		if(!isFinite(x) || !isFinite(y) || !isFinite(width) || !isFinite(height)) {
+			button.hidden = true;
 			continue;
 		}
 		if(x + width * .5 < frame.left || x - width * .5 > frame.right || y + height * .5 < frame.top || y - height * .5 > frame.bottom) {
+			button.hidden = true;
 			continue;
 		}
 		button.style.left = x - frame.left - width * .5 + "px";
@@ -33809,7 +33950,7 @@ GoldenTouchLayout.prototype = {
 				continue;
 			}
 			var base = s.frames.frames[idle.frames[0]].sourceSize;
-			var centerX = flixel_FlxG.width * (.14 + i % 4 * .24);
+			var centerX = flixel_FlxG.width * (.20 + i % 4 * .20);
 			var centerY = flixel_FlxG.save.data.downscroll ? flixel_FlxG.height - 105 : 105;
 			s.setPosition(centerX - base.x * size * .5,centerY - base.y * size * .5);
 			GoldenNoteSkin.alignStrum(s);
@@ -126401,7 +126542,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 73442;
+	this.version = 410445;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
