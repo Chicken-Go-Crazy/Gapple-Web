@@ -25629,7 +25629,7 @@ GoldenHud.update = function(p,elapsed) {
 };
 var GoldenInput = function(state) {
 	this.events = [];
-	this.keys = new haxe_ds_IntMap();
+	this.keys = new haxe_ds_StringMap();
 	this.held = [false,false,false,false];
 	this.state = state;
 	window.addEventListener("keydown",$bind(this,this.onBrowserDown),true);
@@ -25704,14 +25704,14 @@ GoldenInput.prototype = {
 			return;
 		}
 		event.preventDefault();
-		this.pressKey(code,lane);
+		this.pressKey("key:" + code,lane);
 	}
 	,onBrowserUp: function(event) {
 		var code = this.browserCode(event);
-		if(this.keys.h.hasOwnProperty(code)) {
+		if(Object.prototype.hasOwnProperty.call(this.keys.h,"key:" + code)) {
 			event.preventDefault();
 		}
-		this.releaseKey(code);
+		this.releaseKey("key:" + code);
 	}
 	,onBrowserBlur: function(event) {
 		this.clear();
@@ -25738,32 +25738,42 @@ GoldenInput.prototype = {
 		}
 	}
 	,onDown: function(event) {
-		this.pressKey(event.keyCode,this.laneFor(event.keyCode));
+		this.pressKey("key:" + event.keyCode,this.laneFor(event.keyCode));
 	}
-	,pressKey: function(source,lane) {
-		if(lane < 0 || this.keys.h.hasOwnProperty(source) || !this.playable()) {
+	,pressKey: function(source,lane,retrigger) {
+		if(retrigger == null) {
+			retrigger = false;
+		}
+		if(lane < 0 || Object.prototype.hasOwnProperty.call(this.keys.h,source) || !this.playable()) {
 			return;
 		}
 		this.keys.h[source] = lane;
-		if(!this.held[lane]) {
+		if(retrigger || !this.held[lane]) {
 			this.events.push({ lane : lane, time : GoldenInput.audioTime(), down : true});
 		}
 		this.held[lane] = true;
 	}
 	,onUp: function(event) {
-		this.releaseKey(event.keyCode);
+		this.releaseKey("key:" + event.keyCode);
 	}
 	,releaseKey: function(source) {
-		if(!this.keys.h.hasOwnProperty(source)) {
+		if(!Object.prototype.hasOwnProperty.call(this.keys.h,source)) {
 			return;
 		}
 		var lane = this.keys.h[source];
-		this.keys.remove(source);
+		var _this = this.keys;
+		if(Object.prototype.hasOwnProperty.call(_this.h,source)) {
+			delete(_this.h[source]);
+		}
 		var stillHeld = false;
-		var other = this.keys.iterator();
-		while(other.hasNext()) {
-			var other1 = other.next();
-			if(other1 == lane) {
+		var h = this.keys.h;
+		var other_h = h;
+		var other_keys = Object.keys(h);
+		var other_length = other_keys.length;
+		var other_current = 0;
+		while(other_current < other_length) {
+			var other = other_h[other_keys[other_current++]];
+			if(other == lane) {
 				stillHeld = true;
 			}
 		}
@@ -25780,18 +25790,30 @@ GoldenInput.prototype = {
 		if(lane < 0) {
 			return;
 		}
-		var source = -1000 - code;
+		var source = "touch-key:" + code;
 		if(down) {
 			this.pressKey(source,lane);
 		} else {
 			this.releaseKey(source);
 		}
 	}
-	,touchTap: function(code) {
-		var lane = this.laneFor(code);
-		if(lane >= 0 && this.playable()) {
-			this.events.push({ lane : lane, time : GoldenInput.audioTime(), down : true});
+	,touchPointer: function(pointer,code,down) {
+		var source = "finger:" + pointer;
+		if(!down) {
+			this.releaseKey(source);
+			return;
 		}
+		var lane = this.laneFor(code);
+		if(lane < 0 || !this.playable()) {
+			return;
+		}
+		if(Object.prototype.hasOwnProperty.call(this.keys.h,source)) {
+			if(this.keys.h[source] == lane) {
+				return;
+			}
+			this.releaseKey(source);
+		}
+		this.pressKey(source,lane,true);
 	}
 	,onBlur: function(event) {
 		this.clear();
@@ -25803,7 +25825,7 @@ GoldenInput.prototype = {
 	}
 	,clear: function() {
 		GoldenHaptics.stop();
-		this.keys.h = { };
+		this.keys.h = Object.create(null);
 		this.held = [false,false,false,false];
 		this.events = [];
 	}
@@ -27720,6 +27742,7 @@ GoldenMobileControls.install = function() {
 	window.document.getElementById("touch-toggle").addEventListener("click",function(_) {
 		GoldenMobileControls.setEnabled(!GoldenMobileControls.enabled);
 	});
+	GoldenMobileControls.nativeTouch = $global.navigator.maxTouchPoints > 0 && 'ontouchstart' in window;
 	GoldenMobileControls.applyEnabled();
 	var _g = 0;
 	var _g1 = GoldenMobileControls.controls.querySelectorAll("button[data-key]");
@@ -27729,6 +27752,9 @@ GoldenMobileControls.install = function() {
 		var element = [button];
 		element[0].addEventListener("pointerdown",(function(element) {
 			return function(event) {
+				if(element[0].hasAttribute("data-lane") && GoldenMobileControls.strumButtons) {
+					return;
+				}
 				event.preventDefault();
 				if(event.pointerType == "mouse" && event.button != 0) {
 					return;
@@ -27761,6 +27787,12 @@ GoldenMobileControls.install = function() {
 			};
 		})());
 	}
+	if(GoldenMobileControls.nativeTouch) {
+		window.document.addEventListener("touchstart",GoldenMobileControls.touchStart,{ capture : true, passive : false});
+		window.document.addEventListener("touchmove",GoldenMobileControls.touchMove,{ capture : true, passive : false});
+		window.document.addEventListener("touchend",GoldenMobileControls.touchEnd,{ capture : true, passive : false});
+		window.document.addEventListener("touchcancel",GoldenMobileControls.touchEnd,{ capture : true, passive : false});
+	}
 	window.document.addEventListener("pointerdown",GoldenMobileControls.beginStrum,true);
 	window.document.addEventListener("pointermove",GoldenMobileControls.move,true);
 	window.document.addEventListener("pointerup",GoldenMobileControls.end,true);
@@ -27782,28 +27814,134 @@ GoldenMobileControls.install = function() {
 	flixel_FlxG.signals.postDraw.add(GoldenMobileControls.syncStrumButtons);
 	GoldenMobileControls.refresh();
 };
-GoldenMobileControls.beginStrum = function(event) {
-	if(!GoldenMobileControls.enabled || !GoldenMobileControls.strumButtons || GoldenMobileControls.pointers.h.hasOwnProperty(event.pointerId) || !((flixel_FlxG.game._state) instanceof PlayState) || event.pointerType == "mouse" && event.button != 0) {
+GoldenMobileControls.playableStrums = function() {
+	if(!GoldenMobileControls.enabled || !GoldenMobileControls.strumButtons || !((flixel_FlxG.game._state) instanceof PlayState)) {
+		return false;
+	}
+	var state = flixel_FlxG.game._state;
+	if(!state.paused && state.subState == null && !state.startingSong && !state.inCutscene) {
+		return state.generatedMusic;
+	} else {
+		return false;
+	}
+};
+GoldenMobileControls.fingerEdge = function(id,code,down) {
+	if(!((flixel_FlxG.game._state) instanceof PlayState)) {
 		return;
 	}
 	var state = flixel_FlxG.game._state;
-	if(state.paused || state.subState != null || state.startingSong || state.inCutscene || !state.generatedMusic) {
-		return;
+	if(state.goldenInput != null) {
+		state.goldenInput.touchPointer(id,code,down);
 	}
-	var target = event.target;
+};
+GoldenMobileControls.paintFingerLane = function(code) {
+	var down = false;
+	var id = GoldenMobileControls.pointers.keys();
+	while(id.hasNext()) {
+		var id1 = id.next();
+		if(GoldenMobileControls.holdLanes.h[id1] == true && GoldenMobileControls.pointers.h[id1] == code) {
+			down = true;
+			break;
+		}
+	}
+	GoldenMobileControls.paint(code,down);
+};
+GoldenMobileControls.startFinger = function(id,x,y,target) {
+	if(GoldenMobileControls.pointers.h.hasOwnProperty(id) || !GoldenMobileControls.playableStrums()) {
+		return false;
+	}
 	var actionButton = target == null ? null : target.closest("button");
 	if(actionButton != null && !actionButton.hasAttribute("data-lane")) {
+		return false;
+	}
+	var code = GoldenMobileControls.strumCodeAt(x,y);
+	if(code < 0) {
+		return false;
+	}
+	GoldenMobileControls.holdLanes.h[id] = true;
+	GoldenMobileControls.pointers.h[id] = code;
+	GoldenMobileControls.fingerEdge(id,code,true);
+	GoldenMobileControls.paint(code,true);
+	return true;
+};
+GoldenMobileControls.moveFinger = function(id,x,y) {
+	if(!GoldenMobileControls.pointers.h.hasOwnProperty(id) || GoldenMobileControls.holdLanes.h[id] != true || !GoldenMobileControls.playableStrums()) {
 		return;
 	}
-	var code = GoldenMobileControls.strumCodeAt(event.clientX,event.clientY);
-	if(code < 0) {
-		if(event.pointerType != "touch" || GoldenMobileControls.overlay == null) {
-			return;
+	var previous = GoldenMobileControls.pointers.h[id];
+	var code = GoldenMobileControls.strumCodeAt(x,y,24,previous);
+	if(code < 0 || previous == code) {
+		return;
+	}
+	GoldenMobileControls.pointers.h[id] = code;
+	GoldenMobileControls.fingerEdge(id,code,true);
+	GoldenMobileControls.paintFingerLane(previous);
+	GoldenMobileControls.paint(code,true);
+};
+GoldenMobileControls.endFinger = function(id) {
+	if(!GoldenMobileControls.pointers.h.hasOwnProperty(id)) {
+		return;
+	}
+	var code = GoldenMobileControls.pointers.h[id];
+	GoldenMobileControls.fingerEdge(id,code,false);
+	GoldenMobileControls.pointers.remove(id);
+	GoldenMobileControls.holdLanes.remove(id);
+	GoldenMobileControls.paintFingerLane(code);
+};
+GoldenMobileControls.touchStart = function(event) {
+	var handled = false;
+	var _g = 0;
+	var _g1 = event.changedTouches.length;
+	while(_g < _g1) {
+		var i = _g++;
+		var touch = event.changedTouches.item(i);
+		if(GoldenMobileControls.startFinger(268435456 + touch.identifier,touch.clientX,touch.clientY,touch.target)) {
+			handled = true;
 		}
-		var frame = GoldenMobileControls.overlay.getBoundingClientRect();
-		if(event.clientX < frame.left || event.clientX > frame.right || event.clientY < frame.top || event.clientY > frame.bottom) {
-			return;
+	}
+	if(handled && event.cancelable) {
+		event.preventDefault();
+	}
+};
+GoldenMobileControls.touchMove = function(event) {
+	var handled = false;
+	var _g = 0;
+	var _g1 = event.changedTouches.length;
+	while(_g < _g1) {
+		var i = _g++;
+		var touch = event.changedTouches.item(i);
+		var id = 268435456 + touch.identifier;
+		if(GoldenMobileControls.holdLanes.h[id] == true) {
+			GoldenMobileControls.moveFinger(id,touch.clientX,touch.clientY);
+			handled = true;
 		}
+	}
+	if(handled && event.cancelable) {
+		event.preventDefault();
+	}
+};
+GoldenMobileControls.touchEnd = function(event) {
+	var handled = false;
+	var _g = 0;
+	var _g1 = event.changedTouches.length;
+	while(_g < _g1) {
+		var i = _g++;
+		var id = 268435456 + event.changedTouches.item(i).identifier;
+		if(GoldenMobileControls.holdLanes.h[id] == true) {
+			GoldenMobileControls.endFinger(id);
+			handled = true;
+		}
+	}
+	if(handled && event.cancelable) {
+		event.preventDefault();
+	}
+};
+GoldenMobileControls.beginStrum = function(event) {
+	if(GoldenMobileControls.nativeTouch && event.pointerType == "touch" || event.pointerType == "mouse" && event.button != 0) {
+		return;
+	}
+	if(!GoldenMobileControls.startFinger(event.pointerId,event.clientX,event.clientY,event.target)) {
+		return;
 	}
 	event.preventDefault();
 	if(GoldenMobileControls.gameCanvas != null) {
@@ -27813,9 +27951,6 @@ GoldenMobileControls.beginStrum = function(event) {
 			haxe_NativeStackTrace.lastError = _g;
 		}
 	}
-	GoldenMobileControls.holdLanes.h[event.pointerId] = true;
-	GoldenMobileControls.pointers.h[event.pointerId] = code;
-	GoldenMobileControls.press(code);
 };
 GoldenMobileControls.applyEnabled = function() {
 	GoldenMobileControls.controls.hidden = !GoldenMobileControls.enabled;
@@ -27890,11 +28025,6 @@ GoldenMobileControls.press = function(code) {
 	GoldenMobileControls.counts.h[code] = count + 1;
 	if(count == 0) {
 		GoldenMobileControls.dispatch(code,true);
-	} else if(GoldenMobileControls.strumButtons && [37,40,38,39].indexOf(code) >= 0 && ((flixel_FlxG.game._state) instanceof PlayState)) {
-		var state = flixel_FlxG.game._state;
-		if(state.goldenInput != null) {
-			state.goldenInput.touchTap(code);
-		}
 	}
 	GoldenMobileControls.paint(code,true);
 };
@@ -27919,28 +28049,25 @@ GoldenMobileControls.paint = function(code,down) {
 	}
 };
 GoldenMobileControls.move = function(event) {
+	if(GoldenMobileControls.nativeTouch && event.pointerType == "touch") {
+		return;
+	}
 	if(!GoldenMobileControls.pointers.h.hasOwnProperty(event.pointerId) || GoldenMobileControls.holdLanes.h[event.pointerId] != true) {
 		return;
 	}
 	event.preventDefault();
-	var code = -1;
-	if(GoldenMobileControls.strumButtons) {
-		code = GoldenMobileControls.strumCodeAt(event.clientX,event.clientY,24);
-	} else {
-		var under = window.document.elementFromPoint(event.clientX,event.clientY);
-		var button = under == null ? null : under.closest("button[data-lane]");
-		code = button == null ? -1 : Std.parseInt(button.getAttribute("data-key"));
-	}
-	var previous = GoldenMobileControls.pointers.h[event.pointerId];
-	if(previous == code) {
-		return;
-	}
-	GoldenMobileControls.release(previous);
-	GoldenMobileControls.pointers.h[event.pointerId] = code;
-	GoldenMobileControls.press(code);
+	GoldenMobileControls.moveFinger(event.pointerId,event.clientX,event.clientY);
 };
 GoldenMobileControls.end = function(event) {
 	if(!GoldenMobileControls.pointers.h.hasOwnProperty(event.pointerId)) {
+		return;
+	}
+	if(GoldenMobileControls.holdLanes.h[event.pointerId] == true) {
+		if(event.type == "lostpointercapture") {
+			return;
+		}
+		event.preventDefault();
+		GoldenMobileControls.endFinger(event.pointerId);
 		return;
 	}
 	event.preventDefault();
@@ -27949,6 +28076,13 @@ GoldenMobileControls.end = function(event) {
 	GoldenMobileControls.holdLanes.remove(event.pointerId);
 };
 GoldenMobileControls.clear = function() {
+	var id = GoldenMobileControls.pointers.keys();
+	while(id.hasNext()) {
+		var id1 = id.next();
+		if(GoldenMobileControls.holdLanes.h[id1] == true) {
+			GoldenMobileControls.fingerEdge(id1,GoldenMobileControls.pointers.h[id1],false);
+		}
+	}
 	var code = GoldenMobileControls.counts.keys();
 	while(code.hasNext()) {
 		var code1 = code.next();
@@ -28116,12 +28250,16 @@ GoldenMobileControls.syncStrumButtons = function() {
 		GoldenMobileControls.strumTargets.push({ x : x, y : y, width : width, height : height, code : [37,40,38,39][lane]});
 	}
 };
-GoldenMobileControls.strumCodeAt = function(x,y,verticalSlop) {
+GoldenMobileControls.strumCodeAt = function(x,y,verticalSlop,previousCode) {
+	if(previousCode == null) {
+		previousCode = -1;
+	}
 	if(verticalSlop == null) {
 		verticalSlop = 0;
 	}
 	var best = -1;
 	var distance = Infinity;
+	var previousDistance = Infinity;
 	var frame = GoldenMobileControls.overlay.getBoundingClientRect();
 	if(x < frame.left || x > frame.right || y < frame.top || y > frame.bottom) {
 		return -1;
@@ -28137,10 +28275,16 @@ GoldenMobileControls.strumCodeAt = function(x,y,verticalSlop) {
 			continue;
 		}
 		var d = dx * dx + dy * dy;
+		if(target.code == previousCode) {
+			previousDistance = d;
+		}
 		if(d < distance) {
 			distance = d;
 			best = target.code;
 		}
+	}
+	if(previousCode >= 0 && best >= 0 && best != previousCode && Math.sqrt(previousDistance) <= Math.sqrt(distance) + 6) {
+		return previousCode;
 	}
 	return best;
 };
@@ -126930,7 +127074,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 771698;
+	this.version = 108791;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
@@ -181006,6 +181150,7 @@ GoldenMobileControls.strumTargets = [];
 GoldenMobileControls.pending = new haxe_ds_IntMap();
 GoldenMobileControls.keyboardDown = new haxe_ds_IntMap();
 GoldenMobileControls.frameSignature = "";
+GoldenMobileControls.nativeTouch = false;
 GoldenNoteSkin.assigned = new haxe_ds_ObjectMap();
 GoldenNoteSplash.paletteShaders = new haxe_ds_StringMap();
 GoldenOverworld.WALK_SPEED = 650;

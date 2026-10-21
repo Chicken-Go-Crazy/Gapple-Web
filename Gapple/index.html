@@ -251,7 +251,6 @@
         }
         function animateApples(now) {
             appleFrame = 0;
-            if(window.goldenPotatoMode === true){clearApples();return;}
             const dt = Math.min(.05, Math.max(0, (now - appleFrameTime) / 1000));
             appleFrameTime = now;
             const follow = appleReducedMotion.matches ? 1 : 1 - Math.exp(-35 * dt);
@@ -288,7 +287,6 @@
             appleFrame = requestAnimationFrame(animateApples);
         }
         document.addEventListener('pointerdown', event => {
-            if(window.goldenPotatoMode === true)return;
             if (event.pointerType === 'mouse' && event.button !== 0) return;
             const start = document.getElementById('start-screen');
             if (!shell.contains(event.target) && !(start && start.contains(event.target))) return;
@@ -304,22 +302,21 @@
             image.addEventListener('error', () => removeApple(point), {once:true});
             heldApples.set(point.id, point); visibleApples.add(point);
             tapFeedback.appendChild(image); wakeApples();
-        }, {capture:true, passive:true});
+        }, {capture:false, passive:true});
         document.addEventListener('pointermove', event => {
             const point = heldApples.get(event.pointerId); if (!point) return;
             const now = performance.now(), dt = Math.max(1, now - point.moved) / 1000;
             point.vx = point.vx * .35 + (event.clientX - point.targetX) / dt * .65;
             point.vy = point.vy * .35 + (event.clientY - point.targetY) / dt * .65;
             point.targetX = event.clientX; point.targetY = event.clientY; point.moved = now;
-        }, {capture:true, passive:true});
+        }, {capture:false, passive:true});
         function releaseApple(event) {
             const point = heldApples.get(event.pointerId); if (!point) return;
             if (event.type === 'pointerup') { point.targetX = event.clientX; point.targetY = event.clientY; }
             point.released = performance.now(); heldApples.delete(event.pointerId);
         }
-        document.addEventListener('pointerup', releaseApple, {capture:true, passive:true});
-        document.addEventListener('pointercancel', releaseApple, {capture:true, passive:true});
-        document.addEventListener('lostpointercapture', releaseApple, {capture:true, passive:true});
+        document.addEventListener('pointerup', releaseApple, {capture:false, passive:true});
+        document.addEventListener('pointercancel', releaseApple, {capture:false, passive:true});
         function clearApples() {
             for (const point of visibleApples) removeApple(point);
             heldApples.clear();
