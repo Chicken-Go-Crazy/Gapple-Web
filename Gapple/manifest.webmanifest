@@ -1,11 +1,19 @@
 {
-  "name": "Golden Apple",
-  "short_name": "Golden Apple",
+  "name": "gapple",
+  "short_name": "gapple",
   "id": "./",
   "start_url": "./?touch=1",
   "scope": "./",
   "display": "standalone",
   "orientation": "landscape",
   "background_color": "#000000",
-  "theme_color": "#000000"
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "./ui/golden-apple-tap.png",
+      "sizes": "360x360",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
 }
