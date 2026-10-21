@@ -13,6 +13,8 @@
     <meta name="apple-mobile-web-app-title" content="Golden Apple">
     <meta name="theme-color" content="#000000">
     <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="preload" as="image" href="./ui/golden-apple-tap.png">
+    <link rel="preload" as="image" href="./ui/start-background.png">
 
 	
 	<link rel="shortcut icon" type="image/png" href="./favicon.png">
@@ -41,13 +43,15 @@
         #game-shell:-webkit-full-screen { width:100%;height:100%; }
         #game-shell.large-view { position:fixed;left:0;top:0;width:100%;height:var(--game-height,100dvh);z-index:4; }
         #game-frame-overlay { position:fixed;inset:0;z-index:5;pointer-events:none; }
-		#start-screen { position:fixed; inset:0; background:#111; color:white; display:grid; place-content:center; text-align:center; font:20px system-ui; z-index:10; }
-		#start-screen button { font:inherit; padding:16px 28px; cursor:pointer; }
-        #start-screen .sprite-option { display:flex;align-items:center;justify-content:center;gap:12px;margin:24px 0 4px;cursor:pointer; }
+        #start-screen { position:fixed;inset:0;background:#590000 url('./ui/start-background.png') center / contain no-repeat;color:white;display:flex;align-items:flex-end;justify-content:center;overflow-y:auto;box-sizing:border-box;padding:16px;text-align:center;font:20px system-ui;z-index:10; }
+        #start-panel { display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 20px;background:#160000dd;padding:12px 20px;max-width:560px;box-sizing:border-box;border-radius:8px; }
+        #start-screen button { font:inherit;padding:12px 24px;cursor:pointer; }
+        #start-screen .sprite-option { display:flex;align-items:center;justify-content:center;gap:10px;margin:0;cursor:pointer; }
         #start-screen input { width:24px;height:24px;accent-color:#42dc68;cursor:pointer; }
-        #start-screen .sprite-help { margin:4px 16px 24px;font-size:15px;color:#bbb; }
         #start-screen button:disabled { opacity:.65;cursor:wait; }
-        #startup-status { max-width:440px;margin:12px 16px;font-size:15px; }
+        #start-panel p { width:100%;margin:0;font-size:14px; }
+        #startup-status { max-width:440px; }
+        #startup-status:empty { display:none; }
 		#content { background: #000000; width: 100%; height: 100%; }
         body { background:#000; --touch-height:clamp(58px,17vh,104px); }
         #touch-controls[hidden], #touch-controls button[hidden], #touch-tools button[hidden] { display:none; }
@@ -87,6 +91,8 @@
         #world-joystick[hidden] { display:none; }
         #world-joystick { position:absolute;left:max(18px,env(safe-area-inset-left));bottom:max(18px,env(safe-area-inset-bottom));width:clamp(96px,22%,150px);aspect-ratio:1;border:2px solid #9cffafaa;border-radius:50%;background:#0b432b99;box-shadow:inset 0 0 20px #0006;pointer-events:auto;touch-action:none;user-select:none;-webkit-user-select:none; }
         #world-joystick-thumb { position:absolute;left:50%;top:50%;width:42%;height:42%;border-radius:50%;background:#45b969dd;border:2px solid #c4ffcf;transform:translate(-50%,-50%);pointer-events:none; }
+        #tap-feedback { position:fixed;inset:0;z-index:1000;pointer-events:none;overflow:hidden; }
+        .golden-apple-tap { position:absolute;left:0;top:0;width:32px;height:32px;object-fit:contain;image-rendering:pixelated;pointer-events:none;user-select:none;-webkit-user-select:none;transform-origin:center; }
         @keyframes green-button-bars { from { transform:translate3d(-24px,0,0); } to { transform:translate3d(24px,0,0); } }
         @media (prefers-reduced-motion:reduce) {
             #touch-controls button::before, #touch-tools button::before, #start-screen button::before { animation:none; }
@@ -185,12 +191,13 @@
     <p id="landscape-hint" role="status" hidden></p>
     </div>
     </div>
-	<div id="start-screen">
-        <label class="sprite-option"><input type="checkbox" id="potato-sprites">Potato sprites</label>
-        <p class="sprite-help">Use lightly pixelated character sprites</p>
-        <button type="button" id="start-game">Click to start</button>
-        <p>Enter also starts the game</p>
-        <p id="startup-status" role="status"></p>
+    <div id="start-screen">
+        <div id="start-panel">
+            <label class="sprite-option"><input type="checkbox" id="potato-mode">Potato mode</label>
+            <button type="button" id="start-game">Click to start</button>
+            <p>Enter also starts the game</p>
+            <p id="startup-status" role="status"></p>
+        </div>
     </div>
 
 	<script type="text/javascript">
@@ -203,6 +210,104 @@
         let largeView = false;
         let fullscreenHint = '';
         const fullscreenElement = () => document.fullscreenElement || document.webkitFullscreenElement;
+        const tapFeedback = document.createElement('div');
+        tapFeedback.id = 'tap-feedback';
+        tapFeedback.setAttribute('aria-hidden', 'true');
+        document.body.appendChild(tapFeedback);
+        function placeTapFeedback() {
+            const parent = fullscreenElement() || document.body;
+            if (tapFeedback.parentElement !== parent) parent.appendChild(tapFeedback);
+        }
+        document.addEventListener('fullscreenchange', placeTapFeedback);
+        document.addEventListener('webkitfullscreenchange', placeTapFeedback);
+        const heldApples = new Map();
+        const visibleApples = new Set();
+        const appleReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        let appleFrame = 0;
+        let appleFrameTime = 0;
+        function removeApple(point) {
+            point.image.remove();
+            visibleApples.delete(point);
+            if (heldApples.get(point.id) === point) heldApples.delete(point.id);
+        }
+        function animateApples(now) {
+            appleFrame = 0;
+            const dt = Math.min(.05, Math.max(0, (now - appleFrameTime) / 1000));
+            appleFrameTime = now;
+            const follow = appleReducedMotion.matches ? 1 : 1 - Math.exp(-35 * dt);
+            const soften = 1 - Math.exp(-18 * dt);
+            const rect = tapFeedback.getBoundingClientRect();
+            for (const point of visibleApples) {
+                const age = point.released === null ? 0 : (now - point.released) / 450;
+                if (age >= 1) { removeApple(point); continue; }
+                point.x += (point.targetX - point.x) * follow;
+                point.y += (point.targetY - point.y) * follow;
+                const speed = Math.hypot(point.vx, point.vy) * Math.exp(-Math.max(0, now - point.moved) / 85);
+                const amount = appleReducedMotion.matches || point.released !== null ? 0 : Math.min(.9, speed / 1800);
+                point.stretch += (amount - point.stretch) * soften;
+                if (speed > 15) {
+                    const wanted = Math.atan2(point.vy, point.vx);
+                    point.angle += Math.atan2(Math.sin(wanted - point.angle), Math.cos(wanted - point.angle)) * soften;
+                }
+                const a = point.angle;
+                const long = 1 + point.stretch;
+                const short = 1 / Math.sqrt(long);
+                // Stretch along travel, while keeping the apple upright when it settles.
+                const cos = Math.cos(a), sin = Math.sin(a);
+                const xx = long * cos * cos + short * sin * sin;
+                const yy = long * sin * sin + short * cos * cos;
+                const xy = (long - short) * sin * cos;
+                point.image.style.transform = `translate3d(${point.x - rect.left}px,${point.y - rect.top}px,0) translate(-50%,-50%) matrix(${xx},${xy},${xy},${yy},0,0)`;
+                point.image.style.opacity = String(1 - age);
+            }
+            if (visibleApples.size) appleFrame = requestAnimationFrame(animateApples);
+        }
+        function wakeApples() {
+            if (appleFrame) return;
+            appleFrameTime = performance.now();
+            appleFrame = requestAnimationFrame(animateApples);
+        }
+        document.addEventListener('pointerdown', event => {
+            if (event.pointerType === 'mouse' && event.button !== 0) return;
+            const start = document.getElementById('start-screen');
+            if (!shell.contains(event.target) && !(start && start.contains(event.target))) return;
+            placeTapFeedback();
+            if (heldApples.has(event.pointerId)) removeApple(heldApples.get(event.pointerId));
+            while (visibleApples.size >= 24) removeApple(visibleApples.values().next().value);
+            const image = document.createElement('img');
+            image.className = 'golden-apple-tap';
+            image.src = './ui/golden-apple-tap.png'; image.alt = ''; image.draggable = false;
+            const point = {id:event.pointerId, image, x:event.clientX, y:event.clientY,
+                targetX:event.clientX, targetY:event.clientY, vx:0, vy:0,
+                moved:performance.now(), angle:0, stretch:0, released:null};
+            image.addEventListener('error', () => removeApple(point), {once:true});
+            heldApples.set(point.id, point); visibleApples.add(point);
+            tapFeedback.appendChild(image); wakeApples();
+        }, {capture:true, passive:true});
+        document.addEventListener('pointermove', event => {
+            const point = heldApples.get(event.pointerId); if (!point) return;
+            const now = performance.now(), dt = Math.max(1, now - point.moved) / 1000;
+            point.vx = point.vx * .35 + (event.clientX - point.targetX) / dt * .65;
+            point.vy = point.vy * .35 + (event.clientY - point.targetY) / dt * .65;
+            point.targetX = event.clientX; point.targetY = event.clientY; point.moved = now;
+        }, {capture:true, passive:true});
+        function releaseApple(event) {
+            const point = heldApples.get(event.pointerId); if (!point) return;
+            if (event.type === 'pointerup') { point.targetX = event.clientX; point.targetY = event.clientY; }
+            point.released = performance.now(); heldApples.delete(event.pointerId);
+        }
+        document.addEventListener('pointerup', releaseApple, {capture:true, passive:true});
+        document.addEventListener('pointercancel', releaseApple, {capture:true, passive:true});
+        document.addEventListener('lostpointercapture', releaseApple, {capture:true, passive:true});
+        function clearApples() {
+            for (const point of visibleApples) removeApple(point);
+            heldApples.clear();
+            if (appleFrame) cancelAnimationFrame(appleFrame);
+            appleFrame = 0;
+        }
+        window.addEventListener('blur', clearApples);
+        document.addEventListener('visibilitychange', () => { if (document.hidden) clearApples(); });
+
         const standalone = () => navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches;
         const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
         function syncViewport() {
@@ -294,17 +399,17 @@
         syncViewport();
         updateFullscreenControls();
 
-        const potatoSprites = document.getElementById('potato-sprites');
+        const potatoMode = document.getElementById('potato-mode');
         const startButton = document.getElementById('start-game');
         const startupStatus = document.getElementById('startup-status');
-        try { potatoSprites.checked = localStorage.getItem('goldenApple.potatoSprites') === 'true'; } catch (_) {}
+        try { potatoMode.checked = localStorage.getItem('goldenApple.potatoMode') === 'true' || localStorage.getItem('goldenApple.potatoSprites') === 'true'; } catch (_) {}
         let started = false;
         async function startGame() {
             if (started) return;
             started = true;
-            window.goldenPotatoSprites = potatoSprites.checked;
-            try { localStorage.setItem('goldenApple.potatoSprites', String(potatoSprites.checked)); } catch (_) {}
-            potatoSprites.disabled = true;
+            window.goldenPotatoMode = potatoMode.checked;
+            try { localStorage.setItem('goldenApple.potatoMode', String(potatoMode.checked)); localStorage.removeItem('goldenApple.potatoSprites'); } catch (_) {}
+            potatoMode.disabled = true;
             startButton.disabled = true;
             startButton.textContent = 'Loading...';
             startupStatus.textContent = '';
@@ -331,7 +436,7 @@
                 window.removeEventListener('keydown', startKey);
             } catch (error) {
                 started = false;
-                potatoSprites.disabled = false;
+                potatoMode.disabled = false;
                 startButton.disabled = false;
                 startButton.textContent = 'Click to start';
                 startupStatus.textContent = error.message || 'Could not load the mod. Click to try again.';

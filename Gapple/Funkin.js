@@ -7606,7 +7606,7 @@ Main.prototype = $extend(openfl_display_Sprite.prototype,{
 		this.setupGame();
 	}
 	,setupGame: function() {
-		flixel_FlxG.save.bind("golden-apple");
+		flixel_FlxG.save.bind("funkin","ninjamuffin99");
 		GoldenQuality.load();
 		var stageWidth = openfl_Lib.get_current().stage.stageWidth;
 		var stageHeight = openfl_Lib.get_current().stage.stageHeight;
@@ -7643,6 +7643,7 @@ Main.prototype = $extend(openfl_display_Sprite.prototype,{
 			this.initialState = GoldenScenePreviewState;
 		}
 		this.addChild(new flixel_FlxGame(this.gameWidth,this.gameHeight,this.initialState,this.zoom,this.framerate,this.framerate,this.skipSplash,this.startFullscreen));
+		GoldenPotatoMode.install();
 		GoldenMobileControls.install();
 		GoldenMenuTouch.install();
 		this.addChild(new openfl_display_FPS(10,3,16777215));
@@ -8259,10 +8260,10 @@ Character.prototype = $extend(flixel_FlxSprite.prototype,{
 			var oy = pose == null ? 0 : pose[1];
 			this.offset.set(this.origin.x * (1 - this.scale.x) + ox * this.scale.x,this.origin.y * (1 - this.scale.y) + oy * this.scale.y);
 		}
-		if(GoldenQuality.potatoSprites || GoldenQuality.superLow) {
+		if(GoldenQuality.potatoMode || (GoldenQuality.potatoMode || GoldenQuality.savedSuperLow)) {
 			this.set_antialiasing(false);
 		}
-		if(GoldenQuality.superLow) {
+		if(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow) {
 			this.shader = null;
 		}
 		flixel_FlxSprite.prototype.draw.call(this);
@@ -16138,7 +16139,7 @@ FreeplayState.prototype = $extend(MusicBeatState.prototype,{
 		this.content = new flixel_group_FlxTypedGroup();
 		this.add(this.content);
 		var song = this.songs[FreeplayState.selection];
-		var bg = new flixel_FlxSprite().loadGraphic(Paths.getPath("images/" + ("golden/menu/storyMode/songs/" + song + "/bg") + ".png","IMAGE",null));
+		var bg = new GoldenDepthSprite().loadGraphic(Paths.getPath("images/" + ("golden/menu/storyMode/songs/" + song + "/bg") + ".png","IMAGE",null));
 		bg.setGraphicSize(flixel_FlxG.width * 1.05 | 0);
 		bg.updateHitbox();
 		var axes = flixel_util_FlxAxes.XY;
@@ -16618,7 +16619,7 @@ var GoldenAnimateScene = function(documentPath,sheetPath,library) {
 		++_g;
 		this.sprites.h[frame.name] = frame;
 	}
-	this.set_antialiasing(!GoldenQuality.superLow);
+	this.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 };
 $hxClasses["GoldenAnimateScene"] = GoldenAnimateScene;
 GoldenAnimateScene.__name__ = "GoldenAnimateScene";
@@ -16999,11 +17000,25 @@ GoldenApplecore.update = function(p) {
 		GoldenApplecore.swapIcon(p);
 	}
 };
+var GoldenDepthSprite = function(X,Y,SimpleGraphic) {
+	flixel_FlxSprite.call(this,X,Y,SimpleGraphic);
+};
+$hxClasses["GoldenDepthSprite"] = GoldenDepthSprite;
+GoldenDepthSprite.__name__ = "GoldenDepthSprite";
+GoldenDepthSprite.__super__ = flixel_FlxSprite;
+GoldenDepthSprite.prototype = $extend(flixel_FlxSprite.prototype,{
+	draw: function() {
+		if(!GoldenStageDepth.draw(this)) {
+			flixel_FlxSprite.prototype.draw.call(this);
+		}
+	}
+	,__class__: GoldenDepthSprite
+});
 var GoldenArtworkBackground = function(tint) {
 	if(tint == null) {
 		tint = -1412611;
 	}
-	flixel_FlxSprite.call(this);
+	GoldenDepthSprite.call(this);
 	var names = ["seth","samualcheese","Harvey","doo","TallsAnimationTAF","Ty","wick","zevisly","cleoarty","baldilord64","exorcistgold","Cid","bubbscadex","Smeekles","vio","biorange","cudroid"];
 	this.loadGraphic(Paths.getPath("images/" + ("golden/menu/backgrounds/" + names[flixel_FlxG.random.int(0,names.length - 1)]) + ".png","IMAGE",null));
 	var factor = Math.max(flixel_FlxG.width / this.get_width(),flixel_FlxG.height / this.get_height());
@@ -17038,8 +17053,8 @@ var GoldenArtworkBackground = function(tint) {
 };
 $hxClasses["GoldenArtworkBackground"] = GoldenArtworkBackground;
 GoldenArtworkBackground.__name__ = "GoldenArtworkBackground";
-GoldenArtworkBackground.__super__ = flixel_FlxSprite;
-GoldenArtworkBackground.prototype = $extend(flixel_FlxSprite.prototype,{
+GoldenArtworkBackground.__super__ = GoldenDepthSprite;
+GoldenArtworkBackground.prototype = $extend(GoldenDepthSprite.prototype,{
 	__class__: GoldenArtworkBackground
 });
 var GoldenAssetViewerState = function(MaxSize) {
@@ -18040,6 +18055,33 @@ GoldenCreditsState.prototype = $extend(MusicBeatState.prototype,{
 		}
 	}
 	,__class__: GoldenCreditsState
+});
+var GoldenDepthGroup = function(MaxSize) {
+	flixel_group_FlxTypedGroup.call(this,MaxSize);
+};
+$hxClasses["GoldenDepthGroup"] = GoldenDepthGroup;
+GoldenDepthGroup.__name__ = "GoldenDepthGroup";
+GoldenDepthGroup.__super__ = flixel_group_FlxTypedGroup;
+GoldenDepthGroup.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
+	draw: function() {
+		var previous = flixel_FlxCamera._defaultCameras;
+		if(this.get_cameras() != null) {
+			flixel_FlxCamera._defaultCameras = this.get_cameras();
+		}
+		var _g = 0;
+		var _g1 = this.members;
+		while(_g < _g1.length) {
+			var sprite = _g1[_g];
+			++_g;
+			if(sprite != null && sprite.exists && sprite.visible) {
+				if(!GoldenStageDepth.draw(sprite)) {
+					sprite.draw();
+				}
+			}
+		}
+		flixel_FlxCamera._defaultCameras = previous;
+	}
+	,__class__: GoldenDepthGroup
 });
 var PlayState = function(TransIn,TransOut) {
 	this.curLight = 0;
@@ -20657,7 +20699,7 @@ GoldenExtraCharacter.apply = function(actor) {
 			}
 		}
 	}
-	actor.set_antialiasing(data.antialiasing != false && !GoldenQuality.superLow);
+	actor.set_antialiasing(data.antialiasing != false && !(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 	actor.set_flipX(data.flipX == true);
 	if(data.allIdleEase != null) {
 		actor.allIdleEase = data.allIdleEase;
@@ -20772,7 +20814,7 @@ GoldenExtrasMenu.prototype = $extend(MusicBeatState.prototype,{
 		}
 		item.setGraphicSize(width);
 		item.updateHitbox();
-		item.set_antialiasing(!GoldenQuality.superLow);
+		item.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 		this.content.add(item);
 		return item;
 	}
@@ -22735,7 +22777,7 @@ var GoldenFrustStage = function(song) {
 	this.ocActors = new haxe_ds_StringMap();
 	this.foregrounds = [];
 	this.shaderTime = 0;
-	flixel_group_FlxTypedGroup.call(this);
+	GoldenDepthGroup.call(this);
 	switch(song) {
 	case "aug":
 		this.back = this.layer(song,"bg",0,0,1.35);
@@ -22774,23 +22816,23 @@ var GoldenFrustStage = function(song) {
 		break;
 	case "cell":
 		this.back = this.layer(song,"secret/secret_room",-760,-70,1.3);
-		this.back.set_antialiasing(!GoldenQuality.superLow);
-		this.foreground = new flixel_FlxSprite(-220,800).loadGraphic(Paths.getPath("images/" + "golden/frustsongs/cell/secret/desk" + ".png","IMAGE",GoldenFrustExtras.library(song)));
+		this.back.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
+		this.foreground = new GoldenDepthSprite(-220,800).loadGraphic(Paths.getPath("images/" + "golden/frustsongs/cell/secret/desk" + ".png","IMAGE",GoldenFrustExtras.library(song)));
 		this.foreground.scale.set(1.4,1.4);
 		this.foreground.updateHitbox();
 		this.foreground.origin.set();
 		this.foreground.offset.set();
-		this.foreground.set_antialiasing(!GoldenQuality.superLow);
+		this.foreground.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 		break;
 	case "collision":
 		this.back = this.layer(song,"covers/mugen_basics",-400,-100,1.1);
-		this.back.set_antialiasing(!GoldenQuality.superLow);
+		this.back.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 		break;
 	case "cooking-lesson":
 		this.back = this.layer(song,"cooking_lesson",-600,-200);
 		this.back.scrollFactor.set();
 		this.glitch = new GoldenGlitchShader();
-		if(!GoldenQuality.superLow) {
+		if(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow)) {
 			this.back.shader = this.glitch;
 		}
 		this.sizedLayer(song,"zamb_set",-706,-267,2611,1232);
@@ -22867,9 +22909,9 @@ var GoldenFrustStage = function(song) {
 	case "galactic":
 		this.back = this.layer(song,"secret/galaxy",-400,-300);
 		this.back.scrollFactor.set(.6,.6);
-		this.back.set_antialiasing(!GoldenQuality.superLow);
+		this.back.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 		this.galaxy = new GoldenGalacticShader();
-		if(!GoldenQuality.superLow) {
+		if(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow)) {
 			this.back.shader = this.galaxy;
 		}
 		break;
@@ -22904,7 +22946,7 @@ var GoldenFrustStage = function(song) {
 		break;
 	case "left-unchecked":
 		this.back = this.layer(song,"covers/hypno",-400,0,.5);
-		this.back.set_antialiasing(!GoldenQuality.superLow);
+		this.back.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 		break;
 	case "lofthouse":
 		this.back = this.layer(song,"loftbg",-600,-400,.9);
@@ -22966,7 +23008,7 @@ var GoldenFrustStage = function(song) {
 		break;
 	case "nutty":
 		this.back = this.layer(song,"ocWeek/strawberries",-800,-400,1.5);
-		this.back.set_antialiasing(!GoldenQuality.superLow);
+		this.back.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 		this.glitchBack(this.back);
 		this.oc(song,"bendu",-550,170,"watch");
 		this.oc(song,"ringi",-200,20,"wtf");
@@ -22985,7 +23027,7 @@ var GoldenFrustStage = function(song) {
 		while(_g < _g1.length) {
 			var sprite = _g1[_g];
 			++_g;
-			sprite.set_antialiasing(!GoldenQuality.superLow);
+			sprite.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 		}
 		break;
 	case "piehole":
@@ -22996,12 +23038,12 @@ var GoldenFrustStage = function(song) {
 			++_g;
 			var parent = this.layer(song,spec.name,spec.x,spec.y);
 			parent.scrollFactor.set(spec.sx,spec.sy);
-			parent.set_antialiasing(!GoldenQuality.superLow);
+			parent.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 			this.sceneLayers.h[spec.name] = parent;
 			if(spec.name == "sky") {
 				this.back = parent;
 			}
-			if(!GoldenQuality.superLow) {
+			if(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow)) {
 				var glow = this.layer(song,spec.name + "-glow",spec.x - 24,spec.y - 24);
 				var _this = glow.scrollFactor;
 				var point = parent.scrollFactor;
@@ -23045,12 +23087,12 @@ var GoldenFrustStage = function(song) {
 		}
 		gradient.set_y(gradient.y - 400);
 		gradient.scrollFactor.set();
-		gradient.set_antialiasing(!GoldenQuality.superLow);
+		gradient.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 		gradient.set_blend(9);
 		gradient.set_alpha(0);
 		this.add(gradient);
 		this.sceneLayers.h["gradient"] = gradient;
-		if(!GoldenQuality.superLow) {
+		if(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow)) {
 			var _g = 0;
 			while(_g < 128) {
 				var i = _g++;
@@ -23065,7 +23107,7 @@ var GoldenFrustStage = function(song) {
 			}
 		}
 		this.ground = this.layer(song,"grass",-1500,250);
-		this.ground.set_antialiasing(!GoldenQuality.superLow);
+		this.ground.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 		break;
 	case "poopers":case "wheels":
 		this.back = this.layer(song,"wheels/swag",-400,60);
@@ -23073,9 +23115,9 @@ var GoldenFrustStage = function(song) {
 		this.back.updateHitbox();
 		this.back.origin.set();
 		this.back.offset.set();
-		this.back.set_antialiasing(!GoldenQuality.superLow);
+		this.back.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 		var girlfriend = this.layer(song,"characters/best_gf",400,260,2.3);
-		girlfriend.set_antialiasing(!GoldenQuality.superLow);
+		girlfriend.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 		break;
 	case "ready-loud":
 		var name = "back_hallway";
@@ -23106,7 +23148,7 @@ var GoldenFrustStage = function(song) {
 			sprite.set_y((flixel_FlxG.height - sprite.get_height()) / 2);
 		}
 		sprite.scrollFactor.set();
-		sprite.set_antialiasing(!GoldenQuality.superLow);
+		sprite.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 		if(name == "room") {
 			this.room = sprite;
 		}
@@ -23141,7 +23183,7 @@ var GoldenFrustStage = function(song) {
 			sprite.set_y((flixel_FlxG.height - sprite.get_height()) / 2);
 		}
 		sprite.scrollFactor.set();
-		sprite.set_antialiasing(!GoldenQuality.superLow);
+		sprite.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 		if(name == "room") {
 			this.room = sprite;
 		}
@@ -23176,7 +23218,7 @@ var GoldenFrustStage = function(song) {
 			sprite.set_y((flixel_FlxG.height - sprite.get_height()) / 2);
 		}
 		sprite.scrollFactor.set();
-		sprite.set_antialiasing(!GoldenQuality.superLow);
+		sprite.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 		if(name == "room") {
 			this.room = sprite;
 		}
@@ -23326,7 +23368,7 @@ var GoldenFrustStage = function(song) {
 		break;
 	case "sick-tricks":
 		this.back = this.layer(song,"dave/sick_tricks",-250,-50,.8);
-		this.back.set_antialiasing(!GoldenQuality.superLow);
+		this.back.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 		break;
 	case "slices":
 		var back = this.layer(song,"slices",0,0,1.35);
@@ -23446,7 +23488,7 @@ var GoldenFrustStage = function(song) {
 	case "the-boopadoop-song":
 		this.back = this.layer(song,"BlackVoid",-600,-300);
 		this.back.scrollFactor.set(.9,.9);
-		this.back.set_antialiasing(!GoldenQuality.superLow);
+		this.back.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 		break;
 	case "thunderstorm":
 		this.back = this.layer(song,"thunda/sky",-600,-300,.9);
@@ -23458,14 +23500,14 @@ var GoldenFrustStage = function(song) {
 		while(_g < _g1.length) {
 			var sprite = _g1[_g];
 			++_g;
-			sprite.set_antialiasing(!GoldenQuality.superLow);
+			sprite.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 		}
 		break;
 	case "ticking":
 		this.back = this.layer(song,"back",-1900,-900,2.3);
 		this.back.scrollFactor.set(.3,.3);
 		var balls = new GoldenTickingShader();
-		if(!GoldenQuality.superLow) {
+		if(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow)) {
 			this.back.shader = balls;
 		}
 		this.sceneLayers.h["ballsShader"] = this.back;
@@ -23518,8 +23560,8 @@ var GoldenFrustStage = function(song) {
 };
 $hxClasses["GoldenFrustStage"] = GoldenFrustStage;
 GoldenFrustStage.__name__ = "GoldenFrustStage";
-GoldenFrustStage.__super__ = flixel_group_FlxTypedGroup;
-GoldenFrustStage.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
+GoldenFrustStage.__super__ = GoldenDepthGroup;
+GoldenFrustStage.prototype = $extend(GoldenDepthGroup.prototype,{
 	glitch: null
 	,wave: null
 	,shaderTime: null
@@ -23559,7 +23601,7 @@ GoldenFrustStage.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 		this.glitch.uWaveAmplitude.value[0] = amplitude;
 		this.glitch.uFrequency.value[0] = frequency;
 		this.glitch.uSpeed.value[0] = speed;
-		if(!GoldenQuality.superLow) {
+		if(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow)) {
 			sprite.shader = this.glitch;
 		}
 	}
@@ -23568,7 +23610,7 @@ GoldenFrustStage.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 		this.wave.uWaveAmplitude.value[0] = amplitude;
 		this.wave.uFrequency.value[0] = frequency;
 		this.wave.uSpeed.value[0] = speed;
-		if(!GoldenQuality.superLow) {
+		if(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow)) {
 			sprite.shader = this.wave;
 		}
 	}
@@ -23591,7 +23633,7 @@ GoldenFrustStage.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 		if(scale == null) {
 			scale = 1;
 		}
-		var sprite = new flixel_FlxSprite(x,y).loadGraphic(Paths.getPath("images/" + ("golden/frustsongs/" + song + "/" + name) + ".png","IMAGE",GoldenFrustExtras.library(song)));
+		var sprite = new GoldenDepthSprite(x,y).loadGraphic(Paths.getPath("images/" + ("golden/frustsongs/" + song + "/" + name) + ".png","IMAGE",GoldenFrustExtras.library(song)));
 		sprite.scale.set(scale,scale);
 		sprite.updateHitbox();
 		sprite.origin.set();
@@ -24040,6 +24082,9 @@ GoldenFrustrationMods.prototype = {
 		this.settle(beat);
 	}
 	,update: function(owner,time) {
+		if(GoldenMobileControls.enabled) {
+			return;
+		}
 		if(owner.strumLineNotes == null || owner.strumLineNotes.length < 8) {
 			return;
 		}
@@ -24317,11 +24362,11 @@ GoldenFrustrationPreviewState.prototype = $extend(PlayState.prototype,{
 	,__class__: GoldenFrustrationPreviewState
 });
 var GoldenFrustrationStage = function() {
-	flixel_group_FlxTypedGroup.call(this);
+	GoldenDepthGroup.call(this);
 	this.world = new flixel_addons_display_FlxBackdrop(Paths.getPath("images/" + "golden/frustration/frustables" + ".png","IMAGE","frustration"));
 	this.world.setPosition(-1000,-800);
 	this.glitch = new GoldenGlitchShader();
-	if(!GoldenQuality.superLow) {
+	if(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow)) {
 		this.world.shader = this.glitch;
 	}
 	this.world.scale.set(1.5,1.5);
@@ -24366,8 +24411,8 @@ var GoldenFrustrationStage = function() {
 };
 $hxClasses["GoldenFrustrationStage"] = GoldenFrustrationStage;
 GoldenFrustrationStage.__name__ = "GoldenFrustrationStage";
-GoldenFrustrationStage.__super__ = flixel_group_FlxTypedGroup;
-GoldenFrustrationStage.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
+GoldenFrustrationStage.__super__ = GoldenDepthGroup;
+GoldenFrustrationStage.prototype = $extend(GoldenDepthGroup.prototype,{
 	world: null
 	,glitch: null
 	,screen: null
@@ -24845,7 +24890,7 @@ GoldenHoldCap.__name__ = "GoldenHoldCap";
 GoldenHoldCap.__super__ = flixel_FlxSprite;
 GoldenHoldCap.prototype = $extend(flixel_FlxSprite.prototype,{
 	set_clipRect: function(rect) {
-		if(GoldenQuality.superLow) {
+		if(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow) {
 			return flixel_FlxSprite.prototype.set_clipRect.call(this,rect);
 		}
 		this.clipRect = rect;
@@ -25080,7 +25125,7 @@ GoldenHoldRibbon.prototype = {
 	,uv: null
 	,indices: null
 	,draw: function(note) {
-		if(GoldenQuality.superLow) {
+		if(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow) {
 			return;
 		}
 		var now = note.holdSongTime;
@@ -25948,7 +25993,7 @@ GoldenInspicablePreviewState.prototype = $extend(PlayState.prototype,{
 	,__class__: GoldenInspicablePreviewState
 });
 var GoldenInspicableStage = function() {
-	flixel_group_FlxTypedGroup.call(this);
+	GoldenDepthGroup.call(this);
 	this.disruptor = new GoldenWavySprite(-600,-200);
 	this.disruptor.loadGraphic(Paths.getPath("images/" + "golden/inspicable/disruptor" + ".png","IMAGE","inspicable"));
 	this.disruptor.waveShader.uSpeed.value = [1.45];
@@ -25959,7 +26004,7 @@ var GoldenInspicableStage = function() {
 	this.add(this.disruptor);
 	this.back = new flixel_FlxSprite(-275,35).loadGraphic(Paths.getPath("images/" + "golden/inspicable/backLayer" + ".png","IMAGE","inspicable"));
 	this.backShader = new GoldenTubeShader();
-	if(!GoldenQuality.superLow) {
+	if(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow)) {
 		this.back.shader = this.backShader;
 	}
 	this.add(this.back);
@@ -25969,7 +26014,7 @@ var GoldenInspicableStage = function() {
 	this.frontShader.verticalAmount.value = [.075];
 	this.frontShader.verticalSpeed.value = [.15];
 	this.frontShader.verticalOffset.value = [.2];
-	if(!GoldenQuality.superLow) {
+	if(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow)) {
 		this.front.shader = this.frontShader;
 	}
 	this.add(this.front);
@@ -25988,7 +26033,7 @@ var GoldenInspicableStage = function() {
 	this.add(this.shade);
 	this.headroom = new flixel_FlxSprite().makeGraphic(1280,720,-1);
 	this.headroomShader = new GoldenHeadroomShader();
-	if(!GoldenQuality.superLow) {
+	if(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow)) {
 		this.headroom.shader = this.headroomShader;
 	}
 	this.headroom.set_alpha(0);
@@ -26041,8 +26086,8 @@ GoldenInspicableStage.headroomPose = function(seconds) {
 	}
 	return [vertical,yaw,roll,zoom];
 };
-GoldenInspicableStage.__super__ = flixel_group_FlxTypedGroup;
-GoldenInspicableStage.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
+GoldenInspicableStage.__super__ = GoldenDepthGroup;
+GoldenInspicableStage.prototype = $extend(GoldenDepthGroup.prototype,{
 	headroom: null
 	,headroomShader: null
 	,shade: null
@@ -26331,7 +26376,7 @@ var GoldenMenuBackground = function(title,color) {
 	if(title == null) {
 		title = false;
 	}
-	flixel_group_FlxTypedGroup.call(this);
+	GoldenDepthGroup.call(this);
 	this.add(new flixel_FlxSprite().makeGraphic(flixel_FlxG.width,flixel_FlxG.height,title ? -16777216 : color));
 	var checker = new flixel_addons_display_FlxBackdrop(Paths.getPath("images/" + ("golden/menu/" + (title ? "titleScreen/darkChecker" : "mainMenu/checkeredBG")) + ".png","IMAGE",null));
 	checker.velocity.set(-50,-50);
@@ -26345,8 +26390,8 @@ var GoldenMenuBackground = function(title,color) {
 };
 $hxClasses["GoldenMenuBackground"] = GoldenMenuBackground;
 GoldenMenuBackground.__name__ = "GoldenMenuBackground";
-GoldenMenuBackground.__super__ = flixel_group_FlxTypedGroup;
-GoldenMenuBackground.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
+GoldenMenuBackground.__super__ = GoldenDepthGroup;
+GoldenMenuBackground.prototype = $extend(GoldenDepthGroup.prototype,{
 	__class__: GoldenMenuBackground
 });
 var GoldenMenuTouch = function() { };
@@ -26819,7 +26864,7 @@ GoldenMenuTransition.prototype = $extend(flixel_FlxSubState.prototype,{
 		tmp.add("apple",_g,12,true);
 		this.iris.animation.play("apple",true,false,flixel_FlxG.random.int(0,18));
 		this.iris.set_color(-16777216);
-		this.iris.set_antialiasing(!GoldenQuality.superLow);
+		this.iris.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 		this.iris.scrollFactor.set();
 		this.iris.set_pixelPerfectRender(false);
 		this.add(this.iris);
@@ -26938,7 +26983,7 @@ var GoldenMineRoup = function(owner,host) {
 		this.wave.uSpeed.value[0] = 0;
 		this.wave.uFrequency.value[0] = 0;
 		this.wave.uWaveAmplitude.value[0] = .1;
-		if(!GoldenQuality.superLow) {
+		if(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow)) {
 			owner.frustStage.sceneLayers.h["mine"].shader = this.weird;
 			owner.dad.shader = this.wave;
 		}
@@ -27756,7 +27801,7 @@ var GoldenNFT = function(owner) {
 	this.frontCamera = this.makeCamera();
 	this.tube = new GoldenTubeShader();
 	this.tube.speed.value[0] = 0;
-	if(!GoldenQuality.superLow) {
+	if(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow)) {
 		this.nftCamera.setFilters([new openfl_filters_ShaderFilter(this.tube)]);
 	}
 	var actor = owner.dad;
@@ -27994,7 +28039,7 @@ var GoldenNoteSplash = function() {
 $hxClasses["GoldenNoteSplash"] = GoldenNoteSplash;
 GoldenNoteSplash.__name__ = "GoldenNoteSplash";
 GoldenNoteSplash.shouldSpawn = function(sustain,noteTime,inputTime) {
-	if(!sustain) {
+	if(!GoldenQuality.potatoMode && !sustain) {
 		return GoldenJudgement.judge(noteTime - inputTime).name == "sick";
 	} else {
 		return false;
@@ -28111,12 +28156,12 @@ GoldenNoteSplash.prototype = $extend(flixel_FlxSprite.prototype,{
 		this.set_alpha(0.5);
 		this.scrollFactor.set(0,0);
 		this.set_pixelPerfectRender(false);
-		this.set_antialiasing(!GoldenQuality.superLow && skin != "3d" && skin != "bevel");
+		this.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow) && skin != "3d" && skin != "bevel");
 		this.set_cameras(receptor.get_cameras());
 		this.set_clipRect(null);
 		if(skin == "3d" || skin == "bevel") {
 			this.shader = null;
-		} else if(!GoldenQuality.superLow) {
+		} else if(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow)) {
 			var red = GoldenNoteSplash.paletteColor(this.style.rgbSplashes.red,lane);
 			var green = GoldenNoteSplash.paletteColor(this.style.rgbSplashes.green,lane);
 			var blue = GoldenNoteSplash.paletteColor(this.style.rgbSplashes.blue,lane);
@@ -28649,7 +28694,7 @@ var GoldenOrthoExtras = function(owner,host) {
 		bar.set_visible(false);
 		owner.add(bar);
 		this.border.push(bar);
-		if(!GoldenQuality.superLow) {
+		if(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow)) {
 			var _g = 0;
 			while(_g < 128) {
 				var i = _g++;
@@ -29266,7 +29311,7 @@ var GoldenOrthogonalPortal = function() {
 		++_g;
 		this.sprites.h[frame.name] = frame;
 	}
-	this.set_antialiasing(!GoldenQuality.superLow);
+	this.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 };
 $hxClasses["GoldenOrthogonalPortal"] = GoldenOrthogonalPortal;
 GoldenOrthogonalPortal.__name__ = "GoldenOrthogonalPortal";
@@ -29420,7 +29465,7 @@ GoldenOrthogonalPortal.prototype = $extend(flixel_FlxSprite.prototype,{
 	,__class__: GoldenOrthogonalPortal
 });
 var GoldenOrthogonalStage = function() {
-	flixel_group_FlxTypedGroup.call(this);
+	GoldenDepthGroup.call(this);
 	this.layer("sky",-300,-100,0.02,0.02);
 	this.layer("mountains",-200,-120,0.125,0.5);
 	this.layer("hills",-50,0,0.6,0.9);
@@ -29433,8 +29478,8 @@ var GoldenOrthogonalStage = function() {
 };
 $hxClasses["GoldenOrthogonalStage"] = GoldenOrthogonalStage;
 GoldenOrthogonalStage.__name__ = "GoldenOrthogonalStage";
-GoldenOrthogonalStage.__super__ = flixel_group_FlxTypedGroup;
-GoldenOrthogonalStage.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
+GoldenOrthogonalStage.__super__ = GoldenDepthGroup;
+GoldenOrthogonalStage.prototype = $extend(GoldenDepthGroup.prototype,{
 	portal: null
 	,layer: function(name,x,y,sx,sy) {
 		var sprite = new flixel_FlxSprite(x,y).loadGraphic(Paths.getPath("images/" + ("golden/orthogonal/" + name) + ".png","IMAGE","orthogonal"));
@@ -30152,7 +30197,7 @@ GoldenOverworldPlayer.prototype = $extend(flixel_FlxSprite.prototype,{
 	,__class__: GoldenOverworldPlayer
 });
 var GoldenOverworldSky = function(game) {
-	flixel_group_FlxTypedGroup.call(this);
+	GoldenDepthGroup.call(this);
 	this.game = game;
 	game.bgColor = 0;
 	this.blue = new flixel_FlxCamera();
@@ -30175,8 +30220,8 @@ var GoldenOverworldSky = function(game) {
 };
 $hxClasses["GoldenOverworldSky"] = GoldenOverworldSky;
 GoldenOverworldSky.__name__ = "GoldenOverworldSky";
-GoldenOverworldSky.__super__ = flixel_group_FlxTypedGroup;
-GoldenOverworldSky.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
+GoldenOverworldSky.__super__ = GoldenDepthGroup;
+GoldenOverworldSky.prototype = $extend(GoldenDepthGroup.prototype,{
 	blue: null
 	,green: null
 	,game: null
@@ -30259,7 +30304,7 @@ GoldenOverworldSky.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 		this.blue = null;
 		this.green = null;
 		this.game = null;
-		flixel_group_FlxTypedGroup.prototype.destroy.call(this);
+		GoldenDepthGroup.prototype.destroy.call(this);
 	}
 	,__class__: GoldenOverworldSky
 });
@@ -30357,7 +30402,7 @@ GoldenPagedAtlas.clear = function() {
 	GoldenPagedAtlas.cache.h = Object.create(null);
 };
 GoldenPagedAtlas.get = function(key,library) {
-	var id = library + ":" + key + (GoldenQuality.potatoSprites ? ":potato" : ":normal");
+	var id = library + ":" + key + (GoldenQuality.potatoMode ? ":potato" : ":normal");
 	if(Object.prototype.hasOwnProperty.call(GoldenPagedAtlas.cache.h,id)) {
 		return GoldenPagedAtlas.cache.h[id];
 	}
@@ -30376,7 +30421,7 @@ GoldenPagedAtlas.get = function(key,library) {
 		++_g;
 		var potato = name + "_potato";
 		var pageKey;
-		if(GoldenQuality.potatoSprites && openfl_utils_Assets.exists(Paths.getPath("images/" + potato + ".png","IMAGE",library),"IMAGE")) {
+		if(GoldenQuality.potatoMode && openfl_utils_Assets.exists(Paths.getPath("images/" + potato + ".png","IMAGE",library),"IMAGE")) {
 			var type = "TEXT";
 			if(type == null) {
 				type = "TEXT";
@@ -30457,14 +30502,71 @@ GoldenPartThree.speedFactor = function(note) {
 	return root.visualSpeed;
 };
 GoldenPartThree.noteSpeed = function(p,note) {
-	if(GoldenHoldPath.frustration != null) {
+	if(GoldenMobileControls.enabled) {
+		return PlayState.SONG.speed;
+	} else if(GoldenHoldPath.frustration != null) {
 		return GoldenHoldPath.frustration.speed(note.mustPress ? 1 : 0);
 	} else {
 		return PlayState.SONG.speed * (GoldenPartThree.active(p) ? GoldenPartThree.speedFactor(note) : 1);
 	}
 };
+GoldenPartThree.positionMobile = function(p,note) {
+	var receptor = p.strumLineNotes.members[note.noteData + (note.mustPress ? 4 : 0)];
+	if(receptor == null) {
+		return;
+	}
+	var idle = receptor.animation._animations.h["static"];
+	if(idle == null || idle.frames.length == 0) {
+		return;
+	}
+	var base = receptor.frames.frames[idle.frames[0]].sourceSize;
+	var width = base.x * receptor.scale.x;
+	var height = base.y * receptor.scale.y;
+	var size = note.artScale * 1.12;
+	note.mobileSizing = true;
+	note.curvedHold = false;
+	note.set_angle(0);
+	note.set_alpha(note.isSustainNote ? .6 : 1);
+	if(note.scale.x != size || !note.isSustainNote && note.scale.y != size) {
+		note.scale.set(size,note.isSustainNote ? note.scale.y : size);
+		note.updateHitbox();
+	}
+	note.origin.set();
+	note.offset.set();
+	if(note.endCap != null) {
+		if(note.endCap.scale.x != size || note.endCap.scale.y != size) {
+			note.endCap.scale.set(size,size);
+			note.endCap.updateHitbox();
+		}
+		note.endCap.set_angle(0);
+		note.endCap.origin.set();
+		note.endCap.offset.set();
+	}
+	note.positionOnStrum(Conductor.songPosition,receptor.y,PlayState.SONG.speed,flixel_FlxG.save.data.downscroll,receptor.x,width,height);
+	if(!note.isSustainNote) {
+		note.set_x(receptor.x + (width - note.get_width()) * .5);
+		note.set_y(GoldenNoteGeometry.position(note.strumTime,Conductor.songPosition,receptor.y + (height - note.get_height()) * .5,PlayState.SONG.speed,flixel_FlxG.save.data.downscroll));
+	}
+};
 GoldenPartThree.positionNote = function(p,note) {
 	note.set_visible(PlayState.controlsNote(note) || !GoldenMobileControls.enabled && PlayState.curStage != "kooky");
+	if(GoldenMobileControls.enabled) {
+		GoldenPartThree.positionMobile(p,note);
+		return;
+	}
+	if(note.mobileSizing) {
+		note.mobileSizing = false;
+		note.scale.set(note.artScale,note.isSustainNote ? note.scale.y : note.artScale);
+		note.updateHitbox();
+		note.origin.set();
+		note.offset.set();
+		if(note.endCap != null) {
+			note.endCap.scale.set(note.artScale,note.artScale);
+			note.endCap.updateHitbox();
+			note.endCap.origin.set();
+			note.endCap.offset.set();
+		}
+	}
 	if(GoldenHoldPath.frustration != null) {
 		GoldenHoldPath.frustration.position(note,p);
 		return;
@@ -30802,57 +30904,151 @@ GoldenPoseOffsets.apply = function(actor) {
 		actor.offset.set(actor.scaleOffsetX + (ox + dx) * actor.scale.x + actor.goldenOriginX,actor.scaleOffsetY + (oy + dy) * actor.scale.y + actor.goldenOriginY);
 	}
 };
+var GoldenPotatoMode = function() { };
+$hxClasses["GoldenPotatoMode"] = GoldenPotatoMode;
+GoldenPotatoMode.__name__ = "GoldenPotatoMode";
+GoldenPotatoMode.install = function() {
+	if(GoldenPotatoMode.installed) {
+		return;
+	}
+	GoldenPotatoMode.installed = true;
+	flixel_FlxG.signals.postStateSwitch.add(function() {
+		GoldenPotatoMode.nextSweep = 0;
+		GoldenPotatoMode.apply();
+	});
+	flixel_FlxG.signals.postUpdate.add(function() {
+		if(!GoldenQuality.potatoMode) {
+			return;
+		}
+		GoldenPotatoMode.nextSweep -= flixel_FlxG.elapsed;
+		if(GoldenPotatoMode.nextSweep <= 0) {
+			GoldenPotatoMode.nextSweep = .5;
+			GoldenPotatoMode.stripEffects(flixel_FlxG.game._state);
+		}
+	});
+	GoldenPotatoMode.apply();
+};
+GoldenPotatoMode.apply = function() {
+	if(GoldenPotatoMode.installed && flixel_FlxG.game != null) {
+		if(GoldenPotatoMode.lastMode != GoldenQuality.potatoMode) {
+			GoldenPotatoMode.nextSweep = 0;
+		}
+		GoldenPotatoMode.lastMode = GoldenQuality.potatoMode;
+	}
+};
+GoldenPotatoMode.stripEffects = function(object) {
+	if(object == null) {
+		return;
+	}
+	if(((object) instanceof flixel_FlxSprite)) {
+		var sprite = object;
+		sprite.set_antialiasing(false);
+		if(sprite.graphic != null && sprite.graphic.assetsKey != null) {
+			sprite.shader = null;
+		}
+	}
+	if(((object) instanceof flixel_group_FlxTypedGroup)) {
+		var group = object;
+		var _g = 0;
+		var _g1 = group.members;
+		while(_g < _g1.length) {
+			var member = _g1[_g];
+			++_g;
+			GoldenPotatoMode.stripEffects(member);
+		}
+	}
+	if(((object) instanceof flixel_FlxState)) {
+		var state = object;
+		if(state.subState != null) {
+			GoldenPotatoMode.stripEffects(state.subState);
+		}
+	}
+};
 var GoldenQuality = function() { };
 $hxClasses["GoldenQuality"] = GoldenQuality;
 GoldenQuality.__name__ = "GoldenQuality";
+GoldenQuality.__properties__ = {get_superLow:"get_superLow"};
+GoldenQuality.get_superLow = function() {
+	if(!GoldenQuality.potatoMode) {
+		return GoldenQuality.savedSuperLow;
+	} else {
+		return true;
+	}
+};
 GoldenQuality.load = function() {
 	if(flixel_FlxG.save.data.superLowQuality == null) {
 		flixel_FlxG.save.data.superLowQuality = false;
 	}
-	GoldenQuality.superLow = flixel_FlxG.save.data.superLowQuality == true;
-	if(flixel_FlxG.save.data.potatoSprites == null) {
-		flixel_FlxG.save.data.potatoSprites = GoldenQuality.superLow;
-	}
-	GoldenQuality.potatoSprites = flixel_FlxG.save.data.potatoSprites == true;
-	var startup = Reflect.field(window,"goldenPotatoSprites");
-	if(startup != null) {
-		GoldenQuality.potatoSprites = startup == true;
+	GoldenQuality.savedSuperLow = flixel_FlxG.save.data.superLowQuality == true;
+	GoldenQuality.potatoMode = flixel_FlxG.save.data.potatoMode == true || flixel_FlxG.save.data.potatoSprites == true;
+	var modeChoice = Reflect.field(window,"goldenPotatoMode");
+	if(modeChoice != null) {
+		GoldenQuality.potatoMode = modeChoice == true;
 	} else {
 		try {
-			var stored = window.localStorage.getItem("goldenApple.potatoSprites");
-			if(stored != null) {
-				GoldenQuality.potatoSprites = stored == "true";
+			var storedMode = window.localStorage.getItem("goldenApple.potatoMode");
+			if(storedMode != null) {
+				GoldenQuality.potatoMode = storedMode == "true";
 			}
 		} catch( _g ) {
 			haxe_NativeStackTrace.lastError = _g;
 		}
 	}
-	flixel_FlxG.save.data.potatoSprites = GoldenQuality.potatoSprites;
+	flixel_FlxG.save.data.potatoMode = GoldenQuality.potatoMode;
+	Reflect.deleteField(flixel_FlxG.save.data,"potatoSprites");
+	GoldenQuality.depthBackgrounds = flixel_FlxG.save.data.depthBackgrounds == true;
+	var depthChoice = Reflect.field(window,"goldenDepthBackgrounds");
+	if(depthChoice != null) {
+		GoldenQuality.depthBackgrounds = depthChoice == true;
+	} else {
+		try {
+			var storedDepth = window.localStorage.getItem("goldenApple.depthBackgrounds");
+			if(storedDepth != null) {
+				GoldenQuality.depthBackgrounds = storedDepth == "true";
+			}
+		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
+		}
+	}
+	flixel_FlxG.save.data.depthBackgrounds = GoldenQuality.depthBackgrounds;
 	GoldenQuality.apply();
 };
 GoldenQuality.toggle = function() {
-	GoldenQuality.superLow = !GoldenQuality.superLow;
-	flixel_FlxG.save.data.superLowQuality = GoldenQuality.superLow;
+	GoldenQuality.savedSuperLow = !GoldenQuality.savedSuperLow;
+	flixel_FlxG.save.data.superLowQuality = GoldenQuality.savedSuperLow;
 	flixel_FlxG.save.flush();
 	GoldenQuality.apply();
 };
-GoldenQuality.togglePotatoSprites = function() {
-	GoldenQuality.potatoSprites = !GoldenQuality.potatoSprites;
-	flixel_FlxG.save.data.potatoSprites = GoldenQuality.potatoSprites;
+GoldenQuality.togglePotatoMode = function() {
+	GoldenQuality.potatoMode = !GoldenQuality.potatoMode;
+	flixel_FlxG.save.data.potatoMode = GoldenQuality.potatoMode;
 	flixel_FlxG.save.flush();
-	window["goldenPotatoSprites"] = GoldenQuality.potatoSprites;
+	window["goldenPotatoMode"] = GoldenQuality.potatoMode;
 	try {
-		window.localStorage.setItem("goldenApple.potatoSprites",Std.string(GoldenQuality.potatoSprites));
+		window.localStorage.setItem("goldenApple.potatoMode",Std.string(GoldenQuality.potatoMode));
+	} catch( _g ) {
+		haxe_NativeStackTrace.lastError = _g;
+	}
+	GoldenQuality.apply();
+};
+GoldenQuality.toggleDepthBackgrounds = function() {
+	GoldenQuality.depthBackgrounds = !GoldenQuality.depthBackgrounds;
+	flixel_FlxG.save.data.depthBackgrounds = GoldenQuality.depthBackgrounds;
+	flixel_FlxG.save.flush();
+	window["goldenDepthBackgrounds"] = GoldenQuality.depthBackgrounds;
+	try {
+		window.localStorage.setItem("goldenApple.depthBackgrounds",Std.string(GoldenQuality.depthBackgrounds));
 	} catch( _g ) {
 		haxe_NativeStackTrace.lastError = _g;
 	}
 };
 GoldenQuality.apply = function() {
+	GoldenPotatoMode.apply();
 	if(openfl_Lib.get_current().stage != null) {
-		var tmp = GoldenQuality.superLow ? 2 : 0;
-		openfl_Lib.get_current().stage.set_quality(tmp);
+		var tmp = GoldenQuality.potatoMode || GoldenQuality.savedSuperLow;
+		openfl_Lib.get_current().stage.set_quality(tmp ? 2 : 0);
 	}
-	if(GoldenQuality.superLow && flixel_FlxG.cameras != null) {
+	if((GoldenQuality.potatoMode || GoldenQuality.savedSuperLow) && flixel_FlxG.cameras != null) {
 		var _g = 0;
 		var _g1 = flixel_FlxG.cameras.list;
 		while(_g < _g1.length) {
@@ -30863,10 +31059,10 @@ GoldenQuality.apply = function() {
 	}
 };
 GoldenQuality.shadersEnabled = function() {
-	return !GoldenQuality.superLow;
+	return !(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow);
 };
 GoldenQuality.antialiasingEnabled = function() {
-	return !GoldenQuality.superLow;
+	return !(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow);
 };
 var GoldenReadyLoud = function(owner) {
 	this.strumsReady = false;
@@ -30885,7 +31081,7 @@ var GoldenReadyLoud = function(owner) {
 	this.owl.animation.addByPrefix("owlJumpscare","owl",24,false);
 	this.owl.scrollFactor.set();
 	this.owl.set_alpha(0);
-	this.owl.set_antialiasing(!GoldenQuality.superLow);
+	this.owl.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 	owner.insert(owner.members.indexOf(owner.strumLineNotes),this.owl);
 	var face = new flixel_FlxSprite().loadGraphic(Paths.getPath("images/" + "golden/frustsongs/ready-loud/facecam" + ".png","IMAGE","extra-ready-loud"));
 	face.scale.set(.75,.75);
@@ -31087,7 +31283,7 @@ var GoldenRemaining = function(owner,host) {
 	if(this.invert != null) {
 		filters.push(new openfl_filters_ShaderFilter(this.invert));
 	}
-	if(filters.length > 0 && !GoldenQuality.superLow) {
+	if(filters.length > 0 && !(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow)) {
 		flixel_FlxG.camera.setFilters(filters);
 	}
 };
@@ -31114,10 +31310,10 @@ GoldenRemaining.buildStage = function(stage,song) {
 	while(_g < _g1) {
 		var i = _g++;
 		var def = layers[i];
-		if(def.decorative == true && GoldenQuality.superLow) {
+		if(def.decorative == true && (GoldenQuality.potatoMode || GoldenQuality.savedSuperLow)) {
 			continue;
 		}
-		var sprite = new flixel_FlxSprite(def.x,def.y);
+		var sprite = new GoldenDepthSprite(def.x,def.y);
 		var path = "golden/frustsongs/" + song + "/" + def.path;
 		if(def.animated == true) {
 			sprite.set_frames(Paths.getSparrowAtlas(path,GoldenFrustExtras.library(song)));
@@ -31131,9 +31327,9 @@ GoldenRemaining.buildStage = function(stage,song) {
 		sprite.origin.set();
 		sprite.offset.set();
 		sprite.scrollFactor.set(def.scrollX,def.scrollY);
-		sprite.set_antialiasing(!GoldenQuality.superLow);
+		sprite.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 		sprite.set_flipX(def.flipX == true);
-		if(def.wave == true && !GoldenQuality.superLow) {
+		if(def.wave == true && !(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow)) {
 			sprite.shader = new GoldenGalacticShader();
 		}
 		if(stage.back == null) {
@@ -31617,7 +31813,7 @@ var GoldenSecretSongs = function(owner,host) {
 		this.black.set_cameras([owner.camHUD]);
 		owner.add(this.black);
 		this.split = new GoldenTickingSplitShader();
-		if(!GoldenQuality.superLow) {
+		if(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow)) {
 			owner.camHUD.setFilters([new openfl_filters_ShaderFilter(this.split)]);
 		}
 		this.mods = new GoldenFrustrationMods("golden/frustsongs/ticking/modchart","extra-ticking",PlayState.SONG.bpm,3.0);
@@ -32005,7 +32201,7 @@ var GoldenSongAlphabet = function(x,y,text,size) {
 		glyph.animation.play("glyph");
 		glyph.scale.set(factor,factor);
 		glyph.updateHitbox();
-		glyph.set_antialiasing(!GoldenQuality.superLow);
+		glyph.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 		this.add(glyph);
 		this.textWidth += (atlas.frames[index].frame.width + 5) * factor;
 	}
@@ -32196,7 +32392,7 @@ var GoldenStage = function(owner) {
 	this.ready = false;
 	this.nativeZoom = 0.425;
 	var _gthis = this;
-	flixel_group_FlxTypedGroup.call(this);
+	GoldenDepthGroup.call(this);
 	this.owner = owner;
 	this.bg = this.layer("golden/applecore/stage/bg",0);
 	this.bg.tileWorld = true;
@@ -32210,8 +32406,8 @@ var GoldenStage = function(owner) {
 };
 $hxClasses["GoldenStage"] = GoldenStage;
 GoldenStage.__name__ = "GoldenStage";
-GoldenStage.__super__ = flixel_group_FlxTypedGroup;
-GoldenStage.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
+GoldenStage.__super__ = GoldenDepthGroup;
+GoldenStage.prototype = $extend(GoldenDepthGroup.prototype,{
 	pizzas: null
 	,nativeZoom: null
 	,bg: null
@@ -32318,7 +32514,7 @@ GoldenStage.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 		this.owner.goldenTweens.tween(this,{ nativeZoom : value},duration,{ ease : flixel_tweens_FlxEase.quadInOut});
 	}
 	,update: function(elapsed) {
-		flixel_group_FlxTypedGroup.prototype.update.call(this,elapsed);
+		GoldenDepthGroup.prototype.update.call(this,elapsed);
 		if(this.pizzas != null) {
 			this.pizzas.update(elapsed);
 		}
@@ -32358,6 +32554,1004 @@ GoldenStage.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
 		}
 	}
 	,__class__: GoldenStage
+});
+var lime_math_Matrix3 = {};
+lime_math_Matrix3.__properties__ = {set_ty:"set_ty",get_ty:"get_ty",set_tx:"set_tx",get_tx:"get_tx",set_d:"set_d",get_d:"get_d",set_c:"set_c",get_c:"get_c",set_b:"set_b",get_b:"get_b",set_a:"set_a",get_a:"get_a"};
+lime_math_Matrix3._new = function(a,b,c,d,tx,ty) {
+	if(ty == null) {
+		ty = 0;
+	}
+	if(tx == null) {
+		tx = 0;
+	}
+	if(d == null) {
+		d = 1;
+	}
+	if(c == null) {
+		c = 0;
+	}
+	if(b == null) {
+		b = 0;
+	}
+	if(a == null) {
+		a = 1;
+	}
+	var elements = null;
+	var array = [a,b,0,c,d,0,tx,ty,1];
+	var vector = null;
+	var view = null;
+	var buffer = null;
+	var len = null;
+	var this1;
+	if(elements != null) {
+		this1 = new Float32Array(elements);
+	} else if(array != null) {
+		this1 = new Float32Array(array);
+	} else if(vector != null) {
+		this1 = new Float32Array(vector.__array);
+	} else if(view != null) {
+		this1 = new Float32Array(view);
+	} else if(buffer != null) {
+		if(len == null) {
+			this1 = new Float32Array(buffer,0);
+		} else {
+			this1 = new Float32Array(buffer,0,len);
+		}
+	} else {
+		this1 = null;
+	}
+	return this1;
+};
+lime_math_Matrix3.clone = function(this1) {
+	return lime_math_Matrix3._new(this1[0],this1[1],this1[3],this1[4],this1[6],this1[7]);
+};
+lime_math_Matrix3.concat = function(this1,m) {
+	var a1 = this1[0] * m[0] + this1[1] * m[3];
+	this1[1] = this1[0] * m[1] + this1[1] * m[4];
+	this1[0] = a1;
+	var c1 = this1[3] * m[0] + this1[4] * m[3];
+	this1[4] = this1[3] * m[1] + this1[4] * m[4];
+	this1[3] = c1;
+	var tx1 = this1[6] * m[0] + this1[7] * m[3] + m[6];
+	this1[7] = this1[6] * m[1] + this1[7] * m[4] + m[7];
+	this1[6] = tx1;
+};
+lime_math_Matrix3.copyColumnFrom = function(this1,column,vector4) {
+	if(column > 2) {
+		throw haxe_Exception.thrown("Column " + column + " out of bounds (2)");
+	} else if(column == 0) {
+		this1[0] = vector4.x;
+		this1[1] = vector4.y;
+	} else if(column == 1) {
+		this1[3] = vector4.x;
+		this1[4] = vector4.y;
+	} else {
+		this1[6] = vector4.x;
+		this1[7] = vector4.y;
+	}
+};
+lime_math_Matrix3.copyColumnTo = function(this1,column,vector4) {
+	if(column > 2) {
+		throw haxe_Exception.thrown("Column " + column + " out of bounds (2)");
+	} else if(column == 0) {
+		vector4.x = this1[0];
+		vector4.y = this1[1];
+		vector4.z = 0;
+	} else if(column == 1) {
+		vector4.x = this1[3];
+		vector4.y = this1[4];
+		vector4.z = 0;
+	} else {
+		vector4.x = this1[6];
+		vector4.y = this1[7];
+		vector4.z = 1;
+	}
+};
+lime_math_Matrix3.copyFrom = function(this1,sourceMatrix3) {
+	this1[0] = sourceMatrix3[0];
+	this1[1] = sourceMatrix3[1];
+	this1[3] = sourceMatrix3[3];
+	this1[4] = sourceMatrix3[4];
+	this1[6] = sourceMatrix3[6];
+	this1[7] = sourceMatrix3[7];
+};
+lime_math_Matrix3.copyRowFrom = function(this1,row,vector4) {
+	if(row > 2) {
+		throw haxe_Exception.thrown("Row " + row + " out of bounds (2)");
+	} else if(row == 0) {
+		this1[0] = vector4.x;
+		this1[3] = vector4.y;
+		this1[6] = vector4.z;
+	} else if(row == 1) {
+		this1[1] = vector4.x;
+		this1[4] = vector4.y;
+		this1[7] = vector4.z;
+	}
+};
+lime_math_Matrix3.copyRowTo = function(this1,row,vector4) {
+	if(row > 2) {
+		throw haxe_Exception.thrown("Row " + row + " out of bounds (2)");
+	} else if(row == 0) {
+		vector4.x = this1[0];
+		vector4.y = this1[3];
+		vector4.z = this1[6];
+	} else if(row == 1) {
+		vector4.x = this1[1];
+		vector4.y = this1[4];
+		vector4.z = this1[7];
+	} else {
+		vector4.x = 0;
+		vector4.y = 0;
+		vector4.z = 1;
+	}
+};
+lime_math_Matrix3.createBox = function(this1,scaleX,scaleY,rotation,xTranslate,yTranslate) {
+	if(yTranslate == null) {
+		yTranslate = 0;
+	}
+	if(xTranslate == null) {
+		xTranslate = 0;
+	}
+	if(rotation == null) {
+		rotation = 0;
+	}
+	if(rotation != 0) {
+		var cos = Math.cos(rotation);
+		var sin = Math.sin(rotation);
+		this1[0] = cos * scaleX;
+		this1[1] = sin * scaleY;
+		this1[3] = -sin * scaleX;
+		this1[4] = cos * scaleY;
+	} else {
+		this1[0] = scaleX;
+		this1[1] = 0;
+		this1[3] = 0;
+		this1[4] = scaleY;
+	}
+	this1[6] = xTranslate;
+	this1[7] = yTranslate;
+};
+lime_math_Matrix3.createGradientBox = function(this1,width,height,rotation,xTranslate,yTranslate) {
+	if(yTranslate == null) {
+		yTranslate = 0;
+	}
+	if(xTranslate == null) {
+		xTranslate = 0;
+	}
+	if(rotation == null) {
+		rotation = 0;
+	}
+	this1[0] = width / 1638.4;
+	this1[4] = height / 1638.4;
+	if(rotation != 0) {
+		var cos = Math.cos(rotation);
+		var sin = Math.sin(rotation);
+		this1[1] = sin * this1[4];
+		this1[3] = -sin * this1[0];
+		this1[0] *= cos;
+		this1[4] *= cos;
+	} else {
+		this1[1] = 0;
+		this1[3] = 0;
+	}
+	this1[6] = xTranslate + width / 2;
+	this1[7] = yTranslate + height / 2;
+};
+lime_math_Matrix3.equals = function(this1,matrix3) {
+	if(matrix3 != null && this1[6] == matrix3[6] && this1[7] == matrix3[7] && this1[0] == matrix3[0] && this1[1] == matrix3[1] && this1[3] == matrix3[3]) {
+		return this1[4] == matrix3[4];
+	} else {
+		return false;
+	}
+};
+lime_math_Matrix3.deltaTransformVector = function(this1,Vector2,result) {
+	if(result == null) {
+		result = new lime_math_Vector2();
+	}
+	result.x = Vector2.x * this1[0] + Vector2.y * this1[3];
+	result.y = Vector2.x * this1[1] + Vector2.y * this1[4];
+	return result;
+};
+lime_math_Matrix3.fromCairoMatrix3 = function(matrix) {
+	return lime_math_Matrix3._new(matrix.a,matrix.b,matrix.c,matrix.d,matrix.tx,matrix.ty);
+};
+lime_math_Matrix3.fromFloat32Array = function(array) {
+	if(array.length != 9) {
+		throw haxe_Exception.thrown("Expected array of length 9, got " + array.length);
+	}
+	return array;
+};
+lime_math_Matrix3.identity = function(this1) {
+	this1[0] = 1;
+	this1[1] = 0;
+	this1[3] = 0;
+	this1[4] = 1;
+	this1[6] = 0;
+	this1[7] = 0;
+};
+lime_math_Matrix3.invert = function(this1) {
+	var norm = this1[0] * this1[4] - this1[1] * this1[3];
+	if(norm == 0) {
+		this1[0] = this1[1] = this1[3] = this1[4] = 0;
+		this1[6] = -this1[6];
+		this1[7] = -this1[7];
+	} else {
+		norm = 1.0 / norm;
+		var a1 = this1[4] * norm;
+		this1[4] = this1[0] * norm;
+		this1[0] = a1;
+		this1[1] *= -norm;
+		this1[3] *= -norm;
+		var tx1 = -this1[0] * this1[6] - this1[3] * this1[7];
+		this1[7] = -this1[1] * this1[6] - this1[4] * this1[7];
+		this1[6] = tx1;
+	}
+	if(this1.length != 9) {
+		throw haxe_Exception.thrown("Expected array of length 9, got " + this1.length);
+	}
+	return this1;
+};
+lime_math_Matrix3.rotate = function(this1,theta) {
+	var cos = Math.cos(theta);
+	var sin = Math.sin(theta);
+	var a1 = this1[0] * cos - this1[1] * sin;
+	this1[1] = this1[0] * sin + this1[1] * cos;
+	this1[0] = a1;
+	var c1 = this1[3] * cos - this1[4] * sin;
+	this1[4] = this1[3] * sin + this1[4] * cos;
+	this1[3] = c1;
+	var tx1 = this1[6] * cos - this1[7] * sin;
+	this1[7] = this1[6] * sin + this1[7] * cos;
+	this1[6] = tx1;
+};
+lime_math_Matrix3.scale = function(this1,sx,sy) {
+	this1[0] *= sx;
+	this1[1] *= sy;
+	this1[3] *= sx;
+	this1[4] *= sy;
+	this1[6] *= sx;
+	this1[7] *= sy;
+};
+lime_math_Matrix3.setRotation = function(this1,theta,scale) {
+	if(scale == null) {
+		scale = 1;
+	}
+	this1[0] = Math.cos(theta) * scale;
+	this1[3] = Math.sin(theta) * scale;
+	this1[1] = -this1[3];
+	this1[4] = this1[0];
+};
+lime_math_Matrix3.setTo = function(this1,a,b,c,d,tx,ty) {
+	this1[0] = a;
+	this1[1] = b;
+	this1[3] = c;
+	this1[4] = d;
+	this1[6] = tx;
+	this1[7] = ty;
+};
+lime_math_Matrix3.toCairoMatrix3 = function(this1) {
+	return new lime_math_CairoMatrix3(this1[0],this1[1],this1[3],this1[4],this1[6],this1[7]);
+};
+lime_math_Matrix3.toString = function(this1) {
+	return "matrix(" + this1[0] + ", " + this1[1] + ", " + this1[3] + ", " + this1[4] + ", " + this1[6] + ", " + this1[7] + ")";
+};
+lime_math_Matrix3.transformRect = function(this1,rect,result) {
+	if(result == null) {
+		result = new lime_math_Rectangle();
+	}
+	var tx0 = this1[0] * rect.x + this1[3] * rect.y;
+	var tx1 = tx0;
+	var ty0 = this1[1] * rect.x + this1[4] * rect.y;
+	var ty1 = ty0;
+	var tx = this1[0] * (rect.x + rect.width) + this1[3] * rect.y;
+	var ty = this1[1] * (rect.x + rect.width) + this1[4] * rect.y;
+	if(tx < tx0) {
+		tx0 = tx;
+	}
+	if(ty < ty0) {
+		ty0 = ty;
+	}
+	if(tx > tx1) {
+		tx1 = tx;
+	}
+	if(ty > ty1) {
+		ty1 = ty;
+	}
+	tx = this1[0] * (rect.x + rect.width) + this1[3] * (rect.y + rect.height);
+	ty = this1[1] * (rect.x + rect.width) + this1[4] * (rect.y + rect.height);
+	if(tx < tx0) {
+		tx0 = tx;
+	}
+	if(ty < ty0) {
+		ty0 = ty;
+	}
+	if(tx > tx1) {
+		tx1 = tx;
+	}
+	if(ty > ty1) {
+		ty1 = ty;
+	}
+	tx = this1[0] * rect.x + this1[3] * (rect.y + rect.height);
+	ty = this1[1] * rect.x + this1[4] * (rect.y + rect.height);
+	if(tx < tx0) {
+		tx0 = tx;
+	}
+	if(ty < ty0) {
+		ty0 = ty;
+	}
+	if(tx > tx1) {
+		tx1 = tx;
+	}
+	if(ty > ty1) {
+		ty1 = ty;
+	}
+	result.setTo(tx0 + tx,ty0 + ty,tx1 - tx0,ty1 - ty0);
+	return result;
+};
+lime_math_Matrix3.transformVector = function(this1,pos,result) {
+	if(result == null) {
+		result = new lime_math_Vector2();
+	}
+	result.x = pos.x * this1[0] + pos.y * this1[3] + this1[6];
+	result.y = pos.x * this1[1] + pos.y * this1[4] + this1[7];
+	return result;
+};
+lime_math_Matrix3.translate = function(this1,dx,dy) {
+	this1[6] += dx;
+	this1[7] += dy;
+};
+lime_math_Matrix3.get_a = function(this1) {
+	return this1[0];
+};
+lime_math_Matrix3.set_a = function(this1,value) {
+	return this1[0] = value;
+};
+lime_math_Matrix3.get_b = function(this1) {
+	return this1[1];
+};
+lime_math_Matrix3.set_b = function(this1,value) {
+	return this1[1] = value;
+};
+lime_math_Matrix3.get_c = function(this1) {
+	return this1[3];
+};
+lime_math_Matrix3.set_c = function(this1,value) {
+	return this1[3] = value;
+};
+lime_math_Matrix3.get_d = function(this1) {
+	return this1[4];
+};
+lime_math_Matrix3.set_d = function(this1,value) {
+	return this1[4] = value;
+};
+lime_math_Matrix3.get_tx = function(this1) {
+	return this1[6];
+};
+lime_math_Matrix3.set_tx = function(this1,value) {
+	return this1[6] = value;
+};
+lime_math_Matrix3.get_ty = function(this1) {
+	return this1[7];
+};
+lime_math_Matrix3.set_ty = function(this1,value) {
+	return this1[7] = value;
+};
+lime_math_Matrix3.get = function(this1,index) {
+	return this1[index];
+};
+lime_math_Matrix3.set = function(this1,index,value) {
+	this1[index] = value;
+	return value;
+};
+var openfl_geom_Matrix = function(a,b,c,d,tx,ty) {
+	if(ty == null) {
+		ty = 0;
+	}
+	if(tx == null) {
+		tx = 0;
+	}
+	if(d == null) {
+		d = 1;
+	}
+	if(c == null) {
+		c = 0;
+	}
+	if(b == null) {
+		b = 0;
+	}
+	if(a == null) {
+		a = 1;
+	}
+	this.a = a;
+	this.b = b;
+	this.c = c;
+	this.d = d;
+	this.tx = tx;
+	this.ty = ty;
+};
+$hxClasses["openfl.geom.Matrix"] = openfl_geom_Matrix;
+openfl_geom_Matrix.__name__ = "openfl.geom.Matrix";
+openfl_geom_Matrix.prototype = {
+	a: null
+	,b: null
+	,c: null
+	,d: null
+	,tx: null
+	,ty: null
+	,__array: null
+	,clone: function() {
+		return new openfl_geom_Matrix(this.a,this.b,this.c,this.d,this.tx,this.ty);
+	}
+	,concat: function(m) {
+		var a1 = this.a * m.a + this.b * m.c;
+		this.b = this.a * m.b + this.b * m.d;
+		this.a = a1;
+		var c1 = this.c * m.a + this.d * m.c;
+		this.d = this.c * m.b + this.d * m.d;
+		this.c = c1;
+		var tx1 = this.tx * m.a + this.ty * m.c + m.tx;
+		this.ty = this.tx * m.b + this.ty * m.d + m.ty;
+		this.tx = tx1;
+	}
+	,copyColumnFrom: function(column,vector3D) {
+		if(column > 2) {
+			throw haxe_Exception.thrown("Column " + column + " out of bounds (2)");
+		} else if(column == 0) {
+			this.a = vector3D.x;
+			this.b = vector3D.y;
+		} else if(column == 1) {
+			this.c = vector3D.x;
+			this.d = vector3D.y;
+		} else {
+			this.tx = vector3D.x;
+			this.ty = vector3D.y;
+		}
+	}
+	,copyColumnTo: function(column,vector3D) {
+		if(column > 2) {
+			throw haxe_Exception.thrown("Column " + column + " out of bounds (2)");
+		} else if(column == 0) {
+			vector3D.x = this.a;
+			vector3D.y = this.b;
+			vector3D.z = 0;
+		} else if(column == 1) {
+			vector3D.x = this.c;
+			vector3D.y = this.d;
+			vector3D.z = 0;
+		} else {
+			vector3D.x = this.tx;
+			vector3D.y = this.ty;
+			vector3D.z = 1;
+		}
+	}
+	,copyFrom: function(sourceMatrix) {
+		this.a = sourceMatrix.a;
+		this.b = sourceMatrix.b;
+		this.c = sourceMatrix.c;
+		this.d = sourceMatrix.d;
+		this.tx = sourceMatrix.tx;
+		this.ty = sourceMatrix.ty;
+	}
+	,copyRowFrom: function(row,vector3D) {
+		if(row > 2) {
+			throw haxe_Exception.thrown("Row " + row + " out of bounds (2)");
+		} else if(row == 0) {
+			this.a = vector3D.x;
+			this.c = vector3D.y;
+			this.tx = vector3D.z;
+		} else if(row == 1) {
+			this.b = vector3D.x;
+			this.d = vector3D.y;
+			this.ty = vector3D.z;
+		}
+	}
+	,copyRowTo: function(row,vector3D) {
+		if(row > 2) {
+			throw haxe_Exception.thrown("Row " + row + " out of bounds (2)");
+		} else if(row == 0) {
+			vector3D.x = this.a;
+			vector3D.y = this.c;
+			vector3D.z = this.tx;
+		} else if(row == 1) {
+			vector3D.x = this.b;
+			vector3D.y = this.d;
+			vector3D.z = this.ty;
+		} else {
+			vector3D.setTo(0,0,1);
+		}
+	}
+	,createBox: function(scaleX,scaleY,rotation,tx,ty) {
+		if(ty == null) {
+			ty = 0;
+		}
+		if(tx == null) {
+			tx = 0;
+		}
+		if(rotation == null) {
+			rotation = 0;
+		}
+		if(rotation != 0) {
+			var cos = Math.cos(rotation);
+			var sin = Math.sin(rotation);
+			this.a = cos * scaleX;
+			this.b = sin * scaleY;
+			this.c = -sin * scaleX;
+			this.d = cos * scaleY;
+		} else {
+			this.a = scaleX;
+			this.b = 0;
+			this.c = 0;
+			this.d = scaleY;
+		}
+		this.tx = tx;
+		this.ty = ty;
+	}
+	,createGradientBox: function(width,height,rotation,tx,ty) {
+		if(ty == null) {
+			ty = 0;
+		}
+		if(tx == null) {
+			tx = 0;
+		}
+		if(rotation == null) {
+			rotation = 0;
+		}
+		this.a = width / 1638.4;
+		this.d = height / 1638.4;
+		if(rotation != 0) {
+			var cos = Math.cos(rotation);
+			var sin = Math.sin(rotation);
+			this.b = sin * this.d;
+			this.c = -sin * this.a;
+			this.a *= cos;
+			this.d *= cos;
+		} else {
+			this.b = 0;
+			this.c = 0;
+		}
+		this.tx = tx + width / 2;
+		this.ty = ty + height / 2;
+	}
+	,deltaTransformPoint: function(point) {
+		return new openfl_geom_Point(point.x * this.a + point.y * this.c,point.x * this.b + point.y * this.d);
+	}
+	,deltaTransformPointToOutput: function(point,output) {
+		if(output != null) {
+			output.setTo(point.x * this.a + point.y * this.c,point.x * this.b + point.y * this.d);
+			return output;
+		}
+		return new openfl_geom_Point(point.x * this.a + point.y * this.c,point.x * this.b + point.y * this.d);
+	}
+	,equals: function(matrix) {
+		if(matrix != null && this.tx == matrix.tx && this.ty == matrix.ty && this.a == matrix.a && this.b == matrix.b && this.c == matrix.c) {
+			return this.d == matrix.d;
+		} else {
+			return false;
+		}
+	}
+	,identity: function() {
+		this.a = 1;
+		this.b = 0;
+		this.c = 0;
+		this.d = 1;
+		this.tx = 0;
+		this.ty = 0;
+	}
+	,invert: function() {
+		var norm = this.a * this.d - this.b * this.c;
+		if(norm == 0) {
+			this.a = this.b = this.c = this.d = 0;
+			this.tx = -this.tx;
+			this.ty = -this.ty;
+		} else {
+			norm = 1.0 / norm;
+			var a1 = this.d * norm;
+			this.d = this.a * norm;
+			this.a = a1;
+			this.b *= -norm;
+			this.c *= -norm;
+			var tx1 = -this.a * this.tx - this.c * this.ty;
+			this.ty = -this.b * this.tx - this.d * this.ty;
+			this.tx = tx1;
+		}
+		return this;
+	}
+	,rotate: function(theta) {
+		var cos = Math.cos(theta);
+		var sin = Math.sin(theta);
+		var a1 = this.a * cos - this.b * sin;
+		this.b = this.a * sin + this.b * cos;
+		this.a = a1;
+		var c1 = this.c * cos - this.d * sin;
+		this.d = this.c * sin + this.d * cos;
+		this.c = c1;
+		var tx1 = this.tx * cos - this.ty * sin;
+		this.ty = this.tx * sin + this.ty * cos;
+		this.tx = tx1;
+	}
+	,scale: function(sx,sy) {
+		this.a *= sx;
+		this.b *= sy;
+		this.c *= sx;
+		this.d *= sy;
+		this.tx *= sx;
+		this.ty *= sy;
+	}
+	,setRotation: function(theta,scale) {
+		if(scale == null) {
+			scale = 1;
+		}
+		this.a = Math.cos(theta) * scale;
+		this.c = Math.sin(theta) * scale;
+		this.b = -this.c;
+		this.d = this.a;
+	}
+	,setTo: function(a,b,c,d,tx,ty) {
+		this.a = a;
+		this.b = b;
+		this.c = c;
+		this.d = d;
+		this.tx = tx;
+		this.ty = ty;
+	}
+	,to3DString: function(roundPixels) {
+		if(roundPixels == null) {
+			roundPixels = false;
+		}
+		if(roundPixels) {
+			return "matrix3d(" + this.a + ", " + this.b + ", 0, 0, " + this.c + ", " + this.d + ", 0, 0, 0, 0, 1, 0, " + (this.tx | 0) + ", " + (this.ty | 0) + ", 0, 1)";
+		} else {
+			return "matrix3d(" + this.a + ", " + this.b + ", 0, 0, " + this.c + ", " + this.d + ", 0, 0, 0, 0, 1, 0, " + this.tx + ", " + this.ty + ", 0, 1)";
+		}
+	}
+	,toMozString: function() {
+		return "matrix(" + this.a + ", " + this.b + ", " + this.c + ", " + this.d + ", " + this.tx + "px, " + this.ty + "px)";
+	}
+	,toString: function() {
+		return "matrix(" + this.a + ", " + this.b + ", " + this.c + ", " + this.d + ", " + this.tx + ", " + this.ty + ")";
+	}
+	,transformPoint: function(pos) {
+		return new openfl_geom_Point(pos.x * this.a + pos.y * this.c + this.tx,pos.x * this.b + pos.y * this.d + this.ty);
+	}
+	,transformPointToOutput: function(pos,output) {
+		if(output != null) {
+			output.setTo(pos.x * this.a + pos.y * this.c + this.tx,pos.x * this.b + pos.y * this.d + this.ty);
+			return output;
+		}
+		return new openfl_geom_Point(pos.x * this.a + pos.y * this.c + this.tx,pos.x * this.b + pos.y * this.d + this.ty);
+	}
+	,translate: function(dx,dy) {
+		this.tx += dx;
+		this.ty += dy;
+	}
+	,toArray: function(transpose) {
+		if(transpose == null) {
+			transpose = false;
+		}
+		if(this.__array == null) {
+			var array = null;
+			var vector = null;
+			var view = null;
+			var buffer = null;
+			var len = null;
+			this.__array = new Float32Array(9);
+		}
+		if(transpose) {
+			this.__array[0] = this.a;
+			this.__array[1] = this.b;
+			this.__array[2] = 0;
+			this.__array[3] = this.c;
+			this.__array[4] = this.d;
+			this.__array[5] = 0;
+			this.__array[6] = this.tx;
+			this.__array[7] = this.ty;
+			this.__array[8] = 1;
+		} else {
+			this.__array[0] = this.a;
+			this.__array[1] = this.c;
+			this.__array[2] = this.tx;
+			this.__array[3] = this.b;
+			this.__array[4] = this.d;
+			this.__array[5] = this.ty;
+			this.__array[6] = 0;
+			this.__array[7] = 0;
+			this.__array[8] = 1;
+		}
+		return this.__array;
+	}
+	,__cleanValues: function() {
+		this.a = Math.round(this.a * 1000) / 1000;
+		this.b = Math.round(this.b * 1000) / 1000;
+		this.c = Math.round(this.c * 1000) / 1000;
+		this.d = Math.round(this.d * 1000) / 1000;
+		this.tx = Math.round(this.tx * 10) / 10;
+		this.ty = Math.round(this.ty * 10) / 10;
+	}
+	,__toMatrix3: function() {
+		lime_math_Matrix3.setTo(openfl_geom_Matrix.__matrix3,this.a,this.b,this.c,this.d,this.tx,this.ty);
+		return openfl_geom_Matrix.__matrix3;
+	}
+	,__transformInversePoint: function(point) {
+		var norm = this.a * this.d - this.b * this.c;
+		if(norm == 0) {
+			point.x = -this.tx;
+			point.y = -this.ty;
+		} else {
+			var px = 1.0 / norm * (this.c * (this.ty - point.y) + this.d * (point.x - this.tx));
+			point.y = 1.0 / norm * (this.a * (point.y - this.ty) + this.b * (this.tx - point.x));
+			point.x = px;
+		}
+	}
+	,__transformInverseX: function(px,py) {
+		var norm = this.a * this.d - this.b * this.c;
+		if(norm == 0) {
+			return -this.tx;
+		} else {
+			return 1.0 / norm * (this.c * (this.ty - py) + this.d * (px - this.tx));
+		}
+	}
+	,__transformInverseY: function(px,py) {
+		var norm = this.a * this.d - this.b * this.c;
+		if(norm == 0) {
+			return -this.ty;
+		} else {
+			return 1.0 / norm * (this.a * (py - this.ty) + this.b * (this.tx - px));
+		}
+	}
+	,__transformPoint: function(point) {
+		var px = point.x;
+		var py = point.y;
+		point.x = px * this.a + py * this.c + this.tx;
+		point.y = px * this.b + py * this.d + this.ty;
+	}
+	,__transformX: function(px,py) {
+		return px * this.a + py * this.c + this.tx;
+	}
+	,__transformY: function(px,py) {
+		return px * this.b + py * this.d + this.ty;
+	}
+	,__translateTransformed: function(px,py) {
+		this.tx = px * this.a + py * this.c + this.tx;
+		this.ty = px * this.b + py * this.d + this.ty;
+	}
+	,__class__: openfl_geom_Matrix
+};
+var flixel_math_FlxMatrix = function(a,b,c,d,tx,ty) {
+	openfl_geom_Matrix.call(this,a,b,c,d,tx,ty);
+};
+$hxClasses["flixel.math.FlxMatrix"] = flixel_math_FlxMatrix;
+flixel_math_FlxMatrix.__name__ = "flixel.math.FlxMatrix";
+flixel_math_FlxMatrix.__super__ = openfl_geom_Matrix;
+flixel_math_FlxMatrix.prototype = $extend(openfl_geom_Matrix.prototype,{
+	rotateWithTrig: function(cos,sin) {
+		var a1 = this.a * cos - this.b * sin;
+		this.b = this.a * sin + this.b * cos;
+		this.a = a1;
+		var c1 = this.c * cos - this.d * sin;
+		this.d = this.c * sin + this.d * cos;
+		this.c = c1;
+		var tx1 = this.tx * cos - this.ty * sin;
+		this.ty = this.tx * sin + this.ty * cos;
+		this.tx = tx1;
+		return this;
+	}
+	,rotateBy180: function() {
+		this.setTo(-this.a,-this.b,-this.c,-this.d,-this.tx,-this.ty);
+		return this;
+	}
+	,rotateByPositive90: function() {
+		this.setTo(-this.b,this.a,-this.d,this.c,-this.ty,this.tx);
+		return this;
+	}
+	,rotateByNegative90: function() {
+		this.setTo(this.b,-this.a,this.d,-this.c,this.ty,-this.tx);
+		return this;
+	}
+	,transformX: function(px,py) {
+		return px * this.a + py * this.c + this.tx;
+	}
+	,transformY: function(px,py) {
+		return px * this.b + py * this.d + this.ty;
+	}
+	,__class__: flixel_math_FlxMatrix
+});
+var GoldenStageDepth = function() { };
+$hxClasses["GoldenStageDepth"] = GoldenStageDepth;
+GoldenStageDepth.__name__ = "GoldenStageDepth";
+GoldenStageDepth.prepare = function(sprite,frame) {
+	if(!GoldenStageDepth.installed) {
+		GoldenStageDepth.installed = true;
+		flixel_FlxG.signals.postStateSwitch.add(function() {
+			GoldenStageDepth.cache.h = { __keys__ : { }};
+		});
+	}
+	if(++GoldenStageDepth.draws % 120 == 0) {
+		var old = GoldenStageDepth.cache.keys();
+		while(old.hasNext()) {
+			var old1 = old.next();
+			if(old1.graphic == null || !old1.exists) {
+				GoldenStageDepth.cache.remove(old1);
+			}
+		}
+	}
+	var effect = GoldenStageDepth.cache.h[sprite.__id__];
+	if(effect == null) {
+		effect = new GoldenStageDepthShader();
+		GoldenStageDepth.cache.set(sprite,effect);
+	}
+	var mode = 0.;
+	var time = 0.;
+	var speed = 0.;
+	var frequency = 0.;
+	var amplitude = 0.;
+	var old = sprite.shader;
+	if(((old) instanceof GoldenWavyShader)) {
+		var s = old;
+		mode = 1;
+		time = s.iTime.value[0];
+		speed = s.uSpeed.value[0];
+		frequency = s.uFrequency.value[0];
+		amplitude = s.uWaveAmplitude.value[0];
+	} else if(((old) instanceof GoldenGlitchShader)) {
+		var s = old;
+		mode = 2;
+		time = s.uTime.value[0];
+		speed = s.uSpeed.value[0];
+		frequency = s.uFrequency.value[0];
+		amplitude = s.uWaveAmplitude.value[0];
+	} else if(((old) instanceof GoldenGalacticShader)) {
+		var s = old;
+		mode = 3;
+		time = s.uTime.value[0];
+		speed = s.uSpeed.value[0];
+		frequency = s.uFrequency.value[0];
+		amplitude = s.uWaveAmplitude.value[0];
+	} else if(((old) instanceof GoldenTubeShader)) {
+		var s = old;
+		mode = 4;
+		time = s.iTime.value[0];
+		effect.tube.value[0] = s.speed.value[0];
+		effect.tube.value[1] = s.horizSize.value[0];
+		effect.tube.value[2] = s.verticalAmount.value[0];
+		effect.tube.value[3] = s.verticalSpeed.value[0];
+		effect.tubeOffset.value[0] = s.verticalOffset.value[0];
+	} else if(((old) instanceof GoldenTickingShader)) {
+		var s = old;
+		mode = 5;
+		time = s.iTime.value[0];
+	}
+	effect.waveMode.value[0] = mode;
+	effect.boxed.value[0] = mode > 0 ? 1 : 0;
+	effect.wave.value[0] = time;
+	effect.wave.value[1] = speed;
+	effect.wave.value[2] = frequency;
+	effect.wave.value[3] = amplitude;
+	var uv = frame.uv;
+	effect.atlasRect.value[0] = uv.x;
+	effect.atlasRect.value[1] = uv.y;
+	effect.atlasRect.value[2] = uv.width;
+	effect.atlasRect.value[3] = uv.height;
+	effect.texel.value[0] = 1 / frame.parent.width;
+	effect.texel.value[1] = 1 / frame.parent.height;
+	effect.frameRotation.value[0] = frame.angle;
+	effect.clock.value[0] = ((flixel_FlxG.game._state) instanceof PlayState) ? Math.max(0,Conductor.songPosition) / 1000 : new Date().getTime() / 1000 - GoldenStageDepth.startedAt;
+	return effect;
+};
+GoldenStageDepth.draw = function(sprite) {
+	if(!GoldenQuality.depthBackgrounds || (GoldenQuality.potatoMode || GoldenQuality.savedSuperLow) || flixel_FlxG.renderBlit || sprite == null) {
+		return false;
+	}
+	if(((sprite) instanceof Character) || ((sprite) instanceof GoldenOCActor) || ((sprite) instanceof GoldenOrthogonalPortal) || ((sprite) instanceof flixel_text_FlxText)) {
+		return false;
+	}
+	var frame = sprite.frame;
+	if(((sprite) instanceof flixel_addons_display_FlxBackdrop)) {
+		var backdrop = sprite;
+		frame = backdrop._tileFrame;
+	}
+	if(frame == null || frame.parent == null || frame.parent.assetsKey == null || sprite.clipRect != null) {
+		return false;
+	}
+	if(sprite.shader != null && !((sprite.shader) instanceof GoldenWavyShader) && !((sprite.shader) instanceof GoldenGlitchShader) && !((sprite.shader) instanceof GoldenGalacticShader) && !((sprite.shader) instanceof GoldenTubeShader) && !((sprite.shader) instanceof GoldenTickingShader)) {
+		return false;
+	}
+	if(sprite.alpha <= 0 || !sprite.visible) {
+		return true;
+	}
+	var effect = GoldenStageDepth.prepare(sprite,frame);
+	var box = effect.boxed.value[0] > 0;
+	var repeats = ((sprite) instanceof flixel_addons_display_FlxBackdrop);
+	var _g = 0;
+	var _g1 = sprite.get_cameras();
+	while(_g < _g1.length) {
+		var camera = _g1[_g];
+		++_g;
+		if(camera == null || !camera.exists || !camera.visible || camera.zoom <= 0) {
+			continue;
+		}
+		if(effect.baseZoom <= 0) {
+			effect.baseZoom = camera.zoom;
+		}
+		effect.viewZoom.value[0] = Math.max(.25,Math.min(4,camera.zoom / effect.baseZoom));
+		effect.pan.value[0] = Math.max(-.09,Math.min(.09,camera.scroll.x * sprite.scrollFactor.x / 20000));
+		effect.pan.value[1] = Math.max(-.06,Math.min(.06,camera.scroll.y * sprite.scrollFactor.y / 20000));
+		var tmp = effect.tilePattern.value[1] = 1.;
+		effect.tilePattern.value[0] = tmp;
+		var tmp1 = effect.tilePattern.value[3] = 0.;
+		effect.tilePattern.value[2] = tmp1;
+		if(box || repeats) {
+			var width = camera.width / camera.zoom;
+			var height = camera.height / camera.zoom;
+			var left = camera.width * .5 - width * .5;
+			var top = camera.height * .5 - height * .5;
+			frame.prepareMatrix(GoldenStageDepth.matrix,0,sprite.flipX,sprite.flipY);
+			GoldenStageDepth.matrix.scale(width / frame.sourceSize.x,height / frame.sourceSize.y);
+			GoldenStageDepth.matrix.translate(left,top);
+			if(repeats && !box) {
+				var tileWidth = Math.max(1,frame.sourceSize.x * Math.abs(sprite.scale.x));
+				var tileHeight = Math.max(1,frame.sourceSize.y * Math.abs(sprite.scale.y));
+				effect.tilePattern.value[0] = width / tileWidth;
+				effect.tilePattern.value[1] = height / tileHeight;
+				effect.tilePattern.value[2] = (left + camera.scroll.x * sprite.scrollFactor.x - sprite.x) / tileWidth;
+				effect.tilePattern.value[3] = (top + camera.scroll.y * sprite.scrollFactor.y - sprite.y) / tileHeight;
+			}
+		} else {
+			frame.prepareMatrix(GoldenStageDepth.matrix,0,sprite.flipX,sprite.flipY);
+			GoldenStageDepth.matrix.translate(-sprite.origin.x,-sprite.origin.y);
+			GoldenStageDepth.matrix.scale(sprite.scale.x,sprite.scale.y);
+			if(sprite.angle != 0) {
+				GoldenStageDepth.matrix.rotate(sprite.angle * Math.PI / 180);
+			}
+			var position = sprite.getScreenPosition(null,camera);
+			GoldenStageDepth.matrix.translate(position.x - sprite.offset.x + sprite.origin.x,position.y - sprite.offset.y + sprite.origin.y);
+			position.put();
+		}
+		camera.drawPixels(frame,null,GoldenStageDepth.matrix,sprite.colorTransform,sprite.blend,sprite.antialiasing,effect);
+	}
+	return true;
+};
+var GoldenStageDepthShader = function() {
+	this.baseZoom = 0;
+	if(this.__glFragmentSource == null) {
+		this.__glFragmentSource = "\nvarying float openfl_Alphav;\n\t\tvarying vec4 openfl_ColorMultiplierv;\n\t\tvarying vec4 openfl_ColorOffsetv;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform bool openfl_HasColorTransform;\n\t\tuniform vec2 openfl_TextureSize;\n\t\tuniform sampler2D bitmap;\n\n\t\tuniform bool hasTransform;\n\t\tuniform bool hasColorTransform;\n\n\t\tvec4 flixel_texture2D(sampler2D bitmap, vec2 coord)\n\t\t{\n\t\t\tvec4 color = texture2D(bitmap, coord);\n\t\t\tif (!hasTransform)\n\t\t\t{\n\t\t\t\treturn color;\n\t\t\t}\n\n\t\t\tif (color.a == 0.0)\n\t\t\t{\n\t\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\n\t\t\t}\n\n\t\t\tif (!hasColorTransform)\n\t\t\t{\n\t\t\t\treturn color * openfl_Alphav;\n\t\t\t}\n\n\t\t\tcolor = vec4(color.rgb / color.a, color.a);\n\n\t\t\tmat4 colorMultiplier = mat4(0);\n\t\t\tcolorMultiplier[0][0] = openfl_ColorMultiplierv.x;\n\t\t\tcolorMultiplier[1][1] = openfl_ColorMultiplierv.y;\n\t\t\tcolorMultiplier[2][2] = openfl_ColorMultiplierv.z;\n\t\t\tcolorMultiplier[3][3] = openfl_ColorMultiplierv.w;\n\n\t\t\tcolor = clamp(openfl_ColorOffsetv + (color * colorMultiplier), 0.0, 1.0);\n\n\t\t\tif (color.a > 0.0)\n\t\t\t{\n\t\t\t\treturn vec4(color.rgb * color.a * openfl_Alphav, color.a * openfl_Alphav);\n\t\t\t}\n\t\t\treturn vec4(0.0, 0.0, 0.0, 0.0);\n\t\t}\n\t\n\nuniform vec4 atlasRect;\nuniform vec2 texel;\nuniform float frameRotation;\nuniform float boxed;\nuniform float clock;\nuniform float viewZoom;\nuniform vec2 pan;\nuniform vec4 tilePattern;\nuniform float waveMode;\nuniform vec4 wave;\nuniform vec4 tube;\nuniform float tubeOffset;\nvec2 orient(vec2 p, float direction) {\n    float r=frameRotation*direction;\n    if(r>45.0)return vec2(p.y,1.0-p.x);\n    if(r< -45.0)return vec2(1.0-p.y,p.x);\n    return p;\n}\nvec2 animatedTexture(vec2 p) {\n    float t=wave.x;\n    if(waveMode<0.5)return p;\n    if(waveMode<1.5) {\n        float fy=sin(p.y*wave.z*3.0-t*wave.y)*wave.w*0.4;\n        float fx=sin(p.x*wave.z*3.0+t*wave.y)*wave.w*0.4;\n        return p+vec2(fx+fy*sin(t*wave.y)*1.2,fy+fx*cos(t*wave.y)*1.5);\n    }\n    if(waveMode<2.5) {\n        vec2 safe=max(abs(p),vec2(0.025));\n        return p+vec2(sin(p.y*wave.z+t*wave.y)*wave.w*p.y/safe.x,\n            sin(p.x*wave.z-t*wave.y)*wave.w*p.x/safe.y);\n    }\n    if(waveMode<3.5) {\n        return p+vec2(sin(p.x*wave.z+5.0*p.y+t*wave.y),sin(p.y*wave.z+10.0*p.x+t*wave.y))*wave.w;\n    }\n    if(waveMode<4.5) {\n        float dx=abs(p.x-0.5)*1.5;\n        float dy=abs(p.y-0.5);\n        float dir=p.y<=0.5?1.0:-1.0;\n        p.y+=sin(t*tube.w*10.0)*tube.z+tubeOffset;\n        p.y+=dx*dx*dy*dir;\n        p.x=p.x*tube.y-t*tube.x;\n        return p;\n    }\n    // Ticking retains its moving lens pattern on the room surfaces.\n    vec2 lens=p-0.5;\n    lens.x-=lens.x*lens.x*lens.x*0.512;lens.y*=1.0-(lens.x*1.3)*(lens.x*1.3);lens+=0.5;\n    vec2 ball=fract(lens*vec2(5.0,3.0)-t*0.1)-0.5;\n    ball.y=fract(ball.y+floor(mod(lens.x*5.0-t*0.1,2.0))*0.5+0.5)-0.5;\n    ball*=2.4;\n    if(length(ball)<1.0)p+=reflect(ball* -0.1,ball);\n    return p;\n}\nvoid main() {\n    vec2 span=max(atlasRect.zw-atlasRect.xy,vec2(0.000001));\n    vec2 uv=orient((openfl_TextureCoordv-atlasRect.xy)/span,1.0);\n    float light=1.0;\n    if(boxed>0.5) {\n        vec2 p=(uv*2.0-1.0)/max(0.25,viewZoom)+pan;\n        p+=vec2(sin(clock*0.17)*0.035,cos(clock*0.13)*0.02);\n        float depth=2.25;\n        vec3 ray=vec3(p.x*1.6,p.y,1.0);\n        float distance=depth;\n        float face=0.0;\n        float side=1.6/max(abs(ray.x),0.0001);\n        float vertical=1.0/max(abs(ray.y),0.0001);\n        if(side<distance){distance=side;face=1.0;}\n        if(vertical<distance){distance=vertical;face=2.0;}\n        vec3 hit=ray*distance;\n        if(face<0.5)uv=vec2(hit.x/3.2+0.5,hit.y*0.5+0.5);\n        else if(face<1.5) {\n            uv=vec2(hit.x>0.0?hit.z/depth:1.0-hit.z/depth,hit.y*0.5+0.5);\n            light=hit.x>0.0?0.88:0.74;\n        } else {\n            uv=vec2(hit.x/3.2+0.5,hit.y>0.0?hit.z/depth:1.0-hit.z/depth);\n            light=hit.y>0.0?0.86:0.70;\n        }\n    } else {\n        vec2 p=uv*2.0-1.0;\n        vec2 tilt=vec2(sin(clock*0.16)*0.045,cos(clock*0.12)*0.025)+pan*0.3;\n        uv=0.5+0.5*p/max(0.8,1.0+dot(p,tilt));\n        uv=uv*tilePattern.xy+tilePattern.zw;\n    }\n    uv=animatedTexture(uv);\n    if(boxed>0.5||waveMode>0.5||tilePattern.x>1.001||tilePattern.y>1.001)uv=fract(uv);\n    else uv=clamp(uv,0.0,1.0);\n    uv=orient(uv,-1.0);\n    vec2 sampleUv=atlasRect.xy+uv*span;\n    sampleUv=clamp(sampleUv,atlasRect.xy+texel*0.5,atlasRect.zw-texel*0.5);\n    vec4 color=flixel_texture2D(bitmap,sampleUv);\n    gl_FragColor=vec4(color.rgb*light,color.a);\n}\n";
+	}
+	if(this.__glVertexSource == null) {
+		this.__glVertexSource = "\n\t\tattribute float openfl_Alpha;\n\t\tattribute vec4 openfl_ColorMultiplier;\n\t\tattribute vec4 openfl_ColorOffset;\n\t\tattribute vec4 openfl_Position;\n\t\tattribute vec2 openfl_TextureCoord;\n\n\t\tvarying float openfl_Alphav;\n\t\tvarying vec4 openfl_ColorMultiplierv;\n\t\tvarying vec4 openfl_ColorOffsetv;\n\t\tvarying vec2 openfl_TextureCoordv;\n\n\t\tuniform mat4 openfl_Matrix;\n\t\tuniform bool openfl_HasColorTransform;\n\t\tuniform vec2 openfl_TextureSize;\n\n\t\t\n\t\tattribute float alpha;\n\t\tattribute vec4 colorMultiplier;\n\t\tattribute vec4 colorOffset;\n\t\tuniform bool hasColorTransform;\n\t\t\n\t\tvoid main(void)\n\t\t{\n\t\t\topenfl_Alphav = openfl_Alpha;\n\t\topenfl_TextureCoordv = openfl_TextureCoord;\n\n\t\tif (openfl_HasColorTransform) {\n\n\t\t\topenfl_ColorMultiplierv = openfl_ColorMultiplier;\n\t\t\topenfl_ColorOffsetv = openfl_ColorOffset / 255.0;\n\n\t\t}\n\n\t\tgl_Position = openfl_Matrix * openfl_Position;\n\n\t\t\t\n\t\t\topenfl_Alphav = openfl_Alpha * alpha;\n\t\t\t\n\t\t\tif (hasColorTransform)\n\t\t\t{\n\t\t\t\topenfl_ColorOffsetv = colorOffset / 255.0;\n\t\t\t\topenfl_ColorMultiplierv = colorMultiplier;\n\t\t\t}\n\t\t}";
+	}
+	flixel_graphics_tile_FlxGraphicsShader.call(this);
+	this.atlasRect.value = [0.,0.,1.,1.];
+	this.texel.value = [.001,.001];
+	this.frameRotation.value = [0.];
+	this.boxed.value = [0.];
+	this.clock.value = [0.];
+	this.viewZoom.value = [1.];
+	this.pan.value = [0.,0.];
+	this.tilePattern.value = [1.,1.,0.,0.];
+	this.waveMode.value = [0.];
+	this.wave.value = [0.,0.,0.,0.];
+	this.tube.value = [0.,1.,0.,0.];
+	this.tubeOffset.value = [0.];
+	this.__isGenerated = true;
+	this.__initGL();
+};
+$hxClasses["GoldenStageDepthShader"] = GoldenStageDepthShader;
+GoldenStageDepthShader.__name__ = "GoldenStageDepthShader";
+GoldenStageDepthShader.__super__ = flixel_graphics_tile_FlxGraphicsShader;
+GoldenStageDepthShader.prototype = $extend(flixel_graphics_tile_FlxGraphicsShader.prototype,{
+	baseZoom: null
+	,atlasRect: null
+	,texel: null
+	,frameRotation: null
+	,boxed: null
+	,clock: null
+	,viewZoom: null
+	,pan: null
+	,tilePattern: null
+	,waveMode: null
+	,wave: null
+	,tube: null
+	,tubeOffset: null
+	,__class__: GoldenStageDepthShader
 });
 var GoldenStrumArrow = function(x,y,skin,autoReset) {
 	flixel_FlxSprite.call(this,x,y);
@@ -32518,30 +33712,54 @@ GoldenTickingSplitShader.prototype = $extend(flixel_graphics_tile_FlxGraphicsSha
 });
 var GoldenTouchLayout = function(owner) {
 	this.bambiVisible = null;
-	this.visibility = [];
-	this.offsets = [];
+	this.snapshots = [];
 	this.owner = owner;
 };
 $hxClasses["GoldenTouchLayout"] = GoldenTouchLayout;
 GoldenTouchLayout.__name__ = "GoldenTouchLayout";
 GoldenTouchLayout.prototype = {
 	owner: null
-	,offsets: null
-	,visibility: null
+	,snapshots: null
+	,hud: null
 	,bambiVisible: null
 	,restore: function() {
 		var _g = 0;
-		var _g1 = this.offsets.length;
-		while(_g < _g1) {
-			var i = _g++;
-			var strum = this.owner.strumLineNotes.members[i];
-			if(strum != null) {
-				strum.set_x(strum.x - this.offsets[i]);
-				strum.set_visible(this.visibility[i]);
+		var _g1 = this.snapshots;
+		while(_g < _g1.length) {
+			var data = _g1[_g];
+			++_g;
+			var s = data.sprite;
+			if(s == null || !s.exists) {
+				continue;
 			}
+			s.setPosition(data.x,data.y);
+			s.scale.set(data.sx,data.sy);
+			s.set_angle(data.angle);
+			s.set_alpha(data.alpha);
+			s.set_visible(data.visible);
+			s.scrollFactor.set(data.scrollX,data.scrollY);
+			s.origin.set(data.ox,data.oy);
+			s.offset.set(data.dx,data.dy);
 		}
-		this.offsets.length = 0;
-		this.visibility.length = 0;
+		this.snapshots.length = 0;
+		if(this.hud != null) {
+			var _this = this.owner.camHUD;
+			var X = this.hud.x;
+			var Y = this.hud.y;
+			if(Y == null) {
+				Y = 0;
+			}
+			if(X == null) {
+				X = 0;
+			}
+			_this.set_x(X);
+			_this.set_y(Y);
+			this.owner.camHUD.set_zoom(this.hud.zoom);
+			this.owner.camHUD.set_angle(this.hud.angle);
+			this.owner.camHUD.scroll.set(this.hud.sx,this.hud.sy);
+			this.owner.camHUD.filtersEnabled = this.hud.filters;
+			this.hud = null;
+		}
 		if(this.bambiVisible != null && this.owner.bambiStrums != null) {
 			this.owner.bambiStrums.set_visible(this.bambiVisible);
 		}
@@ -32551,23 +33769,50 @@ GoldenTouchLayout.prototype = {
 		if(!GoldenMobileControls.enabled || this.owner.strumLineNotes == null) {
 			return;
 		}
+		this.hud = { x : this.owner.camHUD.x, y : this.owner.camHUD.y, zoom : this.owner.camHUD.zoom, angle : this.owner.camHUD.angle, sx : this.owner.camHUD.scroll.x, sy : this.owner.camHUD.scroll.y, filters : this.owner.camHUD.filtersEnabled};
+		var _this = this.owner.camHUD;
+		var X = 0;
+		var Y = 0;
+		if(Y == null) {
+			Y = 0;
+		}
+		if(X == null) {
+			X = 0;
+		}
+		_this.set_x(X);
+		_this.set_y(Y);
+		this.owner.camHUD.set_zoom(1);
+		this.owner.camHUD.set_angle(0);
+		this.owner.camHUD.scroll.set();
+		this.owner.camHUD.filtersEnabled = false;
 		var _g = 0;
 		var _g1 = this.owner.strumLineNotes.members.length;
 		while(_g < _g1) {
 			var i = _g++;
-			var strum = this.owner.strumLineNotes.members[i];
-			var controlled = i < 4 == PlayState.opponentMode;
-			var offset = controlled && !GoldenPartThree.active(this.owner) && PlayState.curStage != "ready-loud" ? (PlayState.opponentMode ? 1 : -1) * flixel_FlxG.width / 4 : 0;
-			this.offsets.push(offset);
-			this.visibility.push(strum == null ? false : strum.visible);
-			if(strum != null) {
-				strum.set_x(strum.x + offset);
-				if(!controlled) {
-					strum.set_visible(false);
-				} else {
-					strum.set_visible(true);
-				}
+			var s = this.owner.strumLineNotes.members[i];
+			if(s == null) {
+				continue;
 			}
+			this.snapshots.push({ sprite : s, x : s.x, y : s.y, sx : s.scale.x, sy : s.scale.y, angle : s.angle, alpha : s.alpha, visible : s.visible, scrollX : s.scrollFactor.x, scrollY : s.scrollFactor.y, ox : s.origin.x, oy : s.origin.y, dx : s.offset.x, dy : s.offset.y});
+			var controlled = i < 4 == PlayState.opponentMode;
+			s.set_visible(controlled);
+			if(!controlled) {
+				continue;
+			}
+			var size = GoldenNoteSkin.baseScale(GoldenNoteSkin.skinOf(s)) * 1.12;
+			s.scale.set(size,size);
+			s.set_angle(0);
+			s.set_alpha(1);
+			s.scrollFactor.set();
+			var idle = s.animation._animations.h["static"];
+			if(idle == null || idle.frames.length == 0) {
+				continue;
+			}
+			var base = s.frames.frames[idle.frames[0]].sourceSize;
+			var centerX = flixel_FlxG.width * (.14 + i % 4 * .24);
+			var centerY = flixel_FlxG.save.data.downscroll ? flixel_FlxG.height - 105 : 105;
+			s.setPosition(centerX - base.x * size * .5,centerY - base.y * size * .5);
+			GoldenNoteSkin.alignStrum(s);
 		}
 		if(this.owner.bambiStrums != null) {
 			this.bambiVisible = this.owner.bambiStrums.visible;
@@ -33327,7 +34572,7 @@ GoldenTunnelVision.prototype = {
 			this.badai.set_x((step >= 1632 ? -880 : this.entranceX) + drift);
 			this.badai.set_y((step >= 1632 ? 445 : this.entranceY) + drift);
 			this.badai.origin.set(this.badai.frameWidth * .5,this.badai.frameHeight * .5);
-			this.badai.set_angle(GoldenQuality.superLow ? 0 : Math.sin(this.floatClock) * 15);
+			this.badai.set_angle(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow ? 0 : Math.sin(this.floatClock) * 15);
 		}
 		if(step >= 1216 && step < 2160) {
 			var p = GoldenTunnelVision.eased(GoldenTunnelVision.ramp(time,1216,2500));
@@ -33343,7 +34588,7 @@ GoldenTunnelVision.prototype = {
 				fh.set_y(fh.y - 75.6 * (Math.cos(this.backgroundPhase) - Math.cos(this.floatClock)));
 				this.chaseDave.set_flipX(horizontal >= 900);
 				this.chaseDave.origin.set(this.chaseDave.frameWidth * .5,this.chaseDave.frameHeight * .5);
-				this.chaseDave.set_angle(GoldenQuality.superLow ? 0 : travel * 20 % 360);
+				this.chaseDave.set_angle(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow ? 0 : travel * 20 % 360);
 			}
 		}
 		this.chair.scale.set(this.chaseDave.scale.x,this.chaseDave.scale.y);
@@ -33428,7 +34673,7 @@ GoldenTunnelVision.prototype = {
 	,__class__: GoldenTunnelVision
 };
 var GoldenTunnelVisionStage = function() {
-	flixel_group_FlxTypedGroup.call(this);
+	GoldenDepthGroup.call(this);
 	this.backdrop = new flixel_FlxSprite().loadGraphic(Paths.getPath("images/" + "golden/tunnelvision/its" + ".png","IMAGE","tunnelvision"));
 	this.backdrop.scale.set(2,2);
 	this.backdrop.updateHitbox();
@@ -33489,7 +34734,7 @@ var GoldenTunnelVisionStage = function() {
 		_this.set_y((flixel_FlxG.height - _this.get_height()) / 2);
 	}
 	this.wire.scrollFactor.set(.2,.2);
-	this.wire.set_antialiasing(!GoldenQuality.superLow);
+	this.wire.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 	this.add(this.wire);
 	this.disco = new GoldenTunnelBackdrop(Paths.getPath("images/" + "golden/tunnelvision/disco_bg" + ".png","IMAGE","tunnelvision"));
 	this.discoSecond = new GoldenTunnelBackdrop(Paths.getPath("images/" + "golden/tunnelvision/disco_bg" + ".png","IMAGE","tunnelvision"));
@@ -33511,12 +34756,12 @@ var GoldenTunnelVisionStage = function() {
 	this.vignette.scrollFactor.set();
 	this.vignette.set_visible(false);
 	this.vignette.set_alpha(0);
-	this.vignette.set_antialiasing(!GoldenQuality.superLow);
+	this.vignette.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 };
 $hxClasses["GoldenTunnelVisionStage"] = GoldenTunnelVisionStage;
 GoldenTunnelVisionStage.__name__ = "GoldenTunnelVisionStage";
-GoldenTunnelVisionStage.__super__ = flixel_group_FlxTypedGroup;
-GoldenTunnelVisionStage.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
+GoldenTunnelVisionStage.__super__ = GoldenDepthGroup;
+GoldenTunnelVisionStage.prototype = $extend(GoldenDepthGroup.prototype,{
 	backdrop: null
 	,wire: null
 	,disco: null
@@ -33527,7 +34772,7 @@ GoldenTunnelVisionStage.prototype = $extend(flixel_group_FlxTypedGroup.prototype
 		this.disco.set_visible(this.discoSecond.set_visible(this.vignette.set_visible(discoActive)));
 		if(discoActive) {
 			var phaseTime = Math.max(0,time - 133043.478260869568);
-			var offset = GoldenQuality.superLow ? 0 : -(phaseTime * 5) % 5652;
+			var offset = GoldenQuality.potatoMode || GoldenQuality.savedSuperLow ? 0 : -(phaseTime * 5) % 5652;
 			this.disco.set_y(-2466 + offset);
 			this.discoSecond.set_y(this.disco.y + 5652);
 			var colorTime = Math.max(0,Math.min(time,176086.956521739135) - 133043.478260869568);
@@ -33566,7 +34811,7 @@ GoldenTunnelVisionStage.prototype = $extend(flixel_group_FlxTypedGroup.prototype
 			this.vignette.set_alpha(step >= 2160 ? .8 * (1 - Math.min(1,(time - 176086.956521739135) / 3000)) : .8);
 		}
 		if(this.wire.animation._curAnim != null) {
-			this.wire.animation._curAnim.set_curFrame(GoldenQuality.superLow ? 0 : (Math.max(0,time) * 24 / 1000 | 0) % this.wire.animation._curAnim.frames.length);
+			this.wire.animation._curAnim.set_curFrame(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow ? 0 : (Math.max(0,time) * 24 / 1000 | 0) % this.wire.animation._curAnim.frames.length);
 			var _this = this.wire.animation;
 			if(_this._curAnim != null) {
 				_this._curAnim.pause();
@@ -33585,7 +34830,7 @@ var GoldenTunnelVisionTrail = function(target) {
 	flixel_group_FlxTypedGroup.call(this,4);
 	this.target = target;
 	this.set_active(false);
-	if(!GoldenQuality.superLow) {
+	if(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow)) {
 		this.allocateCopies();
 	}
 };
@@ -33634,7 +34879,7 @@ GoldenTunnelVisionTrail.prototype = $extend(flixel_group_FlxTypedGroup.prototype
 			this.target = source;
 			this.resetTrail();
 		}
-		if(GoldenQuality.superLow) {
+		if(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow) {
 			if(this.filled > 0) {
 				this.resetTrail();
 			}
@@ -33683,7 +34928,7 @@ GoldenTunnelVisionTrail.prototype = $extend(flixel_group_FlxTypedGroup.prototype
 		}
 	}
 	,draw: function() {
-		if(GoldenQuality.superLow || this.filled == 0 || this.alpha <= 0) {
+		if(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow || this.filled == 0 || this.alpha <= 0) {
 			return;
 		}
 		var _g = 0;
@@ -33925,7 +35170,7 @@ var GoldenWavySprite = function(x,y) {
 	this.tileWorld = false;
 	flixel_FlxSprite.call(this,x,y);
 	this.waveShader = new GoldenWavyShader();
-	if(!GoldenQuality.superLow) {
+	if(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow)) {
 		this.shader = this.waveShader;
 	}
 };
@@ -33936,6 +35181,9 @@ GoldenWavySprite.prototype = $extend(flixel_FlxSprite.prototype,{
 	tileWorld: null
 	,waveShader: null
 	,draw: function() {
+		if(GoldenStageDepth.draw(this)) {
+			return;
+		}
 		if(this.frame != null) {
 			var uv = this.frame.uv;
 			var values = this.waveShader.frameUv.value;
@@ -33980,7 +35228,7 @@ GoldenWavySprite.prototype = $extend(flixel_FlxSprite.prototype,{
 	}
 	,update: function(elapsed) {
 		flixel_FlxSprite.prototype.update.call(this,elapsed);
-		if(!GoldenQuality.superLow) {
+		if(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow)) {
 			this.waveShader.iTime.value[0] += elapsed;
 		}
 	}
@@ -34121,7 +35369,7 @@ HealthIcon.prototype = $extend(flixel_FlxSprite.prototype,{
 		}
 	}
 	,draw: function() {
-		if(GoldenQuality.superLow) {
+		if(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow) {
 			this.set_antialiasing(false);
 		}
 		flixel_FlxSprite.prototype.draw.call(this);
@@ -34371,7 +35619,7 @@ LoadReplayState.prototype = $extend(MusicBeatState.prototype,{
 	,versionShit: null
 	,poggerDetails: null
 	,create: function() {
-		var menuBG = new flixel_FlxSprite().loadGraphic(Paths.getPath("images/" + "menuDesat" + ".png","IMAGE",null));
+		var menuBG = new GoldenDepthSprite().loadGraphic(Paths.getPath("images/" + "menuDesat" + ".png","IMAGE",null));
 		haxe_Log.trace(this.controlsStrings,{ fileName : "source/LoadReplayState.hx", lineNumber : 38, className : "LoadReplayState", methodName : "create"});
 		this.controlsStrings.sort(Reflect.compare);
 		this.addWeek(["Bopeebo","Fresh","Dadbattle"],1,["dad"]);
@@ -34534,6 +35782,7 @@ LoadReplayState.prototype = $extend(MusicBeatState.prototype,{
 	,__class__: LoadReplayState
 });
 var LoadingState = function(target,stopMusic) {
+	this.disposed = false;
 	this.failed = false;
 	this.lastFill = -1;
 	this.completedFor = 0;
@@ -34579,11 +35828,24 @@ LoadingState.getNextState = function(target,stopMusic) {
 	}
 	return target;
 };
+LoadingState.libraryReady = function(id) {
+	var library = lime_utils_Assets.getLibrary(id);
+	if(library == null) {
+		return false;
+	}
+	if(((library) instanceof openfl_utils_AssetLibrary)) {
+		var wrapper = library;
+		if(wrapper.__proxy != null) {
+			library = wrapper.__proxy;
+		}
+	}
+	return library.loaded;
+};
 LoadingState.isSoundLoaded = function(path) {
 	return openfl_utils_Assets.cache.hasSound(path);
 };
 LoadingState.isLibraryLoaded = function(library) {
-	return openfl_utils_Assets.getLibrary(library) != null;
+	return LoadingState.libraryReady(library);
 };
 LoadingState.initSongsManifest = function() {
 	var id = "songs";
@@ -34643,18 +35905,26 @@ LoadingState.prototype = $extend(MusicBeatState.prototype,{
 	,lastFill: null
 	,failure: null
 	,failed: null
+	,disposed: null
+	,activeLoad: function() {
+		if(!this.disposed) {
+			return flixel_FlxG.game._state == this;
+		} else {
+			return false;
+		}
+	}
 	,loadFailed: function(name,error) {
-		if(this.failed) {
+		if(this.failed || !(!this.disposed && flixel_FlxG.game._state == this)) {
 			return;
 		}
 		this.failed = true;
-		haxe_Log.trace("Could not load " + name + ": " + Std.string(error),{ fileName : "source/LoadingState.hx", lineNumber : 42, className : "LoadingState", methodName : "loadFailed"});
+		haxe_Log.trace("Could not load " + name + ": " + Std.string(error),{ fileName : "source/LoadingState.hx", lineNumber : 44, className : "LoadingState", methodName : "loadFailed"});
 		this.failure = new flixel_text_FlxText(80,535,1120,"Could not load " + name + ".\nEnter: try again    Esc: menu",24);
 		this.failure.setFormat("assets/fonts/" + "comic_normal.ttf",24,-21846,"center",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
 		this.add(this.failure);
 	}
 	,partProgress: function(id,loaded,total) {
-		if(total > 0) {
+		if(!this.disposed && flixel_FlxG.game._state == this && total > 0) {
 			var this1 = this.loadParts;
 			var value = Object.prototype.hasOwnProperty.call(this.loadParts.h,id) ? this.loadParts.h[id] : 0;
 			this1.h[id] = Math.max(value,Math.min(1,loaded / total));
@@ -34771,6 +36041,9 @@ LoadingState.prototype = $extend(MusicBeatState.prototype,{
 		MusicBeatState.prototype.create.call(this);
 		this.loadParts.h["manifest"] = 0;
 		LoadingState.initSongsManifest().onComplete(function(lib) {
+			if(!(!_gthis.disposed && flixel_FlxG.game._state == _gthis)) {
+				return;
+			}
 			_gthis.loadParts.h["manifest"] = 1;
 			_gthis.callbacks = new MultiCallback($bind(_gthis,_gthis.onLoad));
 			var introComplete = _gthis.callbacks.add("introComplete");
@@ -34802,6 +36075,8 @@ LoadingState.prototype = $extend(MusicBeatState.prototype,{
 			new flixel_util_FlxTimer().start(fadeTime + 1.0,function(_) {
 				introComplete();
 			});
+		}).onError(function(error) {
+			_gthis.loadFailed("song list",error);
 		});
 	}
 	,checkLoadSong: function(path) {
@@ -34814,8 +36089,10 @@ LoadingState.prototype = $extend(MusicBeatState.prototype,{
 			openfl_utils_Assets.loadSound(path).onProgress(function(loaded,total) {
 				_gthis.partProgress(path,loaded,total);
 			}).onComplete(function(_) {
-				_gthis.loadParts.h[path] = 1;
-				callback();
+				if(!_gthis.disposed && flixel_FlxG.game._state == _gthis) {
+					_gthis.loadParts.h[path] = 1;
+					callback();
+				}
 			}).onError(function(error) {
 				_gthis.loadFailed(PlayState.SONG.song + " audio",error);
 			});
@@ -34823,19 +36100,26 @@ LoadingState.prototype = $extend(MusicBeatState.prototype,{
 	}
 	,checkLibrary: function(library) {
 		var _gthis = this;
-		haxe_Log.trace(openfl_utils_Assets.hasLibrary(library),{ fileName : "source/LoadingState.hx", lineNumber : 134, className : "LoadingState", methodName : "checkLibrary"});
-		if(openfl_utils_Assets.getLibrary(library) == null) {
+		haxe_Log.trace(openfl_utils_Assets.hasLibrary(library),{ fileName : "source/LoadingState.hx", lineNumber : 137, className : "LoadingState", methodName : "checkLibrary"});
+		if(!LoadingState.libraryReady(library)) {
 			if(!Object.prototype.hasOwnProperty.call(lime_utils_Assets.libraryPaths.h,library)) {
-				throw haxe_Exception.thrown("Missing library: " + library);
+				this.loadFailed(PlayState.SONG.song + " assets","Missing library: " + library);
+				return;
 			}
 			var callback = this.callbacks.add("library:" + library);
 			this.loadParts.h[library] = 0;
 			openfl_utils_Assets.loadLibrary(library).onProgress(function(loaded,total) {
 				_gthis.partProgress(library,loaded,total);
 			}).onComplete(function(_) {
-				_gthis.loadParts.h[library] = 1;
-				callback();
+				if(!_gthis.disposed && flixel_FlxG.game._state == _gthis) {
+					_gthis.loadParts.h[library] = 1;
+					callback();
+				}
 			}).onError(function(error) {
+				if(!(!_gthis.disposed && flixel_FlxG.game._state == _gthis)) {
+					return;
+				}
+				openfl_utils_Assets.unloadLibrary(library);
 				_gthis.loadFailed(PlayState.SONG.song + " assets",error);
 			});
 		}
@@ -34884,12 +36168,15 @@ LoadingState.prototype = $extend(MusicBeatState.prototype,{
 		MusicBeatState.prototype.update.call(this,elapsed);
 	}
 	,onLoad: function() {
-		if(!this.failed) {
+		if(!this.disposed && flixel_FlxG.game._state == this && !this.failed) {
 			this.ready = true;
 		}
 	}
 	,finishLoad: function() {
 		var _gthis = this;
+		if(!(!this.disposed && flixel_FlxG.game._state == this) || this.failed) {
+			return;
+		}
 		if(this.stopMusic && flixel_FlxG.sound.music != null) {
 			var _this = flixel_FlxG.sound.music;
 			_this.cleanup(_this.autoDestroy,true);
@@ -34899,6 +36186,7 @@ LoadingState.prototype = $extend(MusicBeatState.prototype,{
 		});
 	}
 	,destroy: function() {
+		this.disposed = true;
 		MusicBeatState.prototype.destroy.call(this);
 		this.callbacks = null;
 	}
@@ -34941,19 +36229,19 @@ MultiCallback.prototype = {
 				_gthis.numRemaining--;
 				if(_gthis.logId != null) {
 					if(_gthis.logId != null) {
-						haxe_Log.trace("" + _gthis.logId + ": " + ("fired " + id + ", " + _gthis.numRemaining + " remaining"),{ fileName : "source/LoadingState.hx", lineNumber : 371, className : "MultiCallback", methodName : "log"});
+						haxe_Log.trace("" + _gthis.logId + ": " + ("fired " + id + ", " + _gthis.numRemaining + " remaining"),{ fileName : "source/LoadingState.hx", lineNumber : 392, className : "MultiCallback", methodName : "log"});
 					}
 				}
 				if(_gthis.numRemaining == 0) {
 					if(_gthis.logId != null) {
 						if(_gthis.logId != null) {
-							haxe_Log.trace("" + _gthis.logId + ": " + "all callbacks fired",{ fileName : "source/LoadingState.hx", lineNumber : 371, className : "MultiCallback", methodName : "log"});
+							haxe_Log.trace("" + _gthis.logId + ": " + "all callbacks fired",{ fileName : "source/LoadingState.hx", lineNumber : 392, className : "MultiCallback", methodName : "log"});
 						}
 					}
 					_gthis.callback();
 				}
 			} else if(_gthis.logId != null) {
-				haxe_Log.trace("" + _gthis.logId + ": " + ("already fired " + id),{ fileName : "source/LoadingState.hx", lineNumber : 371, className : "MultiCallback", methodName : "log"});
+				haxe_Log.trace("" + _gthis.logId + ": " + ("already fired " + id),{ fileName : "source/LoadingState.hx", lineNumber : 392, className : "MultiCallback", methodName : "log"});
 			}
 		};
 		this.unfired.h[id] = func;
@@ -34961,7 +36249,7 @@ MultiCallback.prototype = {
 	}
 	,log: function(msg) {
 		if(this.logId != null) {
-			haxe_Log.trace("" + this.logId + ": " + msg,{ fileName : "source/LoadingState.hx", lineNumber : 371, className : "MultiCallback", methodName : "log"});
+			haxe_Log.trace("" + this.logId + ": " + msg,{ fileName : "source/LoadingState.hx", lineNumber : 392, className : "MultiCallback", methodName : "log"});
 		}
 	}
 	,getFired: function() {
@@ -35030,13 +36318,13 @@ MainMenuState.prototype = $extend(MusicBeatState.prototype,{
 		electric.animation.play("idle");
 		electric.scale.set(0.664886,1);
 		electric.updateHitbox();
-		electric.set_antialiasing(!GoldenQuality.superLow);
+		electric.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 		this.carousel.add(electric);
 		var top = new flixel_FlxSprite(278,-180).loadGraphic(Paths.getPath("images/" + "golden/menu/mainMenu/Toppom" + ".png","IMAGE",null));
-		top.set_antialiasing(!GoldenQuality.superLow);
+		top.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 		this.add(top);
 		var bottom = new flixel_FlxSprite(-24,456).loadGraphic(Paths.getPath("images/" + "golden/menu/mainMenu/Bottom" + ".png","IMAGE",null));
-		bottom.set_antialiasing(!GoldenQuality.superLow);
+		bottom.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 		this.add(bottom);
 		var atlas = Paths.getSparrowAtlas("golden/menu/mainMenu/buttons");
 		var _g = 0;
@@ -35048,7 +36336,7 @@ MainMenuState.prototype = $extend(MusicBeatState.prototype,{
 			sprite.set_frames(atlas);
 			sprite.animation.addByPrefix("idle",name,24,true);
 			sprite.animation.play("idle");
-			sprite.set_antialiasing(!GoldenQuality.superLow);
+			sprite.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 			sprite.ID = this.buttons.length;
 			this.buttons.push(sprite);
 			this.carousel.add(sprite);
@@ -35080,7 +36368,7 @@ MainMenuState.prototype = $extend(MusicBeatState.prototype,{
 		flixel_tweens_FlxTween.cancelTweensOf(this.bandu);
 		this.bandu.setPosition(targetX + 45,0);
 		this.bandu.set_alpha(0);
-		this.bandu.set_antialiasing(!GoldenQuality.superLow);
+		this.bandu.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 		flixel_tweens_FlxTween.tween(this.bandu,{ x : targetX, alpha : 1},0.22,{ ease : flixel_tweens_FlxEase.quadOut});
 	}
 	,update: function(elapsed) {
@@ -35310,7 +36598,7 @@ ManifestResources.init = function(config) {
 	lime_utils_Assets.libraryPaths.h["orthogonal"] = v;
 	var v = ManifestResources.rootPath + "manifest/applecorestage.json";
 	lime_utils_Assets.libraryPaths.h["applecorestage"] = v;
-	var data = "{\"name\":null,\"assets\":\"aoy4:sizei1464369y4:typey5:MUSICy2:idy44:assets%2Fmusic%2Fgolden%2Fmenu%2Fcredits.mp3y9:pathGroupaR4hy7:preloadtgoR0i1417760R1R2R3y41:assets%2Fmusic%2Fgolden%2Fmenu%2Fplay.mp3R5aR7hR6tgoR0i566714R1R2R3y42:assets%2Fmusic%2Fgolden%2Fmenu%2Fpause.mp3R5aR8hR6tgoR0i1469737R1R2R3y41:assets%2Fmusic%2Fgolden%2Fmenu%2Fmain.mp3R5aR9hR6tgoR0i3713317R1R2R3y42:assets%2Fmusic%2Fgolden%2Fmenu%2Ftitle.mp3R5aR10hR6tgoR0i1473973R1R2R3y45:assets%2Fmusic%2Fgolden%2Fmenu%2Fsettings.mp3R5aR11hR6tgoR0i2309657R1R2R3y31:assets%2Fmusic%2FfreakyMenu.mp3R5aR12hR6tgoy4:pathy39:assets%2Fimages%2Fstorymenu%2Fweek3.pngR0i7148R1y5:IMAGER3R14R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek2.pngR0i6517R1R15R3R16R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek0.pngR0i7056R1R15R3R17R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek1.pngR0i6261R1R15R3R18R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek5.pngR0i6440R1R15R3R19R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek4.pngR0i6262R1R15R3R20R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek6.pngR0i6998R1R15R3R21R6tgoR13y28:assets%2Fimages%2FmenuBG.pngR0i620342R1R15R3R22R6tgoR13y26:assets%2Fimages%2Fnum4.pngR0i3989R1R15R3R23R6tgoR13y26:assets%2Fimages%2Fnum5.pngR0i4113R1R15R3R24R6tgoR13y26:assets%2Fimages%2Fnum7.pngR0i3692R1R15R3R25R6tgoR13y26:assets%2Fimages%2Fnum6.pngR0i4181R1R15R3R26R6tgoR13y26:assets%2Fimages%2Fnum2.pngR0i3990R1R15R3R27R6tgoR13y44:assets%2Fimages%2Fgolden%2Fui%2FuiBorder.pngR0i203R1R15R3R28R6tgoR13y52:assets%2Fimages%2Fgolden%2Fui%2FhealthBarOverlay.pngR0i331R1R15R3R29R6tgoR13y50:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2Fgo.pngR0i13831R1R15R3R30R6tgoR13y49:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2F2.pngR0i7823R1R15R3R31R6tgoR13y49:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2F3.pngR0i9226R1R15R3R32R6tgoR13y49:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2F1.pngR0i5893R1R15R3R33R6tgoR13y43:assets%2Fimages%2Fgolden%2Fui%2FtimeBar.pngR0i235R1R15R3R34R6tgoR13y45:assets%2Fimages%2Fgolden%2Fui%2FhealthBar.pngR0i290R1R15R3R35R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FBEVEL_NOTES.pngR0i9853R1R15R3R36R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FBEVEL_NOTES.xmlR0i1798R1y4:TEXTR3R37R6tgoR13y53:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets_3D.xmlR0i5205R1R38R3R39R6tgoR13y53:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets_3D.pngR0i666393R1R15R3R40R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2Fbevel_splash.xmlR0i2719R1R38R3R41R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2Fbevel_splash.pngR0i15211R1R15R3R42R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets.pngR0i561216R1R15R3R43R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets.xmlR0i7178R1R38R3R44R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2FnoteSplashes.xmlR0i1596R1R38R3R45R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2FnoteSplashes.pngR0i219186R1R15R3R46R6tgoR13y48:assets%2Fimages%2Fgolden%2Fnotes%2Fsplash_3d.pngR0i63270R1R15R3R47R6tgoR13y48:assets%2Fimages%2Fgolden%2Fnotes%2Fsplash_3d.xmlR0i4823R1R38R3R48R6tgoR13y52:assets%2Fimages%2Fgolden%2Fnotes%2Fawesome_notes.pngR0i83950R1R15R3R49R6tgoR13y52:assets%2Fimages%2Fgolden%2Fnotes%2Fawesome_notes.xmlR0i8003R1R38R3R50R6tgoR13y49:assets%2Fimages%2Fgolden%2Fnotes%2Fbevel_ends.xmlR0i670R1R38R3R51R6tgoR13y49:assets%2Fimages%2Fgolden%2Fnotes%2Fbevel_ends.pngR0i1481R1R15R3R52R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FbreadyNotes.pngR0i387393R1R15R3R53R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FbreadyNotes.xmlR0i7931R1R38R3R54R6tgoR13y61:assets%2Fimages%2Fgolden%2Fmenu%2Ftransition%2Ftransition.pngR0i28278R1R15R3R55R6tgoR13y72:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2FtitleFellows%2Fbandu.pngR0i432446R1R15R3R56R6tgoR13y72:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2FtitleFellows%2Fbandu.xmlR0i2899R1R38R3R57R6tgoR13y63:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2FdarkChecker.pngR0i149R1R15R3R58R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2Flogo.pngR0i82258R1R15R3R59R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2Fsopar_text.xmlR0i4934R1R38R3R60R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2Fsopar_text.pngR0i1449202R1R15R3R61R6tgoR13y75:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Forthogonal%2Ficon.pngR0i258865R1R15R3R62R6tgoR13y77:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Forthogonal%2Fheader.pngR0i45705R1R15R3R63R6tgoR13y73:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Forthogonal%2Fbg.pngR0i202995R1R15R3R64R6tgoR13y75:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2Ficon.pngR0i326259R1R15R3R65R6tgoR13y77:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2Fheader.pngR0i12093R1R15R3R66R6tgoR13y82:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2FsongPreview.pngR0i168958R1R15R3R67R6tgoR13y73:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2Fbg.pngR0i861461R1R15R3R68R6tgoR13y76:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2Ficon.pngR0i910457R1R15R3R69R6tgoR13y78:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2Fheader.pngR0i17253R1R15R3R70R6tgoR13y83:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2FsongPreview.pngR0i174673R1R15R3R71R6tgoR13y74:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2Fbg.pngR0i1170366R1R15R3R72R6tgoR13y93:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2FsongPreview_complete.pngR0i357300R1R15R3R73R6tgoR13y77:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2Ficon.pngR0i708048R1R15R3R74R6tgoR13y79:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2Fheader.pngR0i22174R1R15R3R75R6tgoR13y84:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2FsongPreview.pngR0i178512R1R15R3R76R6tgoR13y75:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2Fbg.pngR0i178626R1R15R3R77R6tgoR13y90:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2FsongPreview_complete.pngR0i261035R1R15R3R78R6tgoR13y74:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2Ficon.pngR0i38964R1R15R3R79R6tgoR13y76:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2Fheader.pngR0i11563R1R15R3R80R6tgoR13y81:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2FsongPreview.pngR0i87336R1R15R3R81R6tgoR13y72:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2Fbg.pngR0i565038R1R15R3R82R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fchalkboard.pngR0i46302R1R15R3R83R6tgoR13y59:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fcudroid.pngR0i463377R1R15R3R84R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fbiorange.pngR0i403587R1R15R3R85R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fvio.pngR0i213111R1R15R3R86R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FSmeekles.pngR0i670164R1R15R3R87R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fbubbscadex.pngR0i109865R1R15R3R88R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FCid.pngR0i47673R1R15R3R89R6tgoR13y64:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fexorcistgold.pngR0i502774R1R15R3R90R6tgoR13y63:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fbaldilord64.pngR0i480724R1R15R3R91R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fcleoarty.pngR0i241191R1R15R3R92R6tgoR13y59:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fzevisly.pngR0i239645R1R15R3R93R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fwick.pngR0i120994R1R15R3R94R6tgoR13y54:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FTy.pngR0i199739R1R15R3R95R6tgoR13y69:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FTallsAnimationTAF.pngR0i201648R1R15R3R96R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fdoo.pngR0i57073R1R15R3R97R6tgoR13y58:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FHarvey.pngR0i178777R1R15R3R98R6tgoR13y64:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fsamualcheese.pngR0i458670R1R15R3R99R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fseth.pngR0i127660R1R15R3R100R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2FcheckeredBG.pngR0i423R1R15R3R101R6tgoR13y57:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fgradient.pngR0i63026R1R15R3R102R6tgoR13y66:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FSettings.pngR0i16351R1R15R3R103R6tgoR13y63:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FLinks.pngR0i13691R1R15R3R104R6tgoR13y65:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FCredits.pngR0i26321R1R15R3R105R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FPlay.pngR0i19101R1R15R3R106R6tgoR13y69:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fblack_border_overlay.pngR0i111R1R15R3R107R6tgoR13y57:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Felectric.xmlR0i13228R1R38R3R108R6tgoR13y57:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Felectric.pngR0i79183R1R15R3R109R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2FBottom.pngR0i6280R1R15R3R110R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbuttons.xmlR0i3354R1R38R3R111R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbuttons.pngR0i27595R1R15R3R112R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2FToppom.pngR0i3261R1R15R3R113R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf_potato.pngR0i3010172R1R15R3R114R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf_potato.xmlR0i26049R1R38R3R115R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf_potato.xmlR0i11121R1R38R3R116R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf_potato.pngR0i1684735R1R15R3R117R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf.xmlR0i11114R1R38R3R118R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf.pngR0i3152226R1R15R3R119R6tgoR13y51:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead.pngR0i1263283R1R15R3R120R6tgoR13y51:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead.xmlR0i6158R1R38R3R121R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf.xmlR0i26042R1R38R3R122R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf.pngR0i6529446R1R15R3R123R6tgoR13y58:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead_potato.xmlR0i6043R1R38R3R124R6tgoR13y58:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead_potato.pngR0i999974R1R15R3R125R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2F3d-bf.pngR0i5508R1R15R3R126R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fbadai.pngR0i6570R1R15R3R127R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fgf.pngR0i5432R1R15R3R128R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Finspicable.pngR0i6797R1R15R3R129R6tgoR13y55:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fdave.pngR0i3271R1R15R3R130R6tgoR13y67:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fdave-frustration.pngR0i7963R1R15R3R131R6tgoR13y58:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fjunkers.pngR0i3905R1R15R3R132R6tgoR13y55:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fface.pngR0i2959R1R15R3R133R6tgoR13y74:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Funfair-expunged-forward.pngR0i16340R1R15R3R134R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fbandu.pngR0i5862R1R15R3R135R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fdave-decimated.pngR0i15982R1R15R3R136R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fbf.pngR0i5815R1R15R3R137R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Fmg.pngR0i25187R1R15R3R138R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Ffries.pngR0i6266R1R15R3R139R6tgoR13y57:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Fphones.pngR0i158733R1R15R3R140R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Fbg.pngR0i322926R1R15R3R141R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst_potato.pngR0i2295396R1R15R3R142R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst_potato.xmlR0i48509R1R38R3R143R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst.pngR0i1356106R1R15R3R144R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst.xmlR0i48616R1R38R3R145R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy.pngR0i874647R1R15R3R146R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy.xmlR0i8049R1R38R3R147R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi.pngR0i1136169R1R15R3R148R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi.xmlR0i47561R1R38R3R149R6tgoR13y71:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap_potato.xmlR0i50269R1R38R3R150R6tgoR13y71:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap_potato.pngR0i2088279R1R15R3R151R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy_potato.pngR0i2392579R1R15R3R152R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy_potato.xmlR0i7942R1R38R3R153R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad.pngR0i274474R1R15R3R154R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad.xmlR0i25415R1R38R3R155R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_potato.pngR0i599235R1R15R3R156R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_potato.xmlR0i12341R1R38R3R157R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra_potato.xmlR0i19727R1R38R3R158R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra_potato.pngR0i1900147R1R15R3R159R6tgoR13y64:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap.xmlR0i50350R1R38R3R160R6tgoR13y64:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap.pngR0i1220343R1R15R3R161R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi_potato.xmlR0i47476R1R38R3R162R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi_potato.pngR0i1789590R1R15R3R163R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu.pngR0i366915R1R15R3R164R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu.xmlR0i12422R1R38R3R165R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra.xmlR0i19808R1R38R3R166R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad_potato.xmlR0i25334R1R38R3R167R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad_potato.pngR0i509016R1R15R3R168R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra.pngR0i5372875R1R15R3R169R6tgoR13y26:assets%2Fimages%2Fnum3.pngR0i4022R1R15R3R170R6tgoR13y26:assets%2Fimages%2Fnum1.pngR0i3390R1R15R3R171R6tgoR13y37:assets%2Fimages%2Fnewgrounds_logo.pngR0i57747R1R15R3R172R6tgoR13y26:assets%2Fimages%2Fnum0.pngR0i3738R1R15R3R173R6tgoR13y30:assets%2Fimages%2Falphabet.xmlR0i39069R1R38R3R174R6tgoR13y30:assets%2Fimages%2Falphabet.pngR0i139836R1R15R3R175R6tgoR13y26:assets%2Fimages%2Flogo.pngR0i86924R1R15R3R176R6tgoR13y35:assets%2Fimages%2FmenuBGMagenta.pngR0i553468R1R15R3R177R6tgoR13y32:assets%2Fimages%2FlogoBumpin.pngR0i592724R1R15R3R178R6tgoR13y32:assets%2Fimages%2FlogoBumpin.xmlR0i2177R1R38R3R179R6tgoR13y26:assets%2Fimages%2Fnum8.pngR0i3914R1R15R3R180R6tgoR13y26:assets%2Fimages%2Fnum9.pngR0i3687R1R15R3R181R6tgoR13y45:assets%2Fimages%2Fcampaign_menu_UI_assets.pngR0i27171R1R15R3R182R6tgoR13y45:assets%2Fimages%2Fcampaign_menu_UI_assets.xmlR0i1893R1R38R3R183R6tgoR13y32:assets%2Fimages%2FmenuBGBlue.pngR0i614586R1R15R3R184R6tgoR13y42:assets%2Fimages%2FFNF_main_menu_assets.pngR0i281298R1R15R3R185R6tgoR13y42:assets%2Fimages%2FFNF_main_menu_assets.xmlR0i4755R1R38R3R186R6tgoR13y32:assets%2Fimages%2FtitleEnter.xmlR0i4875R1R38R3R187R6tgoR13y31:assets%2Fimages%2FmenuDesat.pngR0i357911R1R15R3R188R6tgoR13y32:assets%2Fimages%2FtitleEnter.pngR0i1449202R1R15R3R189R6tgoR0i17762R1R2R3y32:assets%2Fsounds%2FcancelMenu.mp3R5aR190hR6tgoR0i22403R1R2R3y62:assets%2Fsounds%2Fgolden%2Fcountdown%2Fawesomeson%2Fintro2.mp3R5aR191hR6tgoR0i22403R1R2R3y62:assets%2Fsounds%2Fgolden%2Fcountdown%2Fawesomeson%2Fintro3.mp3R5aR192hR6tgoR0i22403R1R2R3y62:assets%2Fsounds%2Fgolden%2Fcountdown%2Fawesomeson%2Fintro1.mp3R5aR193hR6tgoR0i22403R1R2R3y63:assets%2Fsounds%2Fgolden%2Fcountdown%2Fawesomeson%2FintroGo.mp3R5aR194hR6tgoR0i12773R1R2R3y49:assets%2Fsounds%2Fgolden%2Fcountdown%2Fintro2.mp3R5aR195hR6tgoR0i8857R1R2R3y49:assets%2Fsounds%2Fgolden%2Fcountdown%2Fintro3.mp3R5aR196hR6tgoR0i12458R1R2R3y49:assets%2Fsounds%2Fgolden%2Fcountdown%2Fintro1.mp3R5aR197hR6tgoR0i11536R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fbandu%2Fintro2.mp3R5aR198hR6tgoR0i11954R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fbandu%2Fintro3.mp3R5aR199hR6tgoR0i13626R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fbandu%2Fintro1.mp3R5aR200hR6tgoR0i8611R1R2R3y58:assets%2Fsounds%2Fgolden%2Fcountdown%2Fbandu%2FintroGo.mp3R5aR201hR6tgoR0i8441R1R2R3y56:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2Fintro2.mp3R5aR202hR6tgoR0i7317R1R2R3y56:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2Fintro3.mp3R5aR203hR6tgoR0i6198R1R2R3y56:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2Fintro1.mp3R5aR204hR6tgoR0i7500R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2FintroGo.mp3R5aR205hR6tgoR0i7555R1R2R3y50:assets%2Fsounds%2Fgolden%2Fcountdown%2FintroGo.mp3R5aR206hR6tgoR0i91950R1R2R3y33:assets%2Fsounds%2FconfirmMenu.mp3R5aR207hR6tgoR0i17762R1R2R3y32:assets%2Fsounds%2FscrollMenu.mp3R5aR208hR6tgoR0i245600R1y4:FONTy9:classNamey38:__ASSET__assets_fonts_comic_normal_ttfR3y33:assets%2Ffonts%2Fcomic_normal.ttfR6tgoR0i229408R1R209R210y31:__ASSET__assets_fonts_comic_ttfR3y26:assets%2Ffonts%2Fcomic.ttfR6tgoR13y52:assets%2Fdata%2Fleft-unchecked%2Fleft-unchecked.jsonR0i38561R1R38R3R215R6tgoR13y34:assets%2Fdata%2Fdata-goes-here.txtR0zR1R38R3R216R6tgoR13y40:assets%2Fdata%2Fgalactic%2Fgalactic.jsonR0i17308R1R38R3R217R6tgoR13y60:assets%2Fdata%2Fthe-boopadoop-song%2Fthe-boopadoop-song.jsonR0i2500R1R38R3R218R6tgoR13y44:assets%2Fdata%2Fstrawberry%2Fstrawberry.jsonR0i24616R1R38R3R219R6tgoR13y44:assets%2Fdata%2Fapprentice%2Fapprentice.jsonR0i50612R1R38R3R220R6tgoR13y40:assets%2Fdata%2Fdynamics%2Fdynamics.jsonR0i120012R1R38R3R221R6tgoR13y58:assets%2Fdata%2Frecovered-project%2Frecovered-project.jsonR0i46383R1R38R3R222R6tgoR13y29:assets%2Fdata%2Fmain-view.xmlR0i123R1R38R3R223R6tgoR13y46:assets%2Fdata%2Fsick-tricks%2Fsick-tricks.jsonR0i18622R1R38R3R224R6tgoR13y32:assets%2Fdata%2Fnice%2Fnice.jsonR0i252050R1R38R3R225R6tgoR13y46:assets%2Fdata%2Fdeformation%2Fdeformation.jsonR0i90256R1R38R3R226R6tgoR13y36:assets%2Fdata%2Fslices%2Fslices.jsonR0i37818R1R38R3R227R6tgoR13y42:assets%2Fdata%2Falternate%2Falternate.jsonR0i21837R1R38R3R228R6tgoR13y30:assets%2Fdata%2Fnft%2Fnft.jsonR0i43569R1R38R3R229R6tgoR13y34:assets%2Fdata%2Fkooky%2Fkooky.jsonR0i80683R1R38R3R230R6tgoR13y30:assets%2Fdata%2Faug%2Faug.jsonR0i20014R1R38R3R231R6tgoR13y29:assets%2Fdata%2FintroText.txtR0i1260R1R38R3R232R6tgoR13y42:assets%2Fdata%2Ftoo-shiny%2Ftoo-shiny.jsonR0i26702R1R38R3R233R6tgoR13y38:assets%2Fdata%2Fticking%2Fticking.jsonR0i38655R1R38R3R234R6tgoR13y42:assets%2Fdata%2Flofthouse%2Flofthouse.jsonR0i50661R1R38R3R235R6tgoR13y33:assets%2Fdata%2FspecialThanks.txtR0i300R1R38R3R236R6tgoR13y38:assets%2Fdata%2Fpiehole%2Fpiehole.jsonR0i81700R1R38R3R237R6tgoR13y44:assets%2Fdata%2Forthogonal%2Forthogonal.jsonR0i127054R1R38R3R238R6tgoR13y32:assets%2Fdata%2Fdale%2Fdale.jsonR0i43441R1R38R3R239R6tgoR13y44:assets%2Fdata%2Fready-loud%2Fready-loud.jsonR0i34408R1R38R3R240R6tgoR13y46:assets%2Fdata%2Fgolden%2Fremaining-extras.jsonR0i2046R1R38R3R241R6tgoR13y45:assets%2Fdata%2Fgolden%2Fnotes%2Fawesome.jsonR0i431R1R38R3R242R6tgoR13y40:assets%2Fdata%2Fgolden%2Fnotes%2F3d.jsonR0i667R1R38R3R243R6tgoR13y43:assets%2Fdata%2Fgolden%2Fnotes%2Fbevel.jsonR0i178R1R38R3R244R6tgoR13y45:assets%2Fdata%2Fgolden%2Fnotes%2Fdefault.jsonR0i1028R1R38R3R245R6tgoR13y44:assets%2Fdata%2Fgolden%2Fnotes%2Fbready.jsonR0i374R1R38R3R246R6tgoR13y44:assets%2Fdata%2Fgolden%2Fmenu%2Fcredits.jsonR0i940R1R38R3R247R6tgoR13y50:assets%2Fdata%2Fgolden%2Fshaders%2FWavyShader.fragR0i1316R1R38R3R248R6tgoR13y52:assets%2Fdata%2Fgolden%2Fcharacters%2Fbf-bounds.jsonR0i22224R1R38R3R249R6tgoR13y57:assets%2Fdata%2Fgolden%2Fapplecore%2Fsecondary-bambi.jsonR0i46074R1R38R3R250R6tgoR13y50:assets%2Fdata%2Fgolden%2Fapplecore%2Fsubtitles.srtR0i1683R1R38R3R251R6tgoR13y78:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Funfair-expunged-forward.jsonR0i688R1R38R3R252R6tgoR13y66:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu-first.jsonR0i1784R1R38R3R253R6tgoR13y60:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu.jsonR0i819R1R38R3R254R6tgoR13y64:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu-sad.jsonR0i1363R1R38R3R255R6tgoR13y71:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fdisruption-bambi.jsonR0i1527R1R38R3R256R6tgoR13y44:assets%2Fdata%2Finspicable%2Finspicable.jsonR0i41973R1R38R3R257R6tgoR13y58:assets%2Fdata%2Ffresh-and-toasted%2Ffresh-and-toasted.jsonR0i51291R1R38R3R258R6tgoR13y42:assets%2Fdata%2Fwireframe%2Fwireframe.jsonR0i43383R1R38R3R259R6tgoR13y40:assets%2Fdata%2Funhinged%2Funhinged.jsonR0i42823R1R38R3R260R6tgoR13y42:assets%2Fdata%2Fgift-card%2Fgift-card.jsonR0i49357R1R38R3R261R6tgoR13y36:assets%2Fdata%2Fwheels%2Fwheels.jsonR0i33645R1R38R3R262R6tgoR13y36:assets%2Fdata%2FfreeplaySonglist.txtR0i10R1R38R3R263R6tgoR13y32:assets%2Fdata%2Fcell%2Fcell.jsonR0i54396R1R38R3R264R6tgoR13y28:assets%2Fdata%2Fcontrols.txtR0i324R1R38R3R265R6tgoR13y46:assets%2Fdata%2Ffrustration%2Ffrustration.jsonR0i79278R1R38R3R266R6tgoR13y50:assets%2Fdata%2Froupiniphobia%2Froupiniphobia.jsonR0i919707R1R38R3R267R6tgoR13y42:assets%2Fdata%2Fferocious%2Fferocious.jsonR0i238742R1R38R3R268R6tgoR13y52:assets%2Fdata%2Fthe-big-dingle%2Fthe-big-dingle.jsonR0i24539R1R38R3R269R6tgoR13y40:assets%2Fdata%2Ftantalum%2Ftantalum.jsonR0i47979R1R38R3R270R6tgoR13y32:assets%2Fdata%2Fmine%2Fmine.jsonR0i38921R1R38R3R271R6tgoR13y44:assets%2Fdata%2Fdisability%2Fdisability.jsonR0i58977R1R38R3R272R6tgoR13y34:assets%2Fdata%2Fhouse%2Fhouse.jsonR0i36148R1R38R3R273R6tgoR13y44:assets%2Fdata%2Fsugar-rush%2Fsugar-rush.jsonR0i32555R1R38R3R274R6tgoR13y40:assets%2Fdata%2Fdoughboy%2Fdoughboy.jsonR0i30739R1R38R3R275R6tgoR13y42:assets%2Fdata%2Fenforcers%2Fenforcers.jsonR0i20507R1R38R3R276R6tgoR13y40:assets%2Fdata%2Fsunshine%2Fsunshine.jsonR0i411384R1R38R3R277R6tgoR13y76:assets%2Fdata%2Fdave-x-bambi-shipping-cute%2Fdave-x-bambi-shipping-cute.jsonR0i22659R1R38R3R278R6tgoR13y50:assets%2Fdata%2Fbedtime-bumps%2Fbedtime-bumps.jsonR0i16241R1R38R3R279R6tgoR13y36:assets%2Fdata%2Forigin%2Forigin.jsonR0i15725R1R38R3R280R6tgoR13y48:assets%2Fdata%2Ftunnelvision%2Ftunnelvision.jsonR0i124949R1R38R3R281R6tgoR13y28:assets%2Fdata%2Fog%2Fog.jsonR0i124971R1R38R3R282R6tgoR13y38:assets%2Fdata%2Fsillier%2Fsillier.jsonR0i27687R1R38R3R283R6tgoR13y34:assets%2Fdata%2Fnutty%2Fnutty.jsonR0i35817R1R38R3R284R6tgoR13y44:assets%2Fdata%2Fdisruption%2Fdisruption.jsonR0i63010R1R38R3R285R6tgoR13y34:assets%2Fdata%2Ftheft%2Ftheft.jsonR0i24147R1R38R3R286R6tgoR13y48:assets%2Fdata%2Fthunderstorm%2Fthunderstorm.jsonR0i47233R1R38R3R287R6tgoR13y33:assets%2Fdata%2FcharacterList.txtR0i89R1R38R3R288R6tgoR13y38:assets%2Fdata%2Fpoopers%2Fpoopers.jsonR0i70218R1R38R3R289R6tgoR13y40:assets%2Fdata%2Fkeyboard%2Fkeyboard.jsonR0i37268R1R38R3R290R6tgoR13y38:assets%2Fdata%2Falgebra%2Falgebra.jsonR0i175346R1R38R3R291R6tgoR13y38:assets%2Fdata%2Fresumed%2Fresumed.jsonR0i43258R1R38R3R292R6tgoR13y40:assets%2Fdata%2Fbookworm%2Fbookworm.jsonR0i33174R1R38R3R293R6tgoR13y42:assets%2Fdata%2Fcollision%2Fcollision.jsonR0i77352R1R38R3R294R6tgoR13y40:assets%2Fdata%2Fcuberoot%2Fcuberoot.jsonR0i42421R1R38R3R295R6tgoR13y42:assets%2Fdata%2Fapplecore%2Fapplecore.jsonR0i77355R1R38R3R296R6tgoR13y52:assets%2Fdata%2Fcooking-lesson%2Fcooking-lesson.jsonR0i54523R1R38R3R297R6tgoR13y41:assets%2Fvideos%2Fgolden%2FPizzaVideo.mp4R0i18210431R1y6:BINARYR3R298goR13y50:assets%2Fvideos%2Fgolden%2Ftunnelvision%2Fmask.mp4R0i5769684R1R299R3R300goR13y55:assets%2Fvideos%2Fgolden%2Ftunnelvision%2Fred_blobs.mp4R0i11119130R1R299R3R301goR13y48:mods%2FintroMod%2F_append%2Fdata%2FintroText.txtR0i20R1R38R3R302goR13y17:mods%2Freadme.txtR0i90R1R38R3R303goR13y18:mods%2FmodList.txtR0i8R1R38R3R304goR13y21:do%20NOT%20readme.txtR0i4326R1R38R3R305R6tgoR13y13:changelog.txtR0i7730R1R38R3R306R6tgoR0i75864R1R209R210y29:__ASSET__assets_fonts_vcr_ttfR3y24:assets%2Ffonts%2Fvcr.ttfR6tgoR13y34:assets%2Ffonts%2Ffonts-go-here.txtR0zR1R38R3R309R6tgoR0i14656R1R209R210y31:__ASSET__assets_fonts_pixel_otfR3y26:assets%2Ffonts%2Fpixel.otfR6tgoR0i39706R1R2R3y28:flixel%2Fsounds%2Fflixel.mp3R5aR312y28:flixel%2Fsounds%2Fflixel.ogghR6tgoR0i2114R1R2R3y26:flixel%2Fsounds%2Fbeep.mp3R5aR314y26:flixel%2Fsounds%2Fbeep.ogghR6tgoR0i5794R1y5:SOUNDR3R315R5aR314R315hgoR0i33629R1R316R3R313R5aR312R313hgoR0i15744R1R209R210y35:__ASSET__flixel_fonts_nokiafc22_ttfR3y30:flixel%2Ffonts%2Fnokiafc22.ttfR6tgoR0i29724R1R209R210y36:__ASSET__flixel_fonts_monsterrat_ttfR3y31:flixel%2Ffonts%2Fmonsterrat.ttfR6tgoR13y33:flixel%2Fimages%2Fui%2Fbutton.pngR0i519R1R15R3R321R6tgoR13y36:flixel%2Fimages%2Flogo%2Fdefault.pngR0i3280R1R15R3R322R6tgoR13y44:flixel%2Fflixel-ui%2Fimg%2Fdropdown_mark.pngR0i86R1R15R3R323R6tgoR13y40:flixel%2Fflixel-ui%2Fimg%2Fplus_mark.pngR0i83R1R15R3R324R6tgoR13y36:flixel%2Fflixel-ui%2Fimg%2Fradio.pngR0i108R1R15R3R325R6tgoR13y48:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_left.pngR0i222R1R15R3R326R6tgoR13y42:flixel%2Fflixel-ui%2Fimg%2Fbutton_thin.pngR0i118R1R15R3R327R6tgoR13y34:flixel%2Fflixel-ui%2Fimg%2Ftab.pngR0i106R1R15R3R328R6tgoR13y41:flixel%2Fflixel-ui%2Fimg%2Ffinger_big.pngR0i1337R1R15R3R329R6tgoR13y36:flixel%2Fflixel-ui%2Fimg%2Finvis.pngR0i72R1R15R3R330R6tgoR13y43:flixel%2Fflixel-ui%2Fimg%2Fchrome_inset.pngR0i102R1R15R3R331R6tgoR13y44:flixel%2Fflixel-ui%2Fimg%2Ftooltip_arrow.pngR0i176R1R15R3R332R6tgoR13y49:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_right.pngR0i238R1R15R3R333R6tgoR13y40:flixel%2Fflixel-ui%2Fimg%2Fradio_dot.pngR0i81R1R15R3R334R6tgoR13y37:flixel%2Fflixel-ui%2Fimg%2Fchrome.pngR0i135R1R15R3R335R6tgoR13y40:flixel%2Fflixel-ui%2Fimg%2Fcheck_box.pngR0i101R1R15R3R336R6tgoR13y44:flixel%2Fflixel-ui%2Fimg%2Fbutton_toggle.pngR0i254R1R15R3R337R6tgoR13y46:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_up.pngR0i227R1R15R3R338R6tgoR13y41:flixel%2Fflixel-ui%2Fimg%2Fminus_mark.pngR0i77R1R15R3R339R6tgoR13y42:flixel%2Fflixel-ui%2Fimg%2Fchrome_flat.pngR0i124R1R15R3R340R6tgoR13y37:flixel%2Fflixel-ui%2Fimg%2Fswatch.pngR0i94R1R15R3R341R6tgoR13y43:flixel%2Fflixel-ui%2Fimg%2Fchrome_light.pngR0i118R1R15R3R342R6tgoR13y38:flixel%2Fflixel-ui%2Fimg%2Fhilight.pngR0i74R1R15R3R343R6tgoR13y41:flixel%2Fflixel-ui%2Fimg%2Fcheck_mark.pngR0i97R1R15R3R344R6tgoR13y39:flixel%2Fflixel-ui%2Fimg%2Ftab_back.pngR0i111R1R15R3R345R6tgoR13y34:flixel%2Fflixel-ui%2Fimg%2Fbox.pngR0i75R1R15R3R346R6tgoR13y43:flixel%2Fflixel-ui%2Fimg%2Ffinger_small.pngR0i157R1R15R3R347R6tgoR13y37:flixel%2Fflixel-ui%2Fimg%2Fbutton.pngR0i211R1R15R3R348R6tgoR13y48:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_down.pngR0i216R1R15R3R349R6tgoR13y44:flixel%2Fflixel-ui%2Fxml%2Fdefault_popup.xmlR0i1848R1R38R3R350R6tgoR13y53:flixel%2Fflixel-ui%2Fxml%2Fdefault_loading_screen.xmlR0i1953R1R38R3R351R6tgoR13y39:flixel%2Fflixel-ui%2Fxml%2Fdefaults.xmlR0i1263R1R38R3R352R6tgoR13y20:manifest.webmanifestR0i239R1R38R3R353gh\",\"rootPath\":null,\"version\":2,\"libraryArgs\":[],\"libraryType\":null}";
+	var data = "{\"name\":null,\"assets\":\"aoy4:sizei1464369y4:typey5:MUSICy2:idy44:assets%2Fmusic%2Fgolden%2Fmenu%2Fcredits.mp3y9:pathGroupaR4hy7:preloadtgoR0i1417760R1R2R3y41:assets%2Fmusic%2Fgolden%2Fmenu%2Fplay.mp3R5aR7hR6tgoR0i566714R1R2R3y42:assets%2Fmusic%2Fgolden%2Fmenu%2Fpause.mp3R5aR8hR6tgoR0i1469737R1R2R3y41:assets%2Fmusic%2Fgolden%2Fmenu%2Fmain.mp3R5aR9hR6tgoR0i3713317R1R2R3y42:assets%2Fmusic%2Fgolden%2Fmenu%2Ftitle.mp3R5aR10hR6tgoR0i1473973R1R2R3y45:assets%2Fmusic%2Fgolden%2Fmenu%2Fsettings.mp3R5aR11hR6tgoR0i2309657R1R2R3y31:assets%2Fmusic%2FfreakyMenu.mp3R5aR12hR6tgoy4:pathy39:assets%2Fimages%2Fstorymenu%2Fweek3.pngR0i7148R1y5:IMAGER3R14R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek2.pngR0i6517R1R15R3R16R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek0.pngR0i7056R1R15R3R17R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek1.pngR0i6261R1R15R3R18R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek5.pngR0i6440R1R15R3R19R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek4.pngR0i6262R1R15R3R20R6tgoR13y39:assets%2Fimages%2Fstorymenu%2Fweek6.pngR0i6998R1R15R3R21R6tgoR13y28:assets%2Fimages%2FmenuBG.pngR0i620342R1R15R3R22R6tgoR13y26:assets%2Fimages%2Fnum4.pngR0i3989R1R15R3R23R6tgoR13y26:assets%2Fimages%2Fnum5.pngR0i4113R1R15R3R24R6tgoR13y26:assets%2Fimages%2Fnum7.pngR0i3692R1R15R3R25R6tgoR13y26:assets%2Fimages%2Fnum6.pngR0i4181R1R15R3R26R6tgoR13y26:assets%2Fimages%2Fnum2.pngR0i3990R1R15R3R27R6tgoR13y44:assets%2Fimages%2Fgolden%2Fui%2FuiBorder.pngR0i203R1R15R3R28R6tgoR13y52:assets%2Fimages%2Fgolden%2Fui%2FhealthBarOverlay.pngR0i331R1R15R3R29R6tgoR13y50:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2Fgo.pngR0i13831R1R15R3R30R6tgoR13y49:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2F2.pngR0i7823R1R15R3R31R6tgoR13y49:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2F3.pngR0i9226R1R15R3R32R6tgoR13y49:assets%2Fimages%2Fgolden%2Fui%2Fcountdown%2F1.pngR0i5893R1R15R3R33R6tgoR13y43:assets%2Fimages%2Fgolden%2Fui%2FtimeBar.pngR0i235R1R15R3R34R6tgoR13y45:assets%2Fimages%2Fgolden%2Fui%2FhealthBar.pngR0i290R1R15R3R35R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FBEVEL_NOTES.pngR0i9853R1R15R3R36R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FBEVEL_NOTES.xmlR0i1798R1y4:TEXTR3R37R6tgoR13y53:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets_3D.xmlR0i5205R1R38R3R39R6tgoR13y53:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets_3D.pngR0i666393R1R15R3R40R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2Fbevel_splash.xmlR0i2719R1R38R3R41R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2Fbevel_splash.pngR0i15211R1R15R3R42R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets.pngR0i561216R1R15R3R43R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FNOTE_assets.xmlR0i7178R1R38R3R44R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2FnoteSplashes.xmlR0i1596R1R38R3R45R6tgoR13y51:assets%2Fimages%2Fgolden%2Fnotes%2FnoteSplashes.pngR0i219186R1R15R3R46R6tgoR13y48:assets%2Fimages%2Fgolden%2Fnotes%2Fsplash_3d.pngR0i63270R1R15R3R47R6tgoR13y48:assets%2Fimages%2Fgolden%2Fnotes%2Fsplash_3d.xmlR0i4823R1R38R3R48R6tgoR13y52:assets%2Fimages%2Fgolden%2Fnotes%2Fawesome_notes.pngR0i83950R1R15R3R49R6tgoR13y52:assets%2Fimages%2Fgolden%2Fnotes%2Fawesome_notes.xmlR0i8003R1R38R3R50R6tgoR13y49:assets%2Fimages%2Fgolden%2Fnotes%2Fbevel_ends.xmlR0i670R1R38R3R51R6tgoR13y49:assets%2Fimages%2Fgolden%2Fnotes%2Fbevel_ends.pngR0i1481R1R15R3R52R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FbreadyNotes.pngR0i387393R1R15R3R53R6tgoR13y50:assets%2Fimages%2Fgolden%2Fnotes%2FbreadyNotes.xmlR0i7931R1R38R3R54R6tgoR13y61:assets%2Fimages%2Fgolden%2Fmenu%2Ftransition%2Ftransition.pngR0i28278R1R15R3R55R6tgoR13y72:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2FtitleFellows%2Fbandu.pngR0i432446R1R15R3R56R6tgoR13y72:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2FtitleFellows%2Fbandu.xmlR0i2899R1R38R3R57R6tgoR13y63:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2FdarkChecker.pngR0i149R1R15R3R58R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2Flogo.pngR0i82258R1R15R3R59R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2Fsopar_text.xmlR0i4934R1R38R3R60R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2FtitleScreen%2Fsopar_text.pngR0i1449202R1R15R3R61R6tgoR13y75:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Forthogonal%2Ficon.pngR0i258865R1R15R3R62R6tgoR13y77:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Forthogonal%2Fheader.pngR0i45705R1R15R3R63R6tgoR13y73:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Forthogonal%2Fbg.pngR0i202995R1R15R3R64R6tgoR13y75:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2Ficon.pngR0i326259R1R15R3R65R6tgoR13y77:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2Fheader.pngR0i12093R1R15R3R66R6tgoR13y82:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2FsongPreview.pngR0i168958R1R15R3R67R6tgoR13y73:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Finspicable%2Fbg.pngR0i861461R1R15R3R68R6tgoR13y76:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2Ficon.pngR0i910457R1R15R3R69R6tgoR13y78:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2Fheader.pngR0i17253R1R15R3R70R6tgoR13y83:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2FsongPreview.pngR0i174673R1R15R3R71R6tgoR13y74:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ffrustration%2Fbg.pngR0i1170366R1R15R3R72R6tgoR13y93:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2FsongPreview_complete.pngR0i357300R1R15R3R73R6tgoR13y77:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2Ficon.pngR0i708048R1R15R3R74R6tgoR13y79:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2Fheader.pngR0i22174R1R15R3R75R6tgoR13y84:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2FsongPreview.pngR0i178512R1R15R3R76R6tgoR13y75:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Ftunnelvision%2Fbg.pngR0i178626R1R15R3R77R6tgoR13y90:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2FsongPreview_complete.pngR0i261035R1R15R3R78R6tgoR13y74:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2Ficon.pngR0i38964R1R15R3R79R6tgoR13y76:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2Fheader.pngR0i11563R1R15R3R80R6tgoR13y81:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2FsongPreview.pngR0i87336R1R15R3R81R6tgoR13y72:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fsongs%2Fapplecore%2Fbg.pngR0i565038R1R15R3R82R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2FstoryMode%2Fchalkboard.pngR0i46302R1R15R3R83R6tgoR13y59:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fcudroid.pngR0i463377R1R15R3R84R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fbiorange.pngR0i403587R1R15R3R85R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fvio.pngR0i213111R1R15R3R86R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FSmeekles.pngR0i670164R1R15R3R87R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fbubbscadex.pngR0i109865R1R15R3R88R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FCid.pngR0i47673R1R15R3R89R6tgoR13y64:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fexorcistgold.pngR0i502774R1R15R3R90R6tgoR13y63:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fbaldilord64.pngR0i480724R1R15R3R91R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fcleoarty.pngR0i241191R1R15R3R92R6tgoR13y59:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fzevisly.pngR0i239645R1R15R3R93R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fwick.pngR0i120994R1R15R3R94R6tgoR13y54:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FTy.pngR0i199739R1R15R3R95R6tgoR13y69:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FTallsAnimationTAF.pngR0i201648R1R15R3R96R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fdoo.pngR0i57073R1R15R3R97R6tgoR13y58:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2FHarvey.pngR0i178777R1R15R3R98R6tgoR13y64:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fsamualcheese.pngR0i458670R1R15R3R99R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2Fbackgrounds%2Fseth.pngR0i127660R1R15R3R100R6tgoR13y60:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2FcheckeredBG.pngR0i423R1R15R3R101R6tgoR13y57:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fgradient.pngR0i63026R1R15R3R102R6tgoR13y66:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FSettings.pngR0i16351R1R15R3R103R6tgoR13y63:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FLinks.pngR0i13691R1R15R3R104R6tgoR13y65:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FCredits.pngR0i26321R1R15R3R105R6tgoR13y62:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbandus%2FPlay.pngR0i19101R1R15R3R106R6tgoR13y69:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fblack_border_overlay.pngR0i111R1R15R3R107R6tgoR13y57:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Felectric.xmlR0i13228R1R38R3R108R6tgoR13y57:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Felectric.pngR0i79183R1R15R3R109R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2FBottom.pngR0i6280R1R15R3R110R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbuttons.xmlR0i3354R1R38R3R111R6tgoR13y56:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2Fbuttons.pngR0i27595R1R15R3R112R6tgoR13y55:assets%2Fimages%2Fgolden%2Fmenu%2FmainMenu%2FToppom.pngR0i3261R1R15R3R113R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf_potato.pngR0i3010172R1R15R3R114R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf_potato.xmlR0i26049R1R38R3R115R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf_potato.xmlR0i11121R1R38R3R116R6tgoR13y53:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf_potato.pngR0i1684735R1R15R3R117R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf.xmlR0i11114R1R38R3R118R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fgf.pngR0i3152226R1R15R3R119R6tgoR13y51:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead.pngR0i1263283R1R15R3R120R6tgoR13y51:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead.xmlR0i6158R1R38R3R121R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf.xmlR0i26042R1R38R3R122R6tgoR13y46:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf.pngR0i6529446R1R15R3R123R6tgoR13y58:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead_potato.xmlR0i6043R1R38R3R124R6tgoR13y58:assets%2Fimages%2Fgolden%2Fcharacters%2Fbf-dead_potato.pngR0i999974R1R15R3R125R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2F3d-bf.pngR0i5508R1R15R3R126R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fbadai.pngR0i6570R1R15R3R127R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fgf.pngR0i5432R1R15R3R128R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Finspicable.pngR0i6797R1R15R3R129R6tgoR13y55:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fdave.pngR0i3271R1R15R3R130R6tgoR13y67:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fdave-frustration.pngR0i7963R1R15R3R131R6tgoR13y58:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fjunkers.pngR0i3905R1R15R3R132R6tgoR13y55:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fface.pngR0i2959R1R15R3R133R6tgoR13y74:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Funfair-expunged-forward.pngR0i16340R1R15R3R134R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fbandu.pngR0i5862R1R15R3R135R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fdave-decimated.pngR0i15982R1R15R3R136R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Ficons%2Fbf.pngR0i5815R1R15R3R137R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Fmg.pngR0i25187R1R15R3R138R6tgoR13y56:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Ffries.pngR0i6266R1R15R3R139R6tgoR13y57:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Fphones.pngR0i158733R1R15R3R140R6tgoR13y53:assets%2Fimages%2Fgolden%2Fapplecore%2Fstage%2Fbg.pngR0i322926R1R15R3R141R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst_potato.pngR0i2295396R1R15R3R142R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst_potato.xmlR0i48509R1R38R3R143R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst.pngR0i1356106R1R15R3R144R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduFirst.xmlR0i48616R1R38R3R145R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy.pngR0i874647R1R15R3R146R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy.xmlR0i8049R1R38R3R147R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi.pngR0i1136169R1R15R3R148R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi.xmlR0i47561R1R38R3R149R6tgoR13y71:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap_potato.xmlR0i50269R1R38R3R150R6tgoR13y71:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap_potato.pngR0i2088279R1R15R3R151R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy_potato.pngR0i2392579R1R15R3R152R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Funfairguy_potato.xmlR0i7942R1R38R3R153R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad.pngR0i274474R1R15R3R154R6tgoR13y65:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad.xmlR0i25415R1R38R3R155R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_potato.pngR0i599235R1R15R3R156R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_potato.xmlR0i12341R1R38R3R157R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra_potato.xmlR0i19727R1R38R3R158R6tgoR13y73:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra_potato.pngR0i1900147R1R15R3R159R6tgoR13y64:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap.xmlR0i50350R1R38R3R160R6tgoR13y64:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbanduRap.pngR0i1220343R1R15R3R161R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi_potato.xmlR0i47476R1R38R3R162R6tgoR13y68:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbambi_potato.pngR0i1789590R1R15R3R163R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu.pngR0i366915R1R15R3R164R6tgoR13y61:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu.xmlR0i12422R1R38R3R165R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra.xmlR0i19808R1R38R3R166R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad_potato.xmlR0i25334R1R38R3R167R6tgoR13y72:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu_sad_potato.pngR0i509016R1R15R3R168R6tgoR13y66:assets%2Fimages%2Fgolden%2Fapplecore%2Fcharacters%2FbambiExtra.pngR0i5372875R1R15R3R169R6tgoR13y26:assets%2Fimages%2Fnum3.pngR0i4022R1R15R3R170R6tgoR13y26:assets%2Fimages%2Fnum1.pngR0i3390R1R15R3R171R6tgoR13y37:assets%2Fimages%2Fnewgrounds_logo.pngR0i57747R1R15R3R172R6tgoR13y26:assets%2Fimages%2Fnum0.pngR0i3738R1R15R3R173R6tgoR13y30:assets%2Fimages%2Falphabet.xmlR0i39069R1R38R3R174R6tgoR13y30:assets%2Fimages%2Falphabet.pngR0i139836R1R15R3R175R6tgoR13y26:assets%2Fimages%2Flogo.pngR0i86924R1R15R3R176R6tgoR13y35:assets%2Fimages%2FmenuBGMagenta.pngR0i553468R1R15R3R177R6tgoR13y32:assets%2Fimages%2FlogoBumpin.pngR0i592724R1R15R3R178R6tgoR13y32:assets%2Fimages%2FlogoBumpin.xmlR0i2177R1R38R3R179R6tgoR13y26:assets%2Fimages%2Fnum8.pngR0i3914R1R15R3R180R6tgoR13y26:assets%2Fimages%2Fnum9.pngR0i3687R1R15R3R181R6tgoR13y45:assets%2Fimages%2Fcampaign_menu_UI_assets.pngR0i27171R1R15R3R182R6tgoR13y45:assets%2Fimages%2Fcampaign_menu_UI_assets.xmlR0i1893R1R38R3R183R6tgoR13y32:assets%2Fimages%2FmenuBGBlue.pngR0i614586R1R15R3R184R6tgoR13y42:assets%2Fimages%2FFNF_main_menu_assets.pngR0i281298R1R15R3R185R6tgoR13y42:assets%2Fimages%2FFNF_main_menu_assets.xmlR0i4755R1R38R3R186R6tgoR13y32:assets%2Fimages%2FtitleEnter.xmlR0i4875R1R38R3R187R6tgoR13y31:assets%2Fimages%2FmenuDesat.pngR0i357911R1R15R3R188R6tgoR13y32:assets%2Fimages%2FtitleEnter.pngR0i1449202R1R15R3R189R6tgoR0i17762R1R2R3y32:assets%2Fsounds%2FcancelMenu.mp3R5aR190hR6tgoR0i22403R1R2R3y62:assets%2Fsounds%2Fgolden%2Fcountdown%2Fawesomeson%2Fintro2.mp3R5aR191hR6tgoR0i22403R1R2R3y62:assets%2Fsounds%2Fgolden%2Fcountdown%2Fawesomeson%2Fintro3.mp3R5aR192hR6tgoR0i22403R1R2R3y62:assets%2Fsounds%2Fgolden%2Fcountdown%2Fawesomeson%2Fintro1.mp3R5aR193hR6tgoR0i22403R1R2R3y63:assets%2Fsounds%2Fgolden%2Fcountdown%2Fawesomeson%2FintroGo.mp3R5aR194hR6tgoR0i12773R1R2R3y49:assets%2Fsounds%2Fgolden%2Fcountdown%2Fintro2.mp3R5aR195hR6tgoR0i8857R1R2R3y49:assets%2Fsounds%2Fgolden%2Fcountdown%2Fintro3.mp3R5aR196hR6tgoR0i12458R1R2R3y49:assets%2Fsounds%2Fgolden%2Fcountdown%2Fintro1.mp3R5aR197hR6tgoR0i11536R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fbandu%2Fintro2.mp3R5aR198hR6tgoR0i11954R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fbandu%2Fintro3.mp3R5aR199hR6tgoR0i13626R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fbandu%2Fintro1.mp3R5aR200hR6tgoR0i8611R1R2R3y58:assets%2Fsounds%2Fgolden%2Fcountdown%2Fbandu%2FintroGo.mp3R5aR201hR6tgoR0i8441R1R2R3y56:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2Fintro2.mp3R5aR202hR6tgoR0i7317R1R2R3y56:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2Fintro3.mp3R5aR203hR6tgoR0i6198R1R2R3y56:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2Fintro1.mp3R5aR204hR6tgoR0i7500R1R2R3y57:assets%2Fsounds%2Fgolden%2Fcountdown%2Fdave%2FintroGo.mp3R5aR205hR6tgoR0i7555R1R2R3y50:assets%2Fsounds%2Fgolden%2Fcountdown%2FintroGo.mp3R5aR206hR6tgoR0i91950R1R2R3y33:assets%2Fsounds%2FconfirmMenu.mp3R5aR207hR6tgoR0i17762R1R2R3y32:assets%2Fsounds%2FscrollMenu.mp3R5aR208hR6tgoR0i245600R1y4:FONTy9:classNamey38:__ASSET__assets_fonts_comic_normal_ttfR3y33:assets%2Ffonts%2Fcomic_normal.ttfR6tgoR0i229408R1R209R210y31:__ASSET__assets_fonts_comic_ttfR3y26:assets%2Ffonts%2Fcomic.ttfR6tgoR13y52:assets%2Fdata%2Fleft-unchecked%2Fleft-unchecked.jsonR0i38561R1R38R3R215R6tgoR13y34:assets%2Fdata%2Fdata-goes-here.txtR0zR1R38R3R216R6tgoR13y40:assets%2Fdata%2Fgalactic%2Fgalactic.jsonR0i17308R1R38R3R217R6tgoR13y60:assets%2Fdata%2Fthe-boopadoop-song%2Fthe-boopadoop-song.jsonR0i2500R1R38R3R218R6tgoR13y44:assets%2Fdata%2Fstrawberry%2Fstrawberry.jsonR0i24616R1R38R3R219R6tgoR13y44:assets%2Fdata%2Fapprentice%2Fapprentice.jsonR0i50612R1R38R3R220R6tgoR13y40:assets%2Fdata%2Fdynamics%2Fdynamics.jsonR0i120012R1R38R3R221R6tgoR13y58:assets%2Fdata%2Frecovered-project%2Frecovered-project.jsonR0i46383R1R38R3R222R6tgoR13y29:assets%2Fdata%2Fmain-view.xmlR0i123R1R38R3R223R6tgoR13y46:assets%2Fdata%2Fsick-tricks%2Fsick-tricks.jsonR0i18622R1R38R3R224R6tgoR13y32:assets%2Fdata%2Fnice%2Fnice.jsonR0i252050R1R38R3R225R6tgoR13y46:assets%2Fdata%2Fdeformation%2Fdeformation.jsonR0i90256R1R38R3R226R6tgoR13y36:assets%2Fdata%2Fslices%2Fslices.jsonR0i37818R1R38R3R227R6tgoR13y42:assets%2Fdata%2Falternate%2Falternate.jsonR0i21837R1R38R3R228R6tgoR13y30:assets%2Fdata%2Fnft%2Fnft.jsonR0i43569R1R38R3R229R6tgoR13y34:assets%2Fdata%2Fkooky%2Fkooky.jsonR0i80683R1R38R3R230R6tgoR13y30:assets%2Fdata%2Faug%2Faug.jsonR0i20014R1R38R3R231R6tgoR13y29:assets%2Fdata%2FintroText.txtR0i1260R1R38R3R232R6tgoR13y42:assets%2Fdata%2Ftoo-shiny%2Ftoo-shiny.jsonR0i26702R1R38R3R233R6tgoR13y38:assets%2Fdata%2Fticking%2Fticking.jsonR0i38640R1R38R3R234R6tgoR13y42:assets%2Fdata%2Flofthouse%2Flofthouse.jsonR0i50661R1R38R3R235R6tgoR13y33:assets%2Fdata%2FspecialThanks.txtR0i300R1R38R3R236R6tgoR13y38:assets%2Fdata%2Fpiehole%2Fpiehole.jsonR0i81700R1R38R3R237R6tgoR13y44:assets%2Fdata%2Forthogonal%2Forthogonal.jsonR0i127054R1R38R3R238R6tgoR13y32:assets%2Fdata%2Fdale%2Fdale.jsonR0i43441R1R38R3R239R6tgoR13y44:assets%2Fdata%2Fready-loud%2Fready-loud.jsonR0i34408R1R38R3R240R6tgoR13y46:assets%2Fdata%2Fgolden%2Fremaining-extras.jsonR0i2046R1R38R3R241R6tgoR13y45:assets%2Fdata%2Fgolden%2Fnotes%2Fawesome.jsonR0i431R1R38R3R242R6tgoR13y40:assets%2Fdata%2Fgolden%2Fnotes%2F3d.jsonR0i667R1R38R3R243R6tgoR13y43:assets%2Fdata%2Fgolden%2Fnotes%2Fbevel.jsonR0i178R1R38R3R244R6tgoR13y45:assets%2Fdata%2Fgolden%2Fnotes%2Fdefault.jsonR0i1028R1R38R3R245R6tgoR13y44:assets%2Fdata%2Fgolden%2Fnotes%2Fbready.jsonR0i374R1R38R3R246R6tgoR13y44:assets%2Fdata%2Fgolden%2Fmenu%2Fcredits.jsonR0i940R1R38R3R247R6tgoR13y50:assets%2Fdata%2Fgolden%2Fshaders%2FWavyShader.fragR0i1316R1R38R3R248R6tgoR13y52:assets%2Fdata%2Fgolden%2Fcharacters%2Fbf-bounds.jsonR0i22224R1R38R3R249R6tgoR13y57:assets%2Fdata%2Fgolden%2Fapplecore%2Fsecondary-bambi.jsonR0i46074R1R38R3R250R6tgoR13y50:assets%2Fdata%2Fgolden%2Fapplecore%2Fsubtitles.srtR0i1683R1R38R3R251R6tgoR13y78:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Funfair-expunged-forward.jsonR0i688R1R38R3R252R6tgoR13y66:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu-first.jsonR0i1784R1R38R3R253R6tgoR13y60:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu.jsonR0i819R1R38R3R254R6tgoR13y64:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fbandu-sad.jsonR0i1363R1R38R3R255R6tgoR13y71:assets%2Fdata%2Fgolden%2Fapplecore%2Fcharacters%2Fdisruption-bambi.jsonR0i1527R1R38R3R256R6tgoR13y44:assets%2Fdata%2Finspicable%2Finspicable.jsonR0i41973R1R38R3R257R6tgoR13y58:assets%2Fdata%2Ffresh-and-toasted%2Ffresh-and-toasted.jsonR0i51291R1R38R3R258R6tgoR13y42:assets%2Fdata%2Fwireframe%2Fwireframe.jsonR0i43383R1R38R3R259R6tgoR13y40:assets%2Fdata%2Funhinged%2Funhinged.jsonR0i42823R1R38R3R260R6tgoR13y42:assets%2Fdata%2Fgift-card%2Fgift-card.jsonR0i49357R1R38R3R261R6tgoR13y36:assets%2Fdata%2Fwheels%2Fwheels.jsonR0i33645R1R38R3R262R6tgoR13y36:assets%2Fdata%2FfreeplaySonglist.txtR0i10R1R38R3R263R6tgoR13y32:assets%2Fdata%2Fcell%2Fcell.jsonR0i54396R1R38R3R264R6tgoR13y28:assets%2Fdata%2Fcontrols.txtR0i324R1R38R3R265R6tgoR13y46:assets%2Fdata%2Ffrustration%2Ffrustration.jsonR0i79278R1R38R3R266R6tgoR13y50:assets%2Fdata%2Froupiniphobia%2Froupiniphobia.jsonR0i919707R1R38R3R267R6tgoR13y42:assets%2Fdata%2Fferocious%2Fferocious.jsonR0i238742R1R38R3R268R6tgoR13y52:assets%2Fdata%2Fthe-big-dingle%2Fthe-big-dingle.jsonR0i24539R1R38R3R269R6tgoR13y40:assets%2Fdata%2Ftantalum%2Ftantalum.jsonR0i47979R1R38R3R270R6tgoR13y32:assets%2Fdata%2Fmine%2Fmine.jsonR0i38921R1R38R3R271R6tgoR13y44:assets%2Fdata%2Fdisability%2Fdisability.jsonR0i58977R1R38R3R272R6tgoR13y34:assets%2Fdata%2Fhouse%2Fhouse.jsonR0i36148R1R38R3R273R6tgoR13y44:assets%2Fdata%2Fsugar-rush%2Fsugar-rush.jsonR0i32555R1R38R3R274R6tgoR13y40:assets%2Fdata%2Fdoughboy%2Fdoughboy.jsonR0i30739R1R38R3R275R6tgoR13y42:assets%2Fdata%2Fenforcers%2Fenforcers.jsonR0i20507R1R38R3R276R6tgoR13y40:assets%2Fdata%2Fsunshine%2Fsunshine.jsonR0i411384R1R38R3R277R6tgoR13y76:assets%2Fdata%2Fdave-x-bambi-shipping-cute%2Fdave-x-bambi-shipping-cute.jsonR0i22659R1R38R3R278R6tgoR13y50:assets%2Fdata%2Fbedtime-bumps%2Fbedtime-bumps.jsonR0i16241R1R38R3R279R6tgoR13y36:assets%2Fdata%2Forigin%2Forigin.jsonR0i15725R1R38R3R280R6tgoR13y48:assets%2Fdata%2Ftunnelvision%2Ftunnelvision.jsonR0i124949R1R38R3R281R6tgoR13y28:assets%2Fdata%2Fog%2Fog.jsonR0i124971R1R38R3R282R6tgoR13y38:assets%2Fdata%2Fsillier%2Fsillier.jsonR0i27687R1R38R3R283R6tgoR13y34:assets%2Fdata%2Fnutty%2Fnutty.jsonR0i35817R1R38R3R284R6tgoR13y44:assets%2Fdata%2Fdisruption%2Fdisruption.jsonR0i63010R1R38R3R285R6tgoR13y34:assets%2Fdata%2Ftheft%2Ftheft.jsonR0i24147R1R38R3R286R6tgoR13y48:assets%2Fdata%2Fthunderstorm%2Fthunderstorm.jsonR0i47233R1R38R3R287R6tgoR13y33:assets%2Fdata%2FcharacterList.txtR0i89R1R38R3R288R6tgoR13y38:assets%2Fdata%2Fpoopers%2Fpoopers.jsonR0i70218R1R38R3R289R6tgoR13y40:assets%2Fdata%2Fkeyboard%2Fkeyboard.jsonR0i37268R1R38R3R290R6tgoR13y38:assets%2Fdata%2Falgebra%2Falgebra.jsonR0i175346R1R38R3R291R6tgoR13y38:assets%2Fdata%2Fresumed%2Fresumed.jsonR0i43258R1R38R3R292R6tgoR13y40:assets%2Fdata%2Fbookworm%2Fbookworm.jsonR0i33174R1R38R3R293R6tgoR13y42:assets%2Fdata%2Fcollision%2Fcollision.jsonR0i77352R1R38R3R294R6tgoR13y40:assets%2Fdata%2Fcuberoot%2Fcuberoot.jsonR0i42421R1R38R3R295R6tgoR13y42:assets%2Fdata%2Fapplecore%2Fapplecore.jsonR0i77355R1R38R3R296R6tgoR13y52:assets%2Fdata%2Fcooking-lesson%2Fcooking-lesson.jsonR0i54523R1R38R3R297R6tgoR13y41:assets%2Fvideos%2Fgolden%2FPizzaVideo.mp4R0i18210431R1y6:BINARYR3R298goR13y50:assets%2Fvideos%2Fgolden%2Ftunnelvision%2Fmask.mp4R0i5769684R1R299R3R300goR13y55:assets%2Fvideos%2Fgolden%2Ftunnelvision%2Fred_blobs.mp4R0i11119130R1R299R3R301goR13y48:mods%2FintroMod%2F_append%2Fdata%2FintroText.txtR0i20R1R38R3R302goR13y17:mods%2Freadme.txtR0i90R1R38R3R303goR13y18:mods%2FmodList.txtR0i8R1R38R3R304goR13y21:do%20NOT%20readme.txtR0i4326R1R38R3R305R6tgoR13y13:changelog.txtR0i7730R1R38R3R306R6tgoR0i75864R1R209R210y29:__ASSET__assets_fonts_vcr_ttfR3y24:assets%2Ffonts%2Fvcr.ttfR6tgoR13y34:assets%2Ffonts%2Ffonts-go-here.txtR0zR1R38R3R309R6tgoR0i14656R1R209R210y31:__ASSET__assets_fonts_pixel_otfR3y26:assets%2Ffonts%2Fpixel.otfR6tgoR0i39706R1R2R3y28:flixel%2Fsounds%2Fflixel.mp3R5aR312y28:flixel%2Fsounds%2Fflixel.ogghR6tgoR0i2114R1R2R3y26:flixel%2Fsounds%2Fbeep.mp3R5aR314y26:flixel%2Fsounds%2Fbeep.ogghR6tgoR0i5794R1y5:SOUNDR3R315R5aR314R315hgoR0i33629R1R316R3R313R5aR312R313hgoR0i15744R1R209R210y35:__ASSET__flixel_fonts_nokiafc22_ttfR3y30:flixel%2Ffonts%2Fnokiafc22.ttfR6tgoR0i29724R1R209R210y36:__ASSET__flixel_fonts_monsterrat_ttfR3y31:flixel%2Ffonts%2Fmonsterrat.ttfR6tgoR13y33:flixel%2Fimages%2Fui%2Fbutton.pngR0i519R1R15R3R321R6tgoR13y36:flixel%2Fimages%2Flogo%2Fdefault.pngR0i3280R1R15R3R322R6tgoR13y44:flixel%2Fflixel-ui%2Fimg%2Fdropdown_mark.pngR0i86R1R15R3R323R6tgoR13y40:flixel%2Fflixel-ui%2Fimg%2Fplus_mark.pngR0i83R1R15R3R324R6tgoR13y36:flixel%2Fflixel-ui%2Fimg%2Fradio.pngR0i108R1R15R3R325R6tgoR13y48:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_left.pngR0i222R1R15R3R326R6tgoR13y42:flixel%2Fflixel-ui%2Fimg%2Fbutton_thin.pngR0i118R1R15R3R327R6tgoR13y34:flixel%2Fflixel-ui%2Fimg%2Ftab.pngR0i106R1R15R3R328R6tgoR13y41:flixel%2Fflixel-ui%2Fimg%2Ffinger_big.pngR0i1337R1R15R3R329R6tgoR13y36:flixel%2Fflixel-ui%2Fimg%2Finvis.pngR0i72R1R15R3R330R6tgoR13y43:flixel%2Fflixel-ui%2Fimg%2Fchrome_inset.pngR0i102R1R15R3R331R6tgoR13y44:flixel%2Fflixel-ui%2Fimg%2Ftooltip_arrow.pngR0i176R1R15R3R332R6tgoR13y49:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_right.pngR0i238R1R15R3R333R6tgoR13y40:flixel%2Fflixel-ui%2Fimg%2Fradio_dot.pngR0i81R1R15R3R334R6tgoR13y37:flixel%2Fflixel-ui%2Fimg%2Fchrome.pngR0i135R1R15R3R335R6tgoR13y40:flixel%2Fflixel-ui%2Fimg%2Fcheck_box.pngR0i101R1R15R3R336R6tgoR13y44:flixel%2Fflixel-ui%2Fimg%2Fbutton_toggle.pngR0i254R1R15R3R337R6tgoR13y46:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_up.pngR0i227R1R15R3R338R6tgoR13y41:flixel%2Fflixel-ui%2Fimg%2Fminus_mark.pngR0i77R1R15R3R339R6tgoR13y42:flixel%2Fflixel-ui%2Fimg%2Fchrome_flat.pngR0i124R1R15R3R340R6tgoR13y37:flixel%2Fflixel-ui%2Fimg%2Fswatch.pngR0i94R1R15R3R341R6tgoR13y43:flixel%2Fflixel-ui%2Fimg%2Fchrome_light.pngR0i118R1R15R3R342R6tgoR13y38:flixel%2Fflixel-ui%2Fimg%2Fhilight.pngR0i74R1R15R3R343R6tgoR13y41:flixel%2Fflixel-ui%2Fimg%2Fcheck_mark.pngR0i97R1R15R3R344R6tgoR13y39:flixel%2Fflixel-ui%2Fimg%2Ftab_back.pngR0i111R1R15R3R345R6tgoR13y34:flixel%2Fflixel-ui%2Fimg%2Fbox.pngR0i75R1R15R3R346R6tgoR13y43:flixel%2Fflixel-ui%2Fimg%2Ffinger_small.pngR0i157R1R15R3R347R6tgoR13y37:flixel%2Fflixel-ui%2Fimg%2Fbutton.pngR0i211R1R15R3R348R6tgoR13y48:flixel%2Fflixel-ui%2Fimg%2Fbutton_arrow_down.pngR0i216R1R15R3R349R6tgoR13y44:flixel%2Fflixel-ui%2Fxml%2Fdefault_popup.xmlR0i1848R1R38R3R350R6tgoR13y53:flixel%2Fflixel-ui%2Fxml%2Fdefault_loading_screen.xmlR0i1953R1R38R3R351R6tgoR13y39:flixel%2Fflixel-ui%2Fxml%2Fdefaults.xmlR0i1263R1R38R3R352R6tgoR13y25:ui%2Fgolden-apple-tap.pngR0i38955R1R15R3R353goR13y25:ui%2Fstart-background.pngR0i1099420R1R15R3R354goR13y20:manifest.webmanifestR0i239R1R38R3R355gh\",\"rootPath\":null,\"version\":2,\"libraryArgs\":[],\"libraryType\":null}";
 	var manifest = lime_utils_AssetManifest.parse(data,ManifestResources.rootPath);
 	var library = lime_utils_AssetLibrary.fromManifest(manifest);
 	lime_utils_Assets.registerLibrary("default",library);
@@ -35970,6 +37258,8 @@ var Note = function(strumTime,noteData,prevNote,sustainNote,skin,stepDuration) {
 	this.holdReceptorX = 0;
 	this.holdSongTime = 0;
 	this.curvedHold = false;
+	this.mobileSizing = false;
+	this.artScale = .7;
 	this.visualSpeed = 0;
 	this.sustainStart = 0;
 	this.opponentProcessed = false;
@@ -36007,9 +37297,10 @@ var Note = function(strumTime,noteData,prevNote,sustainNote,skin,stepDuration) {
 	this.animation.addByPrefix("greenhold","green hold piece");
 	this.animation.addByPrefix("redhold","red hold piece");
 	this.animation.addByPrefix("bluehold","blue hold piece");
-	this.scale.set(GoldenNoteSkin.baseScale(skin),GoldenNoteSkin.baseScale(skin));
+	this.artScale = GoldenNoteSkin.baseScale(skin);
+	this.scale.set(this.artScale,this.artScale);
 	this.updateHitbox();
-	this.set_antialiasing(skin != "3d" && skin != "bevel" && !GoldenQuality.superLow);
+	this.set_antialiasing(skin != "3d" && skin != "bevel" && !(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 	switch(noteData) {
 	case 0:
 		this.set_x(this.x + Note.swagWidth * 0);
@@ -36076,7 +37367,7 @@ var Note = function(strumTime,noteData,prevNote,sustainNote,skin,stepDuration) {
 		this.updateHitbox();
 		this.origin.set(0,0);
 		this.offset.set(0,0);
-		this.set_pixelPerfectRender(GoldenQuality.superLow);
+		this.set_pixelPerfectRender(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow);
 	}
 };
 $hxClasses["Note"] = Note;
@@ -36098,6 +37389,8 @@ Note.prototype = $extend(flixel_FlxSprite.prototype,{
 	,sustainStart: null
 	,endCap: null
 	,visualSpeed: null
+	,artScale: null
+	,mobileSizing: null
 	,curvedHold: null
 	,holdSongTime: null
 	,holdReceptorX: null
@@ -36126,7 +37419,7 @@ Note.prototype = $extend(flixel_FlxSprite.prototype,{
 		this.endCap.updateHitbox();
 		this.endCap.origin.set(0,0);
 		this.endCap.offset.set(0,0);
-		this.endCap.set_pixelPerfectRender(GoldenQuality.superLow);
+		this.endCap.set_pixelPerfectRender(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow);
 		this.endCap.set_antialiasing(this.antialiasing);
 		this.endCap.scrollFactor.set(0,0);
 		this.animation.play(color + "hold");
@@ -36139,7 +37432,7 @@ Note.prototype = $extend(flixel_FlxSprite.prototype,{
 		if(this.endCap == null) {
 			return this.strumTime;
 		}
-		if(GoldenQuality.superLow || !this.curvedHold) {
+		if(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow || !this.curvedHold) {
 			return this.strumTime + this.endCap.get_height() / GoldenNoteGeometry.velocity(speed);
 		}
 		if(GoldenHoldPath.frustration != null && (this.capPathTime != this.holdSongTime || this.capPathHeight != this.endCap.get_height()) || this.capTime < 0 || this.capTimeSpeed != speed || this.capTimeDown != this.holdDownscroll) {
@@ -36151,9 +37444,11 @@ Note.prototype = $extend(flixel_FlxSprite.prototype,{
 		}
 		return this.capTime;
 	}
-	,positionOnStrum: function(songPosition,strumY,speed,downscroll,strumX) {
+	,positionOnStrum: function(songPosition,strumY,speed,downscroll,strumX,laneWidth,laneHeight) {
+		var fieldWidth = laneWidth == null ? Note.swagWidth : laneWidth;
+		var fieldHeight = laneHeight == null ? Note.swagWidth : laneHeight;
 		var laneX = strumX == null ? this.sustainRoot.x : strumX;
-		var coarse = this.isSustainNote && GoldenQuality.superLow;
+		var coarse = this.isSustainNote && (GoldenQuality.potatoMode || GoldenQuality.savedSuperLow);
 		if(coarse) {
 			songPosition = Math.floor(songPosition * 24 / 1000) * 1000 / 24;
 			laneX = Math.round(laneX / 4) * 4;
@@ -36169,8 +37464,8 @@ Note.prototype = $extend(flixel_FlxSprite.prototype,{
 			}
 		}
 		this.holdSongTime = songPosition;
-		this.holdReceptorX = laneX + Note.swagWidth / 2;
-		this.holdReceptorY = strumY + Note.swagWidth / 2;
+		this.holdReceptorX = laneX + fieldWidth / 2;
+		this.holdReceptorY = strumY + fieldHeight / 2;
 		this.holdSpeed = speed;
 		this.holdDownscroll = downscroll;
 		if(strumX != null && !this.isSustainNote) {
@@ -36190,8 +37485,8 @@ Note.prototype = $extend(flixel_FlxSprite.prototype,{
 			this.set_y(GoldenNoteGeometry.position(this.strumTime,songPosition,strumY,speed,downscroll));
 			return;
 		}
-		this.set_x(laneX + Note.swagWidth / 2 - this.get_width() / 2);
-		var center = strumY + Note.swagWidth / 2;
+		this.set_x(laneX + fieldWidth / 2 - this.get_width() / 2);
+		var center = strumY + fieldHeight / 2;
 		var startY = GoldenNoteGeometry.position(this.sustainStart,songPosition,center,speed,downscroll);
 		var endY = GoldenNoteGeometry.position(this.strumTime,songPosition,center,speed,downscroll);
 		if(coarse) {
@@ -36217,7 +37512,7 @@ Note.prototype = $extend(flixel_FlxSprite.prototype,{
 			this.set_visible(remaining > 0);
 		}
 		if(this.endCap != null) {
-			this.endCap.set_x(laneX + Note.swagWidth / 2 - this.endCap.get_width() / 2);
+			this.endCap.set_x(laneX + fieldWidth / 2 - this.endCap.get_width() / 2);
 			this.endCap.set_y(downscroll ? endY - this.endCap.get_height() : endY);
 			this.endCap.set_flipY(downscroll);
 			this.endCap.set_alpha(this.alpha);
@@ -36240,14 +37535,14 @@ Note.prototype = $extend(flixel_FlxSprite.prototype,{
 		if(GoldenMobileControls.enabled && !PlayState.controlsNote(this)) {
 			return;
 		}
-		if(this.isSustainNote && !GoldenQuality.superLow) {
+		if(this.isSustainNote && !(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow)) {
 			if(this.ribbon == null) {
 				this.ribbon = new GoldenHoldRibbon();
 			}
 			this.ribbon.draw(this);
 			return;
 		}
-		if(GoldenQuality.superLow && this.ribbon != null) {
+		if((GoldenQuality.potatoMode || GoldenQuality.savedSuperLow) && this.ribbon != null) {
 			this.ribbon.destroy();
 			this.ribbon = null;
 		}
@@ -36271,7 +37566,7 @@ Note.prototype = $extend(flixel_FlxSprite.prototype,{
 		flixel_FlxSprite.prototype.destroy.call(this);
 	}
 	,set_clipRect: function(rect) {
-		if(GoldenQuality.superLow) {
+		if(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow) {
 			return flixel_FlxSprite.prototype.set_clipRect.call(this,rect);
 		}
 		this.clipRect = rect;
@@ -36307,7 +37602,7 @@ Note.prototype = $extend(flixel_FlxSprite.prototype,{
 });
 var OptionsMenu = function(TransIn,TransOut) {
 	this.lastTouch = false;
-	this.descriptions = ["Choose WASD or DFJK. Arrow keys work with either layout.","Allow empty presses without a miss penalty.","Move notes toward receptors at the bottom of the screen.","Show the accuracy percentage in the song HUD.","Adjust the note timing offset in milliseconds. Left / Right: 1 ms; Shift: 10 ms.","Change song speed and pitch. Left / Right: 0.05x. R: reset to 1.00x.","Choppy hold notes and fewer effects.","Use lightly pixelated sprite sheets. Takes effect when the next song loads.","Touch buttons and a centered player note field. Turn off to restore the standard layout.","Browse saved replays."];
+	this.descriptions = ["Choose WASD or DFJK. Arrow keys work with either layout.","Allow empty presses without a miss penalty.","Move notes toward receptors at the bottom of the screen.","Show the accuracy percentage in the song HUD.","Adjust the note timing offset in milliseconds. Left / Right: 1 ms; Shift: 10 ms.","Change song speed and pitch. Left / Right: 0.05x. R: reset to 1.00x.","Choppy hold notes and fewer effects.","Give backgrounds depth. Wavy backgrounds become a room. Needs Super low quality off.","Touch the wide, fixed note row. Modcharts are off while this is on.","Potato sprites, fewer effects and simple holds. Reload a song after changing this.","Browse saved replays."];
 	this.labels = [];
 	this.selected = 0;
 	this.inputDelay = 0.25;
@@ -36337,7 +37632,7 @@ OptionsMenu.prototype = $extend(MusicBeatState.prototype,{
 		var _g1 = this.descriptions.length;
 		while(_g < _g1) {
 			var i = _g++;
-			var text = new flixel_text_FlxText(90,130 + i * 46,1100,"",30);
+			var text = new flixel_text_FlxText(90,130 + i * 42,1100,"",30);
 			text.setFormat("assets/fonts/" + "comic.ttf",30,-1,"left",flixel_text_FlxTextBorderStyle.OUTLINE,-16777216);
 			this.labels.push(text);
 			this.add(text);
@@ -36350,7 +37645,7 @@ OptionsMenu.prototype = $extend(MusicBeatState.prototype,{
 	}
 	,refresh: function() {
 		this.lastTouch = GoldenMobileControls.enabled;
-		var values = ["Keys: " + (flixel_FlxG.save.data.dfjk ? "DFJK" : "WASD") + " + Arrow keys","Ghost tapping: " + (flixel_FlxG.save.data.newInput ? "On" : "Off"),"Scroll: " + (flixel_FlxG.save.data.downscroll ? "Downscroll" : "Upscroll"),"Accuracy: " + (flixel_FlxG.save.data.accuracyDisplay ? "On" : "Off"),"Offset: " + Conductor.validOffset(flixel_FlxG.save.data.offset) + " ms","Playback rate: " + GoldenPlayback.label(GoldenPlayback.setting()),"Super low quality: " + (GoldenQuality.superLow ? "On" : "Off"),"Potato sprites: " + (GoldenQuality.potatoSprites ? "On" : "Off"),"Mobile controls: " + (GoldenMobileControls.enabled ? "On" : "Off"),"Load replays"];
+		var values = ["Keys: " + (flixel_FlxG.save.data.dfjk ? "DFJK" : "WASD") + " + Arrow keys","Ghost tapping: " + (flixel_FlxG.save.data.newInput ? "On" : "Off"),"Scroll: " + (flixel_FlxG.save.data.downscroll ? "Downscroll" : "Upscroll"),"Accuracy: " + (flixel_FlxG.save.data.accuracyDisplay ? "On" : "Off"),"Offset: " + Conductor.validOffset(flixel_FlxG.save.data.offset) + " ms","Playback rate: " + GoldenPlayback.label(GoldenPlayback.setting()),"Super low quality: " + (GoldenQuality.potatoMode || GoldenQuality.savedSuperLow ? "On" : "Off"),"3D backgrounds: " + (GoldenQuality.depthBackgrounds ? "On" : "Off"),"Mobile controls: " + (GoldenMobileControls.enabled ? "On" : "Off"),"Potato mode: " + (GoldenQuality.potatoMode ? "On" : "Off"),"Load replays"];
 		var _g = 0;
 		var _g1 = this.labels.length;
 		while(_g < _g1) {
@@ -36389,12 +37684,15 @@ OptionsMenu.prototype = $extend(MusicBeatState.prototype,{
 			GoldenQuality.toggle();
 			break;
 		case 7:
-			GoldenQuality.togglePotatoSprites();
+			GoldenQuality.toggleDepthBackgrounds();
 			break;
 		case 8:
 			GoldenMobileControls.setEnabled(!GoldenMobileControls.enabled);
 			break;
 		case 9:
+			GoldenQuality.togglePotatoMode();
+			break;
+		case 10:
 			return;
 		}
 		flixel_FlxG.save.flush();
@@ -36438,7 +37736,7 @@ OptionsMenu.prototype = $extend(MusicBeatState.prototype,{
 		} else if(PlayerSettings.player1.controls._rightP.check()) {
 			this.changeValue(1);
 		} else if(PlayerSettings.player1.controls._accept.check()) {
-			if(this.selected == 9) {
+			if(this.selected == 10) {
 				GoldenMenuTransition.go(function() {
 					return new LoadReplayState();
 				});
@@ -36530,7 +37828,7 @@ Paths.getSparrowAtlas = function(key,library) {
 		return GoldenPagedAtlas.get(key,library);
 	}
 	var potatoKey = key + "_potato";
-	if(GoldenQuality.potatoSprites && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT")) {
+	if(GoldenQuality.potatoMode && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),"IMAGE") && openfl_utils_Assets.exists(Paths.getPath("images/" + potatoKey + ".xml","TEXT",library),"TEXT")) {
 		return flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + potatoKey + ".png","IMAGE",library),Paths.getPath("images/" + potatoKey + ".xml","TEXT",library));
 	}
 	return flixel_graphics_frames_FlxAtlasFrames.fromSparrow(Paths.getPath("images/" + key + ".png","IMAGE",library),Paths.getPath("images/" + key + ".xml","TEXT",library));
@@ -36557,7 +37855,7 @@ var PauseSubState = function(x,y) {
 	var extra = GoldenFrustExtras.supports(PlayState.SONG.song);
 	var id = PlayState.SONG.song.toLowerCase();
 	var background = GoldenRemaining.supports(id) ? GoldenRemaining.record(id).pause : id == "left-unchecked" ? "covers/hypno" : id == "thunderstorm" ? "thunda/sky" : id == "cell" ? "secret/secret_room" : id == "collision" ? "covers/mugen_basics" : id == "wheels" || id == "poopers" ? "wheels/swag" : id == "the-boopadoop-song" ? "BlackVoid" : id == "og" ? "ogStage/ogBackground" : id == "sick-tricks" ? "dave/sick_tricks" : id == "galactic" ? "secret/galaxy" : id == "cuberoot" ? "cuberoot" : id == "too-shiny" ? "diamondBg" : id == "piehole" ? "sky" : id == "ticking" ? "back" : id == "recovered-project" ? "q" : id == "dale" ? "dale_bg_new_maybe" : id == "bedtime-bumps" ? "grand_cake" : id == "mine" ? "wtf" : id == "roupiniphobia" ? "zoonuck" : id == "aug" ? "bg" : id == "doughboy" ? "breadworld" : id == "the-big-dingle" ? "sky" : id == "lofthouse" ? "loftbg" : id == "kooky" ? "yoMamaSoBrown/sdfsdfsdfv-min" : id == "gift-card" ? "pixel/main_junk" : id == "tantalum" ? "back" : id == "strawberry" ? "ocWeek/bom" : id == "nutty" ? "ocWeek/strawberries" : id == "keyboard" ? "ocWeek/keyboard" : id == "nft" ? "bg" : id == "sugar-rush" ? "pissing_too" : id == "cooking-lesson" ? "cooking_lesson" : id == "ready-loud" ? "onaf_full" : id == "enforcers" ? "first_bg_back" : "slices";
-	var cover = new flixel_FlxSprite(650,0).loadGraphic(extra ? Paths.getPath("images/" + ("golden/frustsongs/" + id + "/" + background) + ".png","IMAGE",GoldenFrustExtras.library(id)) : Paths.getPath("images/" + ("golden/menu/storyMode/songs/" + id + "/bg") + ".png","IMAGE",null));
+	var cover = new GoldenDepthSprite(650,0).loadGraphic(extra ? Paths.getPath("images/" + ("golden/frustsongs/" + id + "/" + background) + ".png","IMAGE",GoldenFrustExtras.library(id)) : Paths.getPath("images/" + ("golden/menu/storyMode/songs/" + id + "/bg") + ".png","IMAGE",null));
 	cover.setGraphicSize(1280,720);
 	cover.updateHitbox();
 	cover.scrollFactor.set();
@@ -37591,10 +38889,10 @@ TitleState.prototype = $extend(MusicBeatState.prototype,{
 		this.fellow.animation.addByPrefix("danceLeft","bandu-danceLeft",24,false);
 		this.fellow.animation.addByPrefix("danceRight","bandu-danceRight",24,false);
 		this.fellow.animation.play("danceLeft");
-		this.fellow.set_antialiasing(!GoldenQuality.superLow);
+		this.fellow.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 		this.add(this.fellow);
 		this.logo = new flixel_FlxSprite(flixel_FlxG.width + 258,-205).loadGraphic(Paths.getPath("images/" + "golden/menu/titleScreen/logo" + ".png","IMAGE",null));
-		this.logo.set_antialiasing(!GoldenQuality.superLow);
+		this.logo.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 		this.add(this.logo);
 		flixel_tweens_FlxTween.tween(this.fellow,{ y : 0},1,{ ease : flixel_tweens_FlxEase.expoInOut});
 		flixel_tweens_FlxTween.tween(this.logo,{ x : 650, y : 25},1,{ ease : flixel_tweens_FlxEase.expoInOut});
@@ -37606,7 +38904,7 @@ TitleState.prototype = $extend(MusicBeatState.prototype,{
 		this.prompt.scale.set(0.5,0.5);
 		this.prompt.updateHitbox();
 		this.prompt.set_x((flixel_FlxG.width - this.prompt.get_width()) / 2 + 280);
-		this.prompt.set_antialiasing(!GoldenQuality.superLow);
+		this.prompt.set_antialiasing(!(GoldenQuality.potatoMode || GoldenQuality.savedSuperLow));
 		this.add(this.prompt);
 		flixel_FlxG.mouse.set_visible(false);
 		flixel_FlxG.sound.playMusic(Paths.getPath("music/" + "golden/menu/title" + "." + "mp3","MUSIC",null),0.7);
@@ -38571,767 +39869,6 @@ flixel_math_FlxPoint.prototype = {
 	}
 	,__class__: flixel_math_FlxPoint
 	,__properties__: {set_y:"set_y",set_x:"set_x"}
-};
-var lime_math_Matrix3 = {};
-lime_math_Matrix3.__properties__ = {set_ty:"set_ty",get_ty:"get_ty",set_tx:"set_tx",get_tx:"get_tx",set_d:"set_d",get_d:"get_d",set_c:"set_c",get_c:"get_c",set_b:"set_b",get_b:"get_b",set_a:"set_a",get_a:"get_a"};
-lime_math_Matrix3._new = function(a,b,c,d,tx,ty) {
-	if(ty == null) {
-		ty = 0;
-	}
-	if(tx == null) {
-		tx = 0;
-	}
-	if(d == null) {
-		d = 1;
-	}
-	if(c == null) {
-		c = 0;
-	}
-	if(b == null) {
-		b = 0;
-	}
-	if(a == null) {
-		a = 1;
-	}
-	var elements = null;
-	var array = [a,b,0,c,d,0,tx,ty,1];
-	var vector = null;
-	var view = null;
-	var buffer = null;
-	var len = null;
-	var this1;
-	if(elements != null) {
-		this1 = new Float32Array(elements);
-	} else if(array != null) {
-		this1 = new Float32Array(array);
-	} else if(vector != null) {
-		this1 = new Float32Array(vector.__array);
-	} else if(view != null) {
-		this1 = new Float32Array(view);
-	} else if(buffer != null) {
-		if(len == null) {
-			this1 = new Float32Array(buffer,0);
-		} else {
-			this1 = new Float32Array(buffer,0,len);
-		}
-	} else {
-		this1 = null;
-	}
-	return this1;
-};
-lime_math_Matrix3.clone = function(this1) {
-	return lime_math_Matrix3._new(this1[0],this1[1],this1[3],this1[4],this1[6],this1[7]);
-};
-lime_math_Matrix3.concat = function(this1,m) {
-	var a1 = this1[0] * m[0] + this1[1] * m[3];
-	this1[1] = this1[0] * m[1] + this1[1] * m[4];
-	this1[0] = a1;
-	var c1 = this1[3] * m[0] + this1[4] * m[3];
-	this1[4] = this1[3] * m[1] + this1[4] * m[4];
-	this1[3] = c1;
-	var tx1 = this1[6] * m[0] + this1[7] * m[3] + m[6];
-	this1[7] = this1[6] * m[1] + this1[7] * m[4] + m[7];
-	this1[6] = tx1;
-};
-lime_math_Matrix3.copyColumnFrom = function(this1,column,vector4) {
-	if(column > 2) {
-		throw haxe_Exception.thrown("Column " + column + " out of bounds (2)");
-	} else if(column == 0) {
-		this1[0] = vector4.x;
-		this1[1] = vector4.y;
-	} else if(column == 1) {
-		this1[3] = vector4.x;
-		this1[4] = vector4.y;
-	} else {
-		this1[6] = vector4.x;
-		this1[7] = vector4.y;
-	}
-};
-lime_math_Matrix3.copyColumnTo = function(this1,column,vector4) {
-	if(column > 2) {
-		throw haxe_Exception.thrown("Column " + column + " out of bounds (2)");
-	} else if(column == 0) {
-		vector4.x = this1[0];
-		vector4.y = this1[1];
-		vector4.z = 0;
-	} else if(column == 1) {
-		vector4.x = this1[3];
-		vector4.y = this1[4];
-		vector4.z = 0;
-	} else {
-		vector4.x = this1[6];
-		vector4.y = this1[7];
-		vector4.z = 1;
-	}
-};
-lime_math_Matrix3.copyFrom = function(this1,sourceMatrix3) {
-	this1[0] = sourceMatrix3[0];
-	this1[1] = sourceMatrix3[1];
-	this1[3] = sourceMatrix3[3];
-	this1[4] = sourceMatrix3[4];
-	this1[6] = sourceMatrix3[6];
-	this1[7] = sourceMatrix3[7];
-};
-lime_math_Matrix3.copyRowFrom = function(this1,row,vector4) {
-	if(row > 2) {
-		throw haxe_Exception.thrown("Row " + row + " out of bounds (2)");
-	} else if(row == 0) {
-		this1[0] = vector4.x;
-		this1[3] = vector4.y;
-		this1[6] = vector4.z;
-	} else if(row == 1) {
-		this1[1] = vector4.x;
-		this1[4] = vector4.y;
-		this1[7] = vector4.z;
-	}
-};
-lime_math_Matrix3.copyRowTo = function(this1,row,vector4) {
-	if(row > 2) {
-		throw haxe_Exception.thrown("Row " + row + " out of bounds (2)");
-	} else if(row == 0) {
-		vector4.x = this1[0];
-		vector4.y = this1[3];
-		vector4.z = this1[6];
-	} else if(row == 1) {
-		vector4.x = this1[1];
-		vector4.y = this1[4];
-		vector4.z = this1[7];
-	} else {
-		vector4.x = 0;
-		vector4.y = 0;
-		vector4.z = 1;
-	}
-};
-lime_math_Matrix3.createBox = function(this1,scaleX,scaleY,rotation,xTranslate,yTranslate) {
-	if(yTranslate == null) {
-		yTranslate = 0;
-	}
-	if(xTranslate == null) {
-		xTranslate = 0;
-	}
-	if(rotation == null) {
-		rotation = 0;
-	}
-	if(rotation != 0) {
-		var cos = Math.cos(rotation);
-		var sin = Math.sin(rotation);
-		this1[0] = cos * scaleX;
-		this1[1] = sin * scaleY;
-		this1[3] = -sin * scaleX;
-		this1[4] = cos * scaleY;
-	} else {
-		this1[0] = scaleX;
-		this1[1] = 0;
-		this1[3] = 0;
-		this1[4] = scaleY;
-	}
-	this1[6] = xTranslate;
-	this1[7] = yTranslate;
-};
-lime_math_Matrix3.createGradientBox = function(this1,width,height,rotation,xTranslate,yTranslate) {
-	if(yTranslate == null) {
-		yTranslate = 0;
-	}
-	if(xTranslate == null) {
-		xTranslate = 0;
-	}
-	if(rotation == null) {
-		rotation = 0;
-	}
-	this1[0] = width / 1638.4;
-	this1[4] = height / 1638.4;
-	if(rotation != 0) {
-		var cos = Math.cos(rotation);
-		var sin = Math.sin(rotation);
-		this1[1] = sin * this1[4];
-		this1[3] = -sin * this1[0];
-		this1[0] *= cos;
-		this1[4] *= cos;
-	} else {
-		this1[1] = 0;
-		this1[3] = 0;
-	}
-	this1[6] = xTranslate + width / 2;
-	this1[7] = yTranslate + height / 2;
-};
-lime_math_Matrix3.equals = function(this1,matrix3) {
-	if(matrix3 != null && this1[6] == matrix3[6] && this1[7] == matrix3[7] && this1[0] == matrix3[0] && this1[1] == matrix3[1] && this1[3] == matrix3[3]) {
-		return this1[4] == matrix3[4];
-	} else {
-		return false;
-	}
-};
-lime_math_Matrix3.deltaTransformVector = function(this1,Vector2,result) {
-	if(result == null) {
-		result = new lime_math_Vector2();
-	}
-	result.x = Vector2.x * this1[0] + Vector2.y * this1[3];
-	result.y = Vector2.x * this1[1] + Vector2.y * this1[4];
-	return result;
-};
-lime_math_Matrix3.fromCairoMatrix3 = function(matrix) {
-	return lime_math_Matrix3._new(matrix.a,matrix.b,matrix.c,matrix.d,matrix.tx,matrix.ty);
-};
-lime_math_Matrix3.fromFloat32Array = function(array) {
-	if(array.length != 9) {
-		throw haxe_Exception.thrown("Expected array of length 9, got " + array.length);
-	}
-	return array;
-};
-lime_math_Matrix3.identity = function(this1) {
-	this1[0] = 1;
-	this1[1] = 0;
-	this1[3] = 0;
-	this1[4] = 1;
-	this1[6] = 0;
-	this1[7] = 0;
-};
-lime_math_Matrix3.invert = function(this1) {
-	var norm = this1[0] * this1[4] - this1[1] * this1[3];
-	if(norm == 0) {
-		this1[0] = this1[1] = this1[3] = this1[4] = 0;
-		this1[6] = -this1[6];
-		this1[7] = -this1[7];
-	} else {
-		norm = 1.0 / norm;
-		var a1 = this1[4] * norm;
-		this1[4] = this1[0] * norm;
-		this1[0] = a1;
-		this1[1] *= -norm;
-		this1[3] *= -norm;
-		var tx1 = -this1[0] * this1[6] - this1[3] * this1[7];
-		this1[7] = -this1[1] * this1[6] - this1[4] * this1[7];
-		this1[6] = tx1;
-	}
-	if(this1.length != 9) {
-		throw haxe_Exception.thrown("Expected array of length 9, got " + this1.length);
-	}
-	return this1;
-};
-lime_math_Matrix3.rotate = function(this1,theta) {
-	var cos = Math.cos(theta);
-	var sin = Math.sin(theta);
-	var a1 = this1[0] * cos - this1[1] * sin;
-	this1[1] = this1[0] * sin + this1[1] * cos;
-	this1[0] = a1;
-	var c1 = this1[3] * cos - this1[4] * sin;
-	this1[4] = this1[3] * sin + this1[4] * cos;
-	this1[3] = c1;
-	var tx1 = this1[6] * cos - this1[7] * sin;
-	this1[7] = this1[6] * sin + this1[7] * cos;
-	this1[6] = tx1;
-};
-lime_math_Matrix3.scale = function(this1,sx,sy) {
-	this1[0] *= sx;
-	this1[1] *= sy;
-	this1[3] *= sx;
-	this1[4] *= sy;
-	this1[6] *= sx;
-	this1[7] *= sy;
-};
-lime_math_Matrix3.setRotation = function(this1,theta,scale) {
-	if(scale == null) {
-		scale = 1;
-	}
-	this1[0] = Math.cos(theta) * scale;
-	this1[3] = Math.sin(theta) * scale;
-	this1[1] = -this1[3];
-	this1[4] = this1[0];
-};
-lime_math_Matrix3.setTo = function(this1,a,b,c,d,tx,ty) {
-	this1[0] = a;
-	this1[1] = b;
-	this1[3] = c;
-	this1[4] = d;
-	this1[6] = tx;
-	this1[7] = ty;
-};
-lime_math_Matrix3.toCairoMatrix3 = function(this1) {
-	return new lime_math_CairoMatrix3(this1[0],this1[1],this1[3],this1[4],this1[6],this1[7]);
-};
-lime_math_Matrix3.toString = function(this1) {
-	return "matrix(" + this1[0] + ", " + this1[1] + ", " + this1[3] + ", " + this1[4] + ", " + this1[6] + ", " + this1[7] + ")";
-};
-lime_math_Matrix3.transformRect = function(this1,rect,result) {
-	if(result == null) {
-		result = new lime_math_Rectangle();
-	}
-	var tx0 = this1[0] * rect.x + this1[3] * rect.y;
-	var tx1 = tx0;
-	var ty0 = this1[1] * rect.x + this1[4] * rect.y;
-	var ty1 = ty0;
-	var tx = this1[0] * (rect.x + rect.width) + this1[3] * rect.y;
-	var ty = this1[1] * (rect.x + rect.width) + this1[4] * rect.y;
-	if(tx < tx0) {
-		tx0 = tx;
-	}
-	if(ty < ty0) {
-		ty0 = ty;
-	}
-	if(tx > tx1) {
-		tx1 = tx;
-	}
-	if(ty > ty1) {
-		ty1 = ty;
-	}
-	tx = this1[0] * (rect.x + rect.width) + this1[3] * (rect.y + rect.height);
-	ty = this1[1] * (rect.x + rect.width) + this1[4] * (rect.y + rect.height);
-	if(tx < tx0) {
-		tx0 = tx;
-	}
-	if(ty < ty0) {
-		ty0 = ty;
-	}
-	if(tx > tx1) {
-		tx1 = tx;
-	}
-	if(ty > ty1) {
-		ty1 = ty;
-	}
-	tx = this1[0] * rect.x + this1[3] * (rect.y + rect.height);
-	ty = this1[1] * rect.x + this1[4] * (rect.y + rect.height);
-	if(tx < tx0) {
-		tx0 = tx;
-	}
-	if(ty < ty0) {
-		ty0 = ty;
-	}
-	if(tx > tx1) {
-		tx1 = tx;
-	}
-	if(ty > ty1) {
-		ty1 = ty;
-	}
-	result.setTo(tx0 + tx,ty0 + ty,tx1 - tx0,ty1 - ty0);
-	return result;
-};
-lime_math_Matrix3.transformVector = function(this1,pos,result) {
-	if(result == null) {
-		result = new lime_math_Vector2();
-	}
-	result.x = pos.x * this1[0] + pos.y * this1[3] + this1[6];
-	result.y = pos.x * this1[1] + pos.y * this1[4] + this1[7];
-	return result;
-};
-lime_math_Matrix3.translate = function(this1,dx,dy) {
-	this1[6] += dx;
-	this1[7] += dy;
-};
-lime_math_Matrix3.get_a = function(this1) {
-	return this1[0];
-};
-lime_math_Matrix3.set_a = function(this1,value) {
-	return this1[0] = value;
-};
-lime_math_Matrix3.get_b = function(this1) {
-	return this1[1];
-};
-lime_math_Matrix3.set_b = function(this1,value) {
-	return this1[1] = value;
-};
-lime_math_Matrix3.get_c = function(this1) {
-	return this1[3];
-};
-lime_math_Matrix3.set_c = function(this1,value) {
-	return this1[3] = value;
-};
-lime_math_Matrix3.get_d = function(this1) {
-	return this1[4];
-};
-lime_math_Matrix3.set_d = function(this1,value) {
-	return this1[4] = value;
-};
-lime_math_Matrix3.get_tx = function(this1) {
-	return this1[6];
-};
-lime_math_Matrix3.set_tx = function(this1,value) {
-	return this1[6] = value;
-};
-lime_math_Matrix3.get_ty = function(this1) {
-	return this1[7];
-};
-lime_math_Matrix3.set_ty = function(this1,value) {
-	return this1[7] = value;
-};
-lime_math_Matrix3.get = function(this1,index) {
-	return this1[index];
-};
-lime_math_Matrix3.set = function(this1,index,value) {
-	this1[index] = value;
-	return value;
-};
-var openfl_geom_Matrix = function(a,b,c,d,tx,ty) {
-	if(ty == null) {
-		ty = 0;
-	}
-	if(tx == null) {
-		tx = 0;
-	}
-	if(d == null) {
-		d = 1;
-	}
-	if(c == null) {
-		c = 0;
-	}
-	if(b == null) {
-		b = 0;
-	}
-	if(a == null) {
-		a = 1;
-	}
-	this.a = a;
-	this.b = b;
-	this.c = c;
-	this.d = d;
-	this.tx = tx;
-	this.ty = ty;
-};
-$hxClasses["openfl.geom.Matrix"] = openfl_geom_Matrix;
-openfl_geom_Matrix.__name__ = "openfl.geom.Matrix";
-openfl_geom_Matrix.prototype = {
-	a: null
-	,b: null
-	,c: null
-	,d: null
-	,tx: null
-	,ty: null
-	,__array: null
-	,clone: function() {
-		return new openfl_geom_Matrix(this.a,this.b,this.c,this.d,this.tx,this.ty);
-	}
-	,concat: function(m) {
-		var a1 = this.a * m.a + this.b * m.c;
-		this.b = this.a * m.b + this.b * m.d;
-		this.a = a1;
-		var c1 = this.c * m.a + this.d * m.c;
-		this.d = this.c * m.b + this.d * m.d;
-		this.c = c1;
-		var tx1 = this.tx * m.a + this.ty * m.c + m.tx;
-		this.ty = this.tx * m.b + this.ty * m.d + m.ty;
-		this.tx = tx1;
-	}
-	,copyColumnFrom: function(column,vector3D) {
-		if(column > 2) {
-			throw haxe_Exception.thrown("Column " + column + " out of bounds (2)");
-		} else if(column == 0) {
-			this.a = vector3D.x;
-			this.b = vector3D.y;
-		} else if(column == 1) {
-			this.c = vector3D.x;
-			this.d = vector3D.y;
-		} else {
-			this.tx = vector3D.x;
-			this.ty = vector3D.y;
-		}
-	}
-	,copyColumnTo: function(column,vector3D) {
-		if(column > 2) {
-			throw haxe_Exception.thrown("Column " + column + " out of bounds (2)");
-		} else if(column == 0) {
-			vector3D.x = this.a;
-			vector3D.y = this.b;
-			vector3D.z = 0;
-		} else if(column == 1) {
-			vector3D.x = this.c;
-			vector3D.y = this.d;
-			vector3D.z = 0;
-		} else {
-			vector3D.x = this.tx;
-			vector3D.y = this.ty;
-			vector3D.z = 1;
-		}
-	}
-	,copyFrom: function(sourceMatrix) {
-		this.a = sourceMatrix.a;
-		this.b = sourceMatrix.b;
-		this.c = sourceMatrix.c;
-		this.d = sourceMatrix.d;
-		this.tx = sourceMatrix.tx;
-		this.ty = sourceMatrix.ty;
-	}
-	,copyRowFrom: function(row,vector3D) {
-		if(row > 2) {
-			throw haxe_Exception.thrown("Row " + row + " out of bounds (2)");
-		} else if(row == 0) {
-			this.a = vector3D.x;
-			this.c = vector3D.y;
-			this.tx = vector3D.z;
-		} else if(row == 1) {
-			this.b = vector3D.x;
-			this.d = vector3D.y;
-			this.ty = vector3D.z;
-		}
-	}
-	,copyRowTo: function(row,vector3D) {
-		if(row > 2) {
-			throw haxe_Exception.thrown("Row " + row + " out of bounds (2)");
-		} else if(row == 0) {
-			vector3D.x = this.a;
-			vector3D.y = this.c;
-			vector3D.z = this.tx;
-		} else if(row == 1) {
-			vector3D.x = this.b;
-			vector3D.y = this.d;
-			vector3D.z = this.ty;
-		} else {
-			vector3D.setTo(0,0,1);
-		}
-	}
-	,createBox: function(scaleX,scaleY,rotation,tx,ty) {
-		if(ty == null) {
-			ty = 0;
-		}
-		if(tx == null) {
-			tx = 0;
-		}
-		if(rotation == null) {
-			rotation = 0;
-		}
-		if(rotation != 0) {
-			var cos = Math.cos(rotation);
-			var sin = Math.sin(rotation);
-			this.a = cos * scaleX;
-			this.b = sin * scaleY;
-			this.c = -sin * scaleX;
-			this.d = cos * scaleY;
-		} else {
-			this.a = scaleX;
-			this.b = 0;
-			this.c = 0;
-			this.d = scaleY;
-		}
-		this.tx = tx;
-		this.ty = ty;
-	}
-	,createGradientBox: function(width,height,rotation,tx,ty) {
-		if(ty == null) {
-			ty = 0;
-		}
-		if(tx == null) {
-			tx = 0;
-		}
-		if(rotation == null) {
-			rotation = 0;
-		}
-		this.a = width / 1638.4;
-		this.d = height / 1638.4;
-		if(rotation != 0) {
-			var cos = Math.cos(rotation);
-			var sin = Math.sin(rotation);
-			this.b = sin * this.d;
-			this.c = -sin * this.a;
-			this.a *= cos;
-			this.d *= cos;
-		} else {
-			this.b = 0;
-			this.c = 0;
-		}
-		this.tx = tx + width / 2;
-		this.ty = ty + height / 2;
-	}
-	,deltaTransformPoint: function(point) {
-		return new openfl_geom_Point(point.x * this.a + point.y * this.c,point.x * this.b + point.y * this.d);
-	}
-	,deltaTransformPointToOutput: function(point,output) {
-		if(output != null) {
-			output.setTo(point.x * this.a + point.y * this.c,point.x * this.b + point.y * this.d);
-			return output;
-		}
-		return new openfl_geom_Point(point.x * this.a + point.y * this.c,point.x * this.b + point.y * this.d);
-	}
-	,equals: function(matrix) {
-		if(matrix != null && this.tx == matrix.tx && this.ty == matrix.ty && this.a == matrix.a && this.b == matrix.b && this.c == matrix.c) {
-			return this.d == matrix.d;
-		} else {
-			return false;
-		}
-	}
-	,identity: function() {
-		this.a = 1;
-		this.b = 0;
-		this.c = 0;
-		this.d = 1;
-		this.tx = 0;
-		this.ty = 0;
-	}
-	,invert: function() {
-		var norm = this.a * this.d - this.b * this.c;
-		if(norm == 0) {
-			this.a = this.b = this.c = this.d = 0;
-			this.tx = -this.tx;
-			this.ty = -this.ty;
-		} else {
-			norm = 1.0 / norm;
-			var a1 = this.d * norm;
-			this.d = this.a * norm;
-			this.a = a1;
-			this.b *= -norm;
-			this.c *= -norm;
-			var tx1 = -this.a * this.tx - this.c * this.ty;
-			this.ty = -this.b * this.tx - this.d * this.ty;
-			this.tx = tx1;
-		}
-		return this;
-	}
-	,rotate: function(theta) {
-		var cos = Math.cos(theta);
-		var sin = Math.sin(theta);
-		var a1 = this.a * cos - this.b * sin;
-		this.b = this.a * sin + this.b * cos;
-		this.a = a1;
-		var c1 = this.c * cos - this.d * sin;
-		this.d = this.c * sin + this.d * cos;
-		this.c = c1;
-		var tx1 = this.tx * cos - this.ty * sin;
-		this.ty = this.tx * sin + this.ty * cos;
-		this.tx = tx1;
-	}
-	,scale: function(sx,sy) {
-		this.a *= sx;
-		this.b *= sy;
-		this.c *= sx;
-		this.d *= sy;
-		this.tx *= sx;
-		this.ty *= sy;
-	}
-	,setRotation: function(theta,scale) {
-		if(scale == null) {
-			scale = 1;
-		}
-		this.a = Math.cos(theta) * scale;
-		this.c = Math.sin(theta) * scale;
-		this.b = -this.c;
-		this.d = this.a;
-	}
-	,setTo: function(a,b,c,d,tx,ty) {
-		this.a = a;
-		this.b = b;
-		this.c = c;
-		this.d = d;
-		this.tx = tx;
-		this.ty = ty;
-	}
-	,to3DString: function(roundPixels) {
-		if(roundPixels == null) {
-			roundPixels = false;
-		}
-		if(roundPixels) {
-			return "matrix3d(" + this.a + ", " + this.b + ", 0, 0, " + this.c + ", " + this.d + ", 0, 0, 0, 0, 1, 0, " + (this.tx | 0) + ", " + (this.ty | 0) + ", 0, 1)";
-		} else {
-			return "matrix3d(" + this.a + ", " + this.b + ", 0, 0, " + this.c + ", " + this.d + ", 0, 0, 0, 0, 1, 0, " + this.tx + ", " + this.ty + ", 0, 1)";
-		}
-	}
-	,toMozString: function() {
-		return "matrix(" + this.a + ", " + this.b + ", " + this.c + ", " + this.d + ", " + this.tx + "px, " + this.ty + "px)";
-	}
-	,toString: function() {
-		return "matrix(" + this.a + ", " + this.b + ", " + this.c + ", " + this.d + ", " + this.tx + ", " + this.ty + ")";
-	}
-	,transformPoint: function(pos) {
-		return new openfl_geom_Point(pos.x * this.a + pos.y * this.c + this.tx,pos.x * this.b + pos.y * this.d + this.ty);
-	}
-	,transformPointToOutput: function(pos,output) {
-		if(output != null) {
-			output.setTo(pos.x * this.a + pos.y * this.c + this.tx,pos.x * this.b + pos.y * this.d + this.ty);
-			return output;
-		}
-		return new openfl_geom_Point(pos.x * this.a + pos.y * this.c + this.tx,pos.x * this.b + pos.y * this.d + this.ty);
-	}
-	,translate: function(dx,dy) {
-		this.tx += dx;
-		this.ty += dy;
-	}
-	,toArray: function(transpose) {
-		if(transpose == null) {
-			transpose = false;
-		}
-		if(this.__array == null) {
-			var array = null;
-			var vector = null;
-			var view = null;
-			var buffer = null;
-			var len = null;
-			this.__array = new Float32Array(9);
-		}
-		if(transpose) {
-			this.__array[0] = this.a;
-			this.__array[1] = this.b;
-			this.__array[2] = 0;
-			this.__array[3] = this.c;
-			this.__array[4] = this.d;
-			this.__array[5] = 0;
-			this.__array[6] = this.tx;
-			this.__array[7] = this.ty;
-			this.__array[8] = 1;
-		} else {
-			this.__array[0] = this.a;
-			this.__array[1] = this.c;
-			this.__array[2] = this.tx;
-			this.__array[3] = this.b;
-			this.__array[4] = this.d;
-			this.__array[5] = this.ty;
-			this.__array[6] = 0;
-			this.__array[7] = 0;
-			this.__array[8] = 1;
-		}
-		return this.__array;
-	}
-	,__cleanValues: function() {
-		this.a = Math.round(this.a * 1000) / 1000;
-		this.b = Math.round(this.b * 1000) / 1000;
-		this.c = Math.round(this.c * 1000) / 1000;
-		this.d = Math.round(this.d * 1000) / 1000;
-		this.tx = Math.round(this.tx * 10) / 10;
-		this.ty = Math.round(this.ty * 10) / 10;
-	}
-	,__toMatrix3: function() {
-		lime_math_Matrix3.setTo(openfl_geom_Matrix.__matrix3,this.a,this.b,this.c,this.d,this.tx,this.ty);
-		return openfl_geom_Matrix.__matrix3;
-	}
-	,__transformInversePoint: function(point) {
-		var norm = this.a * this.d - this.b * this.c;
-		if(norm == 0) {
-			point.x = -this.tx;
-			point.y = -this.ty;
-		} else {
-			var px = 1.0 / norm * (this.c * (this.ty - point.y) + this.d * (point.x - this.tx));
-			point.y = 1.0 / norm * (this.a * (point.y - this.ty) + this.b * (this.tx - point.x));
-			point.x = px;
-		}
-	}
-	,__transformInverseX: function(px,py) {
-		var norm = this.a * this.d - this.b * this.c;
-		if(norm == 0) {
-			return -this.tx;
-		} else {
-			return 1.0 / norm * (this.c * (this.ty - py) + this.d * (px - this.tx));
-		}
-	}
-	,__transformInverseY: function(px,py) {
-		var norm = this.a * this.d - this.b * this.c;
-		if(norm == 0) {
-			return -this.ty;
-		} else {
-			return 1.0 / norm * (this.a * (py - this.ty) + this.b * (this.tx - px));
-		}
-	}
-	,__transformPoint: function(point) {
-		var px = point.x;
-		var py = point.y;
-		point.x = px * this.a + py * this.c + this.tx;
-		point.y = px * this.b + py * this.d + this.ty;
-	}
-	,__transformX: function(px,py) {
-		return px * this.a + py * this.c + this.tx;
-	}
-	,__transformY: function(px,py) {
-		return px * this.b + py * this.d + this.ty;
-	}
-	,__translateTransformed: function(px,py) {
-		this.tx = px * this.a + py * this.c + this.tx;
-		this.ty = px * this.b + py * this.d + this.ty;
-	}
-	,__class__: openfl_geom_Matrix
 };
 var openfl_geom_ColorTransform = function(redMultiplier,greenMultiplier,blueMultiplier,alphaMultiplier,redOffset,greenOffset,blueOffset,alphaOffset) {
 	if(alphaOffset == null) {
@@ -80766,45 +81303,6 @@ flixel_math_FlxMath.absInt = function(n) {
 		return -n;
 	}
 };
-var flixel_math_FlxMatrix = function(a,b,c,d,tx,ty) {
-	openfl_geom_Matrix.call(this,a,b,c,d,tx,ty);
-};
-$hxClasses["flixel.math.FlxMatrix"] = flixel_math_FlxMatrix;
-flixel_math_FlxMatrix.__name__ = "flixel.math.FlxMatrix";
-flixel_math_FlxMatrix.__super__ = openfl_geom_Matrix;
-flixel_math_FlxMatrix.prototype = $extend(openfl_geom_Matrix.prototype,{
-	rotateWithTrig: function(cos,sin) {
-		var a1 = this.a * cos - this.b * sin;
-		this.b = this.a * sin + this.b * cos;
-		this.a = a1;
-		var c1 = this.c * cos - this.d * sin;
-		this.d = this.c * sin + this.d * cos;
-		this.c = c1;
-		var tx1 = this.tx * cos - this.ty * sin;
-		this.ty = this.tx * sin + this.ty * cos;
-		this.tx = tx1;
-		return this;
-	}
-	,rotateBy180: function() {
-		this.setTo(-this.a,-this.b,-this.c,-this.d,-this.tx,-this.ty);
-		return this;
-	}
-	,rotateByPositive90: function() {
-		this.setTo(-this.b,this.a,-this.d,this.c,-this.ty,this.tx);
-		return this;
-	}
-	,rotateByNegative90: function() {
-		this.setTo(this.b,-this.a,this.d,-this.c,this.ty,-this.tx);
-		return this;
-	}
-	,transformX: function(px,py) {
-		return px * this.a + py * this.c + this.tx;
-	}
-	,transformY: function(px,py) {
-		return px * this.b + py * this.d + this.ty;
-	}
-	,__class__: flixel_math_FlxMatrix
-});
 var flixel_math_FlxCallbackPoint = function(setXCallback,setYCallback,setXYCallback) {
 	flixel_math_FlxPoint.call(this);
 	this._setXCallback = setXCallback;
@@ -125903,7 +126401,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 628417;
+	this.version = 73442;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
@@ -179983,10 +180481,28 @@ GoldenPizza.PROJECTION = .425;
 GoldenPlayback.rate = 1;
 GoldenPlayback.channels = new haxe_ds_ObjectMap();
 GoldenPlayback.syncElapsed = 0;
-GoldenQuality.superLow = false;
-GoldenQuality.potatoSprites = false;
+GoldenPotatoMode.installed = false;
+GoldenPotatoMode.nextSweep = 0;
+GoldenPotatoMode.lastMode = false;
+GoldenQuality.potatoMode = false;
+GoldenQuality.savedSuperLow = false;
+GoldenQuality.depthBackgrounds = false;
 GoldenRemaining.ids = ["algebra","alternate","apprentice","bookworm","dave-x-bambi-shipping-cute","deformation","disability","disruption","ferocious","origin","resumed","sillier","sunshine","theft","unhinged","wireframe","dynamics","fresh-and-toasted","house","nice"];
 GoldenSecretSongs.TICKING_SCROLL_SPEED = 3.0;
+openfl_geom_Matrix.__meta__ = { fields : { equals : { SuppressWarnings : ["checkstyle:FieldDocComment"]}, to3DString : { SuppressWarnings : ["checkstyle:FieldDocComment"]}, toMozString : { SuppressWarnings : ["checkstyle:FieldDocComment"]}}};
+openfl_geom_Matrix.__identity = new openfl_geom_Matrix();
+openfl_geom_Matrix.__pool = new lime_utils_ObjectPool(function() {
+	return new openfl_geom_Matrix();
+},function(m) {
+	m.identity();
+});
+openfl_geom_Matrix.__matrix3 = lime_math_Matrix3._new();
+GoldenStageDepth.cache = new haxe_ds_ObjectMap();
+GoldenStageDepth.installed = false;
+GoldenStageDepth.startedAt = new Date().getTime() / 1000;
+GoldenStageDepth.draws = 0;
+GoldenStageDepth.matrix = new flixel_math_FlxMatrix();
+GoldenTouchLayout.ARROW_SCALE = 1.12;
 GoldenTunnelBackdrop.MIN_ZOOM = .57;
 GoldenTunnelVision.FLOAT_RATE = 75.6;
 GoldenTunnelVision.STEP = 81.5217391304347814;
@@ -180030,14 +180546,6 @@ Xml.DocType = 4;
 Xml.ProcessingInstruction = 5;
 Xml.Document = 6;
 flixel_math_FlxPoint._pool = new flixel_util_FlxPool_$flixel_$math_$FlxPoint(flixel_math_FlxPoint);
-openfl_geom_Matrix.__meta__ = { fields : { equals : { SuppressWarnings : ["checkstyle:FieldDocComment"]}, to3DString : { SuppressWarnings : ["checkstyle:FieldDocComment"]}, toMozString : { SuppressWarnings : ["checkstyle:FieldDocComment"]}}};
-openfl_geom_Matrix.__identity = new openfl_geom_Matrix();
-openfl_geom_Matrix.__pool = new lime_utils_ObjectPool(function() {
-	return new openfl_geom_Matrix();
-},function(m) {
-	m.identity();
-});
-openfl_geom_Matrix.__matrix3 = lime_math_Matrix3._new();
 openfl_geom_ColorTransform.__pool = new lime_utils_ObjectPool(function() {
 	return new openfl_geom_ColorTransform();
 },function(ct) {
